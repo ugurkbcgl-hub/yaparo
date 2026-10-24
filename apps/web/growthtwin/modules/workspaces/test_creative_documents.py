@@ -347,3 +347,31 @@ class CreativeDocumentConcurrencyTests(DocumentFixture, TransactionTestCase):
 
         self.assertCountEqual([2, "stale_document_revision"], self.together(save))
         self.assertEqual(self.read().revision, 2)
+
+    def test_competing_restores_append_once_and_preserve_later_snapshot(self):
+        from .creative_documents import restore_document
+
+        initial = self.create()
+        scene = deepcopy(initial.scene)
+        scene["layers"][0]["x"] = 99
+        self.save(scene)
+
+        def restore(owner):
+            try:
+                return restore_document(
+                    owner=owner,
+                    brand_id=self.brand.pk,
+                    document_id=self.request_id,
+                    expected_revision=2,
+                    target_revision=1,
+                ).revision
+            except ValidationError as error:
+                return error.code
+
+        self.assertCountEqual([3, "stale_document_revision"], self.together(restore))
+        document = self.read()
+        self.assertEqual(initial.scene, document.scene)
+        self.assertEqual(
+            [3, 2, 1], list(document.history.values_list("revision", flat=True))
+        )
+        self.assertEqual(scene, document.history.get(revision=2).scene)

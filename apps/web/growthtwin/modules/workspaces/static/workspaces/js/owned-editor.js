@@ -21,7 +21,9 @@
   const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
   const finiteIn = (value, low, high) => typeof value === "number" && Number.isFinite(value) && value >= low && value <= high;
   function validate(value, fixture) {
-    if (!exactKeys(value, ["schema_version", "fixture", "width", "height", "layers"]) || value.schema_version !== 1 || value.fixture !== fixture || !["product", "service"].includes(fixture) || value.width !== SIZE || value.height !== SIZE || !Array.isArray(value.layers) || value.layers.length !== 4) throw Error("invalid scene");
+    const styled = value && value.schema_version === 2;
+    if (styled && (!exactKeys(value.style, ["background_color", "logo_color", "logo_icon_color", "wordmark_color", "font_family"]) || value.style.font_family !== "Arial" || !["background_color", "logo_color", "logo_icon_color", "wordmark_color"].every(key => typeof value.style[key] === "string" && /^#[0-9a-f]{6}$/i.test(value.style[key])))) throw Error("invalid style");
+    if (!exactKeys(value, ["schema_version", "fixture", "width", "height", "layers", ...(styled ? ["style"] : [])]) || ![1,2].includes(value.schema_version) || value.fixture !== fixture || !["product", "service"].includes(fixture) || value.width !== SIZE || value.height !== SIZE || !Array.isArray(value.layers) || value.layers.length !== 4) throw Error("invalid scene");
     const expected = seed(fixture).layers;
     value.layers.forEach((layer, index) => {
       const reference = expected[index];
@@ -40,9 +42,9 @@
     const ctx = element.getContext("2d");
     const product = fixture === "product";
     if (kind === "logo") {
-      ctx.fillStyle = "#244c3b"; ctx.beginPath(); ctx.arc(25, 28, 20, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = "#e2ecb5"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(14, 29); ctx.lineTo(25, 17); ctx.lineTo(36, 29); ctx.moveTo(19, 27); ctx.lineTo(19, 37); ctx.lineTo(31, 37); ctx.lineTo(31, 27); ctx.stroke();
-      ctx.font = "bold 19px Arial"; ctx.fillText(product ? "DURU / ÖRNEK" : "ÖZEN / ÖRNEK", 57, 35);
+      ctx.fillStyle = scene.style?.logo_color || "#244c3b"; ctx.beginPath(); ctx.arc(25, 28, 20, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = scene.style?.logo_icon_color || "#e2ecb5"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(14, 29); ctx.lineTo(25, 17); ctx.lineTo(36, 29); ctx.moveTo(19, 27); ctx.lineTo(19, 37); ctx.lineTo(31, 37); ctx.lineTo(31, 27); ctx.stroke();
+      ctx.fillStyle = scene.style?.wordmark_color || "#244c3b"; ctx.font = "bold 19px Arial"; ctx.fillText(product ? "DURU / ÖRNEK" : "ÖZEN / ÖRNEK", 57, 35);
     } else if (product) {
       ctx.fillStyle = "#e4d7bf"; ctx.beginPath(); ctx.ellipse(290, 340, 235, 50, 0, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = "#b5c39b"; ctx.beginPath(); ctx.arc(290, 190, 171, 0, Math.PI * 2); ctx.fill();
@@ -86,12 +88,12 @@
   new ResizeObserver(resize).observe($("canvas-shell"));
   async function render(loaded) {
     const version = ++renderVersion; ready = false; $("controls").disabled = true; $("save").disabled = true; $("download").disabled = true;
-    scene = loaded.scene; selected = "title"; dirty = false; canvas.discardActiveObject(); canvas.clear(); canvas.backgroundColor = "#f5eddf"; objects = new Map();
+    scene = loaded.scene; selected = "title"; dirty = false; canvas.discardActiveObject(); canvas.clear(); canvas.backgroundColor = scene.style?.background_color || "#f5eddf"; objects = new Map();
     try {
       const next = await Promise.all(scene.layers.map(async (layer) => {
         let object;
         if (layer.type === "image") object = await fabric.FabricImage.fromURL(bitmap(scene.fixture, layer.id === "logo" ? "logo" : "hero"));
-        else object = new fabric.Textbox(layer.text, { fontFamily: "Arial", fontSize: layer.id === "title" ? 49 : 21, fontWeight: layer.id === "title" ? "bold" : "normal", width: layer.id === "title" ? 680 : 650, fill: layer.color, editable: false, splitByGrapheme: false });
+        else object = new fabric.Textbox(layer.text, { fontFamily: scene.style?.font_family || "Arial", fontSize: layer.id === "title" ? 49 : 21, fontWeight: layer.id === "title" ? "bold" : "normal", width: layer.id === "title" ? 680 : 650, fill: layer.color, editable: false, splitByGrapheme: false });
         object.set({ left: layer.x, top: layer.y, scaleX: layer.scale, scaleY: layer.scale, angle: layer.angle, originX: "left", originY: "top", lockScalingFlip: true, lockSkewingX: true, lockSkewingY: true, borderColor: "#4b7651", cornerColor: "#4b7651", transparentCorners: false, cornerSize: 10 });
         object.setControlsVisibility({ ml: false, mr: false, mt: false, mb: false });
         object.on("selected", () => { selected = layer.id; controls(); });
@@ -123,7 +125,7 @@
   for (const id of ["copy", "color", "x", "y", "scale", "angle"]) $(id).addEventListener("input", update);
   $("save").addEventListener("click", async () => {
     if (!ready || saving) return;
-    saving = true; $("controls").disabled = true; $("save").disabled = true;
+    saving = true; $("restore").disabled = true; $("controls").disabled = true; $("save").disabled = true;
     canvas.selection = false; objects.forEach(object => object.set({ selectable: false, evented: false }));
     try {
       const response = await fetch(boot.save_url, { method: "POST", credentials: "same-origin", redirect: "error",
@@ -132,10 +134,39 @@
       if (!response.ok) throw Error("save denied");
       const result = await response.json();
       if (!Number.isInteger(result.revision) || result.revision < revision) throw Error("bad response");
-      revision = result.revision; $("revision").textContent = revision; dirty = false;
+      revision = result.revision; $("revision").textContent = revision; dirty = false; updateHistory(result.history);
       message("Çalışma hesabına kaydedildi. Yeniden açtığında bu düzenleme korunur.");
     } catch { message("Kayıt doğrulanamadı. Oturum veya çalışma değişmiş olabilir. Düzenlemen ekranda duruyor; yeniden yüklemeden önce PNG indirebilirsin. Otomatik tekrar yapılmadı.", true); }
-    finally { saving = false; $("controls").disabled = false; $("save").disabled = false; canvas.selection = true; objects.forEach(object => object.set({ selectable: true, evented: true })); }
+    finally { saving = false; $("restore").disabled = !ready || $("history").options.length === 0; $("controls").disabled = !ready; $("save").disabled = !ready; canvas.selection = true; objects.forEach(object => object.set({ selectable: true, evented: true })); }
+  });
+  function updateHistory(rows) {
+    $("history").replaceChildren();
+    if (!Array.isArray(rows)) return;
+    rows.forEach(row => {
+      if (!Number.isInteger(row.revision) || row.revision >= revision) return;
+      const option = document.createElement("option"); option.value = row.revision;
+      option.textContent = "Kayıt " + row.revision + " · " + row.label; $("history").append(option);
+    });
+    $("restore").disabled = saving || $("history").options.length === 0;
+  }
+  $("restore").addEventListener("click", async () => {
+    if (!ready || saving || !$("history").value) return;
+    if (dirty && !window.confirm("Kaydedilmemiş düzenlemen değişecek. Önceki kayda dönülsün mü?")) return;
+    saving = true; $("save").disabled = true; $("restore").disabled = true; $("controls").disabled = true;
+    canvas.discardActiveObject(); objects.forEach(object => object.set({ selectable:false, evented:false }));
+    try {
+      const response = await fetch(boot.restore_url, { method:"POST", credentials:"same-origin", redirect:"error",
+        headers:{"Content-Type":"application/json","X-CSRFToken":document.querySelector("#csrf-form input").value},
+        body:JSON.stringify({revision, target_revision:Number($("history").value)}) });
+      if (!response.ok) throw Error("restore refused");
+      const result = await response.json();
+      if (!Number.isInteger(result.revision) || result.revision < revision) throw Error("invalid response");
+      const restored = validate(result.scene, scene.fixture);
+      revision = result.revision; $("revision").textContent = revision;
+      await render({scene:restored, message:"Önceki tasarım yeni kayıt olarak açıldı. Sonraki kayıtlar korunuyor."});
+      updateHistory(result.history);
+    } catch { message("Geri dönüş doğrulanamadı. Düzenlemen korunuyor; güncel kaydı kontrol et. Otomatik tekrar yapılmadı.", true); }
+    finally { saving = false; $("save").disabled = !ready; $("controls").disabled = !ready; $("restore").disabled = !ready || $("history").options.length === 0; objects.forEach(object => object.set({ selectable:true, evented:true })); }
   });
   $("download").addEventListener("click", () => {
     if (!ready) return;
@@ -144,6 +175,7 @@
     } catch { message("Görsel dışa aktarılamadı. Taslağı kaydedip tekrar deneyin.", true); }
   });
   window.addEventListener("beforeunload", event => { if (dirty || saving) { event.preventDefault(); event.returnValue = ""; } });
+  updateHistory(boot.history);
   try { render({ scene: validate(boot.scene, boot.scene.fixture), message: "Kayıtlı çalışma açıldı. Düzenlemeyi saklamak için kaydet." }); }
   catch { message("Kayıtlı tasarım açılamadı; kayıt değiştirilmedi.", true); }
 })();

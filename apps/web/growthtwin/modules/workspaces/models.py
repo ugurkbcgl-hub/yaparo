@@ -194,8 +194,8 @@ class BrandCreativeDocumentQuerySet(models.QuerySet):
 class BrandCreativeDocument(models.Model):
     """Saved synthetic scene with one permanent brand-identity binding.
 
-    Revision protects concurrent edits; this is not scene edit history or a SQL
-    vault. The owner-scoped service is the supported read/write application API.
+    Revision protects concurrent edits; related history stores committed snapshots.
+    This is not a SQL vault. The owner-scoped service is the application API.
     """
 
     id = models.UUIDField(primary_key=True, editable=False)
@@ -225,3 +225,73 @@ class BrandCreativeDocument(models.Model):
         ):
             raise ValidationError("Çalışmanın marka kimliği bağı değiştirilemez.")
         return super().save(*args, **kwargs)
+
+
+class CreativeRevisionQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Çalışma geçmişi değiştirilemez.")
+
+    def delete(self):
+        raise ValidationError("Çalışma geçmişi tek başına silinemez.")
+
+    def bulk_update(self, objs, fields, **kwargs):
+        raise ValidationError("Çalışma geçmişi değiştirilemez.")
+
+
+class BrandCreativeRevision(models.Model):
+    """Append-only application snapshots, not a SQL tamper-proof audit vault."""
+
+    document = models.ForeignKey(
+        BrandCreativeDocument, on_delete=models.CASCADE, related_name="history"
+    )
+    revision = models.PositiveIntegerField()
+    scene = models.JSONField()
+    reason = models.CharField(
+        max_length=12,
+        choices=(
+            ("create", "Oluşturma"),
+            ("baseline", "Başlangıç kaydı"),
+            ("save", "Düzenleme"),
+            ("restore", "Geri dönüş"),
+        ),
+    )
+    restored_from = models.PositiveIntegerField(null=True, blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = CreativeRevisionQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("-revision",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("document", "revision"), name="creative_history_revision_unique"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(revision__gte=1), name="creative_history_positive"
+            ),
+            models.CheckConstraint(
+                condition=(
+                    models.Q(
+                        reason="restore",
+                        restored_from__gte=1,
+                        restored_from__isnull=False,
+                    )
+                    | models.Q(
+                        reason__in=("create", "baseline", "save"),
+                        restored_from__isnull=True,
+                    )
+                ),
+                name="creative_history_reason_valid",
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Çalışma geçmişi değiştirilemez.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Çalışma geçmişi tek başına silinemez.")

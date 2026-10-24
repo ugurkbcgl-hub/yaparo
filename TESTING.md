@@ -537,3 +537,10 @@ PNG, zero external requests, no localStorage and mobile overflow. Screenshots
 reviewed. Initial collectstatic failed on an unshipped upstream source map;
 removing only that comment resolved it, then all five tests passed. No persistent
 configured DB or provider operation. Required CI is still to be checked.
+
+Brand palette/history follow-on (ADR0042):95 focused workspace/browser tests ran,
+90 passed and5 PostgreSQL races skipped locally, including competing restore. Browser save/restore1→3/restore2→4, stale
+tab, actual PNG decoding and pixel palettes passed. Legacy v1 background remained
+unchanged. Atomic history failure rollback and foreign access refusal covered.
+Independent backend/JS source review found no blocker; minor naming/loading notes
+were addressed. New0004 table only, no legacy data rewrite or provider operation.

@@ -14,24 +14,27 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Main973a7d6 (PR333 merged); requiredCI40093217682 and post-mergeCI40093554622
-succeeded. Current branch feat/owned-visual-editor; resolve its PR/checks live.
-Durable task: GitHub issue328. This is the pre-commit snapshot.
+Mainb740f39 (PR334 merged); requiredCI40094382205 and post-mergeCI40124272076
+succeeded. Current branch feat/brand-styling-history; resolve PR/checks live.
+Durable task: GitHub issue328. Pre-commit snapshot for this package.
 
-- PR332/333 delivered synthetic multi-brand identities and identity-pinned saved
-  scene documents with replay and optimistic-save protection.
-- Current slice connects Fabric7.4.0 locally packaged with MIT/source hashes to
-  owned documents: text/color/layer transforms, server save/reopen and PNG export.
-- Four HTTP checks + one browser journey passed. Actual downloadedPNG decoded
-  800x800; stale tab rejected, saved text/x reopened, external requests0 and no
-  localStorage. Desktop/mobile reviewed. Source-map packaging issue fixed.
-- PNG is current canvas (may be unsaved), not approved/persisted campaign asset.
-  Full identity styling, custom assets/fonts, undo/history and campaign binding
-  remain open. No configured DB migration, provider or deployment this slice.
-- Root source review; helper availability failed last turn, no independent review
-  claimed. Usage monitoring remains disabled.
-- 8012 remains standalone experiment, not the authenticated Django editor.
-- Desktop PR attachment limit100 remains; use PR URLs.
+- New creative scenes v2 pin brand palette: background, logo/icon/wordmark and
+  text colors with initial readability fallback; font remains Arial only.
+- Existing v1 scenes keep prior data/rendering; schema flips on save/restore deny.
+- Initial/changed-save snapshots commit atomically; owned restore appends new
+  revision. Later work remains. No-op/stale/replay and failed history writes safe.
+- Legacy documents capture current baseline only on first changed save; unknown
+  old edits are not reconstructed. History list50; stored older rows retained.
+- Four HTTP/editor checks plus backend suites and enhanced Chromium:95 tests,
+  90 passed/5 PostgreSQL-only SQLite skips including the new restore race.
+  Browser restored1→3 then2→4, decoded PNG and verified actual v2 palette pixels
+  and unchanged v1 background. Desktop/mobile reviewed; outside requests0.
+- Independent backend/JS and final atomic-bootstrap delta review approved.
+- Migration0004 tested only on ephemeral DB; no configured DB/provider/deployment.
+- Next after green merge: refresh the SAME disposable local preview database/server
+  so owner can try the new UI; preserve its brands/documents. Do not touch protected
+  Google fixture/history or real databases. No new customer data or paid service.
+- Desktop PR attachment limit100 remains; use PR URLs. Usage monitoring disabled.
 
 ## Preserved implementation evidence and boundaries
 
@@ -67,6 +70,6 @@ created/resumed by the new maintenance cadence proposal. No unattended work clai
 
 ## Next action
 
-Finish owned-editor PR/required CI and review, then complete portable identity
-styling and creative history without changing existing scenes silently. Keep
-customer uploads/publishing gated and preserved Google history untouched.
+Complete brand-styling/history PR with required PostgreSQL CI, then bounded
+synthetic material intake (Y05), including original/derivative rights and private
+owner access. Keep custom real uploads and production operations gated.

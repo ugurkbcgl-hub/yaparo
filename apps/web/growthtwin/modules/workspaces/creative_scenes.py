@@ -1,4 +1,4 @@
-"""Pure bounded Yaparo scene v1; no ORM, files, URLs or Fabric deserialization.
+"""Pure bounded Yaparo scene v1/v2; no ORM, files, URLs or Fabric deserialization.
 
 Identity fields are supplied as literal values, so seeding cannot lazily query a
 BrandIdentity. The caller owns authorization and immutable identity binding.
@@ -72,10 +72,44 @@ def validate_scene(value, *, fixture):
     belong to a later HTTP boundary; this function accepts already decoded values.
     """
     _fixture(fixture)
-    _keys(value, ("schema_version", "fixture", "width", "height", "layers"))
+    if (
+        type(value) is not dict
+        or type(value.get("schema_version")) is not int
+        or value["schema_version"] not in (1, 2)
+    ):
+        _refuse()
+    styled = value["schema_version"] == 2
+    _keys(
+        value,
+        ("schema_version", "fixture", "width", "height", "layers")
+        + (("style",) if styled else ()),
+    )
+    if styled:
+        _keys(
+            value["style"],
+            (
+                "background_color",
+                "logo_color",
+                "logo_icon_color",
+                "wordmark_color",
+                "font_family",
+            ),
+        )
+        for name in (
+            "background_color",
+            "logo_color",
+            "logo_icon_color",
+            "wordmark_color",
+        ):
+            if type(value["style"][name]) is not str or not _COLOR.fullmatch(
+                value["style"][name]
+            ):
+                _refuse()
+        if value["style"]["font_family"] != "Arial":
+            _refuse()
     if (
         type(value["schema_version"]) is not int
-        or value["schema_version"] != 1
+        or value["schema_version"] not in (1, 2)
         or type(value["fixture"]) is not str
         or value["fixture"] != fixture
         or type(value["width"]) is not int
@@ -179,3 +213,49 @@ def seed_scene(*, fixture, tagline_text, primary_color, logo_key):
         },
         fixture=fixture,
     )
+
+
+def seed_brand_scene(
+    *, fixture, tagline_text, primary_color, secondary_color, logo_key
+):
+    """New v2 scenes pin palette literals; existing v1 scenes stay unchanged."""
+    scene = seed_scene(
+        fixture=fixture,
+        tagline_text=tagline_text,
+        primary_color=primary_color,
+        logo_key=logo_key,
+    )
+    if type(secondary_color) is not str or not _COLOR.fullmatch(secondary_color):
+        _refuse()
+
+    def luminance(color):
+        channels = [int(color[index : index + 2], 16) / 255 for index in (1, 3, 5)]
+        linear = [
+            v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+            for v in channels
+        ]
+        return sum(v * weight for v, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
+
+    primary_luminance, background_luminance = (
+        luminance(primary_color),
+        luminance(secondary_color),
+    )
+    contrast = (max(primary_luminance, background_luminance) + 0.05) / (
+        min(primary_luminance, background_luminance) + 0.05
+    )
+    text_color = (
+        primary_color
+        if contrast >= 4.5
+        else ("#000000" if background_luminance > 0.179 else "#FFFFFF")
+    )
+    scene["schema_version"] = 2
+    scene["style"] = {
+        "background_color": secondary_color,
+        "logo_color": primary_color,
+        "logo_icon_color": "#000000" if primary_luminance > 0.179 else "#FFFFFF",
+        "wordmark_color": text_color,
+        "font_family": "Arial",
+    }
+    scene["layers"][2]["color"] = text_color
+    scene["layers"][3]["color"] = text_color
+    return validate_scene(scene, fixture=fixture)

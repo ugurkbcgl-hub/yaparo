@@ -32,11 +32,11 @@ class EditorViewTests(TestCase):
         scene = deepcopy(self.document.scene)
         scene["layers"][2]["x"] = 78
         self.assertEqual(
-            self.post({"revision": 1, "scene": scene}).json(), {"revision": 2}
+            self.post({"revision": 1, "scene": scene}).json()["revision"], 2
         )
         self.assertEqual(self.post({"revision": 1, "scene": scene}).status_code, 409)
         self.assertEqual(
-            self.post({"revision": 2, "scene": scene}).json(), {"revision": 2}
+            self.post({"revision": 2, "scene": scene}).json()["revision"], 2
         )
 
     def test_bad_json_duplicates_nonfinite_limits_and_unknown_fields(self):

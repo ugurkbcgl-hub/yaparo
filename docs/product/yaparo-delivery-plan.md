@@ -18,8 +18,10 @@ Kalıcı iş takibi: [GitHub #328](https://github.com/ugurkbcgl-hub/yaparo/issue
   tamamlanmış değildir.
 - **Y06–Y07 ilk görsel bağlantı:** sahip olunan çalışma → Fabric düzenleme →
   sürüm denetimli sunucu kaydı → yeniden aç → 800×800 PNG akışı uygulandı.
-  Beş odaklı HTTP/tarayıcı testi geçti; dış istek yok. Sahne geçmişi/geri al,
-  tam kimlik stil aktarımı, yükseltme taşınabilirliği ve kampanya bağı açık.
+  İlk beş odaklı HTTP/tarayıcı testi geçti; dış istek yok. ADR-0042 ile yeni
+  tasarımlara marka paleti ve kayıt geçmişinden yeni sürüm olarak dönüş eklendi.
+  Eski v1 görünümü korundu. Özel font/varlık, her hareket için undo, yükseltme
+  taşınabilirliği ve kampanya bağı açık.
 - Kullanıcı 23 Ekim'de kullanım limiti kontrolünü kaldırdı; çalışmayı kullanım
   eşiğine göre durdurma kuralı uygulanmaz. Normal doğrulanmış devir notları korunur.
 
@@ -40,7 +42,7 @@ Kalıcı iş takibi: [GitHub #328](https://github.com/ugurkbcgl-hub/yaparo/issue
 ölçütüdür: marka sürümü/izin/varlık/üretim bağı, ayrı yaratıcı hafıza, kural kontrolü
 ve eski çalışmaların korunması. Temel çok marka ilk kit diliminde yer alır.
 
-Y01–Y03 yerel seçim kararı ADR-0041 ile kaydedildi; yaratıcı çalışma bağı ve ilk görsel akış uygulandı; tam kimlik stili ve çalışma geçmişi sıradadır. Bütün müşteri dosya türlerini açmaz. Y05 gerçek upload servisini ancak ilgili veri/güvenlik kapıları sonrası açar; önce sentetik yerel örneklerle geliştirilir.
+Y01–Y03 yerel seçim kararı ADR-0041 ile kaydedildi; yaratıcı çalışma bağı ve ilk görsel akış uygulandı; marka paleti ve kayıt geçmişi eklendi; sırada sınırlandırılmış sentetik materyal kütüphanesi vardır. Bütün müşteri dosya türlerini açmaz. Y05 gerçek upload servisini ancak ilgili veri/güvenlik kapıları sonrası açar; önce sentetik yerel örneklerle geliştirilir.
 
 ## B — Değiştirilebilir AI üretimi ve maliyet
 

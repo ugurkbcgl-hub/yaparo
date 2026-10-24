@@ -1,6 +1,6 @@
 """Owned synthetic scene persistence, pinned to one literal identity version.
 
-No asset upload, provider, campaign binding, publication or scene edit history.
+No asset upload, provider, campaign binding or publication.
 """
 
 from uuid import UUID
@@ -9,8 +9,8 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 
-from .creative_scenes import SceneValidationError, seed_scene, validate_scene
-from .models import Brand, BrandCreativeDocument
+from .creative_scenes import SceneValidationError, seed_brand_scene, validate_scene
+from .models import Brand, BrandCreativeDocument, BrandCreativeRevision
 
 
 def _owner(owner):
@@ -87,10 +87,11 @@ def create_document(*, owner, brand_id, expected_identity_version, request_id):
             )
         identity = brand.current_identity
         try:
-            scene = seed_scene(
+            scene = seed_brand_scene(
                 fixture=brand.fixture,
                 tagline_text=identity.tagline_text,
                 primary_color=identity.primary_color,
+                secondary_color=identity.secondary_color,
                 logo_key=identity.logo_key,
             )
         except SceneValidationError:
@@ -106,7 +107,27 @@ def create_document(*, owner, brand_id, expected_identity_version, request_id):
             raise ValidationError(
                 "Çalışma isteği başka bir bağlamda kullanılmış."
             ) from None
+        _snapshot(document, owner, "create")
         return document
+
+
+def _snapshot(document, owner, reason, restored_from=None):
+    scene = _scene(document.scene, document.identity.brand.fixture)
+    existing = BrandCreativeRevision.objects.filter(
+        document=document, revision=document.revision
+    ).first()
+    if existing:
+        if existing.scene != scene:
+            raise ValidationError("Çalışma geçmişi kayıtla eşleşmiyor.")
+        return existing
+    return BrandCreativeRevision.objects.create(
+        document=document,
+        revision=document.revision,
+        scene=scene,
+        reason=reason,
+        restored_from=restored_from,
+        created_by=owner,
+    )
 
 
 def read_document(*, owner, brand_id, document_id):
@@ -117,35 +138,89 @@ def read_document(*, owner, brand_id, document_id):
     return document
 
 
+def _write_document(
+    document, owner, expected_revision, scene, *, reason="save", restored_from=None
+):
+    if document.revision != expected_revision:
+        raise ValidationError(
+            "Çalışma değişmiş. Güncel kaydı açın.", code="stale_document_revision"
+        )
+    canonical = _scene(scene, document.identity.brand.fixture)
+    if canonical["schema_version"] != document.scene["schema_version"]:
+        raise ValidationError("Çalışma biçimi sessizce değiştirilemez.")
+    if document.scene == canonical:
+        return document
+    if document.revision == 2**31 - 1:
+        raise ValidationError("Çalışma sürümü sınırına ulaşıldı.")
+    _snapshot(document, owner, "baseline")
+    changed = BrandCreativeDocument.objects.filter(
+        pk=document.pk, identity_id=document.identity_id, revision=expected_revision
+    ).update(scene=canonical, revision=expected_revision + 1, updated_at=timezone.now())
+    if changed != 1:
+        raise ValidationError(
+            "Çalışma değişmiş. Güncel kaydı açın.", code="stale_document_revision"
+        )
+    document.refresh_from_db()
+    _snapshot(document, owner, reason, restored_from)
+    return document
+
+
 def save_document(*, owner, brand_id, document_id, expected_revision, scene):
-    """Compare-and-save current scene; retain the original identity forever."""
     _owner(owner)
     _uuid(document_id)
     _version(expected_revision)
     with transaction.atomic():
         brand = _brand(owner, brand_id, lock=True)
         document = _document(brand, document_id, lock=True)
-        if document.revision != expected_revision:
-            raise ValidationError(
-                "Çalışma değişmiş. Güncel sürümü açıp yeniden deneyin.",
-                code="stale_document_revision",
-            )
-        canonical = _scene(scene, brand.fixture)
-        if document.scene == canonical:
-            return document
-        if document.revision == 2**31 - 1:
-            raise ValidationError("Çalışma sürümü sınırına ulaşıldı.")
-        changed = BrandCreativeDocument.objects.filter(
-            pk=document.pk,
-            identity_id=document.identity_id,
-            revision=expected_revision,
-        ).update(
-            scene=canonical, revision=expected_revision + 1, updated_at=timezone.now()
+        return _write_document(document, owner, expected_revision, scene)
+
+
+def read_document_snapshot(*, owner, brand_id, document_id):
+    _uuid(document_id)
+    with transaction.atomic():
+        brand = _brand(owner, brand_id, lock=True)
+        document = _document(brand, document_id, lock=True)
+        _scene(document.scene, brand.fixture)
+        rows = list(document.history.order_by("-revision")[:50])
+        if rows and (
+            rows[0].revision != document.revision or rows[0].scene != document.scene
+        ):
+            raise ValidationError("Çalışma geçmişi kayıtla eşleşmiyor.")
+        if not rows:
+            return document, [
+                {"revision": document.revision, "label": "Mevcut başlangıç kaydı"}
+            ]
+        return document, [
+            {"revision": row.revision, "label": row.get_reason_display()}
+            for row in rows
+        ]
+
+
+def document_history(*, owner, brand_id, document_id):
+    return read_document_snapshot(
+        owner=owner, brand_id=brand_id, document_id=document_id
+    )[1]
+
+
+def restore_document(
+    *, owner, brand_id, document_id, expected_revision, target_revision
+):
+    _owner(owner)
+    _uuid(document_id)
+    _version(expected_revision)
+    _version(target_revision)
+    with transaction.atomic():
+        brand = _brand(owner, brand_id, lock=True)
+        document = _document(brand, document_id, lock=True)
+        # Resolve target inside this owned document; no global snapshot lookup.
+        target = BrandCreativeRevision.objects.get(
+            document=document, revision=target_revision
         )
-        if changed != 1:
-            raise ValidationError(
-                "Çalışma değişmiş. Güncel sürümü açıp yeniden deneyin.",
-                code="stale_document_revision",
-            )
-        document.refresh_from_db()
-        return document
+        return _write_document(
+            document,
+            owner,
+            expected_revision,
+            target.scene,
+            reason="restore",
+            restored_from=target_revision,
+        )

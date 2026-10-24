@@ -8,8 +8,10 @@ creation, title/color edits, reopen and owned JSON download. Replays do not rese
 work; stale saves are rejected. Brand edits do not rebind existing documents.
 The schema is the bounded editor experiment v1. Django now connects an owned
 Fabric editor to saved documents: layer text/color/transforms, revision-checked
-server saves and client PNG export. Custom assets, creative edit history and
-campaign association remain open. This is a local synthetic slice.
+server saves and client PNG export. New scenes now pin brand palette styling;
+saved edits have immutable snapshots and owned restore as a new revision. Existing
+v1 scenes retain their rendering. Custom assets/fonts, per-keystroke undo and
+campaign association remain open. See ADR-0042; this is a local synthetic slice.
 
 ## Current direction — 2026-10-23
 

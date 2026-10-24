@@ -12,8 +12,12 @@ from django.urls import reverse
 from playwright.sync_api import expect, sync_playwright
 
 from growthtwin.modules.workspaces.creative_documents import create_document
-from growthtwin.modules.workspaces.models import Workspace
-from growthtwin.modules.workspaces.services import create_brand_for_owner
+from growthtwin.modules.workspaces.creative_scenes import seed_scene
+from growthtwin.modules.workspaces.models import BrandCreativeDocument, Workspace
+from growthtwin.modules.workspaces.services import (
+    create_brand_for_owner,
+    update_brand_identity_for_owner,
+)
 
 
 class OwnedEditorBrowserTests(LiveServerTestCase):
@@ -26,10 +30,30 @@ class OwnedEditorBrowserTests(LiveServerTestCase):
         brand = create_brand_for_owner(
             owner=owner, workspace_id=workspace.pk, fixture="product"
         )
+        initial = brand.current_identity
+        legacy = BrandCreativeDocument.objects.create(
+            id=uuid4(),
+            identity=initial,
+            scene=seed_scene(
+                fixture="product",
+                tagline_text=initial.tagline_text,
+                primary_color=initial.primary_color,
+                logo_key=initial.logo_key,
+            ),
+        )
+        update_brand_identity_for_owner(
+            owner=owner,
+            brand_id=brand.pk,
+            expected_version=1,
+            primary_color="#254D9B",
+            secondary_color="#EAF0FF",
+            tone="calm",
+            tagline_key="small_beauty",
+        )
         document = create_document(
             owner=owner,
             brand_id=brand.pk,
-            expected_identity_version=1,
+            expected_identity_version=2,
             request_id=uuid4(),
         )
         with sync_playwright() as p:
@@ -67,6 +91,16 @@ class OwnedEditorBrowserTests(LiveServerTestCase):
                 page.reload()
                 expect(page.locator("#copy")).to_have_value("Özgün örnek · Şığ çömlek")
                 expect(page.locator("#x")).to_have_value("72")
+                page.locator("#history").select_option("1")
+                page.locator("#restore").click()
+                expect(page.locator("#revision")).to_have_text("3")
+                expect(page.locator("#copy")).to_have_value(
+                    "Gününe küçük bir güzellik."
+                )
+                page.locator("#history").select_option("2")
+                page.locator("#restore").click()
+                expect(page.locator("#revision")).to_have_text("4")
+                expect(page.locator("#copy")).to_have_value("Özgün örnek · Şığ çömlek")
                 stale.locator("#copy").fill("Eski sekme")
                 stale.locator("#save").click()
                 expect(stale.locator("#status")).to_contain_text("Kayıt doğrulanamadı")
@@ -80,6 +114,12 @@ class OwnedEditorBrowserTests(LiveServerTestCase):
                     encoded,
                 )
                 self.assertEqual([800, 800], size)
+                palette = page.evaluate(
+                    "data => new Promise(resolve => {const image=new Image(); image.onload=()=>{const c=document.createElement('canvas');c.width=c.height=800;const x=c.getContext('2d');x.drawImage(image,0,0);resolve([Array.from(x.getImageData(0,0,1,1).data),Array.from(x.getImageData(65,68,1,1).data)]);};image.src='data:image/png;base64,'+data;})",
+                    encoded,
+                )
+                self.assertEqual([[234, 240, 255, 255], [37, 77, 155, 255]], palette)
+
                 self.assertEqual([], external)
                 self.assertEqual([], errors)
                 output = os.environ.get("YAPARO_BRAND_SCREENSHOT_DIR")
@@ -98,5 +138,21 @@ class OwnedEditorBrowserTests(LiveServerTestCase):
                         full_page=True,
                     )
                 self.assertEqual(0, page.evaluate("localStorage.length"))
+                page.goto(
+                    self.live_server_url
+                    + reverse("brand_documents:editor", args=[brand.pk, legacy.pk])
+                )
+                expect(page.locator("#save")).to_be_enabled()
+                with page.expect_download() as old_event:
+                    page.locator("#download").click()
+                old_data = base64.b64encode(
+                    Path(old_event.value.path()).read_bytes()
+                ).decode("ascii")
+                old_background = page.evaluate(
+                    "data => new Promise(resolve => {const image=new Image();image.onload=()=>{const c=document.createElement('canvas');c.width=c.height=800;const x=c.getContext('2d');x.drawImage(image,0,0);resolve(Array.from(x.getImageData(0,0,1,1).data));};image.src='data:image/png;base64,'+data;})",
+                    old_data,
+                )
+                self.assertEqual([245, 237, 223, 255], old_background)
+
             finally:
                 browser.close()
