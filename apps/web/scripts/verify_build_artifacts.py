@@ -12,6 +12,12 @@ PROJECT = tomllib.loads(
 NORMALIZED_PROJECT_NAME = PROJECT["name"].replace("-", "_")
 PROJECT_VERSION = PROJECT["version"]
 REQUIRED_FILES = {
+    "growthtwin/modules/workspaces/templates/workspaces/document_editor.html",
+    "growthtwin/modules/workspaces/static/workspaces/js/owned-editor.js",
+    "growthtwin/modules/workspaces/static/workspaces/css/editor.css",
+    "growthtwin/modules/workspaces/static/workspaces/vendor/fabric-7.4.0.min.js",
+    "growthtwin/modules/workspaces/static/workspaces/vendor/fabric-LICENSE.txt",
+    "growthtwin/modules/workspaces/static/workspaces/vendor/NOTICE.txt",
     "growthtwin/demo/templates/demo/profile_edit.html",
     "growthtwin/demo/templates/registration/login.html",
     "growthtwin/modules/campaigns/static/campaigns/js/campaigns.js",

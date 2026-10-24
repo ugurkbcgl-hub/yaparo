@@ -1,0 +1,8 @@
+Fabric.js 7.4.0 (MIT)
+Source: npm fabric@7.4.0 dist/index.min.js; existing experiments/creative-editor/package-lock.json pins distribution integrity.
+Only transformation: remove sourceMappingURL=index.min.js.map comment; map is not shipped.
+Upstream SHA256: d4e908b3b3654db92c08ff0f31aa6a72ba1ddeeeb43a93bc41c833e51fe37f58
+Vendored Git blob SHA256 (LF line endings): a9d1ef21a50cd16ce8b1d7092e78f7e8273767a1b4f84d3755a30f0ce7775669
+Working-tree CRLF conversion on Windows may change byte hashes; normalize to LF when comparing.
+License: fabric-LICENSE.txt.
+Upgrade requires rechecking lockfile, upstream license, adapted scene behavior, browser save/reopen/export and packaging; do not overwrite this file from an unpinned download.

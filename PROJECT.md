@@ -6,8 +6,10 @@
 The local brand slice now has identity-pinned saved scene documents: explicit
 creation, title/color edits, reopen and owned JSON download. Replays do not reset
 work; stale saves are rejected. Brand edits do not rebind existing documents.
-The schema is the bounded editor experiment v1. Django graphical editing/PNG,
-custom assets, creative edit history and campaign association remain open.
+The schema is the bounded editor experiment v1. Django now connects an owned
+Fabric editor to saved documents: layer text/color/transforms, revision-checked
+server saves and client PNG export. Custom assets, creative edit history and
+campaign association remain open. This is a local synthetic slice.
 
 ## Current direction — 2026-10-23
 

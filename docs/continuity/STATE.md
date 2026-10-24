@@ -14,25 +14,24 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-PR332 merged as9e615d76b96af2dfe63faaf42be1754699d1fac4; required
-CI40066617140 succeeded. Current branch feat/brand-creative-documents; resolve
-new PR/current CI live (pre-commit snapshot). Durable task: GitHub issue328.
+Main973a7d6 (PR333 merged); requiredCI40093217682 and post-mergeCI40093554622
+succeeded. Current branch feat/owned-visual-editor; resolve its PR/checks live.
+Durable task: GitHub issue328. This is the pre-commit snapshot.
 
-- Y04 synthetic brand create/list/edit and immutable identity versions merged.
-- Follow-on local saved documents pin BrandIdentity; owner+brand scoping,
-  request UUID replay, optimistic save revision, fixed scene v1 server validation.
-- Explicit brand-page create → bounded title/color edit → reopen → JSON download.
-  No arbitrary import/custom uploads/Fabric-in-Django/PNG rendering yet.
-- 77 focused workspace tests:73 passed,4 PostgreSQL races skipped on SQLite.
-  New document browser test passed (3.258s), retained old identity after brand edit,
-  edited text reopened and actual downloaded JSON decoded. Mobile screenshot
-  reviewed. Lint/format and migration drift passed; required PG CI pending.
-- Root reviewed source after helper agents hit workspace-credit errors; no claim
-  of completed independent review for this second package. No usage query made.
-- Scene edit history/undo is not implemented; revision is a concurrency token.
-- No persistent configured DB migration/provider/deployment/customer data.
-- 8012 remains standalone experiment, not the Django document UI.
-- Desktop PR attachments unavailable at existing100identity limit; use URLs.
+- PR332/333 delivered synthetic multi-brand identities and identity-pinned saved
+  scene documents with replay and optimistic-save protection.
+- Current slice connects Fabric7.4.0 locally packaged with MIT/source hashes to
+  owned documents: text/color/layer transforms, server save/reopen and PNG export.
+- Four HTTP checks + one browser journey passed. Actual downloadedPNG decoded
+  800x800; stale tab rejected, saved text/x reopened, external requests0 and no
+  localStorage. Desktop/mobile reviewed. Source-map packaging issue fixed.
+- PNG is current canvas (may be unsaved), not approved/persisted campaign asset.
+  Full identity styling, custom assets/fonts, undo/history and campaign binding
+  remain open. No configured DB migration, provider or deployment this slice.
+- Root source review; helper availability failed last turn, no independent review
+  claimed. Usage monitoring remains disabled.
+- 8012 remains standalone experiment, not the authenticated Django editor.
+- Desktop PR attachment limit100 remains; use PR URLs.
 
 ## Preserved implementation evidence and boundaries
 
@@ -68,6 +67,6 @@ created/resumed by the new maintenance cadence proposal. No unattended work clai
 
 ## Next action
 
-Finish saved-document PR and required PostgreSQL CI, then connect the bounded
-Fabric editor to owned saved documents without using browser localStorage as the
-source of truth. Preserve pinned identity and existing campaign/Google history.
+Finish owned-editor PR/required CI and review, then complete portable identity
+styling and creative history without changing existing scenes silently. Keep
+customer uploads/publishing gated and preserved Google history untouched.

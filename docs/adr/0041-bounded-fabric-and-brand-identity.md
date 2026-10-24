@@ -66,3 +66,19 @@ fixed dimensions/layers/assets. Its title seeds from the pinned identity tagline
 and primary color; secondary color and tone are preserved by the identity link,
 but are not silently mapped to unsupported v1 fields. Existing campaign records
 and publication approvals remain unchanged. Full visual integration remains Y06.
+
+## Owned visual editor follow-on — 24 October 2026
+
+The bounded Fabric editor is now connected through explicit brand/document routes.
+Server-rendered escaped JSON contains only validated owned scene, current revision
+and same-origin save URL. Save requires authenticated owner, CSRF, JSON content,
+16KB body cap, unique keys, finite numbers and exact bounded scene validation.
+Current brand/document ownership and revision are rechecked by the persistence
+service. Stale saves fail; failed/uncertain network requests are not retried.
+
+Fabric7.4.0 is served locally with MIT license and source/hash notice; only its
+missing source-map comment is removed. No CDN or provider is needed. The saved
+scene remains Yaparo v1, not Fabric JSON; localStorage is not used. PNG exports
+current canvas, potentially unsaved, and is not a persisted approved deliverable.
+Brand secondary/background/logo color, custom fonts/uploads, full history/undo,
+upgrade roundtrip and campaign association remain unfinished Y04–Y07 work.

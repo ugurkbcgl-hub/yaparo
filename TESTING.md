@@ -529,3 +529,11 @@ skips), plus one actual Chromium create/edit/reopen/download/identity-change tes
 passed. The downloaded JSON was decoded and checked. Source reviewed by root;
 independent helper review was interrupted by workspace-credit errors. Required
 PostgreSQL CI is the remaining merge gate. No configured DB migration performed.
+
+Owned visual editor: four focused HTTP tests and one Chromium journey passed.
+Checks cover duplicate/nonfinite/oversized JSON, ownership/CSRF, stale/noop saves,
+save/reload text/transform preservation, rejected stale tab, actual decoded800x800
+PNG, zero external requests, no localStorage and mobile overflow. Screenshots
+reviewed. Initial collectstatic failed on an unshipped upstream source map;
+removing only that comment resolved it, then all five tests passed. No persistent
+configured DB or provider operation. Required CI is still to be checked.
