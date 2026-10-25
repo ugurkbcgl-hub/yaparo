@@ -75,10 +75,10 @@ def validate_scene(value, *, fixture):
     if (
         type(value) is not dict
         or type(value.get("schema_version")) is not int
-        or value["schema_version"] not in (1, 2)
+        or value["schema_version"] not in (1, 2, 3)
     ):
         _refuse()
-    styled = value["schema_version"] == 2
+    styled = value["schema_version"] in (2, 3)
     _keys(
         value,
         ("schema_version", "fixture", "width", "height", "layers")
@@ -109,7 +109,7 @@ def validate_scene(value, *, fixture):
             _refuse()
     if (
         type(value["schema_version"]) is not int
-        or value["schema_version"] not in (1, 2)
+        or value["schema_version"] not in (1, 2, 3)
         or type(value["fixture"]) is not str
         or value["fixture"] != fixture
         or type(value["width"]) is not int
@@ -142,6 +142,8 @@ def validate_scene(value, *, fixture):
             _number(layer[name], minimum, maximum)
         if kind == "image":
             suffix = "illustration" if layer_id == "hero" else "logo"
+            if layer_id == "hero" and value["schema_version"] == 3:
+                suffix = "palette"
             if (
                 type(layer["asset"]) is not str
                 or layer["asset"] != f"{fixture}:{suffix}:v1"

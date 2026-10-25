@@ -60,10 +60,14 @@ def _document(brand, document_id, *, lock=False):
     return rows.get(pk=document_id, identity__brand=brand)
 
 
-def create_document(*, owner, brand_id, expected_identity_version, request_id):
+def create_document(
+    *, owner, brand_id, expected_identity_version, request_id, palette_material_id=None
+):
     """Create one scene, or replay the same scoped request without overwriting it."""
     _owner(owner)
     _uuid(request_id)
+    if palette_material_id is not None:
+        _uuid(palette_material_id)
     _version(expected_identity_version)
     with transaction.atomic():
         brand = _brand(owner, brand_id, lock=True)
@@ -81,6 +85,16 @@ def create_document(*, owner, brand_id, expected_identity_version, request_id):
                 raise ValidationError("Çalışma isteği başka bir bağlamda kullanılmış.")
             _scene(existing.scene, brand.fixture)
             checked_materials(existing)
+            palette = existing.material_bindings.filter(
+                layer_id="hero",
+                material_version__material__source_key=f"{brand.fixture}:palette:v1",
+            ).first()
+            if (
+                palette.material_version.material_id if palette else None
+            ) != palette_material_id:
+                raise ValidationError(
+                    "Çalışma isteği farklı bir kaynak için kullanılmış."
+                )
             return existing
         if brand.current_version != expected_identity_version:
             raise ValidationError(
@@ -100,6 +114,15 @@ def create_document(*, owner, brand_id, expected_identity_version, request_id):
             raise ValidationError(
                 "Geçerli bir sentetik marka kimliği gereklidir."
             ) from None
+        if palette_material_id is not None:
+            from growthtwin.modules.assets.durable_rasters import read_palette_material
+
+            read_palette_material(
+                owner=owner, brand_id=brand.pk, material_id=palette_material_id
+            )
+            scene["schema_version"] = 3
+            scene["layers"][0]["asset"] = f"{brand.fixture}:palette:v1"
+            scene = _scene(scene, brand.fixture)
         try:
             with transaction.atomic():
                 document = BrandCreativeDocument.objects.create(
@@ -112,7 +135,7 @@ def create_document(*, owner, brand_id, expected_identity_version, request_id):
             raise ValidationError(
                 "Çalışma isteği başka bir bağlamda kullanılmış."
             ) from None
-        bind_materials(document, owner)
+        bind_materials(document, owner, palette_material_id=palette_material_id)
         _snapshot(document, owner, "create")
         return document
 

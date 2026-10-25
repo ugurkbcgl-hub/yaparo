@@ -1,10 +1,10 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 13:07 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 13:33 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
-Owned-core/open-source plan; current synthetic raster recovery/removal slice.
+Owned-core/open-source plan; current synthetic palette-image editor slice.
 Usage monitoring disabled by owner; do not query limits. Reviewed green PRs may
 merge under standing authorization; never push directly to main. Local synthetic
 work only; actual customer data/accounts, payments/publishing remain gated.
@@ -14,10 +14,9 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main fb3a0e0 (PR340 merged); required CI40177310129 and main CI40177604172
-succeeded. Implementation branch feat/editor-material-bindings, PR341:
-https://github.com/ugurkbcgl-hub/yaparo/pull/341 . Resolve current PR/head/checks
-live; CI pending at snapshot. No unrelated working-tree edits at task start.
+Base main e6acb94 (PR341 merged); required CI40183388050 and main CI40183690585
+succeeded. Implementation branch feat/palette-editor-scene. Resolve current
+PR/head/checks live before merging. No unrelated working-tree edits at task start.
 PR336 required CI40167348893 and main CI40167513738 succeeded.
 Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
@@ -99,6 +98,21 @@ Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
 ## Preserved implementation evidence and boundaries
 
+PR341/ADR0047 pins new fixed hero/logo sources and protects referenced versions;
+legacy v1/v2 keep their source/history without backfill. New ADR0048 selects the
+exact owned generated palette UUID only for new v3 scenes; replay/source/schema
+switches deny. Current brand style and older source identity remain separate.
+Private same-origin PNG load checks deadline/size/MIME/signature/dimensions;
+missing/corrupt/denied/redirected image leaves save/export disabled. Actual
+save/reopen/restore, decoded PNG pixels, desktop/mobile and no outside requests
+verified.163 focused workspaces/assets/browser checks:157 passed/6 PG-only SQLite
+skips. Ruff, migration drift and independent source review passed. Initial browser
+failure used stale collected JS; collectstatic rebuilt it and final checks passed.
+No new source migration, provider, protected fixture or deployment action.
+Prior workspaces0005 applied ONLY to the SAME disposable local preview after a
+private native SQLite backup. Brand/document/material/raster counts preserved;
+backup hash unchanged. No configured real PostgreSQL/staging DB accessed.
+
 Rename/relocation evidence: docs/continuity/RENAMING.md. Keep stable Python package
 and migration names, DB growthtwin/growthtwin_app, salts/UUIDs/receipts, DPAPI roots,
 Google/Heroku technical identities. No global replacements or secret moves.
@@ -133,13 +147,10 @@ existing safeguards; no usage monitoring. A schedule is not proof a run executed
 
 ## Next action
 
-After reviewed PR341 is green/merged, implement a versioned, explicitly selected
-owned palette PNG layer with private load/export. ADR0047
-pins new fixed hero/logo sources, protects referenced versions, and preserves
-legacy v1/v2 without backfill. Initial149 workspaces/assets tests:143 passed,
-6 SQLite PostgreSQL-only skips. Final24 focused HTTP/service/browser checks passed. Desktop/mobile source
-details reviewed; export PNG pixels and legacy rendering verified. Ruff and
-migration drift passed; independent review found no blocker. No
-configured preview migration, provider or protected-fixture action in this slice.
-Configured DB recovery, customer upload/scanning/parser isolation/privacy gates
-remain open; Y05 incomplete.
+After reviewed palette-editor PR CI/merge, design a versioned owned portable
+scene/source/binary bundle and fresh-workspace recovery rehearsal (ADR0048).
+Scene-only JSON is not a portable asset bundle; no arbitrary import/customer
+upload is authorized. Preview schema is current; port8002 was not listening when
+checked. No refreshed authenticated manual preview claimed. Configured DB
+recovery, customer upload/scanning/parser isolation/privacy gates remain open;
+Y05 incomplete.

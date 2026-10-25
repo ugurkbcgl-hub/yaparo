@@ -37,9 +37,10 @@ veritabanında gerçek backup/restore/PNG okuma/silme provası eklendi. Kaynak/y
 korunur; yapılandırılmış PostgreSQL/staging veya müşteri veri silme kanıtı sayılmaz.
 ADR-0047 ile yeni çalışmaların iki sabit görsel/logo kaynağı sahip olunan materyal
 sürümlerine bağlandı; kullanılan sürümlerin silinmesi engellenir. Eski v1/v2
-çalışmaların görünümü/geçmişi korunur, geçmişe kaynak bağı uydurulmaz. Sıradaki
-yerel iş, açık seçimle palet PNG katmanı ve özel yükleme/export için ayrı sahne
-sürümüdür. Bu dilim gerçek dosya yüklemeyi açmaz.
+çalışmaların görünümü/geçmişi korunur, geçmişe kaynak bağı uydurulmaz. Palet PNG
+katmanı ve özel yükleme/export ADR-0048 ile yalnız yeni v3 çalışmalarda uygulandı;
+eski v1/v2 değişmez. Sıradaki yerel iş sahne/kaynak/binary paketinin taşınabilirliği
+ve yeni çalışma alanında kurtarma provasıdır. Bu dilim gerçek dosya yüklemeyi açmaz.
 
 ADR-0045: Sabit marka paleti görseli, materyal/kimlik sürümüne bağlı orijinal ve
 normalize PNG çiftiyle mevcut veritabanında atomik saklanır. Sahip özel PNG

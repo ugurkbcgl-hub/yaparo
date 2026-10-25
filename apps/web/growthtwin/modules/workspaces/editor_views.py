@@ -54,6 +54,17 @@ def editor(request, brand_id, document_id):
             "bootstrap": {
                 "scene": document.scene,
                 "revision": document.revision,
+                "palette_url": reverse(
+                    "brands:palette_image",
+                    args=[
+                        brand_id,
+                        document.material_bindings.get(
+                            layer_id="hero"
+                        ).material_version.material_id,
+                    ],
+                )
+                if document.scene["schema_version"] == 3
+                else None,
                 "history": history,
                 "restore_url": reverse(
                     "brand_documents:restore_scene", args=[brand_id, document_id]

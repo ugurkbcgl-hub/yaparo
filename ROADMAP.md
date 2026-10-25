@@ -46,8 +46,10 @@ Configured PostgreSQL/Heroku and crash/retention gates remain open.
 **Current:** ADR-0047 pins new editor hero/logo layers to owned fixed-source
 material versions, protects referenced versions and shows provenance. Existing
 v1/v2 documents keep their prior rendering/history and no invented source links.
-**Next:** explicitly selected owned palette PNG layer with private load/export
-and versioned scene compatibility. Customer gates remain open.
+**Current:** ADR-0048 adds explicitly selected owned palette PNG in new scene v3,
+private bounded load, save/reopen/restore/export and incomplete-image refusal.
+Existing v1/v2 stay unchanged. **Next:** owned portable scene/source/binary bundle
+and fresh-workspace recovery rehearsal. Customer gates remain open.
 Y05 is not complete.
 
 The owner's multi-brand requirement is now part of Y04: separate identity,

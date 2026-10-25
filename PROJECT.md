@@ -23,8 +23,14 @@ ADR-0043; this is a local synthetic slice.
 ADR-0047 links new editor documents to the two fixed source material versions,
 protects referenced sources from deletion and displays pinned provenance. Legacy
 v1/v2 documents keep their appearance/history without invented bindings. Scene
-JSON remains unchanged; palette PNG placement and portable asset bundles are next.
-No customer upload, configured runtime migration or production capability is added.
+JSON remains scene-only; portable asset bundles remain open.
+No customer upload or production capability is added.
+
+ADR-0048 adds explicit new-design creation from an owned generated palette PNG.
+Scene v3 pins that image while v1/v2 stay unchanged; the private image is loaded
+with bounded same-origin read and fail-closed save/export. Actual PNG pixels,
+save/reopen/restore and failure cases are verified with synthetic data. This is
+not arbitrary image intake, AI creative quality or production readiness.
 
 Y05-B has an internal, default-off generated JPEG/PNG/WebP rehearsal with bounded
 structural validation, metadata-free PNG derivatives, measured hashes/sizes and

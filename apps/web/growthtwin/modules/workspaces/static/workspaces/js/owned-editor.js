@@ -21,12 +21,13 @@
   const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
   const finiteIn = (value, low, high) => typeof value === "number" && Number.isFinite(value) && value >= low && value <= high;
   function validate(value, fixture) {
-    const styled = value && value.schema_version === 2;
+    const styled = value && [2,3].includes(value.schema_version);
     if (styled && (!exactKeys(value.style, ["background_color", "logo_color", "logo_icon_color", "wordmark_color", "font_family"]) || value.style.font_family !== "Arial" || !["background_color", "logo_color", "logo_icon_color", "wordmark_color"].every(key => typeof value.style[key] === "string" && /^#[0-9a-f]{6}$/i.test(value.style[key])))) throw Error("invalid style");
-    if (!exactKeys(value, ["schema_version", "fixture", "width", "height", "layers", ...(styled ? ["style"] : [])]) || ![1,2].includes(value.schema_version) || value.fixture !== fixture || !["product", "service"].includes(fixture) || value.width !== SIZE || value.height !== SIZE || !Array.isArray(value.layers) || value.layers.length !== 4) throw Error("invalid scene");
+    if (!exactKeys(value, ["schema_version", "fixture", "width", "height", "layers", ...(styled ? ["style"] : [])]) || ![1,2,3].includes(value.schema_version) || value.schema_version !== boot.scene.schema_version || value.fixture !== fixture || !["product", "service"].includes(fixture) || value.width !== SIZE || value.height !== SIZE || !Array.isArray(value.layers) || value.layers.length !== 4) throw Error("invalid scene");
     const expected = seed(fixture).layers;
     value.layers.forEach((layer, index) => {
       const reference = expected[index];
+      if (index === 0 && value.schema_version === 3) reference.asset = fixture + ":palette:v1";
       const fields = ["id", "type", "x", "y", "scale", "angle", ...(reference.type === "text" ? ["text", "color"] : ["asset"])];
       if (!exactKeys(layer, fields) || layer.id !== reference.id || layer.type !== reference.type || !finiteIn(layer.x, 0, 700) || !finiteIn(layer.y, 0, 700) || !finiteIn(layer.scale, 0.5, 1.5) || !finiteIn(layer.angle, -45, 45)) throw Error("invalid layer");
       if (layer.type === "image" && layer.asset !== reference.asset) throw Error("unknown asset");
@@ -63,6 +64,28 @@
     }
     return element.toDataURL("image/png");
   }
+  let paletteData;
+  async function paletteSource() {
+    if (!paletteData) paletteData = (async () => {
+      if (typeof boot.palette_url !== "string" || !/^\/workspace\/brands\/[1-9][0-9]*\/materials\/[0-9a-f-]{36}\/image\/$/.test(boot.palette_url)) throw Error("invalid private source");
+      const response = await fetch(boot.palette_url, { credentials: "same-origin", redirect: "error", cache: "no-store", signal: AbortSignal.timeout(10000) });
+      if (!response.ok || response.headers.get("Content-Type")?.split(";")[0] !== "image/png" || !response.body) throw Error("private image unavailable");
+      const reader = response.body.getReader(); const chunks = []; let total = 0;
+      try {
+        while (true) {
+          const {done,value} = await reader.read(); if (done) break;
+          total += value.byteLength; if (total > 8388608) throw Error("image too large");
+          chunks.push(value);
+        }
+      } finally { await reader.cancel(); }
+      if (total < 8) throw Error("image missing");
+      const blob = new Blob(chunks, {type:"image/png"});
+      const signature = new Uint8Array(await blob.slice(0,8).arrayBuffer());
+      if (![137,80,78,71,13,10,26,10].every((v,i)=>signature[i]===v)) throw Error("invalid PNG");
+      return new Promise((resolve,reject)=>{const file = new FileReader(); file.onload=()=>resolve(file.result); file.onerror=reject; file.readAsDataURL(blob);});
+    })();
+    return paletteData;
+  }
   const canvas = new fabric.Canvas("design", { backgroundColor: "#f5eddf", selection: false, preserveObjectStacking: true });
   let scene; let selected = "title"; let objects = new Map(); let renderVersion = 0; let ready = false; let dirty = false;
   function controls() {
@@ -92,7 +115,11 @@
     try {
       const next = await Promise.all(scene.layers.map(async (layer) => {
         let object;
-        if (layer.type === "image") object = await fabric.FabricImage.fromURL(bitmap(scene.fixture, layer.id === "logo" ? "logo" : "hero"));
+        if (layer.type === "image") {
+          const palette = scene.schema_version === 3 && layer.id === "hero";
+          object = await fabric.FabricImage.fromURL(palette ? await paletteSource() : bitmap(scene.fixture, layer.id === "logo" ? "logo" : "hero"));
+          if (palette && (object.width !== 320 || object.height !== 200)) throw Error("invalid palette dimensions");
+        }
         else object = new fabric.Textbox(layer.text, { fontFamily: scene.style?.font_family || "Arial", fontSize: layer.id === "title" ? 49 : 21, fontWeight: layer.id === "title" ? "bold" : "normal", width: layer.id === "title" ? 680 : 650, fill: layer.color, editable: false, splitByGrapheme: false });
         object.set({ left: layer.x, top: layer.y, scaleX: layer.scale, scaleY: layer.scale, angle: layer.angle, originX: "left", originY: "top", lockScalingFlip: true, lockSkewingX: true, lockSkewingY: true, borderColor: "#4b7651", cornerColor: "#4b7651", transparentCorners: false, cornerSize: 10 });
         object.setControlsVisibility({ ml: false, mr: false, mt: false, mb: false });
@@ -108,7 +135,7 @@
       }));
       if (version !== renderVersion) { next.forEach(([, object]) => object.dispose()); return; }
       objects = new Map(next); next.forEach(([, object]) => canvas.add(object)); ready = true; resize(); $("controls").disabled = false; $("save").disabled = false; $("download").disabled = false; choose("title"); message(loaded.message, loaded.error);
-    } catch { if (version === renderVersion) message("Önizleme hazırlanamadı. Sayfayı yeniden açmayı deneyin.", true); }
+    } catch { if (version === renderVersion) message("Önizleme hazırlanamadı. Kayıtlı görsele veya oturuma erişilemiyor olabilir. Eksik görselle kaydetme ve indirme kapalı; sayfayı yeniden açın.", true); }
   }
   function update() {
     if (!ready) return;

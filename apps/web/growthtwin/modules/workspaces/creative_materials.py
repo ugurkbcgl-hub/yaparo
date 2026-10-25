@@ -2,23 +2,29 @@
 
 from django.core.exceptions import ValidationError
 
-from growthtwin.modules.assets.models import BrandMaterialVersion
+from growthtwin.modules.assets.models import BrandMaterialVersion, MaterialRasterPair
 from growthtwin.modules.assets.services import prepare_synthetic_materials
-from growthtwin.modules.assets.synthetic_catalog import definitions_for_fixture
+from growthtwin.modules.assets.synthetic_catalog import (
+    SyntheticMaterialDefinition,
+    definitions_for_fixture,
+)
 
 from .models import CreativeMaterialBinding
 
 
-def bind_materials(document, owner):
+def bind_materials(document, owner, *, palette_material_id=None):
     """Called only inside the owned document creation transaction/brand lock."""
     prepare_synthetic_materials(owner=owner, brand_id=document.identity.brand_id)
     for layer in document.scene["layers"]:
         if layer["type"] == "image":
-            version = BrandMaterialVersion.objects.get(
+            versions = BrandMaterialVersion.objects.filter(
                 material__brand_id=document.identity.brand_id,
                 material__source_key=layer["asset"],
                 version=1,
             )
+            if layer["id"] == "hero" and palette_material_id is not None:
+                versions = versions.filter(material_id=palette_material_id)
+            version = versions.get()
             CreativeMaterialBinding.objects.create(
                 document=document, layer_id=layer["id"], material_version=version
             )
@@ -32,7 +38,11 @@ def checked_materials(document):
             "material_version__material__identity"
         )
     )
-    if document.material_binding_version == 0 and not rows:
+    if (
+        document.material_binding_version == 0
+        and not rows
+        and document.scene["schema_version"] in (1, 2)
+    ):
         return []  # Legacy scenes are never retroactively rebound.
     if document.material_binding_version != 1 or len(rows) != 2:
         raise ValidationError("Çalışmanın materyal bağları doğrulanamadı.")
@@ -52,6 +62,25 @@ def checked_materials(document):
         row.clean()
         version = row.material_version
         definition = definitions.get(layers[row.layer_id])
+        if row.layer_id == "hero" and document.scene["schema_version"] == 3:
+            raster = (
+                MaterialRasterPair.objects.filter(version=version)
+                .values("original_size")
+                .first()
+            )
+            if raster is None:
+                raise ValidationError("Palet görseli bulunamadı.")
+            definition = SyntheticMaterialDefinition(
+                fixture=document.scene["fixture"],
+                source_key=f"{document.scene['fixture']}:palette:v1",
+                display_name="Marka paleti · Sentetik görsel",
+                media_type="image/png",
+                byte_size=raster["original_size"],
+                width=320,
+                height=200,
+                source_label="Yaparo palette-raster-v1",
+                rights_label="Yalnız yerel sentetik deneme",
+            )
         if (
             definition is None
             or version.material.source_key != definition.source_key
@@ -76,6 +105,8 @@ def checked_materials(document):
                 "display_name": version.display_name,
                 "version": version.version,
                 "identity_version": version.material.identity.version,
+                "is_raster": document.scene["schema_version"] == 3
+                and row.layer_id == "hero",
             }
         )
     return result
