@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 20:48 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 20:55 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,12 +16,12 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main393515d (PR345 merged); required CI40198604735 and main CI40199056437
-succeeded. Branch feat/campaign-design-selection; PR346 open. Required CI40218129191
-was in progress at snapshot; final independent source review found no blocker.
-Resolve current branch/head/PR/CI live. No unrelated edits at task start.
-Durable task: GitHub issue328. New campaigns0009 creates only the local choice table;
-no backfill or configured database change. Preview migration not yet applied.
+Main94cd3c0 contains merged PR346. Required CI40218224320 succeeded on exact
+head f99fdec (984 Django tests:980 pass/4 unrelated skips;21 browser tests pass;
+5 isolated-editor checks pass). All four new PostgreSQL concurrency tests ran.
+Final independent review found no blocker. Postmerge main CI40218655689 was in
+progress at snapshot. Branch codex/campaign-design-handoff records these verified
+results; resolve its PR/head and all mutable Git facts live. Durable task: issue328.
 
 - ADR0052 adds default-off/DEBUG same-workspace campaign → owned brand/saved-design
   selection, pinned to an immutable revision. New document edits do not change it;
@@ -31,8 +31,7 @@ no backfill or configured database change. Preview migration not yet applied.
   no invented legacy provenance. Draft removal preserves source snapshots.
 - Selection locks only its draft; a scoped INSERT subquery rechecks revision,
   owner/workspace/activity/archive at write boundary without adding source locks.
-  Independent review confirmed the prior lock inversion was resolved. Four actual
-  PostgreSQL concurrency tests must pass required CI before merge.
+  The prior lock inversion was resolved and PostgreSQL concurrency checks passed.
 - Private chooser uses closed typed POST, CSRF, preparse multipart/size refusal and
   no-store/noindex headers. Same-origin referrer preserves actual browser CSRF.
   Editor return hint accepts only owned same-workspace bounded integer campaign.
@@ -40,7 +39,9 @@ no backfill or configured database change. Preview migration not yet applied.
   checks passed after UI refinement. Actual selection → stale refusal → editor
   revision2 → preserved pinned revision1 → explicit reselection passed. Desktop/
   mobile screenshots reviewed. Ruff/format/migration-drift/diff checks passed.
-  Required CI and postmerge preview update are not yet claimed.
+- New campaigns0009 creates only the choice table; no backfill. Applied only to the
+  same disposable SQLite preview after exclusive native backup and exact plan.
+  No configured PostgreSQL/Heroku or protected candidate database was touched.
 
 ## Established local capabilities and limits
 
@@ -66,14 +67,19 @@ history stays separate. Current v4 browser checks preserve both mechanisms.
 ## Same disposable local preview
 
 Private root: %TEMP%\yaparo-public-preview-q2ql3pkq, DB preview.sqlite3.
-Prior workspaces0005 applied there only after verified private backup; original
-brand/document/material/raster counts preserved. No data reset or new DB for UI.
-Private serve_design_preview.py runs loopback8002 with DEBUG and only the palette
-flag plus a fresh in-memory signing key; it refuses pending migrations. Verify
-and restart that exact script/process if needed after merge/collectstatic, never
-replace an unknown listener. Home/login and actual unversioned DEBUG static JS/CSS
-were HTTP200 after PR345. No authenticated manual preview claimed; browser evidence
-uses isolated test fixtures. Do not infer production readiness from these checks.
+workspaces0005 and now campaigns0009 applied only here after private backups.
+The latest backup is preview-before-campaign-design.sqlite3 in that private root.
+First strict inventory check stopped on Django's expected post_migrate additions;
+no retry/reset occurred. Read-only comparison then verified ALL existing rows
+match backup exactly, with only one migration, one content type and four standard
+model permissions added. New choice table is empty; SQLite integrity_check passed.
+Private serve_design_preview.py runs loopback8002 with DEBUG, palette persistence
+and campaign-design flags plus a fresh in-memory signing key; source defaults stay
+off. It refuses pending migrations. Only restart this exact script/process, never
+replace an unknown listener. Home/login HTTP200 and owned-design route redirected
+to login after PR346. Browser panel open was queued by the app; no authenticated
+manual preview claimed. Actual authenticated journey evidence uses isolated E2E
+fixtures. Do not infer production readiness from these checks.
 
 ## Preserved integration and release boundaries
 
@@ -105,8 +111,7 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Finish the reviewed campaign-design selection PR and required CI, then apply only
-campaigns0009 to the SAME disposable preview after an exclusive private SQLite
-backup and exact migration-plan verification. Enable the new flag in its private
-launcher only. Next product slice: read-only visual preview/export of the exact
-campaign-pinned snapshot, distinct from the current editable document.
+Build read-only visual preview/export of the exact campaign-pinned snapshot,
+distinct from the current editable document. Reuse the fixed renderer and scoped
+source contracts; preserve immutable selection/history and existing Search,
+approval/dispatch/stop boundaries. Keep it local, owned and synthetic.
