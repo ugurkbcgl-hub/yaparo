@@ -41,8 +41,10 @@ Durable task: GitHub issue328. Resolve current PR head/checks live.
   route and mocked parser verify multipart parsing does not start.
 - Initial local full run:892 tests,866 passed/26 SQLite skips. CI40164225778
   failed on existing browser reload losing its page, not a backend assertion.
-  Added explicit navigation wait; focused assets+browser18 tests passed. Required
-  CI must pass on the final head before merge. Fresh final review is underway.
+  Added explicit navigation wait; focused assets+browser18 tests passed. Enhanced
+  browser test then prepared the actual catalog with CSRF, showed two unmeasured
+  sizes and continued save/reopen/download successfully. Final independent review
+  found no blockers. Required CI must pass on the final head before merge.
 - Assets0001 migration has run only on ephemeral test DBs; not on preview or
   configured/real DB. Preserve protected Google fixture/history and real DBs.
 - Desktop PR attachment limit100 remains; use PR URLs. Usage monitoring disabled.
