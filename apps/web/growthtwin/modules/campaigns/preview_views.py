@@ -1,5 +1,6 @@
 """Private, GET-only campaign snapshot preview; no write or publication path."""
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.http import Http404, HttpResponse
@@ -10,6 +11,7 @@ from django.views.decorators.http import require_safe
 
 from growthtwin.modules.workspaces.creative_scenes import uses_palette
 
+from .design_bundle import export_selected_bundle
 from .design_preview import selected_palette, selected_snapshot
 
 
@@ -34,6 +36,7 @@ def preview(request, draft_id, selection_version):
         {
             "choice": choice,
             "scene": scene,
+            "bundle_enabled": settings.SYNTHETIC_MATERIAL_PERSISTENCE_ENABLED,
             "bootstrap": {
                 "scene": scene,
                 "selection_version": choice.version,
@@ -50,6 +53,28 @@ def preview(request, draft_id, selection_version):
         "img-src 'self' data:; connect-src 'self'; object-src 'none'; "
         "base-uri 'none'; frame-ancestors 'none'"
     )
+    return response
+
+
+@login_required
+@never_cache
+@require_safe
+def bundle(request, draft_id, selection_version):
+    try:
+        data = export_selected_bundle(
+            owner=request.user, draft_id=draft_id, selection_version=selection_version
+        )
+    except (ObjectDoesNotExist, PermissionDenied) as error:
+        raise Http404 from error
+    except ValidationError:
+        return HttpResponse(
+            "Paket hazırlanamadı. Seçili kaydı yeniden kontrol edin.", status=409
+        )
+    response = HttpResponse(data, content_type="application/zip")
+    response["Content-Disposition"] = (
+        f'attachment; filename="yaparo-campaign-{draft_id}-selection-{selection_version}.zip"'
+    )
+    response["X-Content-Type-Options"] = "nosniff"
     return response
 
 

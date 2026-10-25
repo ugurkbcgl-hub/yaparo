@@ -16,10 +16,10 @@ _PREPARE_PATH = re.compile(
 )
 _MAX_FORM_BODY_BYTES = 8 * 1024
 _DESIGN_PATH = re.compile(
-    r"\A/workspace/campaigns/[0-9]+/design/(?:[0-9]+/(?:preview|image)/)?\Z"
+    r"\A/workspace/campaigns/[0-9]+/design/(?:[0-9]+/(?:preview|image|bundle)/)?\Z"
 )
 _READ_ONLY_DESIGN = re.compile(
-    r"\A/workspace/campaigns/[0-9]+/design/[0-9]+/(?:preview|image)/\Z"
+    r"\A/workspace/campaigns/[0-9]+/design/[0-9]+/(?:preview|image|bundle)/\Z"
 )
 
 

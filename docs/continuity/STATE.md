@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 21:08 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 21:28 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,35 +16,32 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main1a34919 (PR347 merged). Main CI40219202806 and prior product CI40218224320
-succeeded. Branch codex/pinned-design-preview; PR not yet created at snapshot.
-Resolve current branch/head/PR/CI live. Durable task: issue328. No new migration,
+Base main40f638a (PR348 merged), required CI40219831960 and main CI40220289970
+succeeded. Branch codex/pinned-design-bundle; PR not yet created at snapshot.
+Resolve mutable branch/head/PR/CI live. Durable task: issue328. No new migration,
 configured database, provider or protected TEST fixture change.
 
-- ADR0052 explicit same-workspace campaign/brand/design reference remains immutable,
-  versioned, stale-safe and separate from existing Search/approval/dispatch/stop.
-- ADR0053 adds GET/HEAD-only read-only preview and PNG of the pinned snapshot.
-  Version-addressed URLs reject changed selections rather than following them.
-  Already loaded pages retain their explicitly shown snapshot, without checking
-  current selection again at the instant of client PNG generation.
-- Source bytes use a scoped version-addressed private route and existing raster
-  hash/version validation. Missing/inaccessible images keep download disabled.
-  Same-owner-other-workspace, archive/transfer/flags/auth and preparse POST refusal
-  checked. Private no-store/noindex responses and bounded CSP remain in place.
-- Shared fixed renderer now supplies bitmap drawing, palette load, Fabric object
-  construction and logical PNG export to both editor and StaticCanvas preview.
-  Editor retains its controls, validation, saves, history and undo. New asset paths
-  are required by package verification; no arbitrary image source or write added.
-- 307 relevant local service/HTTP/browser checks:296 pass/11 PostgreSQL-only skips.
-  Actual illustration and palette portrait PNGs remain pixel-identical after live
-  edit/save and at mobile width; palette failure disables download. Existing editor
-  save/reopen/stale/undo/export journeys passed. Mobile screenshot reviewed.
-  Ruff/format/migration drift/diff checks passed. Initial test run required refreshed
-  local static manifest; second harness failure was corrected to edit through the
-  actual browser rather than ORM inside Playwright's async runtime.
-- Final source review found no blocker. Required PR CI and postmerge preview restart
-  not yet claimed. Existing disposable preview needs only a known-process restart
-  after merge; campaigns0009 was already applied by PR346 with backup proof below.
+- ADR0052/0053 selection and read-only PNG preserve the immutable chosen revision,
+  explicit reselection, ownership/source checks and existing Search/dispatch paths.
+  PR348 passed992 Django tests (988 pass/4 unrelated skips),23 browser tests and5
+  isolated-editor checks. Same known disposable preview restarted after merge;
+  home/login/new JS were HTTP200, preview route required login. No DB migration.
+- ADR0054 adds GET/HEAD-only version-addressed ZIP of the selected snapshot, with
+  campaign/selection/snapshot/revision/brand manifest and exact pinned sources.
+  Document ZIP still exports current saved document through shared serializer.
+  File hashes, deterministic bytes and12MiB/64KiB size bounds remain enforced.
+- Eligibility is checked before/after byte collection; observed selection/ownership
+  changes refuse. No extra locks or writes. Campaign+material flags/DEBUG required;
+  source flags stay off. ZIP link hidden when material flag is off. Closed preparse
+  unsafe-method rejection and private/no-store/noindex/nosniff apply.
+- 15 focused local service/HTTP/browser/rehearsal checks passed: selected revision1 versus live
+  revision2, repeated exact bytes, file hashes, exact palette sources/portrait,
+  scope/flag/multipart refusal and selection/owner change while collecting. Actual
+  browser ZIP downloads before/after live edit are byte-identical for illustration
+  and palette. Source review found no blocker. Ruff/format/migration drift/diff
+  checks passed; required CI and postmerge restart pending.
+- No changes to credentials/provider/OAuth, financial/publishing gates or protected
+  Google candidate. Postmerge preview needs only the known-process restart.
 
 ## Established local capabilities and limits
 
@@ -114,8 +111,8 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Extend owned ZIP export to the campaign-selected immutable snapshot with an
-explicit campaign/selection/revision manifest. Existing document ZIP still exports
-the current saved document; do not silently substitute it for the selected revision.
-Reuse source/hash/scope contracts, preserve Search/approval/dispatch/stop and keep
-local synthetic/default-off boundaries. No generic archive importer or new service.
+Y08: measure the local synthetic campaign → brand/design → edit/save → explicit
+selection → preview/PNG/ZIP journey and fix only demonstrated friction. Record
+observed duration/errors and preserve no-write/read boundaries where applicable.
+Do not call automated rehearsal independent human usability validation; six
+consented human observations remain open. No new provider/service or real data.

@@ -48,8 +48,10 @@ korunur. ADR-0052 kampanyadan aynı çalışma alanındaki marka/tasarım kaydı
 seçimini ekler; eski kampanyalara marka tahmin edilmez, seçim yayın onayı değildir.
 ADR-0053 kampanyanın seçili kaydına salt okunur önizleme ve tam boyutlu PNG ekler.
 Canlı tasarım düzenlemesi bu görüntüyü değiştirmez; seçim değişince eski sürüm
-adresi reddedilir. Sıradaki dilim: seçili kayıttan kampanya/seçim manifestli ZIP;
-mevcut belge ZIP’i hâlâ güncel kayıtlı belgeyi dışa aktarır.
+adresi reddedilir. ADR-0054 seçili kayıttan kampanya/seçim manifestli ZIP ekler;
+mevcut belge ZIP’i hâlâ güncel kayıtlı belgeyi dışa aktarır. Sıradaki Y08 yerel
+sentetik yolculuğun süre/hata ölçümü ve gözlenen sürtünmelerin giderilmesidir;
+insanlarla bağımsız kullanılabilirlik doğrulaması açık kalır.
 Gerçek dosya yükleme kapalıdır.
 
 ADR-0045: Sabit marka paleti görseli, materyal/kimlik sürümüne bağlı orijinal ve
