@@ -1,4 +1,4 @@
-"""Pure bounded Yaparo scene v1/v2; no ORM, files, URLs or Fabric deserialization.
+"""Pure bounded Yaparo scenes v1–v3; no ORM, files or Fabric deserialization.
 
 Identity fields are supplied as literal values, so seeding cannot lazily query a
 BrandIdentity. The caller owns authorization and immutable identity binding.
@@ -23,7 +23,7 @@ _COLOR = re.compile(r"#[0-9a-fA-F]{6}\Z")
 
 
 class SceneValidationError(ValueError):
-    """A scene is outside the fixed synthetic v1 contract."""
+    """A scene is outside the supported fixed synthetic contracts."""
 
 
 def _refuse():

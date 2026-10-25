@@ -133,9 +133,12 @@ class PaletteDocumentTests(DocumentFixture, TestCase):
             target_revision=1,
         )
         self.assertEqual(restored.scene, document.scene)
-        for candidate in (deepcopy(restored.scene), deepcopy(restored.scene)):
-            candidate["schema_version"] = 2
-            candidate["layers"][0]["asset"] = "product:illustration:v1"
+        downgrade = deepcopy(restored.scene)
+        downgrade["schema_version"] = 2
+        downgrade["layers"][0]["asset"] = "product:illustration:v1"
+        foreign_source = deepcopy(restored.scene)
+        foreign_source["layers"][0]["asset"] = "service:palette:v1"
+        for candidate in (downgrade, foreign_source):
             with self.assertRaises(ValidationError):
                 self.save(candidate, expected_revision=3)
 

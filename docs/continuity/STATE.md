@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 13:33 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 15:42 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -15,8 +15,9 @@ Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base main e6acb94 (PR341 merged); required CI40183388050 and main CI40183690585
-succeeded. Implementation branch feat/palette-editor-scene. Resolve current
-PR/head/checks live before merging. No unrelated working-tree edits at task start.
+succeeded. Implementation branch feat/palette-editor-scene, PR342:
+https://github.com/ugurkbcgl-hub/yaparo/pull/342 . Resolve current head/checks live
+before merging; CI pending at snapshot. No unrelated edits at task start.
 PR336 required CI40167348893 and main CI40167513738 succeeded.
 Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
