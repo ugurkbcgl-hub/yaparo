@@ -17,6 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "Pillow==13.0.0",
     "build==1.6.1",
     "pip-audit==2.10.1",
     "ruff==0.16.9",
