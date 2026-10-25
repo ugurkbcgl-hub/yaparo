@@ -1,4 +1,4 @@
-"""Pure bounded Yaparo scenes v1–v3; no ORM, files or Fabric deserialization.
+"""Pure bounded Yaparo scenes v1–v4; no ORM, files or Fabric deserialization.
 
 Identity fields are supplied as literal values, so seeding cannot lazily query a
 BrandIdentity. The caller owns authorization and immutable identity binding.
@@ -9,6 +9,16 @@ import re
 from copy import deepcopy
 
 SCENE_SIZE = 800
+DESIGN_FORMATS = {"square": (800, 800), "portrait": (800, 1000)}
+
+
+def uses_palette(scene):
+    return type(scene) is dict and (
+        scene.get("schema_version") == 3
+        or (scene.get("schema_version") == 4 and scene.get("hero_source") == "palette")
+    )
+
+
 _FIXTURES = {
     "product": "Kurgusal seramik koleksiyonu · Ürün örneği",
     "service": "Kurgusal ev bakım hizmeti · Ankara örneği",
@@ -75,14 +85,16 @@ def validate_scene(value, *, fixture):
     if (
         type(value) is not dict
         or type(value.get("schema_version")) is not int
-        or value["schema_version"] not in (1, 2, 3)
+        or value["schema_version"] not in (1, 2, 3, 4)
     ):
         _refuse()
-    styled = value["schema_version"] in (2, 3)
+    styled = value["schema_version"] in (2, 3, 4)
+    formatted = value["schema_version"] == 4
     _keys(
         value,
         ("schema_version", "fixture", "width", "height", "layers")
-        + (("style",) if styled else ()),
+        + (("style",) if styled else ())
+        + (("format", "hero_source") if formatted else ()),
     )
     if styled:
         _keys(
@@ -107,15 +119,25 @@ def validate_scene(value, *, fixture):
                 _refuse()
         if value["style"]["font_family"] != "Arial":
             _refuse()
+    dimensions = (SCENE_SIZE, SCENE_SIZE)
+    if formatted:
+        if (
+            type(value["format"]) is not str
+            or value["format"] not in DESIGN_FORMATS
+            or type(value["hero_source"]) is not str
+            or value["hero_source"] not in ("illustration", "palette")
+        ):
+            _refuse()
+        dimensions = DESIGN_FORMATS[value["format"]]
     if (
         type(value["schema_version"]) is not int
-        or value["schema_version"] not in (1, 2, 3)
+        or value["schema_version"] not in (1, 2, 3, 4)
         or type(value["fixture"]) is not str
         or value["fixture"] != fixture
         or type(value["width"]) is not int
-        or value["width"] != SCENE_SIZE
+        or value["width"] != dimensions[0]
         or type(value["height"]) is not int
-        or value["height"] != SCENE_SIZE
+        or value["height"] != dimensions[1]
         or type(value["layers"]) is not list
         or len(value["layers"]) != len(_LAYERS)
     ):
@@ -135,14 +157,14 @@ def validate_scene(value, *, fixture):
             _refuse()
         for name, minimum, maximum in (
             ("x", 0, 700),
-            ("y", 0, 700),
+            ("y", 0, dimensions[1] - 100),
             ("scale", 0.5, 1.5),
             ("angle", -45, 45),
         ):
             _number(layer[name], minimum, maximum)
         if kind == "image":
             suffix = "illustration" if layer_id == "hero" else "logo"
-            if layer_id == "hero" and value["schema_version"] == 3:
+            if layer_id == "hero" and uses_palette(value):
                 suffix = "palette"
             if (
                 type(layer["asset"]) is not str

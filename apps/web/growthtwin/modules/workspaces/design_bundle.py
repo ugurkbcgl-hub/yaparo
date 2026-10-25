@@ -16,6 +16,7 @@ from growthtwin.modules.assets.durable_rasters import _enabled, read_palette_mat
 
 from .creative_documents import _brand, _document, _scene, _uuid
 from .creative_materials import checked_materials
+from .creative_scenes import uses_palette
 
 MAX_PACKAGE_BYTES = 12 * 1024 * 1024
 IDENTITY_FIELDS = (
@@ -43,7 +44,7 @@ README = (
     "Kaydedilmiş sahneyi, sabit kaynak bilgisini ve seçilmiş palet görselinin "
     "orijinal/normalize PNG dosyalarını içerir. Kaydedilmemiş değişiklikler ve "
     "kayıt geçmişi dahil değildir.\n"
-    "Uyumlu Yaparo çizicisi gerekir: yaparo-scene-v1-v3. Sabit çizim/logo "
+    "Uyumlu Yaparo çizicisi gerekir; sürüm manifest.json içinde belirtilir. Sabit çizim/logo "
     "bilgisi dosya veya dosya hash'i değildir. Arial sistemde bulunmalıdır; "
     "font dosyası pakete eklenmez.\n"
     "Bu paket tek başına editör, genel içe aktarma hizmeti, hak/tarama belgesi, "
@@ -93,7 +94,7 @@ def export_design_bundle(*, owner, brand_id, document_id):
                 "kind": "fixed_renderer_metadata",
                 "files": {},
             }
-            if scene["schema_version"] == 3 and binding.layer_id == "hero":
+            if uses_palette(scene) and binding.layer_id == "hero":
                 pair = read_palette_material(
                     owner=owner, brand_id=brand.pk, material_id=material.pk
                 )
@@ -110,7 +111,9 @@ def export_design_bundle(*, owner, brand_id, document_id):
             sources.append(source)
         manifest = {
             "package_version": 1,
-            "renderer_contract": "yaparo-scene-v1-v3",
+            "renderer_contract": "yaparo-scene-v1-v4"
+            if scene["schema_version"] == 4
+            else "yaparo-scene-v1-v3",
             "document": {
                 "id": str(document.pk),
                 "revision": document.revision,

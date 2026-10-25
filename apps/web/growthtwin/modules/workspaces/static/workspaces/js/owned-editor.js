@@ -20,16 +20,19 @@
   }
   const exactKeys = (value, keys) => value && typeof value === "object" && !Array.isArray(value) && Object.keys(value).length === keys.length && keys.every((key) => Object.hasOwn(value, key));
   const finiteIn = (value, low, high) => typeof value === "number" && Number.isFinite(value) && value >= low && value <= high;
+  const usesPalette = value => value.schema_version === 3 || (value.schema_version === 4 && value.hero_source === "palette");
   function validate(value, fixture) {
-    const styled = value && [2,3].includes(value.schema_version);
+    const styled = value && [2,3,4].includes(value.schema_version);
+    const formatted = value && value.schema_version === 4;
+    if (formatted && (!["square","portrait"].includes(value.format) || !["illustration","palette"].includes(value.hero_source) || value.format !== boot.scene.format || value.hero_source !== boot.scene.hero_source)) throw Error("invalid format");
     if (styled && (!exactKeys(value.style, ["background_color", "logo_color", "logo_icon_color", "wordmark_color", "font_family"]) || value.style.font_family !== "Arial" || !["background_color", "logo_color", "logo_icon_color", "wordmark_color"].every(key => typeof value.style[key] === "string" && /^#[0-9a-f]{6}$/i.test(value.style[key])))) throw Error("invalid style");
-    if (!exactKeys(value, ["schema_version", "fixture", "width", "height", "layers", ...(styled ? ["style"] : [])]) || ![1,2,3].includes(value.schema_version) || value.schema_version !== boot.scene.schema_version || value.fixture !== fixture || !["product", "service"].includes(fixture) || value.width !== SIZE || value.height !== SIZE || !Array.isArray(value.layers) || value.layers.length !== 4) throw Error("invalid scene");
+    if (!exactKeys(value, ["schema_version", "fixture", "width", "height", "layers", ...(styled ? ["style"] : []), ...(formatted ? ["format","hero_source"] : [])]) || ![1,2,3,4].includes(value.schema_version) || value.schema_version !== boot.scene.schema_version || value.fixture !== fixture || !["product", "service"].includes(fixture) || value.width !== SIZE || value.height !== (formatted && value.format === "portrait" ? 1000 : SIZE) || !Array.isArray(value.layers) || value.layers.length !== 4) throw Error("invalid scene");
     const expected = seed(fixture).layers;
     value.layers.forEach((layer, index) => {
       const reference = expected[index];
-      if (index === 0 && value.schema_version === 3) reference.asset = fixture + ":palette:v1";
+      if (index === 0 && usesPalette(value)) reference.asset = fixture + ":palette:v1";
       const fields = ["id", "type", "x", "y", "scale", "angle", ...(reference.type === "text" ? ["text", "color"] : ["asset"])];
-      if (!exactKeys(layer, fields) || layer.id !== reference.id || layer.type !== reference.type || !finiteIn(layer.x, 0, 700) || !finiteIn(layer.y, 0, 700) || !finiteIn(layer.scale, 0.5, 1.5) || !finiteIn(layer.angle, -45, 45)) throw Error("invalid layer");
+      if (!exactKeys(layer, fields) || layer.id !== reference.id || layer.type !== reference.type || !finiteIn(layer.x, 0, 700) || !finiteIn(layer.y, 0, value.height - 100) || !finiteIn(layer.scale, 0.5, 1.5) || !finiteIn(layer.angle, -45, 45)) throw Error("invalid layer");
       if (layer.type === "image" && layer.asset !== reference.asset) throw Error("unknown asset");
       if (layer.type === "text" && (typeof layer.text !== "string" || layer.text.length > 100 || /[\u0000-\u0009\u000b-\u001f\u007f]/.test(layer.text) || typeof layer.color !== "string" || !/^#[0-9a-f]{6}$/i.test(layer.color))) throw Error("invalid text");
     });
@@ -133,6 +136,7 @@
     $("text-fields").hidden = layer.type !== "text";
     if (layer.type === "text") { $("copy").value = layer.text; $("color").value = layer.color; }
     for (const key of ["x", "y", "scale", "angle"]) $(key).value = layer[key];
+    $("y").max = scene.height - 100;
     $("scale-value").textContent = Math.round(layer.scale * 100) + "%";
     $("angle-value").textContent = Math.round(layer.angle) + "°";
     for (const button of $("layers").children) button.setAttribute("aria-pressed", String(button.dataset.layer === selected));
@@ -144,18 +148,18 @@
   ids.forEach((id) => { const button = document.createElement("button"); button.type = "button"; button.textContent = names[id]; button.dataset.layer = id; button.addEventListener("click", () => choose(id)); $("layers").append(button); });
   function resize() {
     const pixels = Math.floor($("canvas-shell").clientWidth);
-    if (pixels <= 0) return;
-    canvas.setDimensions({ width: pixels, height: pixels }); canvas.setViewportTransform([pixels / SIZE, 0, 0, pixels / SIZE, 0, 0]); canvas.requestRenderAll();
+    if (pixels <= 0 || !scene) return;
+    canvas.setDimensions({ width: pixels, height: pixels * scene.height / scene.width }); canvas.setViewportTransform([pixels / SIZE, 0, 0, pixels / SIZE, 0, 0]); canvas.requestRenderAll();
   }
   new ResizeObserver(resize).observe($("canvas-shell"));
   async function render(loaded) {
     const version = ++renderVersion; ready = false; $("controls").disabled = true; $("save").disabled = true; $("download").disabled = true;
-    gestureActive = false; scene = loaded.scene; savedScene = copy(scene); undoSteps = []; redoSteps = []; localButtons(); selected = "title"; dirty = false; canvas.discardActiveObject(); canvas.clear(); canvas.backgroundColor = scene.style?.background_color || "#f5eddf"; objects = new Map();
+    gestureActive = false; scene = loaded.scene; $("canvas-shell").style.aspectRatio = scene.width + "/" + scene.height; savedScene = copy(scene); undoSteps = []; redoSteps = []; localButtons(); selected = "title"; dirty = false; canvas.discardActiveObject(); canvas.clear(); canvas.backgroundColor = scene.style?.background_color || "#f5eddf"; objects = new Map();
     try {
       const next = await Promise.all(scene.layers.map(async (layer) => {
         let object;
         if (layer.type === "image") {
-          const palette = scene.schema_version === 3 && layer.id === "hero";
+          const palette = usesPalette(scene) && layer.id === "hero";
           object = await fabric.FabricImage.fromURL(palette ? await paletteSource() : bitmap(scene.fixture, layer.id === "logo" ? "logo" : "hero"));
           if (palette && (object.width !== 320 || object.height !== 200)) throw Error("invalid palette dimensions");
         }
@@ -171,7 +175,7 @@
           }
           const before = copy(scene);
           layer.x = clamp(Number.isFinite(object.left) ? object.left : layer.x, 0, 700);
-          layer.y = clamp(Number.isFinite(object.top) ? object.top : layer.y, 0, 700);
+          layer.y = clamp(Number.isFinite(object.top) ? object.top : layer.y, 0, scene.height - 100);
           layer.scale = clamp(Number.isFinite(object.scaleX) ? Math.abs(object.scaleX) : layer.scale, 0.5, 1.5);
           layer.angle = clamp(Number.isFinite(object.angle) ? ((object.angle + 180) % 360 + 360) % 360 - 180 : 0, -45, 45);
           object.set({ left: layer.x, top: layer.y, scaleX: layer.scale, scaleY: layer.scale, angle: layer.angle, flipX: false, flipY: false }); object.setCoords(); remember(before); controls(); canvas.requestRenderAll(); message("Düzenleme hazır. Saklamak için taslağı kaydet.");
@@ -244,7 +248,13 @@
   $("download").addEventListener("click", () => {
     if (!ready) return;
     try {
-      const link = document.createElement("a"); link.href = canvas.toDataURL({ format: "png", multiplier: SIZE / canvas.width, enableRetinaScaling: false }); link.download = "yaparo-sentetik-" + scene.fixture + ".png"; document.body.append(link); link.click(); link.remove(); message("800 × 800 PNG hazırlandı. Bu bir sentetik tasarım çıktısıdır.");
+      const dimensions = {width:canvas.width,height:canvas.height}; const viewport = canvas.viewportTransform.slice();
+      let data;
+      try {
+        canvas.setDimensions({width:scene.width,height:scene.height}); canvas.setViewportTransform([1,0,0,1,0,0]);
+        data = canvas.toDataURL({format:"png",multiplier:1,enableRetinaScaling:false});
+      } finally {canvas.setDimensions(dimensions); canvas.setViewportTransform(viewport); canvas.requestRenderAll();}
+      const link = document.createElement("a"); link.href = data; link.download = "yaparo-sentetik-" + scene.fixture + ".png"; document.body.append(link); link.click(); link.remove(); message(scene.width + " × " + scene.height + " PNG hazırlandı. Bu bir sentetik tasarım çıktısıdır.");
     } catch { message("Görsel dışa aktarılamadı. Taslağı kaydedip tekrar deneyin.", true); }
   });
   window.addEventListener("beforeunload", event => { if (dirty || saving) { event.preventDefault(); event.returnValue = ""; } });

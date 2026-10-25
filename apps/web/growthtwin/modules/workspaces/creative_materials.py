@@ -9,6 +9,7 @@ from growthtwin.modules.assets.synthetic_catalog import (
     definitions_for_fixture,
 )
 
+from .creative_scenes import uses_palette
 from .models import CreativeMaterialBinding
 
 
@@ -62,7 +63,7 @@ def checked_materials(document):
         row.clean()
         version = row.material_version
         definition = definitions.get(layers[row.layer_id])
-        if row.layer_id == "hero" and document.scene["schema_version"] == 3:
+        if row.layer_id == "hero" and uses_palette(document.scene):
             raster = (
                 MaterialRasterPair.objects.filter(version=version)
                 .values("original_size")
@@ -105,8 +106,7 @@ def checked_materials(document):
                 "display_name": version.display_name,
                 "version": version.version,
                 "identity_version": version.material.identity.version,
-                "is_raster": document.scene["schema_version"] == 3
-                and row.layer_id == "hero",
+                "is_raster": uses_palette(document.scene) and row.layer_id == "hero",
             }
         )
     return result

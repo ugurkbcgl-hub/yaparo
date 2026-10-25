@@ -109,6 +109,7 @@ def _exercise(root):
             expected_identity_version=2,
             request_id=uuid4(),
             palette_material_id=pair.version.material_id,
+            design_format="portrait",
         )
         scene = json.loads(json.dumps(document.scene))
         scene["layers"][2]["text"] = "Özgün sentetik paket · Şığ"
@@ -149,6 +150,11 @@ def _exercise(root):
                     and sha256(blobs[path]).hexdigest() == proof["sha256"]
                 )
         _require(manifest["package_version"] == 1 and recovered_scene == scene)
+        _require(
+            recovered_scene["schema_version"] == 4
+            and recovered_scene["format"] == "portrait"
+            and (recovered_scene["width"], recovered_scene["height"]) == (800, 1000)
+        )
         source = next(row for row in manifest["sources"] if row["layer_id"] == "hero")
         _require(
             source["identity"]["version"] == 1
@@ -192,6 +198,7 @@ def _exercise(root):
             expected_identity_version=2,
             request_id=uuid4(),
             palette_material_id=target_material.pk,
+            design_format=recovered_scene.get("format"),
         )
         saved = save_document(
             owner=target_owner,

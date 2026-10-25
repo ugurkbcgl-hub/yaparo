@@ -29,6 +29,13 @@ class DocumentCreateForm(forms.Form):
     )
     request_id = forms.UUIDField(widget=forms.HiddenInput)
     palette_material_id = forms.UUIDField(required=False, widget=forms.HiddenInput)
+    design_format = forms.ChoiceField(
+        required=False,
+        choices=(("square", "Kare · 800 × 800"), ("portrait", "Dikey · 800 × 1000")),
+    )
+
+    def clean_design_format(self):
+        return self.cleaned_data["design_format"] or None
 
 
 class DocumentEditForm(forms.Form):

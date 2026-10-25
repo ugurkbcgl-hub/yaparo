@@ -97,7 +97,7 @@ class MaterialRasterBrowserTests(LiveServerTestCase):
                 with ZipFile(bundle_event.value.path()) as archive:
                     manifest = json.loads(archive.read("manifest.json"))
                     self.assertEqual(
-                        json.loads(archive.read("scene.json"))["schema_version"], 3
+                        json.loads(archive.read("scene.json"))["schema_version"], 4
                     )
                     self.assertEqual(manifest["document"]["revision"], 1)
                     image_data = archive.read("assets/hero-normalized.png")
