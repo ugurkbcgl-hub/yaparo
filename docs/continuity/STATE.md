@@ -1,10 +1,10 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 09:00 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 10:42 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
-Owned-core/open-source plan; current Y05-A closed synthetic material catalog.
+Owned-core/open-source plan; current Y05-B generated raster/storage rehearsal.
 Usage monitoring disabled by owner; do not query limits. Reviewed green PRs may
 merge under standing authorization; never push directly to main. Local synthetic
 work only; actual customer data/accounts, payments/publishing remain gated.
@@ -14,10 +14,10 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Product main e8ad780 (PR336 merged); required CI40167348893 succeeded.
-Post-merge CI40167513738 was running at this snapshot; resolve live.
-Current branch docs/material-catalog-handoff (documentation follow-up PR).
-PR335 required CI40126863230 and post-merge CI40141715049 also succeeded.
+Base main e0feec4 (PR337 merged); main CI40167834694 succeeded.
+PR336 required CI40167348893 and main CI40167513738 succeeded.
+Current implementation branch feat/synthetic-raster-rehearsal, PR338. Recheck
+its current merge/CI status live. No unrelated working-tree changes at creation.
 Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
 - New creative scenes v2 pin brand palette: background, logo/icon/wordmark and
@@ -52,6 +52,19 @@ Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
   backup; brand/document counts preserved. Server restarted on8002; home/login
   HTTP200 verified. No authenticated manual preview review claimed. Temporary
   preview login file removed. No configured/real DB or protected fixture changed.
+- PR338: default-off internal generated JPEG/PNG/WebP original→normalization→
+  private readback→cleanup rehearsal (ADR0044). DEBUG also required. No routes,
+  customer bytes, durable catalog mutation or provider operation. Pillow13.0.0
+  pinned in development dependencies; source/type/byte/edge/pixel/frame limits.
+- Real byte hashes/sizes and tool provenance; output EXIF/comments stripped.
+  Structure verified is not malware CLEAN, READY, legal rights or publish proof.
+- Actual Windows current-user-only directory ACL, exclusive UUID files and exact
+  inventoried deletion tested. POSIX permissions covered by CI. Not an atomic
+  same-user attack defense or parser sandbox; crash orphan recovery remains open.
+- 28 focused asset tests passed on Windows; independent source review found no
+  blockers. Ruff, Django checks, migration drift and dependency audit passed.
+  Required final-head CI must pass before merge. No new migration or database
+  operation except ephemeral tests; existing preview/protected fixture unchanged.
 - Desktop PR attachment limit100 remains; use PR URLs. Usage monitoring disabled.
 
 ## Preserved implementation evidence and boundaries
@@ -88,7 +101,7 @@ created/resumed by the new maintenance cadence proposal. No unattended work clai
 
 ## Next action
 
-After confirming main CI and this documentation PR, implement the bounded
-synthetic binary/quarantine slice (Y05-B): define private storage, byte validation,
-source/derivative provenance and failure/deletion evidence. Start with generated
-fixtures and isolated test storage; customer uploads remain gated under ADR0009.
+Complete PR338 CI/merge, then durable original/derivative records and a private
+storage adapter with crash/orphan reconciliation and backup/restore evidence.
+Use generated fixtures first; customer upload/scanning/parser isolation and
+privacy release gates remain open. This rehearsal does not complete Y05.
