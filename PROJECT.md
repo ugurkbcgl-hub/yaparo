@@ -23,7 +23,10 @@ ADR-0043; this is a local synthetic slice.
 ADR-0052 adds an explicit local campaign visual reference to an owned brand and
 saved design revision in the same workspace. Later edits do not change selection;
 reselection is explicit. It does not alter existing Search text/approval/dispatch.
-Normal flag is off. Pinned visual preview/export is the next local journey step.
+Normal flag is off. ADR-0053 adds version-addressed read-only preview and exact
+PNG export of the pinned snapshot, using the shared fixed renderer. Later live
+edits do not change its pixels; stale selection URLs refuse. Next: pinned ZIP
+export with an explicit campaign-selection manifest.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot
