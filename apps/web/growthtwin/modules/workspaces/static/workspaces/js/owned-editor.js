@@ -88,6 +88,45 @@
   }
   const canvas = new fabric.Canvas("design", { backgroundColor: "#f5eddf", selection: false, preserveObjectStacking: true });
   let scene; let selected = "title"; let objects = new Map(); let renderVersion = 0; let ready = false; let dirty = false;
+  let gestureActive = false;
+  let savedScene; let undoSteps = []; let redoSteps = [];
+  const sameScene = (a,b) => JSON.stringify(a) === JSON.stringify(b);
+  function localButtons() {
+    $("undo").disabled = !ready || saving || gestureActive || undoSteps.length === 0;
+    $("redo").disabled = !ready || saving || gestureActive || redoSteps.length === 0;
+  }
+  function remember(before) {
+    if (sameScene(before,scene)) return false;
+    undoSteps.push(before); if (undoSteps.length > 50) undoSteps.shift(); redoSteps = [];
+    dirty = !sameScene(scene,savedScene); localButtons(); return true;
+  }
+  function localStep(redo) {
+    if (!ready || saving || gestureActive) return;
+    const source = redo ? redoSteps : undoSteps; const destination = redo ? undoSteps : redoSteps;
+    if (!source.length) return;
+    const target = validate(source[source.length - 1],scene.fixture);
+    destination.push(copy(scene)); source.pop(); scene = target;
+    for (const layer of scene.layers) {
+      const object = objects.get(layer.id);
+      object.set({left:layer.x,top:layer.y,scaleX:layer.scale,scaleY:layer.scale,angle:layer.angle,flipX:false,flipY:false});
+      if (layer.type === "text") object.set({text:layer.text,fill:layer.color});
+      object.setCoords();
+    }
+    dirty = !sameScene(scene,savedScene); choose(selected); localButtons();
+    message(redo ? "Düzenleme yinelendi. Saklamak için taslağı kaydet." : "Son düzenleme geri alındı. Kayıt geçmişi değişmedi.");
+  }
+  $("undo").addEventListener("click",()=>localStep(false));
+  $("redo").addEventListener("click",()=>localStep(true));
+  document.addEventListener("keydown",event=>{
+    if (event.defaultPrevented || event.altKey || event.isComposing || !(event.ctrlKey || event.metaKey)) return;
+    if (event.target instanceof Element && event.target.closest("input,textarea,select,[contenteditable]")) return;
+    const key = event.key.toLowerCase();
+    if (key === "z" || (key === "y" && !event.shiftKey)) {
+      event.preventDefault(); localStep(key === "y" || event.shiftKey);
+    }
+  });
+  canvas.on("mouse:down",event=>{if (event.target) {gestureActive = true; localButtons();}});
+  canvas.on("mouse:up",()=>{gestureActive = false; localButtons();});
   function controls() {
     const layer = scene.layers.find((item) => item.id === selected);
     $("selected-name").textContent = names[selected];
@@ -99,7 +138,7 @@
     for (const button of $("layers").children) button.setAttribute("aria-pressed", String(button.dataset.layer === selected));
   }
   function choose(id) {
-    if (!ready) return;
+    if (!ready || saving) return;
     selected = id; canvas.setActiveObject(objects.get(id)); canvas.requestRenderAll(); controls();
   }
   ids.forEach((id) => { const button = document.createElement("button"); button.type = "button"; button.textContent = names[id]; button.dataset.layer = id; button.addEventListener("click", () => choose(id)); $("layers").append(button); });
@@ -111,7 +150,7 @@
   new ResizeObserver(resize).observe($("canvas-shell"));
   async function render(loaded) {
     const version = ++renderVersion; ready = false; $("controls").disabled = true; $("save").disabled = true; $("download").disabled = true;
-    scene = loaded.scene; selected = "title"; dirty = false; canvas.discardActiveObject(); canvas.clear(); canvas.backgroundColor = scene.style?.background_color || "#f5eddf"; objects = new Map();
+    gestureActive = false; scene = loaded.scene; savedScene = copy(scene); undoSteps = []; redoSteps = []; localButtons(); selected = "title"; dirty = false; canvas.discardActiveObject(); canvas.clear(); canvas.backgroundColor = scene.style?.background_color || "#f5eddf"; objects = new Map();
     try {
       const next = await Promise.all(scene.layers.map(async (layer) => {
         let object;
@@ -124,27 +163,33 @@
         object.set({ left: layer.x, top: layer.y, scaleX: layer.scale, scaleY: layer.scale, angle: layer.angle, originX: "left", originY: "top", lockScalingFlip: true, lockSkewingX: true, lockSkewingY: true, borderColor: "#4b7651", cornerColor: "#4b7651", transparentCorners: false, cornerSize: 10 });
         object.setControlsVisibility({ ml: false, mr: false, mt: false, mb: false });
         object.on("selected", () => { selected = layer.id; controls(); });
+        const layerId = layer.id;
         object.on("modified", () => {
+          const layer = scene.layers.find(item=>item.id === layerId);
+          if (!ready || saving) {
+            object.set({left:layer.x,top:layer.y,scaleX:layer.scale,scaleY:layer.scale,angle:layer.angle,flipX:false,flipY:false}); object.setCoords(); canvas.requestRenderAll(); return;
+          }
+          const before = copy(scene);
           layer.x = clamp(Number.isFinite(object.left) ? object.left : layer.x, 0, 700);
           layer.y = clamp(Number.isFinite(object.top) ? object.top : layer.y, 0, 700);
           layer.scale = clamp(Number.isFinite(object.scaleX) ? Math.abs(object.scaleX) : layer.scale, 0.5, 1.5);
           layer.angle = clamp(Number.isFinite(object.angle) ? ((object.angle + 180) % 360 + 360) % 360 - 180 : 0, -45, 45);
-          object.set({ left: layer.x, top: layer.y, scaleX: layer.scale, scaleY: layer.scale, angle: layer.angle, flipX: false, flipY: false }); object.setCoords(); dirty = true; controls(); canvas.requestRenderAll(); message("Düzenleme hazır. Saklamak için taslağı kaydet.");
+          object.set({ left: layer.x, top: layer.y, scaleX: layer.scale, scaleY: layer.scale, angle: layer.angle, flipX: false, flipY: false }); object.setCoords(); remember(before); controls(); canvas.requestRenderAll(); message("Düzenleme hazır. Saklamak için taslağı kaydet.");
         });
         return [layer.id, object];
       }));
       if (version !== renderVersion) { next.forEach(([, object]) => object.dispose()); return; }
-      objects = new Map(next); next.forEach(([, object]) => canvas.add(object)); ready = true; resize(); $("controls").disabled = false; $("save").disabled = false; $("download").disabled = false; choose("title"); message(loaded.message, loaded.error);
+      objects = new Map(next); next.forEach(([, object]) => canvas.add(object)); ready = true; resize(); $("controls").disabled = false; $("save").disabled = false; $("download").disabled = false; canvas.setActiveObject(objects.get("title")); controls(); localButtons(); message(loaded.message, loaded.error);
     } catch { if (version === renderVersion) message("Önizleme hazırlanamadı. Kayıtlı görsele veya oturuma erişilemiyor olabilir. Eksik görselle kaydetme ve indirme kapalı; sayfayı yeniden açın.", true); }
   }
   function update() {
-    if (!ready) return;
+    if (!ready || saving) return;
     const layer = scene.layers.find((item) => item.id === selected);
     const candidate = copy(scene); const changed = candidate.layers.find((item) => item.id === selected);
     for (const key of ["x", "y", "scale", "angle"]) changed[key] = Number($(key).value);
     if (changed.type === "text") { changed.text = $("copy").value; changed.color = $("color").value; }
     try { validate(candidate, scene.fixture); } catch { message("Alanları gösterilen sınırlar içinde doldurun.", true); return; }
-    Object.assign(layer, changed); dirty = true;
+    const before = copy(scene); Object.assign(layer, changed); remember(before);
     const object = objects.get(selected); object.set({ left: layer.x, top: layer.y, scaleX: layer.scale, scaleY: layer.scale, angle: layer.angle });
     if (layer.type === "text") object.set({ text: layer.text, fill: layer.color });
     object.setCoords(); canvas.requestRenderAll(); $("scale-value").textContent = Math.round(layer.scale * 100) + "%"; $("angle-value").textContent = Math.round(layer.angle) + "°"; message("Düzenleme hazır. Saklamak için taslağı kaydet.");
@@ -152,19 +197,20 @@
   for (const id of ["copy", "color", "x", "y", "scale", "angle"]) $(id).addEventListener("input", update);
   $("save").addEventListener("click", async () => {
     if (!ready || saving) return;
-    saving = true; $("restore").disabled = true; $("controls").disabled = true; $("save").disabled = true;
+    saving = true; localButtons(); $("restore").disabled = true; $("controls").disabled = true; $("save").disabled = true;
     canvas.selection = false; objects.forEach(object => object.set({ selectable: false, evented: false }));
     try {
+      const submitted = validate(scene,scene.fixture);
       const response = await fetch(boot.save_url, { method: "POST", credentials: "same-origin", redirect: "error",
         headers: { "Content-Type": "application/json", "X-CSRFToken": document.querySelector("#csrf-form input").value },
-        body: JSON.stringify({ revision, scene: validate(scene, scene.fixture) }) });
+        body: JSON.stringify({ revision, scene: submitted }) });
       if (!response.ok) throw Error("save denied");
       const result = await response.json();
       if (!Number.isInteger(result.revision) || result.revision < revision) throw Error("bad response");
-      revision = result.revision; $("revision").textContent = revision; dirty = false; updateHistory(result.history);
+      revision = result.revision; $("revision").textContent = revision; dirty = false; savedScene = copy(submitted); undoSteps = []; redoSteps = []; updateHistory(result.history);
       message("Çalışma hesabına kaydedildi. Yeniden açtığında bu düzenleme korunur.");
     } catch { message("Kayıt doğrulanamadı. Oturum veya çalışma değişmiş olabilir. Düzenlemen ekranda duruyor; yeniden yüklemeden önce PNG indirebilirsin. Otomatik tekrar yapılmadı.", true); }
-    finally { saving = false; $("restore").disabled = !ready || $("history").options.length === 0; $("controls").disabled = !ready; $("save").disabled = !ready; canvas.selection = true; objects.forEach(object => object.set({ selectable: true, evented: true })); }
+    finally { saving = false; localButtons(); $("restore").disabled = !ready || $("history").options.length === 0; $("controls").disabled = !ready; $("save").disabled = !ready; canvas.selection = true; objects.forEach(object => object.set({ selectable: true, evented: true })); }
   });
   function updateHistory(rows) {
     $("history").replaceChildren();
@@ -179,7 +225,7 @@
   $("restore").addEventListener("click", async () => {
     if (!ready || saving || !$("history").value) return;
     if (dirty && !window.confirm("Kaydedilmemiş düzenlemen değişecek. Önceki kayda dönülsün mü?")) return;
-    saving = true; $("save").disabled = true; $("restore").disabled = true; $("controls").disabled = true;
+    saving = true; localButtons(); $("save").disabled = true; $("restore").disabled = true; $("controls").disabled = true;
     canvas.discardActiveObject(); objects.forEach(object => object.set({ selectable:false, evented:false }));
     try {
       const response = await fetch(boot.restore_url, { method:"POST", credentials:"same-origin", redirect:"error",
@@ -193,7 +239,7 @@
       await render({scene:restored, message:"Önceki tasarım yeni kayıt olarak açıldı. Sonraki kayıtlar korunuyor."});
       updateHistory(result.history);
     } catch { message("Geri dönüş doğrulanamadı. Düzenlemen korunuyor; güncel kaydı kontrol et. Otomatik tekrar yapılmadı.", true); }
-    finally { saving = false; $("save").disabled = !ready; $("controls").disabled = !ready; $("restore").disabled = !ready || $("history").options.length === 0; objects.forEach(object => object.set({ selectable:true, evented:true })); }
+    finally { saving = false; localButtons(); $("save").disabled = !ready; $("controls").disabled = !ready; $("restore").disabled = !ready || $("history").options.length === 0; objects.forEach(object => object.set({ selectable:true, evented:true })); }
   });
   $("download").addEventListener("click", () => {
     if (!ready) return;
