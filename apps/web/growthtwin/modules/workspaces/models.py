@@ -181,12 +181,20 @@ class BrandIdentity(models.Model):
 
 class BrandCreativeDocumentQuerySet(models.QuerySet):
     def update(self, **kwargs):
-        if {"id", "pk", "identity", "identity_id"} & kwargs.keys():
+        if {
+            "id",
+            "pk",
+            "identity",
+            "identity_id",
+            "material_binding_version",
+        } & kwargs.keys():
             raise ValidationError("Çalışmanın marka kimliği bağı değiştirilemez.")
         return super().update(**kwargs)
 
     def bulk_update(self, objs, fields, **kwargs):
-        if {"id", "pk", "identity", "identity_id"} & set(fields):
+        if {"id", "pk", "identity", "identity_id", "material_binding_version"} & set(
+            fields
+        ):
             raise ValidationError("Çalışmanın marka kimliği bağı değiştirilemez.")
         return super().bulk_update(objs, fields, **kwargs)
 
@@ -203,6 +211,7 @@ class BrandCreativeDocument(models.Model):
         BrandIdentity, on_delete=models.PROTECT, related_name="creative_documents"
     )
     scene = models.JSONField()
+    material_binding_version = models.PositiveSmallIntegerField(default=0)
     revision = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -215,16 +224,88 @@ class BrandCreativeDocument(models.Model):
             models.CheckConstraint(
                 condition=models.Q(revision__gte=1),
                 name="brand_creative_revision_positive",
-            )
+            ),
+            models.CheckConstraint(
+                condition=models.Q(material_binding_version__in=(0, 1)),
+                name="creative_material_binding_version",
+            ),
         ]
 
     def save(self, *args, **kwargs):
         original = type(self).objects.filter(pk=self.pk).first() if self.pk else None
         if original and (
-            self._state.adding or original.identity_id != self.identity_id
+            self._state.adding
+            or original.identity_id != self.identity_id
+            or original.material_binding_version != self.material_binding_version
         ):
             raise ValidationError("Çalışmanın marka kimliği bağı değiştirilemez.")
         return super().save(*args, **kwargs)
+
+
+class CreativeMaterialBindingQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Çalışmanın materyal bağı değiştirilemez.")
+
+    def delete(self):
+        raise ValidationError("Çalışmanın materyal bağı tek başına silinemez.")
+
+    def bulk_update(self, objs, fields, **kwargs):
+        raise ValidationError("Çalışmanın materyal bağı değiştirilemez.")
+
+
+class CreativeMaterialBinding(models.Model):
+    """Permanent layer provenance; protects source versions used by a document."""
+
+    document = models.ForeignKey(
+        BrandCreativeDocument,
+        on_delete=models.CASCADE,
+        related_name="material_bindings",
+    )
+    layer_id = models.CharField(
+        max_length=8, choices=(("hero", "Görsel"), ("logo", "Logo"))
+    )
+    material_version = models.ForeignKey(
+        "assets.BrandMaterialVersion",
+        on_delete=models.PROTECT,
+        related_name="creative_bindings",
+    )
+    objects = CreativeMaterialBindingQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("layer_id",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("document", "layer_id"), name="creative_layer_material_unique"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(layer_id__in=("hero", "logo")),
+                name="creative_material_layer_valid",
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        if self.document_id and self.material_version_id:
+            document, version = self.document, self.material_version
+            suffix = {"hero": "illustration", "logo": "logo"}.get(self.layer_id)
+            if (
+                document.material_binding_version != 1
+                or version.material.brand_id != document.identity.brand_id
+                or version.material.identity.brand_id != document.identity.brand_id
+                or version.version != 1
+                or version.material.source_key
+                != f"{document.identity.brand.fixture}:{suffix}:v1"
+            ):
+                raise ValidationError("Materyal çalışma ve katmanla eşleşmiyor.")
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Çalışmanın materyal bağı değiştirilemez.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Çalışmanın materyal bağı tek başına silinemez.")
 
 
 class CreativeRevisionQuerySet(models.QuerySet):

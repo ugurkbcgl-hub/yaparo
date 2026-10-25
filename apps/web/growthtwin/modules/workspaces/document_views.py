@@ -20,6 +20,7 @@ from growthtwin.modules.workspaces.creative_documents import (
     read_document,
     save_document,
 )
+from growthtwin.modules.workspaces.creative_materials import checked_materials
 from growthtwin.modules.workspaces.document_forms import (
     DocumentCreateForm,
     DocumentEditForm,
@@ -121,6 +122,7 @@ def document_detail(request, brand_id, document_id):
             "form": form,
             "saved_title": layers["title"],
             "saved_subtitle": layers["subtitle"],
+            "materials": checked_materials(document),
         },
         status=status,
     )

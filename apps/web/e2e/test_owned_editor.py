@@ -81,6 +81,36 @@ class OwnedEditorBrowserTests(LiveServerTestCase):
                 page.locator("#id_password").fill(password)
                 page.get_by_role("button", name="Giriş yap").click()
                 expect(page.locator("#save")).to_be_enabled()
+                detail_url = self.live_server_url + reverse(
+                    "brand_documents:detail", args=[brand.pk, document.pk]
+                )
+                page.goto(detail_url)
+                expect(
+                    page.get_by_role("heading", name="Bu çalışmanın kaynakları")
+                ).to_be_visible()
+                expect(
+                    page.get_by_text(
+                        "Seramik ürün illüstrasyonu · Materyal sürümü 1 · Kaynak marka kimliği 2"
+                    )
+                ).to_be_visible()
+                output = os.environ.get("YAPARO_BRAND_SCREENSHOT_DIR")
+                if output:
+                    page.screenshot(
+                        path=str(Path(output) / "material-bindings-desktop.png"),
+                        full_page=True,
+                    )
+                page.set_viewport_size({"width": 390, "height": 844})
+                self.assertFalse(
+                    page.evaluate("document.documentElement.scrollWidth > innerWidth")
+                )
+                if output:
+                    page.screenshot(
+                        path=str(Path(output) / "material-bindings-mobile.png"),
+                        full_page=True,
+                    )
+                page.set_viewport_size({"width": 1440, "height": 1000})
+                page.goto(url)
+                expect(page.locator("#save")).to_be_enabled()
                 stale = context.new_page()
                 stale.goto(url)
                 expect(stale.locator("#save")).to_be_enabled()

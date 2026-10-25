@@ -43,8 +43,11 @@ and replay/identity preservation. Normal flag remains off; local synthetic only.
 **Recovery evidence:** ADR-0046 adds atomic scoped synthetic sample removal and
 fresh SQLite backup/restore/PNG readback/deletion with source/backup preserved.
 Configured PostgreSQL/Heroku and crash/retention gates remain open.
-**Next:** explicit editor material-version integration, preserving v1/v2 and
-protecting referenced versions. Customer gates remain open.
+**Current:** ADR-0047 pins new editor hero/logo layers to owned fixed-source
+material versions, protects referenced versions and shows provenance. Existing
+v1/v2 documents keep their prior rendering/history and no invented source links.
+**Next:** explicitly selected owned palette PNG layer with private load/export
+and versioned scene compatibility. Customer gates remain open.
 Y05 is not complete.
 
 The owner's multi-brand requirement is now part of Y04: separate identity,
