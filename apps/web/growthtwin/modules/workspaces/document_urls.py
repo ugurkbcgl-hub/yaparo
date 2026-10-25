@@ -6,6 +6,7 @@ from growthtwin.modules.workspaces import document_views, editor_views
 
 app_name = "brand_documents"
 urlpatterns = [
+    path("<uuid:document_id>/package/", document_views.document_bundle, name="bundle"),
     path(
         "<uuid:document_id>/restore/", editor_views.restore_scene, name="restore_scene"
     ),

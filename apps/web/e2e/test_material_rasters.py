@@ -1,10 +1,13 @@
 """Browser proof for an owner creating, reopening and viewing a fixed raster."""
 
 import base64
+import json
 import os
 import secrets
+from hashlib import sha256
 from io import BytesIO
 from pathlib import Path
+from zipfile import ZipFile
 
 from django.contrib.auth import get_user_model
 from django.test import LiveServerTestCase, override_settings
@@ -87,6 +90,40 @@ class MaterialRasterBrowserTests(LiveServerTestCase):
                 page.context.route("**/*", only_local)
                 page.get_by_role("button", name="Bu görselle yeni tasarım aç").click()
                 page.wait_for_url("**/documents/*/")
+                with page.expect_download() as bundle_event:
+                    page.get_by_role(
+                        "link", name="Tasarım paketini indir (ZIP)"
+                    ).click()
+                with ZipFile(bundle_event.value.path()) as archive:
+                    manifest = json.loads(archive.read("manifest.json"))
+                    self.assertEqual(
+                        json.loads(archive.read("scene.json"))["schema_version"], 3
+                    )
+                    self.assertEqual(manifest["document"]["revision"], 1)
+                    image_data = archive.read("assets/hero-normalized.png")
+                    self.assertEqual(
+                        sha256(image_data).hexdigest(),
+                        manifest["files"]["assets/hero-normalized.png"]["sha256"],
+                    )
+                    self.assertIn(
+                        "Uyumlu Yaparo",
+                        archive.read("README.txt").decode(),
+                    )
+                if screenshot_dir:
+                    page.screenshot(
+                        path=str(directory / "bundle-detail-desktop.png"),
+                        full_page=True,
+                    )
+                    page.set_viewport_size({"width": 390, "height": 844})
+                    self.assertFalse(
+                        page.evaluate(
+                            "document.documentElement.scrollWidth > innerWidth"
+                        )
+                    )
+                    page.screenshot(
+                        path=str(directory / "bundle-detail-mobile.png"), full_page=True
+                    )
+                    page.set_viewport_size({"width": 1440, "height": 1000})
                 page.get_by_role("link", name="Görsel editörü aç").click()
                 expect(page.locator("#download")).to_be_enabled()
                 editor_url = page.url

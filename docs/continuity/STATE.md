@@ -1,10 +1,10 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 15:44 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 15:57 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
-Owned-core/open-source plan; current synthetic palette-image editor slice.
+Owned-core/open-source plan; current owned synthetic design-package slice.
 Usage monitoring disabled by owner; do not query limits. Reviewed green PRs may
 merge under standing authorization; never push directly to main. Local synthetic
 work only; actual customer data/accounts, payments/publishing remain gated.
@@ -14,10 +14,10 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main e6acb94 (PR341 merged); required CI40183388050 and main CI40183690585
-succeeded. Implementation branch feat/palette-editor-scene, PR342:
-https://github.com/ugurkbcgl-hub/yaparo/pull/342 . Resolve current head/checks live
-before merging. No unrelated edits at task start.
+Base main23ad073 (PR342 merged); required CI40194312612 and main CI40194730203
+succeeded. Implementation branch feat/owned-design-bundle; PR not yet created at
+snapshot. Resolve its current PR/head/checks live before merging. No unrelated
+edits at task start.
 PR336 required CI40167348893 and main CI40167513738 succeeded.
 Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
@@ -99,6 +99,20 @@ Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
 ## Preserved implementation evidence and boundaries
 
+ADR0049: owned saved-design ZIP contains canonical scene, source/identity manifest,
+Turkish README and actual palette original/normalized PNG with size/SHA256/tool.
+Fixed drawings/logo remain metadata; Arial and compatible Yaparo renderer required.
+Legacy unbound records deny package export, retain scene JSON; no invented origins.
+Default-off/DEBUG, private/no-store/nosniff, fixed paths, deterministic stored ZIP,
+12 MiB cap, read-only owned snapshot. No importer or customer archive input.
+No-input fresh private source/target DB rehearsal restores only its own generated
+fixed fixture into new owner/document/material IDs; scene, all source metadata,
+bytes/pixels and reexport match. Source DB/ZIP unchanged; exact inventory cleaned.
+Actual Windows normal and -O runs passed.169 related checks:163 passed/6 PG-only
+SQLite skips; final9 service/HTTP/subprocess/browser checks passed after adding cap
+refusal and reviewing desktop/mobile package UI. Ruff/migration drift passed;
+independent source review found no blocker. No new migration/configured DB change.
+
 PR341/ADR0047 pins new fixed hero/logo sources and protects referenced versions;
 legacy v1/v2 keep their source/history without backfill. New ADR0048 selects the
 exact owned generated palette UUID only for new v3 scenes; replay/source/schema
@@ -148,12 +162,12 @@ existing safeguards; no usage monitoring. A schedule is not proof a run executed
 
 ## Next action
 
-After reviewed palette-editor PR CI/merge, design a versioned owned portable
-scene/source/binary bundle and fresh-workspace recovery rehearsal (ADR0048).
-Scene-only JSON is not a portable asset bundle; no arbitrary import/customer
-upload is authorized. Preview schema is current and SAME synthetic DB server was
-restarted on loopback8002; home/login HTTP200 verified. Runtime enables only the
-synthetic palette flag; fresh in-memory session signing key, no secret persisted.
-No refreshed authenticated manual preview claimed. Configured DB
-recovery, customer upload/scanning/parser isolation/privacy gates remain open;
-Y05 incomplete.
+After reviewed design-bundle PR CI/merge, add per-action undo/redo for unsaved
+editor changes, distinct from committed history; keyboard access and failed-save
+edit preservation required. No general importer/customer upload is authorized.
+Same disposable local preview schema is current; loopback8002 runtime was started
+with the palette flag and an in-memory signing key in the prior slice. Refresh
+that same runtime after merge to expose new bundle route; never reset its data.
+No authenticated manual preview claimed. Configured DB recovery, customer upload/
+scanning/parser isolation/privacy and full portable editing remain open; Y05/Y06
+not complete.
