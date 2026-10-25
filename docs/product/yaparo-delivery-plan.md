@@ -49,9 +49,11 @@ seçimini ekler; eski kampanyalara marka tahmin edilmez, seçim yayın onayı de
 ADR-0053 kampanyanın seçili kaydına salt okunur önizleme ve tam boyutlu PNG ekler.
 Canlı tasarım düzenlemesi bu görüntüyü değiştirmez; seçim değişince eski sürüm
 adresi reddedilir. ADR-0054 seçili kayıttan kampanya/seçim manifestli ZIP ekler;
-mevcut belge ZIP’i hâlâ güncel kayıtlı belgeyi dışa aktarır. Sıradaki Y08 yerel
-sentetik yolculuğun süre/hata ölçümü ve gözlenen sürtünmelerin giderilmesidir;
-insanlarla bağımsız kullanılabilirlik doğrulaması açık kalır.
+mevcut belge ZIP’i hâlâ güncel kayıtlı belgeyi dışa aktarır. Y08
+[ölçümlü otomatik prova](y08-synthetic-journey-rehearsal.md) masaüstü/mobil akışı
+tamamladı ve yeni tasarım oluştururken kaybolan kampanya dönüşünü düzeltti.
+İnsanlarla bağımsız doğrulama açık. Sıradaki Y09 mevcut AI geçidi ve markaya/kaynağa
+bağlı görev/yetenek sözleşmesidir; yeni sağlayıcı seçimi anlamına gelmez.
 Gerçek dosya yükleme kapalıdır.
 
 ADR-0045: Sabit marka paleti görseli, materyal/kimlik sürümüne bağlı orijinal ve
