@@ -48,8 +48,11 @@ material versions, protects referenced versions and shows provenance. Existing
 v1/v2 documents keep their prior rendering/history and no invented source links.
 **Current:** ADR-0048 adds explicitly selected owned palette PNG in new scene v3,
 private bounded load, save/reopen/restore/export and incomplete-image refusal.
-Existing v1/v2 stay unchanged. **Next:** owned portable scene/source/binary bundle
-and fresh-workspace recovery rehearsal. Customer gates remain open.
+Existing v1/v2 stay unchanged. **Current:** ADR-0049 adds a bounded owned saved-
+design ZIP and actual fresh-workspace fixture transfer/reexport proof. General
+import/offline editor and full portable editing remain open. **Next:** unsaved
+per-action undo/redo with keyboard access, separate from committed history.
+Customer gates remain open.
 Y05 is not complete.
 
 The owner's multi-brand requirement is now part of Y04: separate identity,

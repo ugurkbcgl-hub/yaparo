@@ -39,8 +39,10 @@ ADR-0047 ile yeni çalışmaların iki sabit görsel/logo kaynağı sahip olunan
 sürümlerine bağlandı; kullanılan sürümlerin silinmesi engellenir. Eski v1/v2
 çalışmaların görünümü/geçmişi korunur, geçmişe kaynak bağı uydurulmaz. Palet PNG
 katmanı ve özel yükleme/export ADR-0048 ile yalnız yeni v3 çalışmalarda uygulandı;
-eski v1/v2 değişmez. Sıradaki yerel iş sahne/kaynak/binary paketinin taşınabilirliği
-ve yeni çalışma alanında kurtarma provasıdır. Bu dilim gerçek dosya yüklemeyi açmaz.
+eski v1/v2 değişmez. ADR-0049 ayrı kayıtlı tasarım ZIP'i ve yeni geçici çalışma
+alanında sabit örneğin aktarım/yeniden export provasını ekler. Genel import veya
+bağımsız offline editör değildir. Sıradaki yerel iş kaydedilmemiş düzenlemelerde
+adım bazlı geri al/yinele ve klavye erişimidir. Gerçek dosya yükleme kapalıdır.
 
 ADR-0045: Sabit marka paleti görseli, materyal/kimlik sürümüne bağlı orijinal ve
 normalize PNG çiftiyle mevcut veritabanında atomik saklanır. Sahip özel PNG

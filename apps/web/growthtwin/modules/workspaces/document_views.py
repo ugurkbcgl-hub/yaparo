@@ -3,6 +3,7 @@
 import json
 from copy import deepcopy
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import Http404, HttpResponse
@@ -21,6 +22,7 @@ from growthtwin.modules.workspaces.creative_documents import (
     save_document,
 )
 from growthtwin.modules.workspaces.creative_materials import checked_materials
+from growthtwin.modules.workspaces.design_bundle import export_design_bundle
 from growthtwin.modules.workspaces.document_forms import (
     DocumentCreateForm,
     DocumentEditForm,
@@ -123,6 +125,9 @@ def document_detail(request, brand_id, document_id):
             "saved_title": layers["title"],
             "saved_subtitle": layers["subtitle"],
             "materials": checked_materials(document),
+            "can_download_bundle": document.material_binding_version == 1
+            and settings.DEBUG
+            and settings.SYNTHETIC_MATERIAL_PERSISTENCE_ENABLED,
         },
         status=status,
     )
@@ -144,4 +149,29 @@ def document_download(request, brand_id, document_id):
         f'attachment; filename="yaparo-scene-{document.pk}.json"'
     )
     response["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
+@login_required
+@never_cache
+@require_safe
+def document_bundle(request, brand_id, document_id):
+    if not settings.DEBUG or not settings.SYNTHETIC_MATERIAL_PERSISTENCE_ENABLED:
+        raise Http404
+    try:
+        data = export_design_bundle(
+            owner=request.user, brand_id=brand_id, document_id=document_id
+        )
+    except ObjectDoesNotExist as error:
+        raise Http404 from error
+    except ValidationError:
+        return HttpResponse(
+            "Tasarım paketi doğrulanamadı. Dosya indirilmedi.", status=409
+        )
+    response = HttpResponse(data, content_type="application/zip")
+    response["Content-Disposition"] = (
+        f'attachment; filename="yaparo-design-{document_id}.zip"'
+    )
+    response["X-Content-Type-Options"] = "nosniff"
+    response["Referrer-Policy"] = "no-referrer"
     return response

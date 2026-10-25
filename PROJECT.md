@@ -23,7 +23,10 @@ ADR-0043; this is a local synthetic slice.
 ADR-0047 links new editor documents to the two fixed source material versions,
 protects referenced sources from deletion and displays pinned provenance. Legacy
 v1/v2 documents keep their appearance/history without invented bindings. Scene
-JSON remains scene-only; portable asset bundles remain open.
+JSON remains scene-only; ADR-0049 adds a separate saved-design ZIP with pinned
+source/identity manifest and actual palette original/normalized PNG. A no-input
+fresh-workspace rehearsal verifies bytes/pixels and reexport. General import and
+standalone portable editing remain open; fixed renderer and Arial are required.
 No customer upload or production capability is added.
 
 ADR-0048 adds explicit new-design creation from an owned generated palette PNG.
