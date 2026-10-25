@@ -15,7 +15,12 @@ _PREPARE_PATH = re.compile(
     r"\A/workspace/(?:brands/[0-9]+/materials/(?:prepare|generate)|campaigns/[0-9]+/design)/\Z"
 )
 _MAX_FORM_BODY_BYTES = 8 * 1024
-_DESIGN_PATH = re.compile(r"\A/workspace/campaigns/[0-9]+/design/\Z")
+_DESIGN_PATH = re.compile(
+    r"\A/workspace/campaigns/[0-9]+/design/(?:[0-9]+/(?:preview|image)/)?\Z"
+)
+_READ_ONLY_DESIGN = re.compile(
+    r"\A/workspace/campaigns/[0-9]+/design/[0-9]+/(?:preview|image)/\Z"
+)
 
 
 def _headers(response, request):
@@ -35,6 +40,13 @@ class ClosedSyntheticMaterialIntakeMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        if _READ_ONLY_DESIGN.fullmatch(request.path) and request.method not in (
+            "GET",
+            "HEAD",
+        ):
+            response = HttpResponse(status=405)
+            response["Allow"] = "GET, HEAD"
+            return _headers(response, request)
         if request.method == "POST" and _PREPARE_PATH.fullmatch(request.path):
             content_type = (
                 request.META.get("CONTENT_TYPE", "").split(";", 1)[0].strip().lower()

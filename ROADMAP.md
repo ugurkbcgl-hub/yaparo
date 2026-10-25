@@ -55,8 +55,9 @@ adds50-step local undo/redo, keyboard access and failed-save preservation, separ
 from committed history. **Current:** ADR-0051 adds new v4 square/portrait design
 selection and exact PNG export, preserving old scenes and history. **Current:**
 ADR-0052 adds explicit same-workspace campaign/brand/design reference with immutable
-revision pinning and no implicit Search/publishing changes. **Next:** read-only
-preview/export of the pinned snapshot, distinct from the live editable document.
+revision pinning and no implicit Search/publishing changes. **Current:** ADR-0053
+adds read-only pinned snapshot preview and exact PNG, separate from the live editor.
+**Next:** owned ZIP for the campaign-selected snapshot and selection manifest.
 Customer gates remain open.
 Y05 is not complete.
 

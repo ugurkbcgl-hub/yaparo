@@ -14,6 +14,9 @@ PROJECT_VERSION = PROJECT["version"]
 REQUIRED_FILES = {
     "growthtwin/modules/workspaces/templates/workspaces/document_editor.html",
     "growthtwin/modules/workspaces/static/workspaces/js/owned-editor.js",
+    "growthtwin/modules/workspaces/static/workspaces/js/scene-renderer.js",
+    "growthtwin/modules/workspaces/static/workspaces/js/campaign-preview.js",
+    "growthtwin/modules/workspaces/static/workspaces/css/preview.css",
     "growthtwin/modules/workspaces/static/workspaces/css/editor.css",
     "growthtwin/modules/workspaces/static/workspaces/vendor/fabric-7.4.0.min.js",
     "growthtwin/modules/workspaces/static/workspaces/vendor/fabric-LICENSE.txt",
