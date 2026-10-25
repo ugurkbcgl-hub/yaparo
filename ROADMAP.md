@@ -37,8 +37,11 @@ synthetic sources, with immutable version metadata and no HTTP file intake.
 **Current Y05-B:** internal generated JPEG/PNG/WebP rehearsal validates real
 bytes, preserves original/normalized derivative provenance and proves temporary
 private-file readback/deletion. Default off; Pillow13.0.0 is evaluation-only.
-**Next:** durable binary records, private storage adapter and crash/orphan/recovery
-evidence; scanning/parser isolation and customer gates remain open. See ADR-0044.
+**Current:** ADR-0045 adds atomic database-backed original/derivative pairs for a
+fixed generated palette source, measured provenance, owned private PNG display
+and replay/identity preservation. Normal flag remains off; local synthetic only.
+**Next:** configured binary backup/restore, crash/recovery and deletion evidence,
+then explicit editor material-version integration. Customer gates remain open.
 Y05 is not complete.
 
 The owner's multi-brand requirement is now part of Y04: separate identity,

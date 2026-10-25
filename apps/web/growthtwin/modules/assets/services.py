@@ -42,7 +42,7 @@ def prepare_synthetic_materials(*, owner, brand_id):
             .select_related("identity")
         }
         expected = {item.source_key for item in definitions}
-        if set(existing) - expected:
+        if set(existing) - (expected | {f"{brand.fixture}:palette:v1"}):
             raise ValidationError("Materyal kataloğu marka örneğiyle eşleşmiyor.")
         for item in definitions:
             material = existing.get(item.source_key)

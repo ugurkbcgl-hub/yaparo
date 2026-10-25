@@ -32,6 +32,11 @@ Kalıcı iş takibi: [GitHub #328](https://github.com/ugurkbcgl-hub/yaparo/issue
 
 ## A — Marka, materyal ve kendi editörümüz
 
+ADR-0045: Sabit marka paleti görseli, materyal/kimlik sürümüne bağlı orijinal ve
+normalize PNG çiftiyle mevcut veritabanında atomik saklanır. Sahip özel PNG
+önizlemesini açabilir; tekrar üretim aynı kaydı korur. Varsayılan kapalı, yerel ve
+sentetik; müşteri upload'u veya editör sahnesine yeni kaynak bağı henüz yoktur.
+
 Y05-B ilk prova: kodla üretilen JPG/PNG/WebP örneklerinde gerçek byte doğrulama,
 normalize PNG türevi, ayrı orijinal/türev hash'leri ve geçici özel dosya readback/
 silme akışı eklendi. Varsayılan kapalı; HTTP/müşteri girdisi ve kalıcı binary kaydı

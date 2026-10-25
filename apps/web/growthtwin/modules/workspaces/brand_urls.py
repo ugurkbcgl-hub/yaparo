@@ -16,5 +16,15 @@ urlpatterns = [
         name="materials_prepare",
     ),
     path("<int:brand_id>/", brand_views.brand_detail, name="detail"),
+    path(
+        "<int:brand_id>/materials/generate/",
+        asset_views.palette_generate,
+        name="palette_generate",
+    ),
+    path(
+        "<int:brand_id>/materials/<uuid:material_id>/image/",
+        asset_views.palette_image,
+        name="palette_image",
+    ),
     path("<int:brand_id>/edit/", brand_views.brand_edit, name="edit"),
 ]

@@ -2,3 +2,4 @@
 .brand-preview-label{color:#15231c}.brand-monogram{text-shadow:none}
 
 .brand-field input:not([type="hidden"]),.brand-field textarea{width:100%;min-height:48px;padding:.7rem;border:1px solid #777e77;border-radius:8px;background:#fff;font:inherit;box-sizing:border-box}.brand-field input:focus-visible,.brand-field textarea:focus-visible{outline:3px solid #b56717;outline-offset:4px}
+.brand-material-image { max-width: 100%; height: auto; display: block; }

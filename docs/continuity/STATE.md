@@ -1,10 +1,10 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 10:42 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 11:14 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
-Owned-core/open-source plan; current Y05-B generated raster/storage rehearsal.
+Owned-core/open-source plan; current durable synthetic palette material slice.
 Usage monitoring disabled by owner; do not query limits. Reviewed green PRs may
 merge under standing authorization; never push directly to main. Local synthetic
 work only; actual customer data/accounts, payments/publishing remain gated.
@@ -14,10 +14,10 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main e0feec4 (PR337 merged); main CI40167834694 succeeded.
+Base main c057053 (PR338 merged); main CI40174121931 succeeded.
 PR336 required CI40167348893 and main CI40167513738 succeeded.
-Current implementation branch feat/synthetic-raster-rehearsal, PR338. Recheck
-its current merge/CI status live. No unrelated working-tree changes at creation.
+Current implementation branch feat/durable-synthetic-raster; resolve its PR/CI
+live. No unrelated working-tree changes at start.
 Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
 - New creative scenes v2 pin brand palette: background, logo/icon/wordmark and
@@ -61,10 +61,22 @@ Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 - Actual Windows current-user-only directory ACL, exclusive UUID files and exact
   inventoried deletion tested. POSIX permissions covered by CI. Not an atomic
   same-user attack defense or parser sandbox; crash orphan recovery remains open.
-- 28 focused asset tests passed on Windows; independent source review found no
-  blockers. Ruff, Django checks, migration drift and dependency audit passed.
-  Required final-head CI must pass before merge. No new migration or database
-  operation except ephemeral tests; existing preview/protected fixture unchanged.
+- PR338 required CI40173841958 and main CI40174121931 passed;28 focused local
+  asset tests and independent source review passed before that merge.
+- New ADR0045 slice: separate fixed palette source, identity-pinned material
+  version and immutable original/normalized PNG pair atomically stored in the
+  existing DB. Measured hashes/sizes/tool; no filesystem orphan during DB writes.
+  Repeat preserves the existing image. Existing scene keys/rendering unchanged.
+- Default-off persistence flag plus DEBUG; Pillow remains development-only.
+  Local owned generate form and private PNG route; multipart refused pre-CSRF.
+  Final binary query repeats current owner/active/archive conditions after an
+  independent review found and we fixed an ownership race; regression passed.
+- Latest focused assets+browser41 tests:40 passed/1 PostgreSQL race skip. Prior
+  assets+workspaces133 tests:127 passed/6 PG skips before read-race fix. Enhanced
+  browser created/reopened/repeated image; PNG pixels and mobile overflow checked,
+  mobile screenshot reviewed. Final independent delta review found no blocker.
+  Ruff and migration drift passed. Assets0002 only ephemeral tests so far.
+  Configured DB, preview and protected fixture unchanged by this new slice.
 - Desktop PR attachment limit100 remains; use PR URLs. Usage monitoring disabled.
 
 ## Preserved implementation evidence and boundaries
@@ -96,12 +108,14 @@ not freshly rechecked here. Fresh campaign staging E2E, configured DB/files rest
 code/schema recovery, domain/identity/privacy, production token/tenant controls,
 actual metrics and payment/financial consent remain open release gates.
 
-The expired work heartbeat and low-usage monitor remain PAUSED; no automation was
-created/resumed by the new maintenance cadence proposal. No unattended work claim.
+Old time-limited heartbeat and low-usage monitor remain PAUSED. Owner requested
+and we created ACTIVE15-minute thread heartbeat
+yaparo-15-dakikada-bir-geli-tirmeye-devam. It resumes local synthetic work under
+existing safeguards; no usage monitoring. A schedule is not proof a run executed.
 
 ## Next action
 
-Complete PR338 CI/merge, then durable original/derivative records and a private
-storage adapter with crash/orphan reconciliation and backup/restore evidence.
-Use generated fixtures first; customer upload/scanning/parser isolation and
-privacy release gates remain open. This rehearsal does not complete Y05.
+Complete durable palette PR review/CI/merge, then binary backup/restore and
+failure/deletion evidence before explicit editor material-version integration.
+Use generated fixtures first; customer upload/scanning/parser isolation/privacy
+gates remain open. Y05 is not complete.

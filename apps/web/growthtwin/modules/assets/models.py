@@ -1,9 +1,8 @@
-"""Private, metadata-only records for Yaparo's fixed synthetic material kit.
+"""Private records for Yaparo's fixed synthetic material kit.
 
-These rows intentionally do not contain uploaded bytes, storage paths, public
-URLs, or an AI/provider permission.  They make the origin and immutable version
-of the two already-rendered synthetic scene assets explicit while real-file
-intake remains closed under ADR-0009.
+Catalog rows record source/version metadata; a separate immutable raster pair
+holds only generated palette-image bytes. No uploaded bytes, storage paths,
+public URLs or AI permission are accepted. Customer intake remains closed.
 """
 
 import uuid
@@ -69,6 +68,7 @@ class BrandMaterial(models.Model):
             allowed = {
                 item.source_key for item in definitions_for_fixture(self.brand.fixture)
             }
+            allowed.add(f"{self.brand.fixture}:palette:v1")
             if self.source_key not in allowed:
                 raise ValidationError({"source_key": "Bilinmeyen sentetik kaynak."})
 
@@ -164,3 +164,58 @@ class BrandMaterialVersion(models.Model):
 
     def delete(self, *args, **kwargs):
         raise ValidationError("Materyal sürümleri tek başına silinemez.")
+
+
+class MaterialRasterPair(models.Model):
+    """Immutable, bounded synthetic original/derivative stored atomically in DB.
+
+    This prototype adapter uses the existing database rather than a filesystem
+    path or public media bucket. Its bytes remain behind owner-scoped services.
+    """
+
+    version = models.OneToOneField(
+        BrandMaterialVersion, on_delete=models.CASCADE, related_name="raster"
+    )
+    original = models.BinaryField()
+    derivative = models.BinaryField()
+    original_sha256 = models.CharField(max_length=64)
+    derivative_sha256 = models.CharField(max_length=64)
+    original_size = models.PositiveIntegerField()
+    derivative_size = models.PositiveIntegerField()
+    tool = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = BrandMaterialVersionQuerySet.as_manager()
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=models.Q(original_size__gte=1, original_size__lte=3145728),
+                name="material_raster_original_size_bound",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(
+                    derivative_size__gte=1, derivative_size__lte=8388608
+                ),
+                name="material_raster_derivative_size_bound",
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        from hashlib import sha256
+
+        for field, size, digest in (
+            (self.original, self.original_size, self.original_sha256),
+            (self.derivative, self.derivative_size, self.derivative_sha256),
+        ):
+            if len(field) != size or sha256(field).hexdigest() != digest:
+                raise ValidationError("Raster bytes do not match their metadata.")
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Raster pairs are immutable.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Raster pairs cannot be deleted independently.")
