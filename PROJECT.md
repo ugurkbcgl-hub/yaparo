@@ -20,6 +20,12 @@ ADR-0043; this is a local synthetic slice.
 
 ## Current direction — 2026-10-23
 
+ADR-0047 links new editor documents to the two fixed source material versions,
+protects referenced sources from deletion and displays pinned provenance. Legacy
+v1/v2 documents keep their appearance/history without invented bindings. Scene
+JSON remains unchanged; palette PNG placement and portable asset bundles are next.
+No customer upload, configured runtime migration or production capability is added.
+
 Y05-B has an internal, default-off generated JPEG/PNG/WebP rehearsal with bounded
 structural validation, metadata-free PNG derivatives, measured hashes/sizes and
 disposable private-file readback/deletion. Pillow13.0.0 is development-only.

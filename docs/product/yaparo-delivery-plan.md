@@ -35,7 +35,11 @@ Kalıcı iş takibi: [GitHub #328](https://github.com/ugurkbcgl-hub/yaparo/issue
 ADR-0046 ile sentetik palet materyalinin atomik silinmesi ve yeni özel SQLite
 veritabanında gerçek backup/restore/PNG okuma/silme provası eklendi. Kaynak/yedek
 korunur; yapılandırılmış PostgreSQL/staging veya müşteri veri silme kanıtı sayılmaz.
-Sıradaki yerel iş, eski v1/v2'yi koruyarak sahip olunan materyal sürümünü editöre bağlamak.
+ADR-0047 ile yeni çalışmaların iki sabit görsel/logo kaynağı sahip olunan materyal
+sürümlerine bağlandı; kullanılan sürümlerin silinmesi engellenir. Eski v1/v2
+çalışmaların görünümü/geçmişi korunur, geçmişe kaynak bağı uydurulmaz. Sıradaki
+yerel iş, açık seçimle palet PNG katmanı ve özel yükleme/export için ayrı sahne
+sürümüdür. Bu dilim gerçek dosya yüklemeyi açmaz.
 
 ADR-0045: Sabit marka paleti görseli, materyal/kimlik sürümüne bağlı orijinal ve
 normalize PNG çiftiyle mevcut veritabanında atomik saklanır. Sahip özel PNG

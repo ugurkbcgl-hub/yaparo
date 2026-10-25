@@ -67,6 +67,15 @@ class DocumentViewTests(TestCase):
             self.assertEqual(self.client.get(self.url(name)).status_code, 302)
         self.assertEqual(self.client.post(self.url("create")).status_code, 302)
 
+    def test_detail_shows_pinned_source_versions_without_changing_scene_download(self):
+        response = self.client.get(self.url())
+        self.assertContains(response, "Bu çalışmanın kaynakları")
+        self.assertContains(response, "Seramik ürün illüstrasyonu")
+        self.assertContains(response, "Materyal sürümü 1", count=2)
+        self.assertEqual(
+            self.client.get(self.url("download")).json(), self.document.scene
+        )
+
     def test_create_replay_does_not_replace_document(self):
         request_id = uuid4()
         payload = {

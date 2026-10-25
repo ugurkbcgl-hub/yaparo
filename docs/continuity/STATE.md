@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 11:35 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 13:07 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -14,9 +14,10 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main75bf33f (PR339 merged); required CI40175882323 and main CI40176187139
-succeeded. Current implementation branch feat/raster-recovery-deletion; resolve
-its PR/checks live. No unrelated working-tree edits at task start.
+Base main fb3a0e0 (PR340 merged); required CI40177310129 and main CI40177604172
+succeeded. Implementation branch feat/editor-material-bindings, PR341:
+https://github.com/ugurkbcgl-hub/yaparo/pull/341 . Resolve current PR/head/checks
+live; CI pending at snapshot. No unrelated working-tree edits at task start.
 PR336 required CI40167348893 and main CI40167513738 succeeded.
 Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
@@ -132,7 +133,13 @@ existing safeguards; no usage monitoring. A schedule is not proof a run executed
 
 ## Next action
 
-Complete recovery/removal PR CI/merge, then explicit owned material-version
-linkage in new editor documents. Preserve v1/v2 scenes/history and protect any
-referenced material versions before adding that linkage. Configured DB recovery,
-customer upload/scanning/parser isolation/privacy gates remain open; Y05 incomplete.
+After reviewed PR341 is green/merged, implement a versioned, explicitly selected
+owned palette PNG layer with private load/export. ADR0047
+pins new fixed hero/logo sources, protects referenced versions, and preserves
+legacy v1/v2 without backfill. Initial149 workspaces/assets tests:143 passed,
+6 SQLite PostgreSQL-only skips. Final24 focused HTTP/service/browser checks passed. Desktop/mobile source
+details reviewed; export PNG pixels and legacy rendering verified. Ruff and
+migration drift passed; independent review found no blocker. No
+configured preview migration, provider or protected-fixture action in this slice.
+Configured DB recovery, customer upload/scanning/parser isolation/privacy gates
+remain open; Y05 incomplete.

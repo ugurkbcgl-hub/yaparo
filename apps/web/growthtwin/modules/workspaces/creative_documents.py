@@ -9,6 +9,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import IntegrityError, transaction
 from django.utils import timezone
 
+from .creative_materials import bind_materials, checked_materials
 from .creative_scenes import SceneValidationError, seed_brand_scene, validate_scene
 from .models import Brand, BrandCreativeDocument, BrandCreativeRevision
 
@@ -79,6 +80,7 @@ def create_document(*, owner, brand_id, expected_identity_version, request_id):
             ):
                 raise ValidationError("Çalışma isteği başka bir bağlamda kullanılmış.")
             _scene(existing.scene, brand.fixture)
+            checked_materials(existing)
             return existing
         if brand.current_version != expected_identity_version:
             raise ValidationError(
@@ -101,12 +103,16 @@ def create_document(*, owner, brand_id, expected_identity_version, request_id):
         try:
             with transaction.atomic():
                 document = BrandCreativeDocument.objects.create(
-                    id=request_id, identity=identity, scene=scene
+                    id=request_id,
+                    identity=identity,
+                    scene=scene,
+                    material_binding_version=1,
                 )
         except IntegrityError:
             raise ValidationError(
                 "Çalışma isteği başka bir bağlamda kullanılmış."
             ) from None
+        bind_materials(document, owner)
         _snapshot(document, owner, "create")
         return document
 
@@ -135,12 +141,14 @@ def read_document(*, owner, brand_id, document_id):
     brand = _brand(owner, brand_id)
     document = _document(brand, document_id)
     _scene(document.scene, brand.fixture)
+    checked_materials(document)
     return document
 
 
 def _write_document(
     document, owner, expected_revision, scene, *, reason="save", restored_from=None
 ):
+    checked_materials(document)
     if document.revision != expected_revision:
         raise ValidationError(
             "Çalışma değişmiş. Güncel kaydı açın.", code="stale_document_revision"
@@ -181,6 +189,7 @@ def read_document_snapshot(*, owner, brand_id, document_id):
         brand = _brand(owner, brand_id, lock=True)
         document = _document(brand, document_id, lock=True)
         _scene(document.scene, brand.fixture)
+        checked_materials(document)
         rows = list(document.history.order_by("-revision")[:50])
         if rows and (
             rows[0].revision != document.revision or rows[0].scene != document.scene
