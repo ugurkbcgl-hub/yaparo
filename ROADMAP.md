@@ -10,8 +10,10 @@ The schema is the bounded editor experiment v1. Django now connects an owned
 Fabric editor to saved documents: layer text/color/transforms, revision-checked
 server saves and client PNG export. New scenes now pin brand palette styling;
 saved edits have immutable snapshots and owned restore as a new revision. Existing
-v1 scenes retain their rendering. Custom assets/fonts, per-keystroke undo and
-campaign association remain open. See ADR-0042; this is a local synthetic slice.
+v1 scenes retain their rendering. A closed brand-identity-pinned catalog now
+records the existing fixed synthetic source metadata only; it does not accept or
+store a file. Custom assets/fonts, per-keystroke undo and campaign association
+remain open. See ADR-0042 and ADR-0043; this is a local synthetic slice.
 
 ## Active delivery plan — 2026-10-23
 
@@ -30,7 +32,10 @@ and legal/platform readiness run alongside local synthetic implementation.
 owner-scoped synthetic brand creation/list/edit, immutable identity versions and
 stale-edit protection. Desktop/mobile journey passed locally. Custom logo/font
 intake, creative/campaign binding and production editor readiness remain open.
-**Next:** bounded synthetic asset-library intake, preserving owned scene and history boundaries.
+**Current:** Y05-A has a closed, owner-scoped catalog for the editor's two fixed
+synthetic sources, with immutable version metadata and no HTTP file intake.
+**Next:** design the bounded synthetic binary/quarantine slice without opening
+customer uploads or weakening ADR-0009.
 
 The owner's multi-brand requirement is now part of Y04: separate identity,
 character, assets and creative history per brand. See [brand experience and

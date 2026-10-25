@@ -14,4 +14,7 @@
 <input type="hidden" name="request_id" value="{{ document_request_id }}">
 <button class="brand-button" type="submit">Örnek çalışma oluştur</button></form>
 <ul>{% for document in documents %}<li><a href="{% url 'brand_documents:detail' brand.pk document.pk %}">Çalışmayı aç · Kimlik {{ document.identity.version }} · Kayıt {{ document.revision }}</a></li>{% empty %}<li>Henüz kayıtlı çalışma yok.</li>{% endfor %}</ul></section>
+<section class="brand-history"><h2>Sentetik materyal kütüphanesi</h2>
+<p>Bu başlangıç kiti yalnız Yaparo'nun sabit örnek çizimlerinin kaynak ve sürüm kaydını gösterir. Dosya yükleme, dış bağlantı, virüs tarama, AI'ye aktarma ve reklam yayını kapalıdır.</p>
+{% if material_rows %}<ul>{% for row in material_rows %}<li class="brand-card"><div><strong>{{ row.version.display_name }}</strong><p>{{ row.version.media_type }} · {{ row.version.width }} × {{ row.version.height }} · {{ row.version.byte_size }} bayt</p><p>Kaynak: {{ row.version.source_label }} · Hak durumu: {{ row.version.rights_label }}</p><p>Marka kimliği {{ row.material.identity.version }} · Kaynak sürümü {{ row.version.version }}</p></div></li>{% endfor %}</ul>{% else %}<p>Henüz katalog kaydı hazırlanmadı. Bu işlem gerçek dosya kabul etmez.</p><form method="post" action="{% url 'brands:materials_prepare' brand.pk %}">{% csrf_token %}<button class="brand-button" type="submit">Sentetik materyal kitini hazırla</button></form>{% endif %}</section>
 {% endblock %}

@@ -16,6 +16,7 @@ from django.views.decorators.http import (
     require_safe,
 )
 
+from growthtwin.modules.assets.services import list_materials
 from growthtwin.modules.workspaces.brand_forms import (
     TONES,
     BrandCreateForm,
@@ -143,6 +144,19 @@ def brand_create(request):
 def brand_detail(request, brand_id):
     brand = _brand(request.user, brand_id)
     identities = BrandIdentity.objects.filter(brand=brand).order_by("-version")
+    materials = list_materials(owner=request.user, brand_id=brand.pk)
+    material_rows = []
+    for material in materials:
+        version = next(
+            (
+                item
+                for item in material.versions.all()
+                if item.version == material.current_version
+            ),
+            None,
+        )
+        if version is not None:
+            material_rows.append({"material": material, "version": version})
     return render(
         request,
         "workspaces/brand_detail.html",
@@ -155,6 +169,7 @@ def brand_detail(request, brand_id):
             "documents": BrandCreativeDocument.objects.filter(identity__brand=brand)
             .select_related("identity")
             .order_by("-created_at"),
+            "material_rows": material_rows,
         },
     )
 
