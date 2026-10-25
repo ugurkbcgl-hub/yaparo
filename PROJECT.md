@@ -32,6 +32,11 @@ pinned to a material/brand identity version and served only to the owner.
 The new source does not replace the editor's fixed illustration/logo keys.
 Production storage selection, configured DB+binary restore and deletion remain open.
 
+ADR-0046 adds scoped internal sample removal and an actual fresh SQLite binary
+backup/restore/decode/deletion rehearsal. Source/backup remain unchanged and
+exact temporary fixtures are cleaned. Configured PostgreSQL/Heroku recovery,
+crash guarantees and customer retention/deletion remain unverified release gates.
+
 The owner requested a sustainable, self-operated product built with maintained
 open-source components and easily replaceable AI providers. [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)
 accepts this strategy and the [new master plan](docs/product/yaparo-open-source-master-plan.md).
