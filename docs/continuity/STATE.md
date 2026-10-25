@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 16:38 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 20:46 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,28 +16,30 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main49f7708 (PR344 merged); required CI40196763270 and main CI40197158851
-succeeded. Branch feat/portrait-design-format; PR not yet created at snapshot.
+Base main393515d (PR345 merged); required CI40198604735 and main CI40199056437
+succeeded. Branch feat/campaign-design-selection; PR not yet created at snapshot.
 Resolve current branch/head/PR/CI live. No unrelated edits at task start.
-Durable task: GitHub issue328. No new migration or configured DB change.
+Durable task: GitHub issue328. New campaigns0009 creates only the local choice table;
+no backfill or configured database change. Preview migration not yet applied.
 
-- ADR0051 adds explicit v4 square800×800 / portrait800×1000 UI creation with fixed
-  illustration or owned palette source. Format/source/dimensions pin permanently;
-  replay/save/restore cannot switch them. Omitted service/form option preserves
-  cached forms and legacy v2/v3 creation. Existing v1–v3 data/rendering unchanged.
-- Preview aspect ratio and y bounds follow the saved height. PNG export uses exact
-  logical dimensions then restores display viewport in finally; no scene or undo
-  mutation. Palette detection is shared across model/material/bootstrap/bundle.
-- V4 ZIP declares renderer contract v1-v4. No-input private bundle rehearsal now
-  transfers the fixed v4 portrait through its manifest to a fresh owner/workspace,
-  compares metadata/bytes/pixels/reexport and preserves source DB/archive hashes.
-  Exact generated inventory cleanup passed on actual Windows normal and -O runs.
-- 184 related service/assets/HTTP/browser checks:178 passed/6 PostgreSQL-only SQLite
-  skips. Actual PNG dimensions/bottom/palette pixels,999/390 responsive viewports,
-  local undo, save/reopen/restore, export then drag/undo and legacy v1–v3 PNGs passed.
-  Mobile drag test first targeted offscreen canvas; explicit scroll fixed the test.
-  Desktop/mobile screenshots reviewed; ruff/format/migration drift/diff checks passed.
-  Independent final source review found no blocker. Required CI not yet claimed.
+- ADR0052 adds default-off/DEBUG same-workspace campaign → owned brand/saved-design
+  selection, pinned to an immutable revision. New document edits do not change it;
+  explicit reselection is required. Existing Search text/approval/dispatch untouched.
+- Append-only choices have exact UUID replay and stale-version refusal. Latest
+  unavailable reference never falls back to earlier history. Bound sources only;
+  no invented legacy provenance. Draft removal preserves source snapshots.
+- Selection locks only its draft; a scoped INSERT subquery rechecks revision,
+  owner/workspace/activity/archive at write boundary without adding source locks.
+  Independent review confirmed the prior lock inversion was resolved. Four actual
+  PostgreSQL concurrency tests must pass required CI before merge.
+- Private chooser uses closed typed POST, CSRF, preparse multipart/size refusal and
+  no-store/noindex headers. Same-origin referrer preserves actual browser CSRF.
+  Editor return hint accepts only owned same-workspace bounded integer campaign.
+- 295 relevant local tests:284 passed/11 PostgreSQL-only skips. Final6 HTTP/browser
+  checks passed after UI refinement. Actual selection → stale refusal → editor
+  revision2 → preserved pinned revision1 → explicit reselection passed. Desktop/
+  mobile screenshots reviewed. Ruff/format/migration-drift/diff checks passed.
+  Required CI and postmerge preview update are not yet claimed.
 
 ## Established local capabilities and limits
 
@@ -69,7 +71,7 @@ Private serve_design_preview.py runs loopback8002 with DEBUG and only the palett
 flag plus a fresh in-memory signing key; it refuses pending migrations. Verify
 and restart that exact script/process if needed after merge/collectstatic, never
 replace an unknown listener. Home/login and actual unversioned DEBUG static JS/CSS
-were HTTP200 after PR344. No authenticated manual preview claimed; browser evidence
+were HTTP200 after PR345. No authenticated manual preview claimed; browser evidence
 uses isolated test fixtures. Do not infer production readiness from these checks.
 
 ## Preserved integration and release boundaries
@@ -102,7 +104,8 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-After reviewed format PR passes required CI and merges, build the first owned
-synthetic campaign → explicit brand/design selection journey with a pinned saved
-revision. Inspect current campaign/domain contracts first; old drafts stay unbound,
-other workspaces stay inaccessible and selection is not publishing approval.
+Finish the reviewed campaign-design selection PR and required CI, then apply only
+campaigns0009 to the SAME disposable preview after an exclusive private SQLite
+backup and exact migration-plan verification. Enable the new flag in its private
+launcher only. Next product slice: read-only visual preview/export of the exact
+campaign-pinned snapshot, distinct from the current editable document.

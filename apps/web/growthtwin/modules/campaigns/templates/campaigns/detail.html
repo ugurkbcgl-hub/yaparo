@@ -7,6 +7,7 @@
     <h1>{{ draft.name }}</h1>
     <p class="lead">{{ draft.brand_name }} · {{ draft.target_city }} · Google Search</p>
     <a class="button button-secondary" href="{% url 'campaigns:journey' draft.pk %}">Kampanya adımlarını gör →</a>
+    {% include 'campaigns/design_reference.html' %}
 
     <aside class="notice" role="note">
       <strong>Önizleme · yayınlanmadı</strong>

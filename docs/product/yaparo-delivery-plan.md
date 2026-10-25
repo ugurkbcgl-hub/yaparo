@@ -44,9 +44,10 @@ alanında sabit örneğin aktarım/yeniden export provasını ekler. Genel impor
 bağımsız offline editör değildir. ADR-0050 kaydedilmemiş düzenlemelerde 50 adımlı
 geri al/yinele ve klavye erişimini ekler; sunucu kayıt geçmişinden ayrıdır.
 ADR-0051 kare/dikey v4 tasarım ve tam boyutlu PNG çıktısını ekler; eski sahneler
-korunur. Sıradaki yerel iş kampanyadan açık marka/tasarım seçimi ve kayıt sürümüne
-bağlanma yolculuğudur; eski kampanyalara marka tahmin edilmez. Gerçek dosya yükleme
-kapalıdır.
+korunur. ADR-0052 kampanyadan aynı çalışma alanındaki marka/tasarım kaydının açık
+seçimini ekler; eski kampanyalara marka tahmin edilmez, seçim yayın onayı değildir.
+Sıradaki yerel iş seçili sabit kaydın salt okunur görsel önizleme/çıktısıdır; güncel
+editör kaydıyla karıştırılmaz. Gerçek dosya yükleme kapalıdır.
 
 ADR-0045: Sabit marka paleti görseli, materyal/kimlik sürümüne bağlı orijinal ve
 normalize PNG çiftiyle mevcut veritabanında atomik saklanır. Sahip özel PNG

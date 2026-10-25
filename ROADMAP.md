@@ -53,8 +53,10 @@ design ZIP and actual fresh-workspace fixture transfer/reexport proof. General
 import/offline editor and full portable editing remain open. **Current:** ADR-0050
 adds50-step local undo/redo, keyboard access and failed-save preservation, separate
 from committed history. **Current:** ADR-0051 adds new v4 square/portrait design
-selection and exact PNG export, preserving old scenes and history. **Next:** first
-owned synthetic campaign → explicit brand/design selection with revision pinning.
+selection and exact PNG export, preserving old scenes and history. **Current:**
+ADR-0052 adds explicit same-workspace campaign/brand/design reference with immutable
+revision pinning and no implicit Search/publishing changes. **Next:** read-only
+preview/export of the pinned snapshot, distinct from the live editable document.
 Customer gates remain open.
 Y05 is not complete.
 

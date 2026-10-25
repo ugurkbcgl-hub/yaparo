@@ -1,5 +1,6 @@
 """Synthetic, workspace-owned campaign drafts."""
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
 
@@ -73,6 +74,65 @@ class WorkspaceCampaignDraft(models.Model):
                 name="campaign_draft_flight_dates_ordered",
             ),
         ]
+
+
+class CampaignDesignChoiceQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Tasarım seçimi geçmişi değiştirilemez.")
+
+    def delete(self):
+        raise ValidationError("Tasarım seçimi geçmişi tek başına silinemez.")
+
+    def bulk_update(self, objs, fields, **kwargs):
+        raise ValidationError("Tasarım seçimi geçmişi değiştirilemez.")
+
+
+class CampaignDesignChoice(models.Model):
+    """Append-only local planning reference; never publishing approval."""
+
+    draft = models.ForeignKey(
+        WorkspaceCampaignDraft, on_delete=models.CASCADE, related_name="design_choices"
+    )
+    snapshot = models.ForeignKey(
+        "workspaces.BrandCreativeRevision",
+        on_delete=models.PROTECT,
+        related_name="campaign_choices",
+    )
+    version = models.PositiveIntegerField()
+    request_id = models.UUIDField(unique=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = CampaignDesignChoiceQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("-version",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("draft", "version"), name="campaign_design_version_unique"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(version__gte=1),
+                name="campaign_design_version_positive",
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        if (
+            self.draft_id
+            and self.snapshot_id
+            and self.draft.workspace_id
+            != self.snapshot.document.identity.brand.workspace_id
+        ):
+            raise ValidationError("Tasarım aynı çalışma alanına ait olmalıdır.")
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Tasarım seçimi geçmişi değiştirilemez.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Tasarım seçimi geçmişi tek başına silinemez.")
 
 
 class CampaignRehearsal(models.Model):
