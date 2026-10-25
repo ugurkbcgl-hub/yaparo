@@ -1,4 +1,4 @@
-"""Pre-CSRF boundary for the body-less synthetic material catalog action.
+"""Pre-CSRF boundary for closed synthetic material/design metadata actions.
 
 CsrfViewMiddleware parses POST data to find its token. Reject multipart and
 oversized/unknown bodies *before* that middleware so a file upload handler never
@@ -9,15 +9,27 @@ receives an attempted customer file merely because a catalog endpoint ignores
 import re
 
 from django.http import HttpResponse
+from django.utils.cache import patch_cache_control
 
 _PREPARE_PATH = re.compile(
-    r"\A/workspace/brands/[0-9]+/materials/(?:prepare|generate)/\Z"
+    r"\A/workspace/(?:brands/[0-9]+/materials/(?:prepare|generate)|campaigns/[0-9]+/design)/\Z"
 )
 _MAX_FORM_BODY_BYTES = 8 * 1024
+_DESIGN_PATH = re.compile(r"\A/workspace/campaigns/[0-9]+/design/\Z")
+
+
+def _headers(response, request):
+    if _DESIGN_PATH.fullmatch(request.path):
+        patch_cache_control(
+            response, private=True, no_store=True, no_cache=True, max_age=0
+        )
+        response["X-Robots-Tag"] = "noindex, nofollow"
+        response["Referrer-Policy"] = "same-origin"
+    return response
 
 
 class ClosedSyntheticMaterialIntakeMiddleware:
-    """Permit only a small browser form body for the fixed-catalog POST."""
+    """Permit only a small browser form body for closed synthetic POSTs."""
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -31,11 +43,11 @@ class ClosedSyntheticMaterialIntakeMiddleware:
             try:
                 body_length = int(content_length)
             except (TypeError, ValueError):
-                return HttpResponse(status=415)
+                return _headers(HttpResponse(status=415), request)
             if (
                 content_type != "application/x-www-form-urlencoded"
                 or body_length < 1
                 or body_length > _MAX_FORM_BODY_BYTES
             ):
-                return HttpResponse(status=415)
-        return self.get_response(request)
+                return _headers(HttpResponse(status=415), request)
+        return _headers(self.get_response(request), request)

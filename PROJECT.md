@@ -20,10 +20,16 @@ ADR-0043; this is a local synthetic slice.
 
 ## Current direction — 2026-10-23
 
+ADR-0052 adds an explicit local campaign visual reference to an owned brand and
+saved design revision in the same workspace. Later edits do not change selection;
+reselection is explicit. It does not alter existing Search text/approval/dispatch.
+Normal flag is off. Pinned visual preview/export is the next local journey step.
+
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot
 be changed on save/restore/replay. V4 owned palette bundles and the fresh-workspace
-rehearsal preserve the selected format. Campaign/brand/design linkage remains open.
+rehearsal preserve the selected format. Full brand-aware campaign generation and
+publishing linkage remain open beyond ADR-0052's local planning reference.
 
 ADR-0050 adds bounded client-memory undo/redo for unsaved editor actions and
 keyboard access. Successful save/restore/reload clears local steps; failed save

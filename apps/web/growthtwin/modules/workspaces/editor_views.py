@@ -1,7 +1,9 @@
 """Owned synthetic visual editor and bounded, non-retrying scene save."""
 
 import json
+import re
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import (
     ObjectDoesNotExist,
@@ -46,12 +48,33 @@ def editor(request, brand_id, document_id):
         raise Http404 from error
     except ValidationError:
         return JsonResponse({"error": "invalid_saved_scene"}, status=409)
+    campaign_return_id = None
+    campaign = request.GET.get("campaign", "")
+    if (
+        settings.DEBUG
+        and settings.SYNTHETIC_CAMPAIGN_DESIGN_ENABLED
+        and re.fullmatch(r"[1-9][0-9]{0,18}", campaign)
+        and int(campaign) <= 2**63 - 1
+    ):
+        from growthtwin.modules.campaigns.models import WorkspaceCampaignDraft
+
+        campaign_return_id = (
+            WorkspaceCampaignDraft.objects.filter(
+                pk=int(campaign),
+                workspace_id=document.identity.brand.workspace_id,
+                workspace__owner=request.user,
+                workspace__owner__is_active=True,
+            )
+            .values_list("pk", flat=True)
+            .first()
+        )
     response = render(
         request,
         "workspaces/document_editor.html",
         {
             "brand": document.identity.brand,
             "document": document,
+            "campaign_return_id": campaign_return_id,
             "bootstrap": {
                 "scene": document.scene,
                 "revision": document.revision,

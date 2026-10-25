@@ -2,11 +2,12 @@
 
 from django.urls import path
 
-from growthtwin.modules.campaigns import views
+from growthtwin.modules.campaigns import design_views, views
 
 app_name = "campaigns"
 
 urlpatterns = [
+    path("<int:draft_id>/design/", design_views.campaign_design, name="design"),
     path("", views.campaign_list, name="list"),
     path("new/", views.campaign_create, name="create"),
     path("<int:draft_id>/", views.campaign_detail, name="detail"),
