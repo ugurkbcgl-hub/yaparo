@@ -37,6 +37,8 @@ from growthtwin.modules.workspaces.services import (
     update_brand_identity_for_owner,
 )
 
+from .campaign_context import campaign_return_id
+
 
 def _brand(owner, brand_id):
     try:
@@ -180,6 +182,7 @@ def brand_detail(request, brand_id):
             "history": [_identity_row(item) for item in identities],
             "preset": SYNTHETIC_BRAND_PRESETS[brand.fixture],
             "document_request_id": uuid.uuid4(),
+            "campaign_return_id": campaign_return_id(request, brand.workspace_id),
             "documents": BrandCreativeDocument.objects.filter(identity__brand=brand)
             .select_related("identity")
             .order_by("-created_at"),

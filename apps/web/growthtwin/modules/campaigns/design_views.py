@@ -12,6 +12,8 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_http_methods
 
+from growthtwin.modules.workspaces.models import Brand
+
 from .design_selection import current_design, design_options, owned_draft, select_design
 
 
@@ -109,6 +111,12 @@ def campaign_design(request, draft_id):
         options=options,
         selection_error=status == 409,
         is_design_chooser=True,
+        design_brands=Brand.objects.filter(
+            workspace_id=draft.workspace_id,
+            workspace__owner=request.user,
+            workspace__owner__is_active=True,
+            is_archived=False,
+        ).order_by("pk")[:20],
     )
     response = render(
         request, "campaigns/design_selection.html", context, status=status

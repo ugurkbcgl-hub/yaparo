@@ -58,8 +58,10 @@ ADR-0052 adds explicit same-workspace campaign/brand/design reference with immut
 revision pinning and no implicit Search/publishing changes. **Current:** ADR-0053
 adds read-only pinned snapshot preview and exact PNG, separate from the live editor.
 **Current:** ADR-0054 adds owned ZIP of the selected snapshot and explicit selection
-manifest. **Next:** Y08 measured synthetic journey rehearsal and observed friction
-fixes; independent human observations remain open.
+manifest. **Current Y08:** [automated journey report](docs/product/y08-synthetic-journey-rehearsal.md)
+records desktop/mobile completion and fixes lost campaign navigation in direct
+new-design creation. Human observations remain open. **Next:** Y09 existing gateway
+review and brand/source-bound capability contract.
 Customer gates remain open.
 Y05 is not complete.
 

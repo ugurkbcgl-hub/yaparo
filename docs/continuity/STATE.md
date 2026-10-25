@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 21:28 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 21:54 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,32 +16,31 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main40f638a (PR348 merged), required CI40219831960 and main CI40220289970
-succeeded. Branch codex/pinned-design-bundle; PR not yet created at snapshot.
-Resolve mutable branch/head/PR/CI live. Durable task: issue328. No new migration,
-configured database, provider or protected TEST fixture change.
+Base main91461a3 (PR349 merged). Required CI40221446082 and main CI40221876779
+succeeded. PR349 passed997 Django tests (993 pass/4 unrelated skips),23 browser
+checks and5 isolated-editor checks. Known disposable preview was restarted with
+no migration; home/login HTTP200 and owned ZIP route required login.
+Branch codex/campaign-design-journey; PR not yet created at snapshot. Recheck live.
+Durable task: issue328. No new migration/configured DB/provider/TEST fixture change.
 
-- ADR0052/0053 selection and read-only PNG preserve the immutable chosen revision,
-  explicit reselection, ownership/source checks and existing Search/dispatch paths.
-  PR348 passed992 Django tests (988 pass/4 unrelated skips),23 browser tests and5
-  isolated-editor checks. Same known disposable preview restarted after merge;
-  home/login/new JS were HTTP200, preview route required login. No DB migration.
-- ADR0054 adds GET/HEAD-only version-addressed ZIP of the selected snapshot, with
-  campaign/selection/snapshot/revision/brand manifest and exact pinned sources.
-  Document ZIP still exports current saved document through shared serializer.
-  File hashes, deterministic bytes and12MiB/64KiB size bounds remain enforced.
-- Eligibility is checked before/after byte collection; observed selection/ownership
-  changes refuse. No extra locks or writes. Campaign+material flags/DEBUG required;
-  source flags stay off. ZIP link hidden when material flag is off. Closed preparse
-  unsafe-method rejection and private/no-store/noindex/nosniff apply.
-- 15 focused local service/HTTP/browser/rehearsal checks passed: selected revision1 versus live
-  revision2, repeated exact bytes, file hashes, exact palette sources/portrait,
-  scope/flag/multipart refusal and selection/owner change while collecting. Actual
-  browser ZIP downloads before/after live edit are byte-identical for illustration
-  and palette. Source review found no blocker. Ruff/format/migration drift/diff
-  checks passed; required CI and postmerge restart pending.
-- No changes to credentials/provider/OAuth, financial/publishing gates or protected
-  Google candidate. Postmerge preview needs only the known-process restart.
+- Y08 actual baseline found direct creation lost campaign return navigation through
+  global brand list → brand → document → editor. Baseline blocked; not completion.
+- Chooser now offers only active same-workspace brand creation links. Typed bounded
+  optional campaign GET hint carries through create/failed-create/retry/document/
+  editor; ownership and workspace are rechecked. No new POST authority, free return
+  URL or automatic choice. Shared helper replaces editor-only duplicate validation.
+- Two completed synthetic desktop/mobile rehearsal runs cover nine checkpoints to
+  actual PNG/selected ZIP. No JS errors or overflow; exact selected revision/title
+  checked. Timings and baseline boundaries recorded in y08-synthetic-journey report;
+  they are not human speed or production SLA evidence. Mobile screenshot reviewed.
+- 34 related local service/HTTP/browser checks:31 pass/3 PostgreSQL-only skips.
+  Foreign/same-owner-other-workspace/flags/invalid hints and create-error return
+  covered; existing persistence/selection preserved. Source review no blocker.
+  Broader workspace module133 checks:128 pass/5 PostgreSQL-only skips.
+  Ruff/format/migration drift/diff passed. Required CI and preview restart pending.
+- This slice excludes brand onboarding, identity/material side paths and human
+  observations. Six consented human observations remain open; no Y08/full-release
+  completion claim. Existing source/approval/dispatch and protected fixtures intact.
 
 ## Established local capabilities and limits
 
@@ -111,8 +110,7 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Y08: measure the local synthetic campaign → brand/design → edit/save → explicit
-selection → preview/PNG/ZIP journey and fix only demonstrated friction. Record
-observed duration/errors and preserve no-write/read boundaries where applicable.
-Do not call automated rehearsal independent human usability validation; six
-consented human observations remain open. No new provider/service or real data.
+Y09: read AI_PROVIDERS.md and relevant ADRs, inspect the existing AI gateway and
+request/result contracts, then define a narrow brand/source/version-bound capability
+profile. Reuse existing provider boundaries; do not add a new SDK/provider/cost or
+send real data. Keep unresolved human usability and release gates explicit.

@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import Http404, HttpResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import (
@@ -28,6 +29,8 @@ from growthtwin.modules.workspaces.document_forms import (
     DocumentEditForm,
 )
 from growthtwin.modules.workspaces.services import get_brand_for_owner
+
+from .campaign_context import campaign_return_id, with_campaign
 
 
 def _brand(owner, brand_id):
@@ -50,6 +53,7 @@ def _document(owner, brand_id, document_id):
 @csrf_protect
 def document_create(request, brand_id):
     brand = _brand(request.user, brand_id)
+    campaign_id = campaign_return_id(request, brand.workspace_id)
     form = DocumentCreateForm(request.POST)
     if form.is_valid() and form.cleaned_data["brand_id"] == brand.pk:
         try:
@@ -60,12 +64,15 @@ def document_create(request, brand_id):
             pass
         else:
             return redirect(
-                "brand_documents:detail", brand_id=brand.pk, document_id=document.pk
+                with_campaign(
+                    reverse("brand_documents:detail", args=[brand.pk, document.pk]),
+                    campaign_id,
+                )
             )
     return render(
         request,
         "workspaces/document_detail.html",
-        {"brand": brand, "create_error": True},
+        {"brand": brand, "create_error": True, "campaign_return_id": campaign_id},
         status=409,
     )
 
@@ -76,6 +83,7 @@ def document_create(request, brand_id):
 @csrf_protect
 def document_detail(request, brand_id, document_id):
     brand = _brand(request.user, brand_id)
+    campaign_id = campaign_return_id(request, brand.workspace_id)
     try:
         document = _document(request.user, brand.pk, document_id)
     except ValidationError:
@@ -112,7 +120,10 @@ def document_detail(request, brand_id, document_id):
                 )
             else:
                 return redirect(
-                    "brand_documents:detail", brand_id=brand.pk, document_id=document.pk
+                    with_campaign(
+                        reverse("brand_documents:detail", args=[brand.pk, document.pk]),
+                        campaign_id,
+                    )
                 )
     layers = {layer["id"]: layer for layer in document.scene["layers"]}
     return render(
@@ -121,6 +132,7 @@ def document_detail(request, brand_id, document_id):
         {
             "brand": brand,
             "document": document,
+            "campaign_return_id": campaign_id,
             "form": form,
             "saved_title": layers["title"],
             "saved_subtitle": layers["subtitle"],
