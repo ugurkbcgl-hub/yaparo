@@ -22,6 +22,11 @@ Kalıcı iş takibi: [GitHub #328](https://github.com/ugurkbcgl-hub/yaparo/issue
   tasarımlara marka paleti ve kayıt geçmişinden yeni sürüm olarak dönüş eklendi.
   Eski v1 görünümü korundu. Özel font/varlık, her hareket için undo, yükseltme
   taşınabilirliği ve kampanya bağı açık.
+- **Y05-A kapalı sentetik katalog:** editörde zaten çizilen iki sabit kaynak
+  artık marka/kimlik sürümüne bağlı, owner-scoped ve değişmez metadata kayıtları
+  olarak hazırlanır. Kayıt yalnız sunucu kataloğundan gelir; dosya, URL veya
+  kullanıcı metadatası kabul edilmez. Bu JPG/PNG/WebP byte alımı, özel binary
+  depo, karantina/tarama veya gerçek hak beyanı değildir; ADR-0043 sınırı açıklar.
 - Kullanıcı 23 Ekim'de kullanım limiti kontrolünü kaldırdı; çalışmayı kullanım
   eşiğine göre durdurma kuralı uygulanmaz. Normal doğrulanmış devir notları korunur.
 
@@ -42,7 +47,7 @@ Kalıcı iş takibi: [GitHub #328](https://github.com/ugurkbcgl-hub/yaparo/issue
 ölçütüdür: marka sürümü/izin/varlık/üretim bağı, ayrı yaratıcı hafıza, kural kontrolü
 ve eski çalışmaların korunması. Temel çok marka ilk kit diliminde yer alır.
 
-Y01–Y03 yerel seçim kararı ADR-0041 ile kaydedildi; yaratıcı çalışma bağı ve ilk görsel akış uygulandı; marka paleti ve kayıt geçmişi eklendi; sırada sınırlandırılmış sentetik materyal kütüphanesi vardır. Bütün müşteri dosya türlerini açmaz. Y05 gerçek upload servisini ancak ilgili veri/güvenlik kapıları sonrası açar; önce sentetik yerel örneklerle geliştirilir.
+Y01–Y03 yerel seçim kararı ADR-0041 ile kaydedildi; yaratıcı çalışma bağı ve ilk görsel akış uygulandı; marka paleti/kayıt geçmişi ile Y05-A kapalı kaynak kataloğu eklendi. Sıradaki Y05-B, byte kabul etmeden önce sentetik binary/quarantine tasarımını ve kanıtını daraltır. Bütün müşteri dosya türleri kapalıdır. Y05 gerçek upload servisini ancak ilgili veri/güvenlik kapıları sonrası açar.
 
 ## B — Değiştirilebilir AI üretimi ve maliyet
 

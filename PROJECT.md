@@ -10,8 +10,13 @@ The schema is the bounded editor experiment v1. Django now connects an owned
 Fabric editor to saved documents: layer text/color/transforms, revision-checked
 server saves and client PNG export. New scenes now pin brand palette styling;
 saved edits have immutable snapshots and owned restore as a new revision. Existing
-v1 scenes retain their rendering. Custom assets/fonts, per-keystroke undo and
-campaign association remain open. See ADR-0042; this is a local synthetic slice.
+v1 scenes retain their rendering. The next closed material-catalog slice records
+the existing fixed PNG illustration/logo sources as immutable, brand-identity-
+pinned, owner-scoped metadata. It accepts no file, URL or client metadata and
+does not store a binary, scan content, make an AI call or expose a public asset
+URL. Its metadata digest is not a file hash or rights proof. Custom uploads/fonts,
+per-keystroke undo and campaign association remain open. See ADR-0042 and
+ADR-0043; this is a local synthetic slice.
 
 ## Current direction — 2026-10-23
 
@@ -31,8 +36,9 @@ production editor readiness and campaign integration remain open.
   and campaign context. Basic multi-brand use is not deferred to the agency phase.
   [Brand-specific experience](docs/product/brand-specific-experience.md) defines
   acceptance and innovation experiments. The first synthetic brand list/create/edit
-  slice now preserves identity versions and owner boundaries; assets, campaign
-  binding, custom uploads and brand-aware AI remain pending.
+  slice now preserves identity versions and owner boundaries. The closed
+  synthetic source catalog is in place; binary assets, campaign binding, custom
+  uploads and brand-aware AI remain pending.
 - Retain Django/PostgreSQL and application-owned customer, brand, asset, editable
   creative, campaign, consent, money and report records. Prefer reusable packages
   and thin adapters; no whole-platform fork or production hosting switch selected.
@@ -40,7 +46,8 @@ production editor readiness and campaign integration remain open.
   providers. Advertising networks, payment processors and hosted AI remain external.
 - Prioritize the synthetic brand/material/editor/export journey, then evaluated
   AI, commerce and a complete Google Search path. [Y01–Y32](docs/product/yaparo-delivery-plan.md)
-  supersedes the older recovery-first task order. Current slice: Y04; Y01–Y03 local selection is recorded in ADR-0041.
+  supersedes the older recovery-first task order. Current slice: Y05-A closed
+  synthetic material catalog; Y01–Y03 local selection is recorded in ADR-0041.
 - Basic editing should work without an AI call. Candidate editor/AI/worker
   choices require a pinned-version comparison before adoption. New worker/storage
   costs, real data, publishing and payments retain their existing release gates.

@@ -12,6 +12,8 @@ ADRs capture decisions that would be costly or confusing to reverse. Keep propos
 
 ## Decisions
 
+- [0043 — Closed synthetic material catalog](0043-closed-synthetic-material-catalog.md) — Accepted for local synthetic implementation
+- [0042 — Pinned brand palette and saved creative history](0042-brand-palette-and-creative-history.md) — Accepted for local synthetic implementation
 - [0041 — Bounded Fabric and versioned multi-brand identity](0041-bounded-fabric-and-brand-identity.md) — Accepted for local synthetic implementation
 
 - [0040 — Yaparo-owned core and staged open-source adoption](0040-owned-core-and-open-source-adoption.md) — Accepted strategy/priority; new components remain evaluation candidates
@@ -46,5 +48,3 @@ ADRs capture decisions that would be costly or confusing to reverse. Keep propos
 - [0030 — Generation-bound synthetic authorization attempts](0030-synthetic-generation-bound-authorization-attempts.md) — Accepted for isolated rehearsal only
 
 - [0031 — Scoped Google TEST candidate boundary](0031-scoped-google-test-candidate-boundary.md) — Accepted for mocked adapter validation only
-
-- [0042 — Pinned brand palette and saved creative history](0042-brand-palette-and-creative-history.md)
