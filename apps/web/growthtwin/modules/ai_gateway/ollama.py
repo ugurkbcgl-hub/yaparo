@@ -14,8 +14,9 @@ from growthtwin.modules.ai_gateway.creative_format import (
     CREATIVE_SCHEMA,
     CREATIVE_SYSTEM_PROMPT,
 )
-from growthtwin.modules.content.creative import CreativeVariant
 from growthtwin.modules.content.planning import CampaignBrief
+
+from .provider_json import load_provider_object, parse_creative_variants
 
 OLLAMA_HOST = "127.0.0.1"
 OLLAMA_PORT = 11434
@@ -104,15 +105,13 @@ class OllamaCreativeGenerator:
             response_body = response.read(MAX_RESPONSE_BYTES + 1)
             if len(response_body) > MAX_RESPONSE_BYTES:
                 raise OSError
-            response_payload = json.loads(response_body.decode("utf-8"))
+            response_payload = load_provider_object(response_body.decode("utf-8"))
             content = response_payload["message"]["content"]
-            generated_payload = json.loads(content)
-            variants = tuple(
-                CreativeVariant(**variant) for variant in generated_payload["variants"]
-            )
+            variants = parse_creative_variants(content)
         except (
             KeyError,
             TypeError,
+            ValueError,
             UnicodeError,
             json.JSONDecodeError,
             HTTPException,

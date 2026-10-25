@@ -118,7 +118,21 @@ def fixtures(request):
     yield "valid", json.dumps(good), True, True
     yield "invalid-json", "{", False, False
     yield "missing-variants", "{}", False, False
-    yield "unknown-root-field", json.dumps(good | {"published": True}), True, False
+    yield "non-object-root", "[]", False, False
+    raw = json.dumps(good)
+    yield (
+        "duplicate-root-key",
+        raw[:-1] + ',"variants":' + json.dumps(good["variants"]) + "}",
+        False,
+        True,
+    )
+    yield (
+        "duplicate-variant-key",
+        raw.replace('"headline":', '"headline":"ignored","headline":', 1),
+        False,
+        True,
+    )
+    yield "unknown-root-field", json.dumps(good | {"published": True}), False, False
     for name, mutate in (
         ("unknown-variant-field", lambda p: p["variants"][0].update(approved=True)),
         ("wrong-field-type", lambda p: p["variants"][0].update(headline=3)),

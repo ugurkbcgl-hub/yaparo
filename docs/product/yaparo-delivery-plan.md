@@ -92,8 +92,10 @@ brief değiştirme reddedilir. Rezervasyon/harcama mutabakatı, kalıcı işler 
 sağlayıcı yürütmesi tamamlanmış değildir. ADR-0056 Y10 çevrimdışı biçim denemesini
 kaydeder: aynı3 brief/13 yanıt/3 tekrar, normal ve optimize modda234’er yürütme.
 PydanticAI ürün bağımlılığına alınmaz; dar görev için mevcut adaptör korunur.
-Sıradaki iş doğrudan ayrıştırıcının bilinmeyen üst alanları reddetmesidir. Bu
-deneme gerçek model kalitesi veya iddia doğruluğu değerlendirmesi değildir.
+ADR-0057 ortak ayrıştırıcıyla bilinmeyen iç alanları, yinelenen anahtarları ve
+belirsiz/bozuk JSON’u reddeder; genişletilmiş çevrimdışı küme mod başına288 yürütme
+yapar. Bu model kalitesi veya iddia doğruluğu değerlendirmesi değildir. Sıradaki
+yerel adım marka bağlı çevrimdışı aday önizlemesi, açık seçim ve düzenleme korumasıdır.
 
 
 | ID | İş / bağımlılık | Teslim ve tamamlanma ölçütü |

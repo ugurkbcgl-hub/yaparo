@@ -15,8 +15,9 @@ from growthtwin.modules.ai_gateway.creative_format import (
     CREATIVE_SCHEMA,
     CREATIVE_SYSTEM_PROMPT,
 )
-from growthtwin.modules.content.creative import CreativeVariant
 from growthtwin.modules.content.planning import CampaignBrief
+
+from .provider_json import load_provider_object, parse_creative_variants
 
 OPENROUTER_HOST = "openrouter.ai"
 OPENROUTER_PATH = "/api/v1/chat/completions"
@@ -170,7 +171,7 @@ class OpenRouterCreativeGenerator:
             response_body = response.read(MAX_RESPONSE_BYTES + 1)
             if response.status != 200 or len(response_body) > MAX_RESPONSE_BYTES:
                 raise OSError
-            payload = json.loads(response_body.decode("utf-8"))
+            payload = load_provider_object(response_body.decode("utf-8"))
             usage = payload["usage"]
             input_tokens = usage["prompt_tokens"]
             output_tokens = usage["completion_tokens"]
@@ -200,9 +201,8 @@ class OpenRouterCreativeGenerator:
                 "output_tokens": output_tokens,
             }
             self.last_cost_usd = round(float(actual_cost), 8)
-            generated = json.loads(payload["choices"][0]["message"]["content"])
-            variants = tuple(
-                CreativeVariant(**variant) for variant in generated["variants"]
+            variants = parse_creative_variants(
+                payload["choices"][0]["message"]["content"]
             )
         except (
             KeyError,

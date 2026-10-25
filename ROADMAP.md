@@ -64,9 +64,11 @@ new-design creation. Human observations remain open. **Current Y09:** existing g
 review and brand/source-bound capability contract are recorded in ADR-0055: first
 offline envelope implemented, zero-cost template only, no dispatch/reservation
 ledger. **Current Y10:** ADR-0056 records the isolated pinned typed-output parsing
-comparison; retain direct runtime adapters, no new product dependency. **Next:**
-strict direct response parsing. Hosted quality, execution and full Y09/Y13
-accounting gates remain open.
+comparison; retain direct runtime adapters, no new product dependency. **Current:**
+ADR-0057 adds shared strict JSON and ambiguity regressions across existing adapters.
+**Next:** local brand-bound offline candidate preview with explicit review and
+preserved edits. Hosted quality, execution and full Y09/Y13 accounting gates remain
+open.
 Customer gates remain open.
 Y05 is not complete.
 
