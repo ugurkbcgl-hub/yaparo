@@ -35,7 +35,9 @@ This proves a bounded synthetic data transfer, not a general customer importer,
 independent offline editor, bundled font/license entitlement, configured DB
 recovery, migration compatibility or full Y05/Y06 readiness. Recreating the fixed
 fixture uses the compatible current Yaparo implementation; it is not production
-restoration and never overwrites an existing workspace. Upload/parser isolation,
+restoration and never overwrites an existing workspace. ADR-0051 subsequently
+extends the fixture to a format-pinned v4 portrait; the original v3 result remains
+historical evidence. Upload/parser isolation,
 production storage, rights/privacy and full portable editing remain open gates.
 
 Verification covers deterministic archive/content/hash checks, saved revision,

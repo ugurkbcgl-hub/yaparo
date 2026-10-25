@@ -22,6 +22,7 @@ from .creative_documents import (
     restore_document,
     save_document,
 )
+from .creative_scenes import uses_palette
 
 
 def _document(request, brand_id, document_id):
@@ -63,7 +64,7 @@ def editor(request, brand_id, document_id):
                         ).material_version.material_id,
                     ],
                 )
-                if document.scene["schema_version"] == 3
+                if uses_palette(document.scene)
                 else None,
                 "history": history,
                 "restore_url": reverse(

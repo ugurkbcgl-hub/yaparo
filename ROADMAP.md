@@ -52,7 +52,9 @@ Existing v1/v2 stay unchanged. **Current:** ADR-0049 adds a bounded owned saved-
 design ZIP and actual fresh-workspace fixture transfer/reexport proof. General
 import/offline editor and full portable editing remain open. **Current:** ADR-0050
 adds50-step local undo/redo, keyboard access and failed-save preservation, separate
-from committed history. **Next:** versioned square/portrait design/export.
+from committed history. **Current:** ADR-0051 adds new v4 square/portrait design
+selection and exact PNG export, preserving old scenes and history. **Next:** first
+owned synthetic campaign → explicit brand/design selection with revision pinning.
 Customer gates remain open.
 Y05 is not complete.
 

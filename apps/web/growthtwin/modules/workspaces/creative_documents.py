@@ -10,7 +10,12 @@ from django.db import IntegrityError, transaction
 from django.utils import timezone
 
 from .creative_materials import bind_materials, checked_materials
-from .creative_scenes import SceneValidationError, seed_brand_scene, validate_scene
+from .creative_scenes import (
+    DESIGN_FORMATS,
+    SceneValidationError,
+    seed_brand_scene,
+    validate_scene,
+)
 from .models import Brand, BrandCreativeDocument, BrandCreativeRevision
 
 
@@ -61,7 +66,13 @@ def _document(brand, document_id, *, lock=False):
 
 
 def create_document(
-    *, owner, brand_id, expected_identity_version, request_id, palette_material_id=None
+    *,
+    owner,
+    brand_id,
+    expected_identity_version,
+    request_id,
+    palette_material_id=None,
+    design_format=None,
 ):
     """Create one scene, or replay the same scoped request without overwriting it."""
     _owner(owner)
@@ -69,6 +80,10 @@ def create_document(
     if palette_material_id is not None:
         _uuid(palette_material_id)
     _version(expected_identity_version)
+    if design_format is not None and (
+        type(design_format) is not str or design_format not in DESIGN_FORMATS
+    ):
+        raise ValidationError("Desteklenen bir tasarım biçimi seçin.")
     with transaction.atomic():
         brand = _brand(owner, brand_id, lock=True)
         existing = (
@@ -85,6 +100,10 @@ def create_document(
                 raise ValidationError("Çalışma isteği başka bir bağlamda kullanılmış.")
             _scene(existing.scene, brand.fixture)
             checked_materials(existing)
+            if existing.scene.get("format") != design_format:
+                raise ValidationError(
+                    "Çalışma isteği farklı bir biçim için kullanılmış."
+                )
             palette = existing.material_bindings.filter(
                 layer_id="hero",
                 material_version__material__source_key=f"{brand.fixture}:palette:v1",
@@ -122,6 +141,19 @@ def create_document(
             )
             scene["schema_version"] = 3
             scene["layers"][0]["asset"] = f"{brand.fixture}:palette:v1"
+            scene = _scene(scene, brand.fixture)
+        if design_format is not None:
+            scene.update(
+                schema_version=4,
+                format=design_format,
+                hero_source="palette"
+                if palette_material_id is not None
+                else "illustration",
+                width=DESIGN_FORMATS[design_format][0],
+                height=DESIGN_FORMATS[design_format][1],
+            )
+            if design_format == "portrait":
+                scene["layers"][0]["y"] = 410
             scene = _scene(scene, brand.fixture)
         try:
             with transaction.atomic():
@@ -179,6 +211,11 @@ def _write_document(
     canonical = _scene(scene, document.identity.brand.fixture)
     if canonical["schema_version"] != document.scene["schema_version"]:
         raise ValidationError("Çalışma biçimi sessizce değiştirilemez.")
+    if any(
+        canonical.get(key) != document.scene.get(key)
+        for key in ("width", "height", "format", "hero_source")
+    ):
+        raise ValidationError("Çalışmanın boyutu veya kaynağı değiştirilemez.")
     if document.scene == canonical:
         return document
     if document.revision == 2**31 - 1:

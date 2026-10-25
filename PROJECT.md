@@ -20,6 +20,11 @@ ADR-0043; this is a local synthetic slice.
 
 ## Current direction — 2026-10-23
 
+ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
+800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot
+be changed on save/restore/replay. V4 owned palette bundles and the fresh-workspace
+rehearsal preserve the selected format. Campaign/brand/design linkage remains open.
+
 ADR-0050 adds bounded client-memory undo/redo for unsaved editor actions and
 keyboard access. Successful save/restore/reload clears local steps; failed save
 preserves them. Committed history and v1–v3 material bindings remain separate.

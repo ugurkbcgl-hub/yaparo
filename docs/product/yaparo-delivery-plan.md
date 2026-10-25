@@ -41,10 +41,12 @@ sürümlerine bağlandı; kullanılan sürümlerin silinmesi engellenir. Eski v1
 katmanı ve özel yükleme/export ADR-0048 ile yalnız yeni v3 çalışmalarda uygulandı;
 eski v1/v2 değişmez. ADR-0049 ayrı kayıtlı tasarım ZIP'i ve yeni geçici çalışma
 alanında sabit örneğin aktarım/yeniden export provasını ekler. Genel import veya
-bağımsız offline editör değildir. ADR-0050 kaydedilmemiş düzenlemelerde50 adımlı
-geri al/yinele ve klavye erişimini ekler; sunucu kayıt geçmişinden ayrıdır. Sıradaki
-yerel iş eski sahneleri koruyan kare/dikey tasarım ve PNG çıktısıdır. Gerçek dosya
-yükleme kapalıdır.
+bağımsız offline editör değildir. ADR-0050 kaydedilmemiş düzenlemelerde 50 adımlı
+geri al/yinele ve klavye erişimini ekler; sunucu kayıt geçmişinden ayrıdır.
+ADR-0051 kare/dikey v4 tasarım ve tam boyutlu PNG çıktısını ekler; eski sahneler
+korunur. Sıradaki yerel iş kampanyadan açık marka/tasarım seçimi ve kayıt sürümüne
+bağlanma yolculuğudur; eski kampanyalara marka tahmin edilmez. Gerçek dosya yükleme
+kapalıdır.
 
 ADR-0045: Sabit marka paleti görseli, materyal/kimlik sürümüne bağlı orijinal ve
 normalize PNG çiftiyle mevcut veritabanında atomik saklanır. Sahip özel PNG

@@ -286,9 +286,11 @@ class CreativeMaterialBinding(models.Model):
     def clean(self):
         super().clean()
         if self.document_id and self.material_version_id:
+            from .creative_scenes import uses_palette
+
             document, version = self.document, self.material_version
             suffix = {"hero": "illustration", "logo": "logo"}.get(self.layer_id)
-            if self.layer_id == "hero" and document.scene.get("schema_version") == 3:
+            if self.layer_id == "hero" and uses_palette(document.scene):
                 suffix = "palette"
             if (
                 document.material_binding_version != 1
