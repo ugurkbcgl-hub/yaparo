@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 21:54 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 22:06 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,31 +16,32 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main91461a3 (PR349 merged). Required CI40221446082 and main CI40221876779
-succeeded. PR349 passed997 Django tests (993 pass/4 unrelated skips),23 browser
-checks and5 isolated-editor checks. Known disposable preview was restarted with
-no migration; home/login HTTP200 and owned ZIP route required login.
-Branch codex/campaign-design-journey; PR not yet created at snapshot. Recheck live.
-Durable task: issue328. No new migration/configured DB/provider/TEST fixture change.
+Base main345c14f (PR350 merged); required CI40223511657 and main CI40223860175
+succeeded. PR350 passed1003 Django tests (999 pass/4 unrelated skips),25 browser
+checks and5 isolated-editor checks. Known preview restarted; home/login HTTP200.
+Branch codex/brand-task-contract; PR not yet created at snapshot. Verify live Git/CI.
+Durable task: issue328. No migration/configured DB/provider/TEST fixture change.
 
-- Y08 actual baseline found direct creation lost campaign return navigation through
-  global brand list → brand → document → editor. Baseline blocked; not completion.
-- Chooser now offers only active same-workspace brand creation links. Typed bounded
-  optional campaign GET hint carries through create/failed-create/retry/document/
-  editor; ownership and workspace are rechecked. No new POST authority, free return
-  URL or automatic choice. Shared helper replaces editor-only duplicate validation.
-- Two completed synthetic desktop/mobile rehearsal runs cover nine checkpoints to
-  actual PNG/selected ZIP. No JS errors or overflow; exact selected revision/title
-  checked. Timings and baseline boundaries recorded in y08-synthetic-journey report;
-  they are not human speed or production SLA evidence. Mobile screenshot reviewed.
-- 34 related local service/HTTP/browser checks:31 pass/3 PostgreSQL-only skips.
-  Foreign/same-owner-other-workspace/flags/invalid hints and create-error return
-  covered; existing persistence/selection preserved. Source review no blocker.
-  Broader workspace module133 checks:128 pass/5 PostgreSQL-only skips.
-  Ruff/format/migration drift/diff passed. Required CI and preview restart pending.
-- This slice excludes brand onboarding, identity/material side paths and human
-  observations. Six consented human observations remain open; no Y08/full-release
-  completion claim. Existing source/approval/dispatch and protected fixtures intact.
+- ADR0055 adds a frozen schema1 brand-copy-candidate task/result envelope over the
+  existing gateway. Actual pinned identity plus campaign/selection/snapshot,
+  workspace/brand/document/material IDs, versions and digests bind fixed synthetic
+  fixture brief. Fingerprint is correlation data, not authorization/signature.
+- Acceptance reconstructs the entire server-owned request and rechecks current
+  selection/scope. Same-source cross-campaign result replay and replaced/rehashed
+  brief reject. Live edit preserves pinned snapshot; explicit reselection rejects
+  the previous task. Candidate/failed/uncertain shapes reuse old candidate validator.
+- Only deterministic synthetic-template-v1, zero ceiling/reported cost and no
+  reservation accepted. No dispatch/SDK/API/key/queue/ledger added; every candidate
+  stays review-required, non-publishable and execution_authorized=False. Full
+  reservation/usage reconciliation/durable execution remain future Y09/Y13 gates.
+- 46 offline/new-context/existing-gateway checks passed. Scope/archive/transfer,
+  schema/profile/identity/material shape/cost/adapter and result mismatches covered.
+  Review found missing campaign binding; fixed with campaign/selection/snapshot IDs
+  and full factory revalidation plus regressions. Final source review no blocker.
+  Ruff/format/migration drift/diff passed. Required PR CI pending; no UI changed.
+- AI_PROVIDERS and canonical plan updated only for this verified offline work.
+  Historical provider model/price/terms are dated evidence, not freshly verified.
+  No usage/balance monitoring, live model quality or real-data permission claimed.
 
 ## Established local capabilities and limits
 
@@ -110,7 +111,8 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Y09: read AI_PROVIDERS.md and relevant ADRs, inspect the existing AI gateway and
-request/result contracts, then define a narrow brand/source/version-bound capability
-profile. Reuse existing provider boundaries; do not add a new SDK/provider/cost or
-send real data. Keep unresolved human usability and release gates explicit.
+Y10 preparation: inspect current primary documentation/maintenance/license and
+pinned compatibility for a typed-output library versus the existing direct adapter
+boundary, using the same offline synthetic suite. Do not select/install a new SDK
+or call a provider without its corresponding review/authorization; no real data.
+Keep Y09 reservation/durable-job and human usability/release gates explicit.

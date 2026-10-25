@@ -30,7 +30,10 @@ selected snapshot ZIP with an explicit campaign-selection manifest and exact
 pinned sources. The current document ZIP stays separate. Y08 automated desktop/
 mobile rehearsal found and fixed lost campaign navigation during direct new-design
 creation; independent human validation remains open. See the measured Y08 report.
-Next: Y09 brand/source-bound AI capability contract using the existing gateway.
+ADR-0055 adds the first offline brand/source/version-bound task/result profile over
+the existing gateway. Only deterministic synthetic templates/zero cost; no hosted
+execution, reservation ledger or provider promotion. Next: Y10 offline typed-output
+comparison preparation with the existing contract.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot

@@ -85,6 +85,14 @@ Y01–Y03 yerel seçim kararı ADR-0041 ile kaydedildi; yaratıcı çalışma ba
 
 ## B — Değiştirilebilir AI üretimi ve maliyet
 
+ADR-0055 ilk çevrimdışı marka/kaynak/sürüm bağlı görev ve sonuç sözleşmesini ekler.
+Mevcut geçit korunur; yalnız deterministik sentetik adaptör ve sıfır maliyet kabul
+edilir. Sunucudaki seçime göre istek tekrar kurularak kampanyalar arası sonuç ve
+brief değiştirme reddedilir. Rezervasyon/harcama mutabakatı, kalıcı işler ve ücretli
+sağlayıcı yürütmesi tamamlanmış değildir. Sıradaki Y10, aynı çevrimdışı kümede mevcut
+adaptör ile tipli çıktı kütüphanesi karşılaştırmasının sürüm/lisans/uyumluluk hazırlığıdır.
+
+
 | ID | İş / bağımlılık | Teslim ve tamamlanma ölçütü |
 |---|---|---|
 | Y09 | Görev/yetenek profili; Y04 | Sürümlü istek/çıktı, kaynaklar, izinli sağlayıcı, maliyet rezervasyonu ve async sonuç sözleşmesi; web formları model adına bağımlı değil |

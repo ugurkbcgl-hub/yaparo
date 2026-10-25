@@ -27,3 +27,12 @@ CREATIVE_COPY_PROFILE = TextTaskProfile(
         "correction-effort",
     ),
 )
+
+# Separate offline brand-bound envelope; no provider or production promotion.
+BRAND_COPY_PROFILE = TextTaskProfile(
+    profile_id="brand-copy-candidate-v1",
+    task_id="brand-bound-copy-candidate",
+    output_contract_id="brand-copy-task-result-v1",
+    minimum_repetitions_per_case=3,
+    manual_review_dimensions=CREATIVE_COPY_PROFILE.manual_review_dimensions,
+)
