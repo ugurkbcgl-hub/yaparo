@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 15:42 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 15:44 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -17,7 +17,7 @@ Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base main e6acb94 (PR341 merged); required CI40183388050 and main CI40183690585
 succeeded. Implementation branch feat/palette-editor-scene, PR342:
 https://github.com/ugurkbcgl-hub/yaparo/pull/342 . Resolve current head/checks live
-before merging; CI pending at snapshot. No unrelated edits at task start.
+before merging. No unrelated edits at task start.
 PR336 required CI40167348893 and main CI40167513738 succeeded.
 Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
@@ -151,7 +151,9 @@ existing safeguards; no usage monitoring. A schedule is not proof a run executed
 After reviewed palette-editor PR CI/merge, design a versioned owned portable
 scene/source/binary bundle and fresh-workspace recovery rehearsal (ADR0048).
 Scene-only JSON is not a portable asset bundle; no arbitrary import/customer
-upload is authorized. Preview schema is current; port8002 was not listening when
-checked. No refreshed authenticated manual preview claimed. Configured DB
+upload is authorized. Preview schema is current and SAME synthetic DB server was
+restarted on loopback8002; home/login HTTP200 verified. Runtime enables only the
+synthetic palette flag; fresh in-memory session signing key, no secret persisted.
+No refreshed authenticated manual preview claimed. Configured DB
 recovery, customer upload/scanning/parser isolation/privacy gates remain open;
 Y05 incomplete.
