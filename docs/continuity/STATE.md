@@ -1,10 +1,10 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 15:57 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 16:15 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
-Owned-core/open-source plan; current owned synthetic design-package slice.
+Owned-core/open-source plan; current bounded unsaved editor undo/redo slice.
 Usage monitoring disabled by owner; do not query limits. Reviewed green PRs may
 merge under standing authorization; never push directly to main. Local synthetic
 work only; actual customer data/accounts, payments/publishing remain gated.
@@ -14,8 +14,8 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main23ad073 (PR342 merged); required CI40194312612 and main CI40194730203
-succeeded. Implementation branch feat/owned-design-bundle; PR not yet created at
+Base main7e5a8c1 (PR343 merged); required CI40195472942 and main CI40195863297
+succeeded. Implementation branch feat/editor-local-undo; PR not yet created at
 snapshot. Resolve its current PR/head/checks live before merging. No unrelated
 edits at task start.
 PR336 required CI40167348893 and main CI40167513738 succeeded.
@@ -99,6 +99,16 @@ Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
 ## Preserved implementation evidence and boundaries
 
+ADR0050 adds50-step scene-only local undo/redo. Actual controls/color/keyboard,
+native field key event, no-op/cap/new branch, no network writes, failed/pending
+save and successful save/reload/restore verified. Real v1/v3 pointer drag-after-
+undo resolves current layer; server schema/source/history unchanged. Review found
+and we fixed restore control-panel mismatch; hero-selected restore then title
+edit/undo regression passed.9 related editor HTTP/browser checks and final3
+enhanced browser checks passed. Desktop/mobile reviewed; ruff/diff checks passed.
+Initial browser test ORM calls inside Playwright loop were moved outside it;
+no async safety bypass. No model/migration/provider/configured DB change.
+
 ADR0049: owned saved-design ZIP contains canonical scene, source/identity manifest,
 Turkish README and actual palette original/normalized PNG with size/SHA256/tool.
 Fixed drawings/logo remain metadata; Arial and compatible Yaparo renderer required.
@@ -162,12 +172,12 @@ existing safeguards; no usage monitoring. A schedule is not proof a run executed
 
 ## Next action
 
-After reviewed design-bundle PR CI/merge, add per-action undo/redo for unsaved
-editor changes, distinct from committed history; keyboard access and failed-save
-edit preservation required. No general importer/customer upload is authorized.
-Same disposable local preview schema is current; loopback8002 runtime was started
-with the palette flag and an in-memory signing key in the prior slice. Refresh
-that same runtime after merge to expose new bundle route; never reset its data.
-No authenticated manual preview claimed. Configured DB recovery, customer upload/
-scanning/parser isolation/privacy and full portable editing remain open; Y05/Y06
-not complete.
+After reviewed undo PR CI/merge, add separately versioned square/portrait design
+selection and PNG export, preserving v1–v3 appearance, source binding and both
+history mechanisms. No general importer/customer upload is authorized.
+Same disposable preview schema is current. Private serve_design_preview.py in
+the existing preview root runs loopback8002 with only the palette flag and an
+in-memory signing key. Verify/restart that exact process after merge if needed
+to serve current collected static assets; never reset its data. No authenticated
+manual preview claimed. Configured DB recovery, customer upload/scanning/parser
+isolation/privacy and full portable editing remain open; Y05/Y06 not complete.

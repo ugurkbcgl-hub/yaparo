@@ -50,8 +50,9 @@ v1/v2 documents keep their prior rendering/history and no invented source links.
 private bounded load, save/reopen/restore/export and incomplete-image refusal.
 Existing v1/v2 stay unchanged. **Current:** ADR-0049 adds a bounded owned saved-
 design ZIP and actual fresh-workspace fixture transfer/reexport proof. General
-import/offline editor and full portable editing remain open. **Next:** unsaved
-per-action undo/redo with keyboard access, separate from committed history.
+import/offline editor and full portable editing remain open. **Current:** ADR-0050
+adds50-step local undo/redo, keyboard access and failed-save preservation, separate
+from committed history. **Next:** versioned square/portrait design/export.
 Customer gates remain open.
 Y05 is not complete.
 
