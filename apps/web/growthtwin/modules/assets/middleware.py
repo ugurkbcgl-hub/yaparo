@@ -10,7 +10,9 @@ import re
 
 from django.http import HttpResponse
 
-_PREPARE_PATH = re.compile(r"\A/workspace/brands/[0-9]+/materials/prepare/\Z")
+_PREPARE_PATH = re.compile(
+    r"\A/workspace/brands/[0-9]+/materials/(?:prepare|generate)/\Z"
+)
 _MAX_FORM_BODY_BYTES = 8 * 1024
 
 

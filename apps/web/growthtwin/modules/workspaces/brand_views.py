@@ -3,6 +3,7 @@
 import re
 import uuid
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -16,6 +17,7 @@ from django.views.decorators.http import (
     require_safe,
 )
 
+from growthtwin.modules.assets.models import MaterialRasterPair
 from growthtwin.modules.assets.services import list_materials
 from growthtwin.modules.workspaces.brand_forms import (
     TONES,
@@ -156,7 +158,14 @@ def brand_detail(request, brand_id):
             None,
         )
         if version is not None:
-            material_rows.append({"material": material, "version": version})
+            raster = (
+                MaterialRasterPair.objects.filter(version=version)
+                .values("original_size", "derivative_size")
+                .first()
+            )
+            material_rows.append(
+                {"material": material, "version": version, "raster": raster}
+            )
     return render(
         request,
         "workspaces/brand_detail.html",
@@ -170,6 +179,8 @@ def brand_detail(request, brand_id):
             .select_related("identity")
             .order_by("-created_at"),
             "material_rows": material_rows,
+            "can_generate_raster": settings.DEBUG
+            and settings.SYNTHETIC_MATERIAL_PERSISTENCE_ENABLED,
         },
     )
 

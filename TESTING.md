@@ -4,6 +4,12 @@ Keep verification proportional to the change. Local product prototypes use synth
 
 ## Current CI and demo coverage
 
+- Durable synthetic palette tests cover atomic database pairs, pinned identity,
+  repeat/rollback, owner changes during read, CSRF/private PNG and actual decoded
+  pixels. A PostgreSQL race checks competing generation. Browser E2E creates,
+  reopens and repeats the private image on a mobile viewport. Feature defaults
+  off; tests enable it only with DEBUG and generated data.
+
 - The generated material rehearsal uses Pillow13.0.0 from development dependencies.
   Focused suite: `python manage.py test growthtwin.modules.assets` with isolated
   test settings. Real temporary generated fixtures exercise JPEG/PNG/WebP decode,

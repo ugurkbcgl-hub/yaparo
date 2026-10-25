@@ -24,7 +24,13 @@ Y05-B has an internal, default-off generated JPEG/PNG/WebP rehearsal with bounde
 structural validation, metadata-free PNG derivatives, measured hashes/sizes and
 disposable private-file readback/deletion. Pillow13.0.0 is development-only.
 Durable binary storage, crash/recovery, scanning and isolation remain open;
-the catalog/UI accepts no binary. See ADR-0044.
+customer binary intake remains closed. See ADR-0044.
+
+ADR-0045 adds a separate default-off local palette-image material: immutable
+original/normalized PNG pairs are stored atomically in the existing database,
+pinned to a material/brand identity version and served only to the owner.
+The new source does not replace the editor's fixed illustration/logo keys.
+Production storage selection, configured DB+binary restore and deletion remain open.
 
 The owner requested a sustainable, self-operated product built with maintained
 open-source components and easily replaceable AI providers. [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)
