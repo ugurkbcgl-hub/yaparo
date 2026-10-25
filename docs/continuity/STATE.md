@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 09:00 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -14,9 +14,11 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Main 5f4ce39 (PR335 merged); required CI40126863230 and post-merge CI40141715049
-succeeded. Current branch feat/synthetic-material-library; PR336 is open.
-Durable task: GitHub issue328. Resolve current PR head/checks live.
+Product main e8ad780 (PR336 merged); required CI40167348893 succeeded.
+Post-merge CI40167513738 was running at this snapshot; resolve live.
+Current branch docs/material-catalog-handoff (documentation follow-up PR).
+PR335 required CI40126863230 and post-merge CI40141715049 also succeeded.
+Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
 - New creative scenes v2 pin brand palette: background, logo/icon/wordmark and
   text colors with initial readability fallback; font remains Arial only.
@@ -44,9 +46,12 @@ Durable task: GitHub issue328. Resolve current PR head/checks live.
   Added explicit navigation wait; focused assets+browser18 tests passed. Enhanced
   browser test then prepared the actual catalog with CSRF, showed two unmeasured
   sizes and continued save/reopen/download successfully. Final independent review
-  found no blockers. Required CI must pass on the final head before merge.
-- Assets0001 migration has run only on ephemeral test DBs; not on preview or
-  configured/real DB. Preserve protected Google fixture/history and real DBs.
+  found no blockers. Final required CI40167348893 passed PostgreSQL, browser,
+  build/static/lint/migration/dependency checks before PR336 merged.
+- Assets0001 applied to the SAME disposable local preview SQLite after a private
+  backup; brand/document counts preserved. Server restarted on8002; home/login
+  HTTP200 verified. No authenticated manual preview review claimed. Temporary
+  preview login file removed. No configured/real DB or protected fixture changed.
 - Desktop PR attachment limit100 remains; use PR URLs. Usage monitoring disabled.
 
 ## Preserved implementation evidence and boundaries
@@ -83,5 +88,7 @@ created/resumed by the new maintenance cadence proposal. No unattended work clai
 
 ## Next action
 
-Complete PR336 review/CI and merge under standing authorization, then design the
-bounded synthetic binary/quarantine slice (Y05-B). Customer uploads remain gated.
+After confirming main CI and this documentation PR, implement the bounded
+synthetic binary/quarantine slice (Y05-B): define private storage, byte validation,
+source/derivative provenance and failure/deletion evidence. Start with generated
+fixtures and isolated test storage; customer uploads remain gated under ADR0009.
