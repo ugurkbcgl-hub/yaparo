@@ -34,6 +34,14 @@ class BrandDocumentBrowserTests(LiveServerTestCase):
                 page.locator("#id_username").fill(owner.username)
                 page.locator("#id_password").fill(password)
                 page.get_by_role("button", name="Giriş yap").click()
+                with page.expect_navigation(wait_until="load"):
+                    page.get_by_role(
+                        "button", name="Sentetik materyal kitini hazırla"
+                    ).click()
+                expect(page.get_by_text("Dosya boyutu ölçülmedi")).to_have_count(2)
+                expect(
+                    page.get_by_text("Yaparo sabit sentetik çizim", exact=False)
+                ).to_be_visible()
                 page.get_by_role("button", name="Örnek çalışma oluştur").click()
                 page.wait_for_url("**/documents/*/")
                 document_url = page.url
