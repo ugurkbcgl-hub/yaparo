@@ -32,6 +32,11 @@ Kalıcı iş takibi: [GitHub #328](https://github.com/ugurkbcgl-hub/yaparo/issue
 
 ## A — Marka, materyal ve kendi editörümüz
 
+Y05-B ilk prova: kodla üretilen JPG/PNG/WebP örneklerinde gerçek byte doğrulama,
+normalize PNG türevi, ayrı orijinal/türev hash'leri ve geçici özel dosya readback/
+silme akışı eklendi. Varsayılan kapalı; HTTP/müşteri girdisi ve kalıcı binary kaydı
+yok. ADR-0044 sınırları tanımlar; Y05 tamamlanmış değildir.
+
 | ID | İş / bağımlılık | Teslim ve tamamlanma ölçütü |
 |---|---|---|
 | Y01 | Mevcut domain ve arayüz haritası; başlangıç | Gerçek mevcut marka/asset/creative/campaign modelleri ve yeni ihtiyaçların eşlemesi; sabit sentetik hizmet + ürün örneği; tek kullanıcı görevi ve test dosyası sınırı |

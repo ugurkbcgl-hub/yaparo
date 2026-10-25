@@ -12,6 +12,7 @@ ADRs capture decisions that would be costly or confusing to reverse. Keep propos
 
 ## Decisions
 
+- [0044 — Generated raster storage rehearsal](0044-generated-raster-storage-rehearsal.md) — Accepted for isolated synthetic evaluation
 - [0043 — Closed synthetic material catalog](0043-closed-synthetic-material-catalog.md) — Accepted for local synthetic implementation
 - [0042 — Pinned brand palette and saved creative history](0042-brand-palette-and-creative-history.md) — Accepted for local synthetic implementation
 - [0041 — Bounded Fabric and versioned multi-brand identity](0041-bounded-fabric-and-brand-identity.md) — Accepted for local synthetic implementation

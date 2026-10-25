@@ -4,6 +4,13 @@ Keep verification proportional to the change. Local product prototypes use synth
 
 ## Current CI and demo coverage
 
+- The generated material rehearsal uses Pillow13.0.0 from development dependencies.
+  Focused suite: `python manage.py test growthtwin.modules.assets` with isolated
+  test settings. Real temporary generated fixtures exercise JPEG/PNG/WebP decode,
+  metadata stripping, type/byte/pixel/animation rejection, original/derivative
+  readback, private OS permissions and cleanup on failure. The normal switch is
+  False. No actual customer files, malware scan or durable recovery is tested.
+
 - `.github/workflows/ci.yml` runs for pull requests and pushes to `main`. It installs the Django app and pinned development tools on Python 3.13, checks formatting with Ruff, runs lint, audits installed dependencies with `pip-audit`, builds source/wheel distributions, verifies required templates and static assets are present, runs `python manage.py check`, checks migration consistency, and runs Django tests.
 - CI uses an ephemeral PostgreSQL 18.6 service with CI-only placeholder credentials. GitHub destroys the service after the run.
 - Pinned Playwright/Chromium browser tests cover the synthetic profile-edit demo and authenticated campaign workspace against that CI PostgreSQL service. Campaign coverage includes owner boundaries, creative editing/version history/restoration, live bounded character counters, and narrow-screen overflow. For focused local runs, use the isolated in-memory SQLite settings and regenerate the static manifest after adding static assets. All product examples stay synthetic; no publisher or spend action is called.

@@ -20,6 +20,12 @@ ADR-0043; this is a local synthetic slice.
 
 ## Current direction — 2026-10-23
 
+Y05-B has an internal, default-off generated JPEG/PNG/WebP rehearsal with bounded
+structural validation, metadata-free PNG derivatives, measured hashes/sizes and
+disposable private-file readback/deletion. Pillow13.0.0 is development-only.
+Durable binary storage, crash/recovery, scanning and isolation remain open;
+the catalog/UI accepts no binary. See ADR-0044.
+
 The owner requested a sustainable, self-operated product built with maintained
 open-source components and easily replaceable AI providers. [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)
 accepts this strategy and the [new master plan](docs/product/yaparo-open-source-master-plan.md).

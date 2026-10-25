@@ -34,8 +34,12 @@ stale-edit protection. Desktop/mobile journey passed locally. Custom logo/font
 intake, creative/campaign binding and production editor readiness remain open.
 **Current:** Y05-A has a closed, owner-scoped catalog for the editor's two fixed
 synthetic sources, with immutable version metadata and no HTTP file intake.
-**Next:** design the bounded synthetic binary/quarantine slice without opening
-customer uploads or weakening ADR-0009.
+**Current Y05-B:** internal generated JPEG/PNG/WebP rehearsal validates real
+bytes, preserves original/normalized derivative provenance and proves temporary
+private-file readback/deletion. Default off; Pillow13.0.0 is evaluation-only.
+**Next:** durable binary records, private storage adapter and crash/orphan/recovery
+evidence; scanning/parser isolation and customer gates remain open. See ADR-0044.
+Y05 is not complete.
 
 The owner's multi-brand requirement is now part of Y04: separate identity,
 character, assets and creative history per brand. See [brand experience and
