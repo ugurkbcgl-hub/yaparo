@@ -8,6 +8,11 @@ app_name = "campaigns"
 
 urlpatterns = [
     path(
+        "<int:draft_id>/design/<int:selection_version>/bundle/",
+        preview_views.bundle,
+        name="design_bundle",
+    ),
+    path(
         "<int:draft_id>/design/<int:selection_version>/preview/",
         preview_views.preview,
         name="design_preview",

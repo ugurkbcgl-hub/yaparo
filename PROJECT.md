@@ -25,8 +25,10 @@ saved design revision in the same workspace. Later edits do not change selection
 reselection is explicit. It does not alter existing Search text/approval/dispatch.
 Normal flag is off. ADR-0053 adds version-addressed read-only preview and exact
 PNG export of the pinned snapshot, using the shared fixed renderer. Later live
-edits do not change its pixels; stale selection URLs refuse. Next: pinned ZIP
-export with an explicit campaign-selection manifest.
+edits do not change its pixels; stale selection URLs refuse. ADR-0054 adds the
+selected snapshot ZIP with an explicit campaign-selection manifest and exact
+pinned sources. The current document ZIP stays separate. Next: Y08 measured
+synthetic usability rehearsal; independent human validation remains open.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot

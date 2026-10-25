@@ -69,81 +69,98 @@ def export_design_bundle(*, owner, brand_id, document_id):
     with transaction.atomic():
         brand = _brand(owner, brand_id, lock=True)
         document = _document(brand, document_id, lock=True)
-        scene = _scene(document.scene, brand.fixture)
-        checked_materials(document)
-        if document.material_binding_version != 1:
-            raise ValidationError(
-                "Eski çalışmanın kaynak bağı yok; sahne JSON'unu indirin."
-            )
-        entries = {"scene.json": _json(scene), "README.txt": README}
-        sources = []
-        for binding in document.material_bindings.select_related(
-            "material_version__material__identity"
-        ):
-            version = binding.material_version
-            material = version.material
-            source = {
-                "layer_id": binding.layer_id,
-                "material_id": str(material.pk),
-                "source_key": material.source_key,
-                "identity": {
-                    field: getattr(material.identity, field)
-                    for field in IDENTITY_FIELDS
-                },
-                "catalog": {field: getattr(version, field) for field in CATALOG_FIELDS},
-                "kind": "fixed_renderer_metadata",
-                "files": {},
-            }
-            if uses_palette(scene) and binding.layer_id == "hero":
-                pair = read_palette_material(
-                    owner=owner, brand_id=brand.pk, material_id=material.pk
-                )
-                if pair.version_id != version.pk:
-                    raise ValidationError("Görsel sürümü kaynak bağıyla eşleşmiyor.")
-                source.update(kind="generated_palette_png", tool=pair.tool)
-                for kind, data in (
-                    ("original", bytes(pair.original)),
-                    ("normalized", bytes(pair.derivative)),
-                ):
-                    path = f"assets/hero-{kind}.png"
-                    entries[path] = data
-                    source["files"][kind] = path
-            sources.append(source)
-        manifest = {
-            "package_version": 1,
-            "renderer_contract": "yaparo-scene-v1-v4"
-            if scene["schema_version"] == 4
-            else "yaparo-scene-v1-v3",
-            "document": {
-                "id": str(document.pk),
-                "revision": document.revision,
-                "fixture": brand.fixture,
-                "identity": {
-                    field: getattr(document.identity, field)
-                    for field in IDENTITY_FIELDS
-                },
+        return _build_bundle(
+            owner=owner,
+            document=document,
+            scene=document.scene,
+            revision=document.revision,
+        )
+
+
+def _build_bundle(*, owner, document, scene, revision, selection=None):
+    """Internal serializer; callers supply a scoped validated document/snapshot."""
+    brand = document.identity.brand
+    scene = _scene(scene, brand.fixture)
+    checked_materials(document)
+    if document.material_binding_version != 1:
+        raise ValidationError(
+            "Eski çalışmanın kaynak bağı yok; sahne JSON'unu indirin."
+        )
+    entries = {"scene.json": _json(scene), "README.txt": README}
+    if selection is not None:
+        entries["README.txt"] += (
+            "Bu paket kampanyanın açıkça seçilmiş sabit tasarım kaydını içerir. "
+            "Kampanya/seçim/kayıt bilgileri manifest.json içindeki "
+            "campaign_selection alanındadır; güncel editör kaydı farklı olabilir.\n"
+        ).encode("utf-8")
+    sources = []
+    for binding in document.material_bindings.select_related(
+        "material_version__material__identity"
+    ):
+        version = binding.material_version
+        material = version.material
+        source = {
+            "layer_id": binding.layer_id,
+            "material_id": str(material.pk),
+            "source_key": material.source_key,
+            "identity": {
+                field: getattr(material.identity, field) for field in IDENTITY_FIELDS
             },
-            "font": {"family": "Arial", "bundled": False, "requirement": "system_font"},
-            "sources": sources,
-            "files": {
-                path: {"size": len(data), "sha256": sha256(data).hexdigest()}
-                for path, data in entries.items()
-            },
+            "catalog": {field: getattr(version, field) for field in CATALOG_FIELDS},
+            "kind": "fixed_renderer_metadata",
+            "files": {},
         }
-        entries["manifest.json"] = _json(manifest)
-        if (
-            len(entries["manifest.json"]) > 65536
-            or sum(map(len, entries.values())) > MAX_PACKAGE_BYTES - 4096
-        ):
-            raise ValidationError("Tasarım paketi boyut sınırını aşıyor.")
-        output = BytesIO()
-        with ZipFile(output, "w", compression=ZIP_STORED) as archive:
-            for path, data in sorted(entries.items()):
-                info = ZipInfo(path, date_time=(1980, 1, 1, 0, 0, 0))
-                info.create_system = 3
-                info.external_attr = 0o100600 << 16
-                archive.writestr(info, data)
-        result = output.getvalue()
-        if len(result) > MAX_PACKAGE_BYTES:
-            raise ValidationError("Tasarım paketi boyut sınırını aşıyor.")
-        return result
+        if uses_palette(scene) and binding.layer_id == "hero":
+            pair = read_palette_material(
+                owner=owner, brand_id=brand.pk, material_id=material.pk
+            )
+            if pair.version_id != version.pk:
+                raise ValidationError("Görsel sürümü kaynak bağıyla eşleşmiyor.")
+            source.update(kind="generated_palette_png", tool=pair.tool)
+            for kind, data in (
+                ("original", bytes(pair.original)),
+                ("normalized", bytes(pair.derivative)),
+            ):
+                path = f"assets/hero-{kind}.png"
+                entries[path] = data
+                source["files"][kind] = path
+        sources.append(source)
+    manifest = {
+        "package_version": 1,
+        "renderer_contract": "yaparo-scene-v1-v4"
+        if scene["schema_version"] == 4
+        else "yaparo-scene-v1-v3",
+        "document": {
+            "id": str(document.pk),
+            "revision": revision,
+            "fixture": brand.fixture,
+            "identity": {
+                field: getattr(document.identity, field) for field in IDENTITY_FIELDS
+            },
+        },
+        "font": {"family": "Arial", "bundled": False, "requirement": "system_font"},
+        "sources": sources,
+        "files": {
+            path: {"size": len(data), "sha256": sha256(data).hexdigest()}
+            for path, data in entries.items()
+        },
+    }
+    if selection is not None:
+        manifest["campaign_selection"] = selection
+    entries["manifest.json"] = _json(manifest)
+    if (
+        len(entries["manifest.json"]) > 65536
+        or sum(map(len, entries.values())) > MAX_PACKAGE_BYTES - 4096
+    ):
+        raise ValidationError("Tasarım paketi boyut sınırını aşıyor.")
+    output = BytesIO()
+    with ZipFile(output, "w", compression=ZIP_STORED) as archive:
+        for path, data in sorted(entries.items()):
+            info = ZipInfo(path, date_time=(1980, 1, 1, 0, 0, 0))
+            info.create_system = 3
+            info.external_attr = 0o100600 << 16
+            archive.writestr(info, data)
+    result = output.getvalue()
+    if len(result) > MAX_PACKAGE_BYTES:
+        raise ValidationError("Tasarım paketi boyut sınırını aşıyor.")
+    return result

@@ -57,7 +57,9 @@ selection and exact PNG export, preserving old scenes and history. **Current:**
 ADR-0052 adds explicit same-workspace campaign/brand/design reference with immutable
 revision pinning and no implicit Search/publishing changes. **Current:** ADR-0053
 adds read-only pinned snapshot preview and exact PNG, separate from the live editor.
-**Next:** owned ZIP for the campaign-selected snapshot and selection manifest.
+**Current:** ADR-0054 adds owned ZIP of the selected snapshot and explicit selection
+manifest. **Next:** Y08 measured synthetic journey rehearsal and observed friction
+fixes; independent human observations remain open.
 Customer gates remain open.
 Y05 is not complete.
 
