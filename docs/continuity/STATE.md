@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 20:46 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 20:50 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -17,7 +17,8 @@ Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base main393515d (PR345 merged); required CI40198604735 and main CI40199056437
-succeeded. Branch feat/campaign-design-selection; PR not yet created at snapshot.
+succeeded. Branch feat/campaign-design-selection; PR346 open. Required CI40218129191
+was in progress at snapshot; final independent source review found no blocker.
 Resolve current branch/head/PR/CI live. No unrelated edits at task start.
 Durable task: GitHub issue328. New campaigns0009 creates only the local choice table;
 no backfill or configured database change. Preview migration not yet applied.
