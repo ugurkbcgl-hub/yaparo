@@ -89,8 +89,11 @@ ADR-0055 ilk çevrimdışı marka/kaynak/sürüm bağlı görev ve sonuç sözle
 Mevcut geçit korunur; yalnız deterministik sentetik adaptör ve sıfır maliyet kabul
 edilir. Sunucudaki seçime göre istek tekrar kurularak kampanyalar arası sonuç ve
 brief değiştirme reddedilir. Rezervasyon/harcama mutabakatı, kalıcı işler ve ücretli
-sağlayıcı yürütmesi tamamlanmış değildir. Sıradaki Y10, aynı çevrimdışı kümede mevcut
-adaptör ile tipli çıktı kütüphanesi karşılaştırmasının sürüm/lisans/uyumluluk hazırlığıdır.
+sağlayıcı yürütmesi tamamlanmış değildir. ADR-0056 Y10 çevrimdışı biçim denemesini
+kaydeder: aynı3 brief/13 yanıt/3 tekrar, normal ve optimize modda234’er yürütme.
+PydanticAI ürün bağımlılığına alınmaz; dar görev için mevcut adaptör korunur.
+Sıradaki iş doğrudan ayrıştırıcının bilinmeyen üst alanları reddetmesidir. Bu
+deneme gerçek model kalitesi veya iddia doğruluğu değerlendirmesi değildir.
 
 
 | ID | İş / bağımlılık | Teslim ve tamamlanma ölçütü |

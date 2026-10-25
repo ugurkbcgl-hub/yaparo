@@ -1,5 +1,12 @@
 # AI provider evaluation and current direction
 
+> **Typed-output comparison (2026-10-25):** [ADR-0056](docs/adr/0056-typed-output-offline-comparison.md)
+> records a pinned isolated PydanticAI experiment. Controlled normal/-O runs each
+> completed234 executions without model access. Retain the direct runtime boundary;
+> fix its ignored unknown-root fields next. Both paths accepted a shaped unsupported
+> claim, so this is parsing evidence, not provider quality or grounding approval.
+
+
 > **Offline contract update (2026-10-25):** [ADR-0055](docs/adr/0055-offline-brand-task-contract.md)
 > adds a brand/source/version-bound task/result envelope over the existing gateway.
 > The initial profile permits only the deterministic synthetic-template adapter,

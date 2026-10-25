@@ -63,8 +63,10 @@ records desktop/mobile completion and fixes lost campaign navigation in direct
 new-design creation. Human observations remain open. **Current Y09:** existing gateway
 review and brand/source-bound capability contract are recorded in ADR-0055: first
 offline envelope implemented, zero-cost template only, no dispatch/reservation
-ledger. **Next:** Y10 pinned typed-output comparison preparation; hosted execution
-and full Y09/Y13 accounting gates remain open.
+ledger. **Current Y10:** ADR-0056 records the isolated pinned typed-output parsing
+comparison; retain direct runtime adapters, no new product dependency. **Next:**
+strict direct response parsing. Hosted quality, execution and full Y09/Y13
+accounting gates remain open.
 Customer gates remain open.
 Y05 is not complete.
 

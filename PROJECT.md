@@ -32,8 +32,10 @@ mobile rehearsal found and fixed lost campaign navigation during direct new-desi
 creation; independent human validation remains open. See the measured Y08 report.
 ADR-0055 adds the first offline brand/source/version-bound task/result profile over
 the existing gateway. Only deterministic synthetic templates/zero cost; no hosted
-execution, reservation ledger or provider promotion. Next: Y10 offline typed-output
-comparison preparation with the existing contract.
+execution, reservation ledger or provider promotion. ADR-0056 records the isolated
+Y10 typed-output comparison: retain direct runtime adapters for this scope; the
+experimental library remains outside product dependencies. Next: strict direct
+output parsing, including ignored unknown-root fields. No model quality claim.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot
