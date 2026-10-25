@@ -54,7 +54,7 @@ class SyntheticMaterialCatalogTests(TestCase):
             ["image/png", "image/png"], [item.media_type for item in versions]
         )
         self.assertTrue(all(len(item.catalog_digest) == 64 for item in versions))
-        self.assertTrue(all(item.byte_size <= MAX_BYTES for item in versions))
+        self.assertTrue(all(item.byte_size is None for item in versions))
         replay = list(self.prepare())
         self.assertEqual([item.pk for item in materials], [item.pk for item in replay])
         self.assertEqual(2, BrandMaterial.objects.count())

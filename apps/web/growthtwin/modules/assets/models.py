@@ -102,7 +102,7 @@ class BrandMaterialVersion(models.Model):
     version = models.PositiveIntegerField()
     display_name = models.CharField(max_length=120)
     media_type = models.CharField(max_length=32)
-    byte_size = models.PositiveIntegerField()
+    byte_size = models.PositiveIntegerField(null=True, blank=True)
     width = models.PositiveIntegerField()
     height = models.PositiveIntegerField()
     source_label = models.CharField(max_length=120)
@@ -147,7 +147,7 @@ class BrandMaterialVersion(models.Model):
 
         if self.media_type not in ALLOWED_MEDIA_TYPES:
             raise ValidationError({"media_type": "Desteklenmeyen materyal türü."})
-        if self.byte_size > MAX_BYTES:
+        if self.byte_size is not None and self.byte_size > MAX_BYTES:
             raise ValidationError({"byte_size": "Materyal boyut sınırı aşıldı."})
         if self.width > MAX_WIDTH or self.height > MAX_HEIGHT:
             raise ValidationError("Materyal piksel sınırı aşıldı.")

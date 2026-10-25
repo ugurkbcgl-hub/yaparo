@@ -38,7 +38,8 @@ class BrandDocumentBrowserTests(LiveServerTestCase):
                 page.wait_for_url("**/documents/*/")
                 document_url = page.url
                 page.locator("#id_title").fill("Özgün sentetik çalışma")
-                page.get_by_role("button", name="Çalışmayı kaydet").click()
+                with page.expect_navigation(wait_until="load"):
+                    page.get_by_role("button", name="Çalışmayı kaydet").click()
                 page.reload()
                 expect(page.locator("#id_title")).to_have_value(
                     "Özgün sentetik çalışma"

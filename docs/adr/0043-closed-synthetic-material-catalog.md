@@ -24,9 +24,11 @@ because the application has a table called "material".
    version current when the kit is first prepared. Existing records are never
    rebound after a later brand change. A catalog item and its version metadata
    are append-only application records, not a tamper-proof SQL vault.
-3. Record display name, declared MIME type, byte/pixel bounds, source label,
+3. Record display name, intended export MIME type, pixel dimensions, source label,
    synthetic-use label and a digest of canonical catalog metadata. The digest is
    **not a binary file hash**, scanner result, rights proof or advertising claim.
+   Byte size stays null because these catalog sources have no stored binary;
+   the UI displays that it has not been measured.
 4. Keep type and byte/pixel caps explicit for future JPEG/PNG/WebP design work.
    This slice catalogs only the existing PNG-rendered examples; it does not
    accept, persist, decode, expose or transform JPEG, PNG or WebP bytes.

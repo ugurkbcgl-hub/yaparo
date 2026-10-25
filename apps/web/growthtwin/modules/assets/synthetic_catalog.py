@@ -22,7 +22,7 @@ class SyntheticMaterialDefinition:
     source_key: str
     display_name: str
     media_type: str
-    byte_size: int
+    byte_size: int | None
     width: int
     height: int
     source_label: str
@@ -57,7 +57,7 @@ _CATALOG = (
         source_key="product:illustration:v1",
         display_name="Seramik ürün illüstrasyonu",
         media_type="image/png",
-        byte_size=18432,
+        byte_size=None,
         width=580,
         height=430,
         source_label="Yaparo sabit sentetik çizim",
@@ -68,7 +68,7 @@ _CATALOG = (
         source_key="product:logo:v1",
         display_name="Seramik örneği işareti",
         media_type="image/png",
-        byte_size=4096,
+        byte_size=None,
         width=275,
         height=58,
         source_label="Yaparo sabit sentetik logo",
@@ -79,7 +79,7 @@ _CATALOG = (
         source_key="service:illustration:v1",
         display_name="Ev bakımı illüstrasyonu",
         media_type="image/png",
-        byte_size=18432,
+        byte_size=None,
         width=580,
         height=430,
         source_label="Yaparo sabit sentetik çizim",
@@ -90,7 +90,7 @@ _CATALOG = (
         source_key="service:logo:v1",
         display_name="Ev bakımı örneği işareti",
         media_type="image/png",
-        byte_size=4096,
+        byte_size=None,
         width=275,
         height=58,
         source_label="Yaparo sabit sentetik logo",
@@ -110,7 +110,7 @@ def definitions_for_fixture(fixture):
     for item in definitions:
         if (
             item.media_type not in ALLOWED_MEDIA_TYPES
-            or not 1 <= item.byte_size <= MAX_BYTES
+            or (item.byte_size is not None and not 1 <= item.byte_size <= MAX_BYTES)
             or not 1 <= item.width <= MAX_WIDTH
             or not 1 <= item.height <= MAX_HEIGHT
             or len(item.catalog_digest) != 64

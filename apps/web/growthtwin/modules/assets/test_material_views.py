@@ -1,5 +1,7 @@
 """Closed HTTP setup boundary for the fixed synthetic material catalog."""
 
+from unittest.mock import patch
+
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
@@ -60,11 +62,19 @@ class MaterialCatalogViewTests(TestCase):
 
     def test_multipart_file_attempt_is_rejected_before_csrf_can_parse_it(self):
         self.client.force_login(self.owner)
-        response = self.client.post(
-            self.url,
-            {"file": SimpleUploadedFile("customer.png", b"not-an-image")},
-        )
-        self.assertEqual(response.status_code, 415)
+        with patch(
+            "django.http.multipartparser.MultiPartParser.parse",
+            side_effect=AssertionError("Multipart parsing must not start"),
+        ):
+            for url in (
+                self.url,
+                self.url.replace(str(self.brand.pk), f"00{self.brand.pk}"),
+            ):
+                response = self.client.post(
+                    url,
+                    {"file": SimpleUploadedFile("customer.png", b"not-an-image")},
+                )
+                self.assertEqual(response.status_code, 415)
         self.assertEqual(0, BrandMaterial.objects.filter(brand=self.brand).count())
 
     def test_oversized_or_unknown_body_is_rejected_before_the_view(self):

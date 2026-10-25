@@ -1,10 +1,10 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-24 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
-Owned-core/open-source plan; current Y04 multi-brand synthetic implementation.
+Owned-core/open-source plan; current Y05-A closed synthetic material catalog.
 Usage monitoring disabled by owner; do not query limits. Reviewed green PRs may
 merge under standing authorization; never push directly to main. Local synthetic
 work only; actual customer data/accounts, payments/publishing remain gated.
@@ -14,9 +14,9 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Mainb740f39 (PR334 merged); requiredCI40094382205 and post-mergeCI40124272076
-succeeded. Current branch feat/brand-styling-history; resolve PR/checks live.
-Durable task: GitHub issue328. Pre-commit snapshot for this package.
+Main 5f4ce39 (PR335 merged); required CI40126863230 and post-merge CI40141715049
+succeeded. Current branch feat/synthetic-material-library; PR336 is open.
+Durable task: GitHub issue328. Resolve current PR head/checks live.
 
 - New creative scenes v2 pin brand palette: background, logo/icon/wordmark and
   text colors with initial readability fallback; font remains Arial only.
@@ -30,10 +30,21 @@ Durable task: GitHub issue328. Pre-commit snapshot for this package.
   Browser restored1→3 then2→4, decoded PNG and verified actual v2 palette pixels
   and unchanged v1 background. Desktop/mobile reviewed; outside requests0.
 - Independent backend/JS and final atomic-bootstrap delta review approved.
-- Migration0004 tested only on ephemeral DB; no configured DB/provider/deployment.
-- Next after green merge: refresh the SAME disposable local preview database/server
-  so owner can try the new UI; preserve its brands/documents. Do not touch protected
-  Google fixture/history or real databases. No new customer data or paid service.
+- Migration0004 also applied to the SAME disposable local preview SQLite with
+  private backup and preserved brand/document counts. Server restarted on8002;
+  home HTTP200 verified. Browser is on the login page; authenticated manual
+  visual check of the refreshed preview remains unfinished.
+- PR336 adds two fixed-source metadata records per synthetic brand, identity-
+  pinned immutable versions and a private catalog on the brand page (ADR0043).
+  No binary exists; byte size is null and metadata digest is not a file hash.
+- Pre-CSRF middleware rejects multipart/unknown/oversized bodies. Leading-zero
+  route and mocked parser verify multipart parsing does not start.
+- Initial local full run:892 tests,866 passed/26 SQLite skips. CI40164225778
+  failed on existing browser reload losing its page, not a backend assertion.
+  Added explicit navigation wait; focused assets+browser18 tests passed. Required
+  CI must pass on the final head before merge. Fresh final review is underway.
+- Assets0001 migration has run only on ephemeral test DBs; not on preview or
+  configured/real DB. Preserve protected Google fixture/history and real DBs.
 - Desktop PR attachment limit100 remains; use PR URLs. Usage monitoring disabled.
 
 ## Preserved implementation evidence and boundaries
@@ -70,6 +81,5 @@ created/resumed by the new maintenance cadence proposal. No unattended work clai
 
 ## Next action
 
-Complete brand-styling/history PR with required PostgreSQL CI, then bounded
-synthetic material intake (Y05), including original/derivative rights and private
-owner access. Keep custom real uploads and production operations gated.
+Complete PR336 review/CI and merge under standing authorization, then design the
+bounded synthetic binary/quarantine slice (Y05-B). Customer uploads remain gated.

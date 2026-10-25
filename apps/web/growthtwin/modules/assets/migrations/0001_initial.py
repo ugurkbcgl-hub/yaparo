@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
                 ("version", models.PositiveIntegerField()),
                 ("display_name", models.CharField(max_length=120)),
                 ("media_type", models.CharField(max_length=32)),
-                ("byte_size", models.PositiveIntegerField()),
+                ("byte_size", models.PositiveIntegerField(blank=True, null=True)),
                 ("width", models.PositiveIntegerField()),
                 ("height", models.PositiveIntegerField()),
                 ("source_label", models.CharField(max_length=120)),
