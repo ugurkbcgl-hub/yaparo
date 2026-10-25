@@ -1,12 +1,15 @@
 """Browser proof for an owner creating, reopening and viewing a fixed raster."""
 
+import base64
 import os
 import secrets
+from io import BytesIO
 from pathlib import Path
 
 from django.contrib.auth import get_user_model
 from django.test import LiveServerTestCase, override_settings
 from django.urls import reverse
+from PIL import Image
 from playwright.sync_api import expect, sync_playwright
 
 from growthtwin.modules.assets.models import MaterialRasterPair
@@ -72,6 +75,95 @@ class MaterialRasterBrowserTests(LiveServerTestCase):
                         path=str(directory / "material-raster-desktop.png"),
                         full_page=True,
                     )
+                external = []
+
+                def only_local(route):
+                    if route.request.url.startswith(self.live_server_url + "/"):
+                        route.continue_()
+                    else:
+                        external.append(route.request.url)
+                        route.abort()
+
+                page.context.route("**/*", only_local)
+                page.get_by_role("button", name="Bu görselle yeni tasarım aç").click()
+                page.wait_for_url("**/documents/*/")
+                page.get_by_role("link", name="Görsel editörü aç").click()
+                expect(page.locator("#download")).to_be_enabled()
+                editor_url = page.url
+                page.get_by_role("button", name="Örnek görsel", exact=True).click()
+                page.locator("#x").fill("160")
+                page.locator("#save").click()
+                expect(page.locator("#revision")).to_have_text("2")
+                page.reload()
+                expect(page.locator("#download")).to_be_enabled()
+                with page.expect_download() as event:
+                    page.locator("#download").click()
+                encoded = base64.b64encode(
+                    Path(event.value.path()).read_bytes()
+                ).decode("ascii")
+                pixels = page.evaluate(
+                    """data => new Promise(resolve=>{const i=new Image();i.onload=()=>{const c=document.createElement('canvas');c.width=c.height=800;const x=c.getContext('2d');x.drawImage(i,0,0);resolve([Array.from(x.getImageData(230,380,1,1).data),Array.from(x.getImageData(170,320,1,1).data)]);};i.src='data:image/png;base64,'+data;})""",
+                    encoded,
+                )
+                self.assertEqual(pixels, [[36, 76, 59, 255], [245, 237, 223, 255]])
+                if screenshot_dir:
+                    page.screenshot(
+                        path=str(directory / "palette-editor-desktop.png"),
+                        full_page=True,
+                    )
+                page.set_viewport_size({"width": 390, "height": 844})
+                self.assertFalse(
+                    page.evaluate("document.documentElement.scrollWidth > innerWidth")
+                )
+                if screenshot_dir:
+                    page.screenshot(
+                        path=str(directory / "palette-editor-mobile.png"),
+                        full_page=True,
+                    )
+                page.locator("#history").select_option("1")
+                page.locator("#restore").click()
+                expect(page.locator("#revision")).to_have_text("3")
+                expect(page.locator("#download")).to_be_enabled()
+                self.assertEqual([], external)
+                # Fail the private image read. The editor must never fall back
+                # to a built-in illustration and export an incomplete design.
+                wrong_size = BytesIO()
+                with Image.new("RGB", (1, 1)) as wrong_image:
+                    wrong_image.save(wrong_size, format="PNG")
+                failures = [
+                    dict(status=403, body="denied"),
+                    dict(status=404, body="missing"),
+                    dict(status=200, content_type="image/png", body=b"bad PNG"),
+                    dict(
+                        status=200, content_type="image/png", body=b"\x89PNG\r\n\x1a\n"
+                    ),
+                    dict(
+                        status=200, content_type="image/png", body=wrong_size.getvalue()
+                    ),
+                    dict(status=200, content_type="image/png", body=b"x" * 8388609),
+                    dict(
+                        status=200, content_type="text/html", body="<p>not an image</p>"
+                    ),
+                    dict(
+                        status=302,
+                        headers={"Location": "https://example.invalid/private-image"},
+                    ),
+                ]
+                for failure in failures:
+                    with self.subTest(
+                        response=failure.get("status"), kind=failure.get("content_type")
+                    ):
+                        page.route(
+                            "**" + source, lambda route: route.fulfill(**failure)
+                        )
+                        page.goto(editor_url)
+                        expect(page.locator("#status")).to_contain_text(
+                            "Eksik görselle kaydetme ve indirme kapalı"
+                        )
+                        expect(page.locator("#download")).to_be_disabled()
+                        expect(page.locator("#save")).to_be_disabled()
+                        page.unroute("**" + source)
+                self.assertEqual([], external)
             finally:
                 browser.close()
         self.assertEqual(1, MaterialRasterPair.objects.count())

@@ -1,4 +1,4 @@
-"""Pure bounded Yaparo scene v1/v2; no ORM, files, URLs or Fabric deserialization.
+"""Pure bounded Yaparo scenes v1–v3; no ORM, files or Fabric deserialization.
 
 Identity fields are supplied as literal values, so seeding cannot lazily query a
 BrandIdentity. The caller owns authorization and immutable identity binding.
@@ -23,7 +23,7 @@ _COLOR = re.compile(r"#[0-9a-fA-F]{6}\Z")
 
 
 class SceneValidationError(ValueError):
-    """A scene is outside the fixed synthetic v1 contract."""
+    """A scene is outside the supported fixed synthetic contracts."""
 
 
 def _refuse():
@@ -75,10 +75,10 @@ def validate_scene(value, *, fixture):
     if (
         type(value) is not dict
         or type(value.get("schema_version")) is not int
-        or value["schema_version"] not in (1, 2)
+        or value["schema_version"] not in (1, 2, 3)
     ):
         _refuse()
-    styled = value["schema_version"] == 2
+    styled = value["schema_version"] in (2, 3)
     _keys(
         value,
         ("schema_version", "fixture", "width", "height", "layers")
@@ -109,7 +109,7 @@ def validate_scene(value, *, fixture):
             _refuse()
     if (
         type(value["schema_version"]) is not int
-        or value["schema_version"] not in (1, 2)
+        or value["schema_version"] not in (1, 2, 3)
         or type(value["fixture"]) is not str
         or value["fixture"] != fixture
         or type(value["width"]) is not int
@@ -142,6 +142,8 @@ def validate_scene(value, *, fixture):
             _number(layer[name], minimum, maximum)
         if kind == "image":
             suffix = "illustration" if layer_id == "hero" else "logo"
+            if layer_id == "hero" and value["schema_version"] == 3:
+                suffix = "palette"
             if (
                 type(layer["asset"]) is not str
                 or layer["asset"] != f"{fixture}:{suffix}:v1"

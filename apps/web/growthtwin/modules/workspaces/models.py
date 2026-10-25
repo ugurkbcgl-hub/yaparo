@@ -288,6 +288,8 @@ class CreativeMaterialBinding(models.Model):
         if self.document_id and self.material_version_id:
             document, version = self.document, self.material_version
             suffix = {"hero": "illustration", "logo": "logo"}.get(self.layer_id)
+            if self.layer_id == "hero" and document.scene.get("schema_version") == 3:
+                suffix = "palette"
             if (
                 document.material_binding_version != 1
                 or version.material.brand_id != document.identity.brand_id

@@ -164,7 +164,12 @@ def brand_detail(request, brand_id):
                 .first()
             )
             material_rows.append(
-                {"material": material, "version": version, "raster": raster}
+                {
+                    "material": material,
+                    "version": version,
+                    "raster": raster,
+                    "document_request_id": uuid.uuid4(),
+                }
             )
     return render(
         request,

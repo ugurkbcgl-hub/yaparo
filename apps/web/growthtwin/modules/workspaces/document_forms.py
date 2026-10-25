@@ -28,6 +28,7 @@ class DocumentCreateForm(forms.Form):
         min_value=1, widget=forms.HiddenInput
     )
     request_id = forms.UUIDField(widget=forms.HiddenInput)
+    palette_material_id = forms.UUIDField(required=False, widget=forms.HiddenInput)
 
 
 class DocumentEditForm(forms.Form):
