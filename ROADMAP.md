@@ -40,8 +40,11 @@ private-file readback/deletion. Default off; Pillow13.0.0 is evaluation-only.
 **Current:** ADR-0045 adds atomic database-backed original/derivative pairs for a
 fixed generated palette source, measured provenance, owned private PNG display
 and replay/identity preservation. Normal flag remains off; local synthetic only.
-**Next:** configured binary backup/restore, crash/recovery and deletion evidence,
-then explicit editor material-version integration. Customer gates remain open.
+**Recovery evidence:** ADR-0046 adds atomic scoped synthetic sample removal and
+fresh SQLite backup/restore/PNG readback/deletion with source/backup preserved.
+Configured PostgreSQL/Heroku and crash/retention gates remain open.
+**Next:** explicit editor material-version integration, preserving v1/v2 and
+protecting referenced versions. Customer gates remain open.
 Y05 is not complete.
 
 The owner's multi-brand requirement is now part of Y04: separate identity,

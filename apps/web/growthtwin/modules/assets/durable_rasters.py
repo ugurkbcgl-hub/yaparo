@@ -114,3 +114,32 @@ def read_palette_material(*, owner, brand_id, material_id):
         version__version=1,
     )
     return _checked(pair)
+
+
+def delete_palette_material(*, owner, brand_id, material_id):
+    """Delete one explicitly identified generated sample and both byte objects.
+
+    Internal synthetic-only operation, not a customer retention policy. Repeating
+    the same scoped ID is a no-op; it cannot remove a subsequently recreated ID.
+    A corrupt/incomplete pair fails closed for inspection rather than silent loss.
+    """
+    _enabled()
+    with transaction.atomic():
+        brand = _brand(owner, brand_id, lock=True)
+        material = (
+            BrandMaterial.objects.select_for_update()
+            .filter(
+                pk=material_id, brand=brand, source_key=f"{brand.fixture}:palette:v1"
+            )
+            .first()
+        )
+        if material is None:
+            return False
+        pair = MaterialRasterPair.objects.get(
+            version__material=material, version__version=1
+        )
+        _checked(pair)
+        # Django's parent collector deletes the immutable child rows as a unit.
+        # Direct child mutation/deletion remains forbidden by their application API.
+        material.delete()
+        return True

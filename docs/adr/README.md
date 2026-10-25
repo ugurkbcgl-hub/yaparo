@@ -12,6 +12,7 @@ ADRs capture decisions that would be costly or confusing to reverse. Keep propos
 
 ## Decisions
 
+- [0046 — Synthetic raster recovery and removal](0046-synthetic-raster-recovery-and-removal.md) — Accepted for local synthetic implementation/evidence
 - [0045 — Durable generated palette rasters](0045-durable-synthetic-palette-rasters.md) — Accepted for local synthetic implementation
 - [0044 — Generated raster storage rehearsal](0044-generated-raster-storage-rehearsal.md) — Accepted for isolated synthetic evaluation
 - [0043 — Closed synthetic material catalog](0043-closed-synthetic-material-catalog.md) — Accepted for local synthetic implementation

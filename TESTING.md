@@ -4,6 +4,12 @@ Keep verification proportional to the change. Local product prototypes use synth
 
 ## Current CI and demo coverage
 
+- `python scripts/rehearse_raster_recovery.py` runs only a fresh, private synthetic
+  SQLite exercise; no arguments or existing Django process are allowed. It proves
+  backup→fresh restore→byte/PNG readback→scoped removal, unchanged source/backup
+  hashes and exact cleanup. It is invoked by the asset tests; configured DB and
+  staging recovery remain unverified.
+
 - Durable synthetic palette tests cover atomic database pairs, pinned identity,
   repeat/rollback, owner changes during read, CSRF/private PNG and actual decoded
   pixels. A PostgreSQL race checks competing generation. Browser E2E creates,

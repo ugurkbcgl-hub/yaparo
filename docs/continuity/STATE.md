@@ -1,10 +1,10 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 11:14 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 11:35 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
-Owned-core/open-source plan; current durable synthetic palette material slice.
+Owned-core/open-source plan; current synthetic raster recovery/removal slice.
 Usage monitoring disabled by owner; do not query limits. Reviewed green PRs may
 merge under standing authorization; never push directly to main. Local synthetic
 work only; actual customer data/accounts, payments/publishing remain gated.
@@ -14,10 +14,10 @@ work only; actual customer data/accounts, payments/publishing remain gated.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main c057053 (PR338 merged); main CI40174121931 succeeded.
+Base main75bf33f (PR339 merged); required CI40175882323 and main CI40176187139
+succeeded. Current implementation branch feat/raster-recovery-deletion; resolve
+its PR/checks live. No unrelated working-tree edits at task start.
 PR336 required CI40167348893 and main CI40167513738 succeeded.
-Current implementation branch feat/durable-synthetic-raster; resolve its PR/CI
-live. No unrelated working-tree changes at start.
 Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
 
 - New creative scenes v2 pin brand palette: background, logo/icon/wordmark and
@@ -75,8 +75,25 @@ Durable task: GitHub issue328. Recheck Git/PR/CI before acting.
   assets+workspaces133 tests:127 passed/6 PG skips before read-race fix. Enhanced
   browser created/reopened/repeated image; PNG pixels and mobile overflow checked,
   mobile screenshot reviewed. Final independent delta review found no blocker.
-  Ruff and migration drift passed. Assets0002 only ephemeral tests so far.
-  Configured DB, preview and protected fixture unchanged by this new slice.
+  Ruff and migration drift passed. PR339 merged after required CI:916 tests,
+  912 passed/4 skips plus15 browser tests. Assets0002 then applied to the SAME
+  disposable preview after private backup; one generated palette stored, original
+  brand/document counts preserved, home/login HTTP200. Configured DB and protected
+  fixture unchanged. New recovery/removal task has not modified that preview.
+- ADR0046: internal default-off scoped palette deletion removes parent/version
+  and original/derivative together. Missing scoped ID is a no-op; old-ID replay
+  cannot remove a new sample. Corrupt pair refuses deletion; cascade failure
+  rolls back all rows. No deletion HTTP endpoint or retention policy.
+- No-input fresh private SQLite CLI migrated only a new fixture, backed it up,
+  restored into a second fresh file, compared hashes/sizes/identity/tool and PNG
+  pixels, removed restored rows and preserved whole source/backup hashes. Exact
+  temporary inventory cleaned. Actual Windows normal and -O runs passed.
+  Initial open SQLite handles caused cleanup refusal; explicit closes fixed it;
+  the two failed generated fixtures were inventoried and removed individually.
+- Latest47 asset tests:46 passes/1 PG skip. Independent review found no blocker;
+  added configured-Django-process refusal before filesystem admission. Ruff and
+  migration drift passed. No migration, configured DB/provider/deployment action.
+  Isolated SQLite proof is not configured PostgreSQL/Heroku/crash/privacy proof.
 - Desktop PR attachment limit100 remains; use PR URLs. Usage monitoring disabled.
 
 ## Preserved implementation evidence and boundaries
@@ -115,7 +132,7 @@ existing safeguards; no usage monitoring. A schedule is not proof a run executed
 
 ## Next action
 
-Complete durable palette PR review/CI/merge, then binary backup/restore and
-failure/deletion evidence before explicit editor material-version integration.
-Use generated fixtures first; customer upload/scanning/parser isolation/privacy
-gates remain open. Y05 is not complete.
+Complete recovery/removal PR CI/merge, then explicit owned material-version
+linkage in new editor documents. Preserve v1/v2 scenes/history and protect any
+referenced material versions before adding that linkage. Configured DB recovery,
+customer upload/scanning/parser isolation/privacy gates remain open; Y05 incomplete.
