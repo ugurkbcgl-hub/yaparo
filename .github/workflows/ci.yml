@@ -83,6 +83,14 @@ jobs:
           python -m ruff check --config apps/web/pyproject.toml experiments/creative-editor/serve.py experiments/creative-editor/test_editor.py
           python experiments/creative-editor/test_editor.py
 
+      - name: Compare pinned typed output without model access
+        working-directory: .
+        timeout-minutes: 3
+        run: |
+          python -m ruff format --check --config apps/web/pyproject.toml experiments/typed-output
+          python -m ruff check --config apps/web/pyproject.toml experiments/typed-output
+          python experiments/typed-output/run.py
+
       - name: Verify Heroku root dependencies and entry point
         working-directory: .
         run: python -m pip install -r requirements.txt

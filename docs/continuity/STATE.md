@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 22:06 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 22:21 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,32 +16,31 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main345c14f (PR350 merged); required CI40223511657 and main CI40223860175
-succeeded. PR350 passed1003 Django tests (999 pass/4 unrelated skips),25 browser
-checks and5 isolated-editor checks. Known preview restarted; home/login HTTP200.
-Branch codex/brand-task-contract; PR not yet created at snapshot. Verify live Git/CI.
+Base main4e68a13 (PR351 merged); required CI40224456006 and main CI40224948006
+succeeded. PR351 passed1012 Django tests (1008 pass/4 skips),25 browser checks
+and5 isolated-editor checks. No UI or product provider change.
+Branch codex/typed-output-evaluation; PR not yet created at snapshot. Verify live.
 Durable task: issue328. No migration/configured DB/provider/TEST fixture change.
 
-- ADR0055 adds a frozen schema1 brand-copy-candidate task/result envelope over the
-  existing gateway. Actual pinned identity plus campaign/selection/snapshot,
-  workspace/brand/document/material IDs, versions and digests bind fixed synthetic
-  fixture brief. Fingerprint is correlation data, not authorization/signature.
-- Acceptance reconstructs the entire server-owned request and rechecks current
-  selection/scope. Same-source cross-campaign result replay and replaced/rehashed
-  brief reject. Live edit preserves pinned snapshot; explicit reselection rejects
-  the previous task. Candidate/failed/uncertain shapes reuse old candidate validator.
-- Only deterministic synthetic-template-v1, zero ceiling/reported cost and no
-  reservation accepted. No dispatch/SDK/API/key/queue/ledger added; every candidate
-  stays review-required, non-publishable and execution_authorized=False. Full
-  reservation/usage reconciliation/durable execution remain future Y09/Y13 gates.
-- 46 offline/new-context/existing-gateway checks passed. Scope/archive/transfer,
-  schema/profile/identity/material shape/cost/adapter and result mismatches covered.
-  Review found missing campaign binding; fixed with campaign/selection/snapshot IDs
-  and full factory revalidation plus regressions. Final source review no blocker.
-  Ruff/format/migration drift/diff passed. Required PR CI pending; no UI changed.
-- AI_PROVIDERS and canonical plan updated only for this verified offline work.
-  Historical provider model/price/terms are dated evidence, not freshly verified.
-  No usage/balance monitoring, live model quality or real-data permission claimed.
+- ADR0056 records actual isolated typed-output evaluation. Tagged license, Python
+  compatibility and testing docs reviewed. PydanticAI-slim2.61.0/Pydantic2.14.1,
+ 18 exact distributions incl pip, no provider extras or product dependency change.
+- Actual direct adapter with mocked HTTP and actual FunctionModel share the same
+  three existing briefs and13 controlled response cases, three repetitions. Normal
+  and -O each234 executions; fresh runner compares observed outcomes. No model
+  requests/cost. Package install/advisory lookup network is separate from the
+  guarded comparison; tracing off. Not OS network isolation or latency comparison.
+- Direct accepted9/39 brief-case pairs; typed6/39. Three differences are ignored
+  unknown-root fields in direct. Both accept shaped unsupported claim; no quality,
+  grounding, rights or production approval claimed. Retain direct product boundary;
+  experimental typed library is not promoted. Next fix direct strict-parser gap.
+- Fresh Windows isolated install, pipcheck and audit passed (no known vulnerabilities
+  at date). Normal/optimized observed results agree. Explicit checks survive -O;
+  Python DNS/socket/async transport guards and no-retry checks reviewed. Final
+  independent source review found no blocker. Required CI pending; no UI restart.
+- New CI step recreates/audits isolated experiment, then removes its own temp env.
+  Initial private trial venv: %USERPROFILE%\.yaparo\typed-output-v261, no keys.
+  Raw synthetic report is private; repository experiment README carries findings.
 
 ## Established local capabilities and limits
 
@@ -111,8 +110,7 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Y10 preparation: inspect current primary documentation/maintenance/license and
-pinned compatibility for a typed-output library versus the existing direct adapter
-boundary, using the same offline synthetic suite. Do not select/install a new SDK
-or call a provider without its corresponding review/authorization; no real data.
-Keep Y09 reservation/durable-job and human usability/release gates explicit.
+Reject unknown top-level generated-response fields and inspect duplicate/malformed
+JSON handling in the existing direct adapters using no-network regression tests.
+Preserve provider/accounting limits, source-bound task contracts and untouched
+product routes; do not add a provider, SDK runtime dependency or paid call.
