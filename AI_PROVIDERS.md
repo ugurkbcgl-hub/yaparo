@@ -1,5 +1,14 @@
 # AI provider evaluation and current direction
 
+> **Offline contract update (2026-10-25):** [ADR-0055](docs/adr/0055-offline-brand-task-contract.md)
+> adds a brand/source/version-bound task/result envelope over the existing gateway.
+> The initial profile permits only the deterministic synthetic-template adapter,
+> zero cost and no reservation/dispatch authority. It pins the selected campaign
+> snapshot and reconstructs the request before acceptance. No provider/SDK/key,
+> live API call, account balance check or production selection occurred. Real
+> reservation/usage reconciliation, durable jobs and provider quality remain open.
+
+
 > **Strategy update (2026-10-23):** [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)
 > and the [master plan](docs/product/yaparo-open-source-master-plan.md) now govern
 > provider evolution. Keep task/capability profiles, provenance, cost and data

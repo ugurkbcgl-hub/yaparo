@@ -60,8 +60,11 @@ adds read-only pinned snapshot preview and exact PNG, separate from the live edi
 **Current:** ADR-0054 adds owned ZIP of the selected snapshot and explicit selection
 manifest. **Current Y08:** [automated journey report](docs/product/y08-synthetic-journey-rehearsal.md)
 records desktop/mobile completion and fixes lost campaign navigation in direct
-new-design creation. Human observations remain open. **Next:** Y09 existing gateway
-review and brand/source-bound capability contract.
+new-design creation. Human observations remain open. **Current Y09:** existing gateway
+review and brand/source-bound capability contract are recorded in ADR-0055: first
+offline envelope implemented, zero-cost template only, no dispatch/reservation
+ledger. **Next:** Y10 pinned typed-output comparison preparation; hosted execution
+and full Y09/Y13 accounting gates remain open.
 Customer gates remain open.
 Y05 is not complete.
 
