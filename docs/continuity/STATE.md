@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 14:41 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 14:42 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -18,7 +18,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base main2a31cda (PR361 merged), required CI40311510323 passed1100 Django tests
 (4 skips)/35 browser tests; main CI40314817748 passed. Current branch
-codex/campaign-hosted-ad-choice; PR not yet created at snapshot; verify head/PR/CI.
+codex/campaign-hosted-ad-choice; PR362 open at snapshot, code5255f6e.
+Verify latest-head required CI before merge.
 Task issue328. Additive campaigns0010 creates separate CampaignHostedAdChoice.
 
 - ADR0065: default-off LOCAL_HOSTED_AD_CAMPAIGN_ENABLED adds explicit owned
