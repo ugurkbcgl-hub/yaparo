@@ -12,11 +12,11 @@ from django.http import HttpResponse
 from django.utils.cache import patch_cache_control
 
 _PREPARE_PATH = re.compile(
-    r"\A/workspace/(?:brands/[0-9]+/materials/(?:prepare|generate)|campaigns/[0-9]+/design)/\Z"
+    r"\A/workspace/(?:brands/[0-9]+/materials/(?:prepare|generate)|campaigns/[0-9]+/design(?:/[0-9]+/copy/apply)?)/\Z"
 )
 _MAX_FORM_BODY_BYTES = 8 * 1024
 _DESIGN_PATH = re.compile(
-    r"\A/workspace/campaigns/[0-9]+/design/(?:[0-9]+/(?:preview|image|bundle|copy)/)?\Z"
+    r"\A/workspace/campaigns/[0-9]+/design/(?:[0-9]+/(?:preview|image|bundle|copy|copy/apply)/)?\Z"
 )
 _READ_ONLY_DESIGN = re.compile(
     r"\A/workspace/campaigns/[0-9]+/design/[0-9]+/(?:preview|image|bundle|copy)/\Z"

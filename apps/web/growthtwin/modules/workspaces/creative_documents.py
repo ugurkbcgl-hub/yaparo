@@ -201,7 +201,14 @@ def read_document(*, owner, brand_id, document_id):
 
 
 def _write_document(
-    document, owner, expected_revision, scene, *, reason="save", restored_from=None
+    document,
+    owner,
+    expected_revision,
+    scene,
+    *,
+    reason="save",
+    restored_from=None,
+    eligibility=None,
 ):
     checked_materials(document)
     if document.revision != expected_revision:
@@ -221,9 +228,14 @@ def _write_document(
     if document.revision == 2**31 - 1:
         raise ValidationError("Çalışma sürümü sınırına ulaşıldı.")
     _snapshot(document, owner, "baseline")
-    changed = BrandCreativeDocument.objects.filter(
+    write_rows = BrandCreativeDocument.objects.filter(
         pk=document.pk, identity_id=document.identity_id, revision=expected_revision
-    ).update(scene=canonical, revision=expected_revision + 1, updated_at=timezone.now())
+    )
+    if eligibility is not None:
+        write_rows = write_rows.filter(eligibility)
+    changed = write_rows.update(
+        scene=canonical, revision=expected_revision + 1, updated_at=timezone.now()
+    )
     if changed != 1:
         raise ValidationError(
             "Çalışma değişmiş. Güncel kaydı açın.", code="stale_document_revision"

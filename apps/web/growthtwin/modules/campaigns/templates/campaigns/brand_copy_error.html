@@ -1,0 +1,2 @@
+{% extends 'campaigns/base.html' %}{% block title %}Metin uygulanamadı{% endblock %}{% block scripts %}{% endblock %}
+{% block content %}<div class="narrow-column"><h1>Metin uygulanamadı.</h1><p class="notice" role="alert">Kayıt, seçim veya aday değişmiş olabilir; metin alanına sığmıyor da olabilir. Tasarımın değiştirilmedi. Güncel kaydı ve seçimi kontrol edip yeniden dene.</p><a class="button button-primary" href="{% url 'campaigns:design' draft_id %}">Kampanyanın güncel tasarım seçimine dön</a></div>{% endblock %}

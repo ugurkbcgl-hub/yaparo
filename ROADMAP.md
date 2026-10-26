@@ -67,9 +67,11 @@ ledger. **Current Y10:** ADR-0056 records the isolated pinned typed-output parsi
 comparison; retain direct runtime adapters, no new product dependency. **Current:**
 ADR-0057 adds shared strict JSON and ambiguity regressions across existing adapters.
 **Current local Y11 slice:** ADR-0058 adds read-only brand-bound template candidate
-preview, default off, no hosted AI or writes. **Next:** explicit stale-safe candidate
-application with field-fit checks and preserved history. Hosted quality, execution
-and full Y09/Y13 accounting gates remain open; Y11 is not complete.
+preview, default off. **Current:** ADR-0059 adds separate explicit stale-safe title/
+subtitle application as a saved revision, no truncation or campaign reselection.
+**Next:** source-grounded synthetic text evaluation preparation through the existing
+gateway. Hosted quality/execution and full Y09/Y13 accounting gates remain open;
+Y11 is not complete.
 Customer gates remain open.
 Y05 is not complete.
 
