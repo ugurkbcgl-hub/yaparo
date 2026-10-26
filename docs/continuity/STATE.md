@@ -20,7 +20,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base main5ef33a8 / PR366 merged; required CI40368365017 passed1146 Django
 (4 skips)/43 browser checks; main CI40369845880 passed.
-Current branch codex/brand-creative-campaign-flow; PR not yet created at snapshot.
+Current branch codex/brand-creative-campaign-flow; PR367 open, code9cd5361 before
+this handoff metadata commit. Required latest-head CI pending; recheck before merge.
 Task issue328. Recheck head/PR/required CI before merge.
 
 Current ADR0070: nullable PROTECT campaign.brand, no legacy backfill. Default-off
