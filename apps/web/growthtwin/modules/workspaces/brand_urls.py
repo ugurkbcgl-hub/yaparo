@@ -14,6 +14,16 @@ from growthtwin.modules.workspaces import (
 app_name = "brands"
 urlpatterns = [
     path(
+        "<int:brand_id>/production/<uuid:request_id>/generate/",
+        production_brief_views.generate,
+        name="production_generate",
+    ),
+    path(
+        "<int:brand_id>/production/<uuid:request_id>/image/",
+        production_brief_views.generated_image,
+        name="production_image",
+    ),
+    path(
         "<int:brand_id>/production/",
         production_brief_views.compose,
         name="production_compose",

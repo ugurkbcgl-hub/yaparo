@@ -1,4 +1,4 @@
-"""Local owner-entered synthetic brief capture; no model or provider action."""
+"""Owned synthetic brief capture and separately admitted one-shot generation."""
 
 from uuid import UUID, uuid4
 
@@ -10,8 +10,13 @@ from django.shortcuts import redirect, render
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.decorators.http import require_http_methods, require_safe
+from django.views.decorators.http import (
+    require_http_methods,
+    require_POST,
+    require_safe,
+)
 
+from . import brand_generation
 from . import production_briefs as service
 from .creative_documents import _brand
 
@@ -146,4 +151,57 @@ def detail(request, brand_id, request_id):
         raise Http404 from error
     except Exception:
         return _error()
-    return render(request, "workspaces/production_brief_detail.html", {"plan": plan})
+    job = None
+    can_generate = False
+    try:
+        job = brand_generation.read(request.user, brand_id, request_id)
+        can_generate = True
+    except (PermissionDenied, ObjectDoesNotExist):
+        pass
+    except Exception:
+        return _error()
+    return render(
+        request,
+        "workspaces/production_brief_detail.html",
+        {"plan": plan, "generation": job, "can_generate": can_generate},
+    )
+
+
+@login_required
+@never_cache
+@require_POST
+@csrf_protect
+def generate(request, brand_id, request_id):
+    try:
+        plan = brand_generation.admitted(request.user, brand_id, request_id)
+        if (
+            set(request.POST) != {"fingerprint", "csrfmiddlewaretoken"}
+            or any(len(request.POST.getlist(k)) != 1 for k in request.POST)
+            or request.POST["fingerprint"] != plan.fingerprint
+        ):
+            return _error()
+        brand_generation.generate(request.user, brand_id, request_id)
+    except (PermissionDenied, ObjectDoesNotExist) as error:
+        raise Http404 from error
+    except Exception:
+        return _error()
+    return redirect(
+        "brands:production_request", brand_id=brand_id, request_id=request_id
+    )
+
+
+@login_required
+@never_cache
+@require_safe
+def generated_image(request, brand_id, request_id):
+    try:
+        job = brand_generation.read(request.user, brand_id, request_id)
+        if job is None or job.status != "completed" or job.kind != "image":
+            return _error()
+    except (PermissionDenied, ObjectDoesNotExist) as error:
+        raise Http404 from error
+    except Exception:
+        return _error()
+    response = HttpResponse(bytes(job.png), content_type="image/png")
+    response["X-Content-Type-Options"] = "nosniff"
+    return response

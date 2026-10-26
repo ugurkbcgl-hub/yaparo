@@ -1,10 +1,10 @@
 # AI provider evaluation and current direction
 
-> **Brand/brief preparation (26 October 2026):** ADR0067 adds owned immutable
-> brand-identity/brief/source-material request versions and a no-I/O mock receipt.
-> Execution remains unauthorized, provider None and cost ceiling zero. Existing
-> paid fixed Duru results remain separate; no retroactive brand binding, API call,
-> provider credential read or account balance query. This is preparation, not model output.
+> **Brand-bound evaluation (26 October 2026):** ADR0067's immutable preparation
+> envelope remains unauthorized. ADR0068 separately admits exact reviewed synthetic
+> requests for one-shot real text/image output; new requests3/4 completed/settled.
+> Earlier failures remain held/unverified. Fixed Duru trials are not retro-bound.
+> Normal switches remain off; account balance checks remain with the owner.
 
 
 > **Explicit local apply (2026-10-26):** [ADR-0059](docs/adr/0059-explicit-offline-copy-application.md)
@@ -643,10 +643,35 @@ calls/cost: zero; preview restarted without provider credentials. Existing text/
 image intents and historical hold remain untouched. General brand-bound hosted
 generation and provider promotion are still separate readiness gates.
 
-**Next:** add a separate versioned square/portrait layout profile over saved outputs,
-preserving old drafts/source metadata. No provider call should be needed.
+**Follow-up status:** ADR0063–0067 completed local saved formats/packages/campaign
+references and brand brief capture. ADR0068 below adds reviewed brand execution.
 Do not label hosted output as the offline synthetic-template profile. Preserve
 the unresolved hold, text USD0.01/image USD0.10 bounds and shared USD16 cap.
 Owner retains account balance checks. No real user data, OpenRouter video,
 privacy-setting changes, production model promotion or publishing is authorized
 by this smoke result.
+
+### Reviewed brand-bound execution — 2026-10-26
+
+ADR0068 separates exact synthetic request/fingerprint admission from the saved
+unauthorized envelope. Actual request3 GPT-6 Luna/Azure produced3 Turkish variants
+(513 input/1010 output tokens, USD0.00055630). Request4's requested Gemini3.1 Flash
+Lite Image/Google Vertex route returned768×1376 JPEG, USD0.03364200. Palette/tone/
+description are used; source pixels/logo binaries are not supplied. Original and
+metadata-free PNG plus input/source hashes are durable. Both completed/settled;
+key-free restart/reload preserves results without another call.
+
+Two INITIAL billable calls failed app acceptance: text truncated at512 tokens;
+image extension was initially passed as MIME type. These were corrected (only
+brand text now1024 tokens; image validates extension then supplies detected MIME).
+Old intents remain unverified/held/no-retry, not silently replaced. Visible provider
+log charges were rounded USD0.000305 and USD0.0336; lost receipts prevent exact
+local settlement. Cumulative local settled spent USD0.22943485; holds USD0.10170650
+including historical0.00078075. Owner retains balance checks; no account balance
+or credits were inspected. Shared approved USD16 cap is unchanged.
+
+Fresh official key hard-cap16/no reset and public priced/ZDR endpoint metadata
+were checked without balance inspection; existing terms were reviewed. No provider
+promotion, privacy-setting change, production data/publishing or new service.
+Next: offline brand-bound composition; precise uncertainty reconciliation remains
+separate. See [ADR0068](docs/adr/0068-one-shot-brand-bound-ai-generation.md).

@@ -27,7 +27,9 @@ _TRIAL_PATH = re.compile(
 _AI_VISUAL_PATH = re.compile(
     r"\A/workspace/campaigns/[0-9]+/ai-visual/(?:[0-9]+/(?:(?:preview|image)/|package\.json))?\Z"
 )
-_BRIEF_PATH = re.compile(r"\A/workspace/brands/[0-9]+/production/(?:[0-9a-f-]{36}/)?\Z")
+_BRIEF_PATH = re.compile(
+    r"\A/workspace/brands/[0-9]+/production/(?:[0-9a-f-]{36}/(?:(?:generate|image)/)?)?\Z"
+)
 
 
 def _headers(response, request):
@@ -53,11 +55,14 @@ class ClosedSyntheticMaterialIntakeMiddleware:
 
     def __call__(self, request):
         if _BRIEF_PATH.fullmatch(request.path):
-            allowed = (
-                ("GET", "HEAD", "POST")
-                if request.path.endswith("/production/")
-                else ("GET", "HEAD")
-            )
+            if request.path.endswith("/generate/"):
+                allowed = ("POST",)
+            else:
+                allowed = (
+                    ("GET", "HEAD", "POST")
+                    if request.path.endswith("/production/")
+                    else ("GET", "HEAD")
+                )
             if request.method not in allowed:
                 response = HttpResponse(status=405)
                 response["Allow"] = ", ".join(allowed)

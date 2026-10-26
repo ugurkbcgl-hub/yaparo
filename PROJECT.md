@@ -67,7 +67,14 @@ source ZIP with exact pinned snapshot and campaign-selection manifest; no new AI
 charge. ADR0067 adds versioned owner-entered synthetic brand briefs pinned to actual
 identity/source/material versions. Old requests survive source edits; new requests
 use the current identity. No AI dispatch or inferred binding for fixed Duru trials.
-Next: separately gated brand-bound execution/result adapter rehearsal.
+ADR0068 adds separately reviewed synthetic request admission and one-shot real
+brand-bound text/image generation with durable intent, cost/output capture and
+no retry. Actual new request3 returned3 Turkish candidates (USD0.00055630);
+request4 returned768×1376 image (USD0.03364200), both identity2/source revision1.
+Two initial billable failures remain unverified with reserved cost preserved;
+see ADR0068 for limitations and exact evidence. Normal switches remain off.
+Next: explicitly compose owned saved brand outputs into an identity-pinned
+editable creative with immutable provenance, without another provider call.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
