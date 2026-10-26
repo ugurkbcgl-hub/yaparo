@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 15:55 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 15:57 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -18,7 +18,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base main14603b2 (PR363 merged); required CI40319643050 passed1113 Django tests
 (4 skips)/38 browser tests, main CI40320638629 passed. Branch
-codex/brand-production-brief; PR not created at snapshot; recheck latest head/PR/CI.
+codex/brand-production-brief; PR364 open at snapshot, code098b2af. Recheck latest
+head and required CI before merge.
 Task issue328. Additive workspaces0010 BrandProductionRequest; campaigns0010 unchanged.
 
 - ADR0067 adds default-off LOCAL_BRAND_PRODUCTION_BRIEF_ENABLED/DEBUG owner UI
