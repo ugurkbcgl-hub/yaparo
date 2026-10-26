@@ -68,9 +68,9 @@
       ctx.fillStyle = rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722 > 0.179 ? "#000000" : "#ffffff"; ctx.font = "bold 24px Arial";
       for (const line of boxes.cta) { ctx.fillText(line,80,y+16); y+=30; }
       const saved = fields.every(key => value[key] === boot.content[key]);
-      $("ad-save").disabled = false;
+      $("ad-save").disabled = !!boot.read_only;
       $("ad-export").disabled = !saved || !boot.can_export;
-      $("ad-package").disabled = !saved || !boot.can_export || packaging;
+      $("ad-package").disabled = !!boot.read_only || !saved || !boot.can_export || packaging;
       status(saved && boot.can_export ? "Kayıtlı taslak hazır. PNG indirebilirsin." : "Düzenleme ekranda. PNG indirmek için önce kaydet.");
     } catch {
       ctx.setTransform(1,0,0,1,0,0);
@@ -79,7 +79,7 @@
     }
   }
   for (const key of fields) form.elements[key].addEventListener("input",render);
-  form.addEventListener("submit",event => { if (!ready || $("ad-save").disabled) event.preventDefault(); });
+  form.addEventListener("submit",event => { if (boot.read_only || !ready || $("ad-save").disabled) event.preventDefault(); });
   $("ad-export").addEventListener("click",() => {
     if (!ready || $("ad-export").disabled) return;
     const link = document.createElement("a");
@@ -89,7 +89,7 @@
   const encode = text => new TextEncoder().encode(text);
   const hashBytes = async bytes => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(v=>v.toString(16).padStart(2,"0")).join("");
   $("ad-package").addEventListener("click",async () => {
-    if (!ready || $("ad-package").disabled || packaging) return;
+    if (boot.read_only || !ready || $("ad-package").disabled || packaging) return;
     packaging=true; $("ad-package").disabled=true;
     $("package-status").textContent="Paket hazırlanıyor…";
     try {
@@ -119,7 +119,8 @@
   });
   (async () => {
     try {
-      if (!/^\/workspace\/brands\/ai-trial\/drafts\/[0-9a-f-]{36}\/image\/$/.test(boot.image_url)) throw Error("url");
+      const path = boot.read_only ? /^\/workspace\/campaigns\/[1-9][0-9]*\/ai-visual\/[1-9][0-9]*\/image\/$/ : /^\/workspace\/brands\/ai-trial\/drafts\/[0-9a-f-]{36}\/image\/$/;
+      if (!path.test(boot.image_url)) throw Error("url");
       const response = await fetch(boot.image_url,{credentials:"same-origin",redirect:"error",cache:"no-store",signal:AbortSignal.timeout(10000)});
       if (!response.ok || response.headers.get("Content-Type")?.split(";")[0] !== "image/png" || !response.body) throw Error("response");
       const reader = response.body.getReader(), chunks = []; let size = 0;

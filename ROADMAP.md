@@ -34,7 +34,9 @@ ADR0063 adds separate square1080×1080/portrait1080×1350 drafts, immutable layo
 provenance and exact fitted-photo PNGs; original overlay/history are preserved.
 ADR0064 adds current saved-format ZIP with exact PNG, source/content/revision
 and manifest; browser assembly is integrity metadata, not a signed attestation.
-Next: explicit owned saved-revision visual planning reference for a local campaign.
+ADR0065 adds separate versioned campaign visual planning references to saved AI
+revisions, stale-safe choices and pinned read-only preview; no Search dispatch or
+brand binding. Next: campaign-selection source package for the pinned revision.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)

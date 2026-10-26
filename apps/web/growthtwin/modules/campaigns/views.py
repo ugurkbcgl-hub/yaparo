@@ -28,6 +28,9 @@ from growthtwin.modules.campaigns.forms import (
     CampaignDraftForm,
     CreativeVariantEditForm,
 )
+from growthtwin.modules.campaigns.hosted_ad_views import (
+    reference_context as hosted_ad_context,
+)
 from growthtwin.modules.campaigns.journey import (
     campaign_journey,
     google_test_controls_available,
@@ -197,6 +200,7 @@ def _campaign_detail_response(request, draft, *, bound_edit_form=None):
             "draft": draft,
             "plan": plan,
             **reference_context(request.user, draft.pk),
+            **hosted_ad_context(request.user, draft.pk),
             "eligibility_decision": synthetic_campaign_eligibility_preview(
                 evaluated_on=timezone.localdate()
             ),

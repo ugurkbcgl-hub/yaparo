@@ -60,7 +60,9 @@ proportional photo placement and exact PNG output. Original geometry stays intac
 ADR0064 adds saved-only ZIP export with exact canvas PNG, verified source PNG,
 content/profile/revision and source manifest. Current owner/version checks and
 client hash/size checks refuse stale or changing inputs; no new AI charge.
-Next: explicit pinned local campaign visual reference to an owned saved draft.
+ADR0065 adds explicit same-workspace saved-AI revision selection for local campaigns,
+with a pinned read-only preview; later edits require explicit reselection. Brand
+identity and Search publishing are unchanged. Next: selected campaign source package.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
