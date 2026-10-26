@@ -41,6 +41,7 @@
   }
   function render() {
     $("ad-save").disabled = true; $("ad-export").disabled = true;
+    if ($("brand-campaign-start")) $("brand-campaign-start").disabled = true;
     if (!ready) return;
     try {
       const value = values(); validate(value); const boxes = layout(value);
@@ -74,8 +75,9 @@
       for (const line of boxes.cta) { ctx.fillText(line,80,y+16); y+=30; }
       const saved = fields.every(key => value[key] === boot.content[key]);
       $("ad-save").disabled = !!boot.read_only;
-      $("ad-export").disabled = !saved || !boot.can_export;
-      status(saved && boot.can_export ? "Kayıtlı taslak hazır. PNG indirebilirsin." : "Düzenleme ekranda. PNG indirmek için önce kaydet.");
+      $("ad-export").disabled = !!boot.read_only || !saved || !boot.can_export;
+      if ($("brand-campaign-start")) $("brand-campaign-start").disabled = !!boot.read_only || !saved || !boot.can_use_saved;
+      status(boot.read_only ? "Kampanyaya seçilen kayıt hazır." : saved && boot.can_export ? "Kayıtlı taslak hazır. PNG indirebilirsin." : "Düzenleme ekranda. PNG indirmek için önce kaydet.");
     } catch {
       ctx.setTransform(1,0,0,1,0,0);
       ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -92,7 +94,7 @@
   });
   (async () => {
     try {
-      const expected = "/workspace/brands/"+boot.brand_id+"/ads/"+boot.id+"/image/";
+      const expected = boot.read_only ? "/workspace/campaigns/"+boot.campaign_id+"/brand-creative/"+boot.selection_version+"/image/" : "/workspace/brands/"+boot.brand_id+"/ads/"+boot.id+"/image/";
       if (boot.image_url !== expected || typeof boot.brand_name !== "string" || !boot.brand_name.trim() || boot.brand_name.length>240 || !boot.brand_name.isWellFormed() || !/^#[0-9a-f]{6}$/i.test(boot.secondary_color)) throw Error("url");
       const response = await fetch(boot.image_url,{credentials:"same-origin",redirect:"error",cache:"no-store",signal:AbortSignal.timeout(10000)});
       if (!response.ok || response.headers.get("Content-Type")?.split(";")[0] !== "image/png" || !response.body) throw Error("response");

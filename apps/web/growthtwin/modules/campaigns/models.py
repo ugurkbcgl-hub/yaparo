@@ -30,6 +30,13 @@ class WorkspaceCampaignDraft(models.Model):
     )
     name = models.CharField(max_length=120)
     brand_name = models.CharField(max_length=120, blank=True, default="")
+    brand = models.ForeignKey(
+        "workspaces.Brand",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="campaign_plans",
+    )
     objective = models.CharField(
         max_length=32,
         choices=Objective.choices,
@@ -176,6 +183,54 @@ class CampaignHostedAdChoice(models.Model):
 
     def delete(self, *args, **kwargs):
         raise ValidationError("Görsel seçimi geçmişi tek başına silinemez.")
+
+
+class CampaignBrandAdChoice(models.Model):
+    """Immutable owned-brand visual planning choice, never publishing authority."""
+
+    campaign = models.ForeignKey(
+        WorkspaceCampaignDraft,
+        on_delete=models.PROTECT,
+        related_name="brand_ad_choices",
+    )
+    revision = models.ForeignKey(
+        "workspaces.BrandAdRevision",
+        on_delete=models.PROTECT,
+        related_name="campaign_choices",
+    )
+    snapshot = models.JSONField()
+    version = models.PositiveIntegerField()
+    request_id = models.UUIDField(unique=True, editable=False)
+    kind = models.CharField(max_length=8)
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = CampaignDesignChoiceQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("-version",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("campaign", "version"), name="campaign_brand_ad_version_unique"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(version__gte=1), name="campaign_brand_ad_positive"
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Marka reklam seçimi geçmişi değiştirilemez.")
+        ad = self.revision.draft
+        if (
+            self.kind not in ("create", "select")
+            or self.campaign.brand_id != ad.brand_id
+            or self.campaign.workspace_id != ad.brand.workspace_id
+        ):
+            raise ValidationError("Kampanya ve reklam aynı markaya ait olmalıdır.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Marka reklam seçimi geçmişi silinemez.")
 
 
 class CampaignRehearsal(models.Model):

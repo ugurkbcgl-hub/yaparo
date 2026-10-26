@@ -134,6 +134,12 @@ def create(request, brand_id):
 
 
 def _editor(request, draft, form=None, status=200):
+    from growthtwin.modules.campaigns.brand_ad_views import start_form
+
+    try:
+        campaign_form = start_form(draft) if status == 200 else None
+    except PermissionDenied:
+        campaign_form = None
     form = form or DraftForm(
         initial={
             "revision": draft.revision,
@@ -150,6 +156,7 @@ def _editor(request, draft, form=None, status=200):
             "draft": draft,
             "form": form,
             "failed_save": status != 200,
+            "campaign_form": campaign_form,
             "boot": {
                 "id": str(draft.pk),
                 "brand_id": str(draft.brand_id),
@@ -158,6 +165,7 @@ def _editor(request, draft, form=None, status=200):
                 "content": draft.content,
                 "revision": draft.revision,
                 "can_export": status == 200,
+                "can_use_saved": status == 200,
                 "width": 768,
                 "height": 1376,
                 "mode": "overlay",

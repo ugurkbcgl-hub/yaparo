@@ -23,6 +23,7 @@ def campaign(owner, campaign_id, *, lock=False):
         rows = rows.select_for_update(of=("self",))
     return rows.get(
         pk=campaign_id,
+        brand__isnull=True,
         workspace=workspace,
         workspace__owner=owner,
         workspace__owner__is_active=True,

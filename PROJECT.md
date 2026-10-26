@@ -1,5 +1,13 @@
 # Yaparo project brief
 
+## Current owner priority — 26 October 2026
+
+Keep the core journey inside the website: brand→AI content→editing→campaign use.
+Download/export availability is UNDECIDED and not an urgent delivery goal. Existing
+PNG/ZIP experiments are prototypes, not an accepted customer feature commitment.
+Do not prioritize a package or add new download surfaces without a product decision.
+ADR0070 supersedes the previous proposed package next step.
+
 
 ## Saved synthetic creative work — 24 October 2026
 
@@ -77,7 +85,10 @@ ADR0069 now adds that explicit composition into a separate identity-pinned
 BrandAdDraft: owned saved result selection, text/color edit, history/stale/replay
 guards and saved-only768×1376 PNG. Actual revision2/export and unchanged source/
 ledger verified, USD0 new AI cost. Logo binary is not applied; fixed overlay only.
-Next: saved-only brand creative package with exact PNG/source/provenance.
+ADR0070 adds explicit new brand-bound synthetic campaign plans and pinned saved
+creative selection/readonly site preview. Legacy campaigns remain unbound; no
+downloads, provider calls or publishing added. Fixed city/budget are only examples.
+Next: owned site setup for campaign objective/audience/budget/schedule, gates closed.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact

@@ -30,7 +30,10 @@ def _enabled():
 def owned_draft(owner, draft_id):
     _owner(owner)
     return WorkspaceCampaignDraft.objects.get(
-        pk=draft_id, workspace__owner=owner, workspace__owner__is_active=True
+        pk=draft_id,
+        brand__isnull=True,
+        workspace__owner=owner,
+        workspace__owner__is_active=True,
     )
 
 
@@ -76,6 +79,7 @@ def select_design(
         # campaign/brand lock graph. Recheck eligibility in the INSERT itself.
         draft = WorkspaceCampaignDraft.objects.select_for_update(of=("self",)).get(
             pk=draft_id,
+            brand__isnull=True,
             workspace__owner=owner,
             workspace__owner__is_active=True,
         )

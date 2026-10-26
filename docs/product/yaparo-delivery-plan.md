@@ -1,5 +1,9 @@
 # Yaparo uygulama sırası ve kabul ölçütleri
 
+26 Ekim öncelik düzeltmesi: indirme/dışa aktarma üründe bulunacak mı kararı açık;
+paket işi ertelendi. Mevcut PNG/ZIP prototipleri kesin ürün kararı sayılmaz.
+Öncelik site içinde üretim→düzenleme→kampanyada açık seçimdir (ADR0070).
+
 23 Ekim 2026. [Ana plan](yaparo-open-source-master-plan.md) ve [ADR-0040](../adr/0040-owned-core-and-open-source-adoption.md) kapsamındadır. Aşağıdaki tablolar kabul ölçütlerini tanımlar; güncel ilerleme aşağıda ayrı belirtilir. Her PR somut müşteri çıktısı veya onun gerekli korumasını teslim eder. Yeni genel amaçlı altyapı, ilk akış onu gerektirmedikçe eklenmez. Gerçek veri/yayın/ödeme/ücretli kaynak kapıları korunur.
 
 Kalıcı iş takibi: [GitHub #328](https://github.com/ugurkbcgl-hub/yaparo/issues/328).
@@ -94,7 +98,9 @@ hazır sayılmaz. Sıradaki dar dilim bu sahip olunan çıktıları marka kimli�
 düzenlenebilir reklama açık seçimle aktarmak; ADR0069 bu dar dilimi tamamlar:
 markaya bağlı ayrı taslak, başlık/açıklama/çağrı/renk, kayıt geçmişi ve PNG.
 Gerçek kayıt2/PNG doğrulandı; yeni AI maliyeti0 USD. Logo dosyası uygulanmaz.
-Sıradaki dilim kayıtlı marka reklamının kaynak ve kimlik bilgileriyle ZIP paketi.
+ADR0070 yeni, açık marka bağlı kampanya taslağı ve seçili reklam sürümünün site içi
+önizlemesini ekler. Eski kampanyalar tahmini markaya bağlanmaz. Sıradaki dilim
+amaç/kitle/bütçe/süre ayarlarını site içinde yönetmek; yayın/harcama kapıları kapalı.
 
 ADR-0055 ilk çevrimdışı marka/kaynak/sürüm bağlı görev ve sonuç sözleşmesini ekler.
 Mevcut geçit korunur; yalnız deterministik sentetik adaptör ve sıfır maliyet kabul
