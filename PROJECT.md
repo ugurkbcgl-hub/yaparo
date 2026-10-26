@@ -54,8 +54,10 @@ ADR0062 now combines saved real text/image into an independent editable draft wi
 true source manifest, stale-safe saves/history and saved-only PNG export. Actual
 draft fa426f70-5e12-4f5c-9b83-f40a72ac1c90 reached revision2 with sources/ledger
 unchanged and no AI cost. The fixed768×1376 Canvas2D profile edits text/CTA/color;
-old Fabric/brand/campaign contracts stay unchanged. Next: a separate versioned
-square/portrait layout profile and exact-size output, preserving existing drafts.
+old Fabric/brand/campaign contracts stay unchanged. ADR0063 adds explicit square
+1080×1080 and portrait1080×1350 profiles, with independent drafts/history, complete
+proportional photo placement and exact PNG output. Original geometry stays intact.
+Next: owned revision/source-manifest export for these independent formatted drafts.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact

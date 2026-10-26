@@ -29,12 +29,12 @@
     return result;
   }
   function layout(value) {
-    const width = canvas.width - 120;
+    const width = 768 - 120;
     ctx.font = "bold 44px Arial"; const title = lines(value.title,width);
     ctx.font = "24px Arial"; const body = lines(value.body,width);
     ctx.font = "bold 24px Arial"; const cta = lines(value.cta,width-40);
     const end = 106 + title.length*52 + 18 + body.length*32 + 24 + cta.length*30 + 32;
-    if (end > canvas.height * 0.52) throw Error("overflow");
+    if (end > canvas.height / (canvas.width/768) * 0.52) throw Error("overflow");
     return {title,body,cta,end};
   }
   function render() {
@@ -42,9 +42,20 @@
     if (!ready) return;
     try {
       const value = values(); validate(value); const boxes = layout(value);
+      ctx.setTransform(1,0,0,1,0,0);
       ctx.clearRect(0,0,canvas.width,canvas.height);
-      ctx.drawImage(photo,0,0,canvas.width,canvas.height);
-      ctx.fillStyle = "#f5eddf"; ctx.fillRect(0,0,canvas.width,boxes.end+26);
+      ctx.scale(canvas.width/768,canvas.width/768);
+      const height = canvas.height/(canvas.width/768);
+      const panel = boxes.end+26;
+      if (boot.mode === "overlay") {
+        ctx.drawImage(photo,0,0,768,height);
+      } else {
+        ctx.fillStyle = "#f5eddf"; ctx.fillRect(0,0,768,height);
+        const ratio = Math.min(768/photo.width,(height-panel)/photo.height);
+        const w = photo.width*ratio, h = photo.height*ratio;
+        ctx.drawImage(photo,(768-w)/2,panel+(height-panel-h)/2,w,h);
+      }
+      ctx.fillStyle = "#f5eddf"; ctx.fillRect(0,0,768,panel);
       ctx.fillStyle = value.color; ctx.textBaseline = "top";
       ctx.font = "bold 24px Arial"; ctx.fillText("Duru Studio",60,50);
       let y = 106; ctx.font = "bold 44px Arial";
@@ -52,7 +63,7 @@
       y+=18; ctx.font = "24px Arial";
       for (const line of boxes.body) { ctx.fillText(line,60,y); y+=32; }
       y+=24; ctx.fillStyle = value.color;
-      ctx.fillRect(60,y,canvas.width-120,boxes.cta.length*30+32);
+      ctx.fillRect(60,y,768-120,boxes.cta.length*30+32);
       const rgb = [1,3,5].map(i=>parseInt(value.color.slice(i,i+2),16)/255).map(v=>v<=0.04045?v/12.92:((v+0.055)/1.055)**2.4);
       ctx.fillStyle = rgb[0]*0.2126+rgb[1]*0.7152+rgb[2]*0.0722 > 0.179 ? "#000000" : "#ffffff"; ctx.font = "bold 24px Arial";
       for (const line of boxes.cta) { ctx.fillText(line,80,y+16); y+=30; }
@@ -61,6 +72,7 @@
       $("ad-export").disabled = !saved || !boot.can_export;
       status(saved && boot.can_export ? "Kayıtlı taslak hazır. PNG indirebilirsin." : "Düzenleme ekranda. PNG indirmek için önce kaydet.");
     } catch {
+      ctx.setTransform(1,0,0,1,0,0);
       ctx.clearRect(0,0,canvas.width,canvas.height);
       status("Metinler sınırı aşıyor veya bu düzene sığmıyor. Kısaltılmadı; alanları düzenle.",true);
     }
@@ -87,7 +99,7 @@
       const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(v=>v.toString(16).padStart(2,"0")).join("");
       if (hash !== boot.sha256) throw Error("hash");
       photo = await createImageBitmap(blob);
-      if (photo.width !== boot.width || photo.height !== boot.height || canvas.width !== boot.width || canvas.height !== boot.height) throw Error("dimensions");
+      if (photo.width !== boot.source_width || photo.height !== boot.source_height || canvas.width !== boot.width || canvas.height !== boot.height || !["overlay","contain"].includes(boot.mode)) throw Error("dimensions");
       ready = true; render();
     } catch { status("Kaydedilmiş görsel doğrulanamadı. Kaydetme ve indirme kapalı; sayfayı yeniden aç.",true); }
   })();
