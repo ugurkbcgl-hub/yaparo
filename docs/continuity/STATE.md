@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 22:45 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 05:09 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,29 +16,29 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main271f9e6 (PR352 merged). Required CI40225671245 and main CI40226199587
-succeeded. Product runtime dependencies unchanged; pinned typed experiment is isolated.
-Branch codex/strict-provider-json; PR not yet created at snapshot. Verify live.
+Base maind3c5362 contains PR353, merged after current exact-head verification.
+Required CI40227564071 succeeded (1019 Django tests:1015 pass/4 skips;25 browser
+checks;5 isolated editor checks;288+288 isolated parsing runs). Recheck main CI.
+Branch codex/brand-copy-preview; PR not yet created at snapshot. Verify live Git/CI.
 Durable task: issue328. No migration/configured DB/provider/TEST fixture change.
 
-- ADR0057 introduces shared64KiB bounded UTF8 JSON object loading: duplicate decoded
-  keys anywhere, nonfinite/overflow floats, invalid roots/trailing/deep JSON reject.
-  Outer metadata remains flexible; generated candidate root/variant fields exact,
- 1–5 variants with bounded nonblank encodable strings. Domain validator retained.
-- All three existing adapters use the helper for outer and inner JSON. Credentials,
-  models, request/accounting/retry/source and product routes unchanged. Generic
-  failures hide provider text; HTTP closes on failure. No live API/key lookup.
-- 53 new-parser/existing-gateway/brand-context checks passed, including all three
-  actual adapters with mocked connections, Unicode, duplicate/escaped keys,
-  ambiguous metadata, shape/size/depth errors and non-publishable semantics.
-- Extended isolated comparison:3 briefs/16 cases/3 repetitions/2 paths =288 per
-  normal and -O mode. Both passed without external calls/cost. Direct now rejects
-  unknown fields and duplicate root/variant keys; typed JSON accepts duplicate
-  fixtures. Both accept shaped unsupported claim; no grounding/quality approval.
-  Original ADR0056/PR352 13-case baseline remains historical, explicitly labeled.
-- Independent source review found no blocker; reviewer reran7 new checks successfully.
-  Ruff/format/migration drift/diff passed. Required PR CI pending. No UI change or
-  restart required. Existing release gates remain.
+- ADR0058 adds default-off/DEBUG owner-scoped read-only three-candidate preview via
+  the bound task factory, only SyntheticTemplateGenerator, then full revalidation.
+  No live adapter/key/spend, candidate/task persistence or scene/campaign edits.
+- The selected snapshot stays pinned; current user edits/history are preserved.
+  UI labels fictional templates, displays source facts/identity metadata and links
+  separately to selection, selected preview and current editor. No apply action.
+- New copy route inherits GET/HEAD-only preparse unsafe/multipart refusal and private
+  no-store/noindex headers. CSP scripts none; HTML escaping verified. Base logout
+  remains available; task area contains no form/input/write controls.
+- Eight focused service/HTTP/browser checks passed, plus58 existing gateway/task/
+  design-view checks. Scope/flags/stale/archive/mid-build change/escaping/preparse
+  refusal and unchanged user revision2/title covered. Desktop/mobile no overflow;
+  screenshot reviewed. Source review no blocker. Ruff/format/migration drift/diff
+  passed; required CI pending.
+- Product flags stay off. After reviewed green merge, enable only the new preview
+  flag in the SAME private disposable preview launcher and restart its known process.
+  No new DB/migrate/reset or provider call. Existing release gates stay open.
 
 ## Established local capabilities and limits
 
@@ -108,7 +108,8 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Expose owned brand-bound offline template candidates in the local creative journey,
-with explicit review/selection and preserved user edits. Keep the selected snapshot
-and source contracts; do not wire a hosted provider, financial dispatch or automatic
-publishing. Inspect current UI/task contracts before implementation.
+Define and implement explicit application of an owned offline candidate to a new
+saved document revision. Recheck owner/selection/current revision, validate title/
+subtitle field fit (no silent truncation), preserve history and reject stale posts.
+Do not grant hosted provider, spend, real-data or publishing authority. Inspect
+current editor/task/save contracts before choosing the smallest reversible design.

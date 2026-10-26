@@ -33,6 +33,9 @@ def reference_context(owner, draft_id):
     if not settings.DEBUG or not settings.SYNTHETIC_CAMPAIGN_DESIGN_ENABLED:
         return {"campaign_design_enabled": False}
     context = {"campaign_design_enabled": True}
+    context["brand_copy_preview_enabled"] = (
+        settings.SYNTHETIC_BRAND_COPY_PREVIEW_ENABLED
+    )
     try:
         choice = current_design(owner=owner, draft_id=draft_id)
     except (ObjectDoesNotExist, PermissionDenied, ValidationError):

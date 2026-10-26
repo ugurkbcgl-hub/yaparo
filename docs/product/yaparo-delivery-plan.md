@@ -94,8 +94,10 @@ kaydeder: aynı3 brief/13 yanıt/3 tekrar, normal ve optimize modda234’er yür
 PydanticAI ürün bağımlılığına alınmaz; dar görev için mevcut adaptör korunur.
 ADR-0057 ortak ayrıştırıcıyla bilinmeyen iç alanları, yinelenen anahtarları ve
 belirsiz/bozuk JSON’u reddeder; genişletilmiş çevrimdışı küme mod başına288 yürütme
-yapar. Bu model kalitesi veya iddia doğruluğu değerlendirmesi değildir. Sıradaki
-yerel adım marka bağlı çevrimdışı aday önizlemesi, açık seçim ve düzenleme korumasıdır.
+yapar. Bu model kalitesi veya iddia doğruluğu değerlendirmesi değildir.
+ADR-0058 ilk yerel Y11 diliminde marka bağlı üç şablon adayını salt okunur gösterir;
+AI çağrısı/kayıt/uygulama yapmaz, kullanıcı düzenlemelerini korur. Sıradaki adım
+açık aday uygulama, sürüm denetimi, alanlara sığma ve geçmişin korunmasıdır.
 
 
 | ID | İş / bağımlılık | Teslim ve tamamlanma ölçütü |
