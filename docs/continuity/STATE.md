@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 14:42 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 15:02 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,11 +16,25 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main2a31cda (PR361 merged), required CI40311510323 passed1100 Django tests
-(4 skips)/35 browser tests; main CI40314817748 passed. Current branch
-codex/campaign-hosted-ad-choice; PR362 open at snapshot, code5255f6e.
-Verify latest-head required CI before merge.
-Task issue328. Additive campaigns0010 creates separate CampaignHostedAdChoice.
+Base main0388f8f (PR362 merged), required CI40317099228 passed1109 Django tests
+(4 skips)/36 browser tests; main CI40318090943 also passed.
+Current branch codex/campaign-ai-source-package; PR not created at snapshot.
+Task issue328. No new migration; private schema workspaces0009/campaigns0010.
+
+- ADR0066 adds separate six-file campaign ZIP with campaign.json, pinned canonical
+  ad_json bytes/hash and exact selection identity. Versioned private JSON route
+  reuses selected() checks/locks. Browser compares every context field and raw-byte
+  snapshot hash before existing source/content/geometry checks; mismatches/stale
+  reselection refuse. No cross-language canonical reserialization. PKs are strings.
+  Independent five-file package and readonly form/save contracts remain unchanged.
+ 36 focused tests:32 pass/4 PG skips, including9 browser journeys; six-file CRC/
+  hashes/PNG/source/pinned old revision, wrong context/digest and stale refusal pass.
+  Ruff/format/drift/diff and independent source review passed; latest full CI pending.
+  Actual normal browser campaign1/selection1 package-ready message; independent
+  Chromium downloaded/verified all6 files and1080x1350 PNG. All38 non-auth tables
+  unchanged. Private campaign-selected-source-package.zip, campaign-ai-package-
+  evidence.json, campaign-ai-package-{1440,390}.png. No DB/source/history/choice/
+  hold mutation, new AI cost or provider credential. Same preview DB, no migration.
 
 - ADR0065: default-off LOCAL_HOSTED_AD_CAMPAIGN_ENABLED adds explicit owned
   same-workspace saved HostedAdRevision choice for local campaign planning.
@@ -31,7 +45,7 @@ Task issue328. Additive campaigns0010 creates separate CampaignHostedAdChoice.
   reselection is explicit and old selection URLs refuse. Private readonly image.
   Campaign-first of=self then source lock graph avoids legacy inversion.32 focused
   tests:28 pass/4 PG skips, including7 browser journeys. Two new PG concurrency
-  checks (competing choices, legacy lock graph select/read) require CI before merge.
+  checks (competing choices, legacy lock graph select/read) passed PR362 required CI.
   Independent final review no blockers. Source/package regression cases pass.
   Same private DB forward0010 backup:preview-before-campaign-ai-visual-20261026T113849Z.sqlite3.
   Old rows preserved; only migration/type/permissions and new empty table at upgrade.
@@ -139,7 +153,7 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Add a campaign-version-specific source package for the selected saved AI revision,
-including campaign-selection metadata. Preserve independent draft package, current
-source jobs/profile histories and stale URL refusal. No inferred brand binding,
-publishing/dispatch, new AI call or customer launch.
+Define and test immutable BrandIdentity/brief/material-version bindings for the
+next brand-aware hosted-generation task/result slice using synthetic mocked
+transport first. Preserve fixed Duru trial/source/profile/selection histories and
+unknown brand provenance; do not retroactively bind them or enable production jobs.

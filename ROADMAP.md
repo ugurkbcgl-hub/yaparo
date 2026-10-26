@@ -36,7 +36,9 @@ ADR0064 adds current saved-format ZIP with exact PNG, source/content/revision
 and manifest; browser assembly is integrity metadata, not a signed attestation.
 ADR0065 adds separate versioned campaign visual planning references to saved AI
 revisions, stale-safe choices and pinned read-only preview; no Search dispatch or
-brand binding. Next: campaign-selection source package for the pinned revision.
+brand binding. ADR0066 adds the pinned campaign source ZIP and exact snapshot
+hash/selection metadata. Next: define/test brand-aware hosted generation contracts
+with immutable brief/material/identity versions and mocked transport first.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)

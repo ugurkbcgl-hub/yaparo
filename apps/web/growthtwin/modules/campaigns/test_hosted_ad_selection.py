@@ -1,6 +1,8 @@
 """Pinned owned AI visual planning references; no dispatch or provider calls."""
 
+import json
 from concurrent.futures import ThreadPoolExecutor
+from hashlib import sha256
 from threading import Barrier, Event
 from unittest import mock
 from urllib.parse import urlencode
@@ -17,7 +19,11 @@ from django.test import (
 )
 from django.urls import reverse
 
-from growthtwin.modules.workspaces.models import HostedAdDraft, Workspace
+from growthtwin.modules.workspaces.models import (
+    HostedAdDraft,
+    HostedImageTrial,
+    Workspace,
+)
 from growthtwin.modules.workspaces.test_hosted_ad_drafts import SavedTrialsFixture
 
 from . import hosted_ad_selection as service
@@ -133,6 +139,62 @@ class CampaignAdSelectionTests(CampaignAdFixture, TransactionTestCase):
                 self.choose()
         self.assertFalse(CampaignHostedAdChoice.objects.exists())
         self.assertEqual(HostedAdDraft.objects.get(pk=self.ad.pk).revision, 1)
+
+    def test_package_pins_canonical_snapshot_and_selection_not_campaign_name(self):
+        choice = self.choose()
+        url = reverse(
+            "campaigns:hosted_ad_package", args=[self.plan.pk, choice.version]
+        )
+        before = CampaignHostedAdChoice.objects.values().get(pk=choice.pk)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        context = data["campaign_selection"]
+        self.assertEqual(context["campaign_id"], str(self.plan.pk))
+        self.assertEqual(context["selection_version"], choice.version)
+        self.assertEqual(context["ad_revision"], 1)
+        self.assertEqual(
+            context["snapshot_sha256"], sha256(data["ad_json"].encode()).hexdigest()
+        )
+        self.assertEqual(json.loads(data["ad_json"]), choice.snapshot)
+        self.assertIn("no-store", response["Cache-Control"])
+        self.assertEqual(response["X-Robots-Tag"], "noindex, nofollow")
+        self.assertEqual(response["X-Content-Type-Options"], "nosniff")
+        self.assertEqual(self.client.head(url).status_code, 200)
+        self.assertEqual(self.client.post(url).status_code, 405)
+        self.assertEqual(self.client.get(url + "?latest=1").status_code, 400)
+        self.ad = self.save(self.ad, title="Sonraki düzenleme")
+        WorkspaceCampaignDraft.objects.filter(pk=self.plan.pk).update(
+            name="Yeni kampanya adı"
+        )
+        self.assertEqual(self.client.get(url).json(), data)
+        self.assertEqual(
+            CampaignHostedAdChoice.objects.values().get(pk=choice.pk), before
+        )
+        self.choose(expected_version=1)
+        self.assertEqual(self.client.get(url).status_code, 409)
+        self.assertEqual(CampaignHostedAdChoice.objects.count(), 2)
+
+    def test_package_denies_foreign_disabled_logged_out_or_corrupt_sources(self):
+        choice = self.choose()
+        url = reverse(
+            "campaigns:hosted_ad_package", args=[self.plan.pk, choice.version]
+        )
+        foreign = get_user_model().objects.create_user(
+            username="foreign-campaign-package"
+        )
+        self.client.force_login(foreign)
+        self.assertEqual(self.client.get(url).status_code, 404)
+        self.client.force_login(self.owner)
+        with override_settings(LOCAL_HOSTED_AD_CAMPAIGN_ENABLED=False):
+            self.assertEqual(self.client.get(url).status_code, 404)
+        HostedImageTrial.objects.filter(pk=self.image.pk).update(png=b"invalid")
+        self.assertEqual(self.client.get(url).status_code, 409)
+        self.client.logout()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("no-store", response["Cache-Control"])
+        self.assertEqual(CampaignHostedAdChoice.objects.count(), 1)
 
     def test_flags_foreign_same_owner_other_workspace_and_inactive_refuse(self):
         choice = self.choose()

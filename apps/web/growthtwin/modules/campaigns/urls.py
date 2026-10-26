@@ -13,6 +13,11 @@ from growthtwin.modules.campaigns import (
 app_name = "campaigns"
 
 urlpatterns = [
+    path(
+        "<int:draft_id>/ai-visual/<int:selection_version>/package.json",
+        hosted_ad_views.package,
+        name="hosted_ad_package",
+    ),
     path("<int:draft_id>/ai-visual/", hosted_ad_views.choose, name="hosted_ad_choose"),
     path(
         "<int:draft_id>/ai-visual/<int:selection_version>/preview/",

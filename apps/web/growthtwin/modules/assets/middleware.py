@@ -25,7 +25,7 @@ _TRIAL_PATH = re.compile(
     r"\A/workspace/brands/ai-trial/(?:generate/|image/(?:generate/|content/|download/)?|drafts/(?:create/|[0-9a-f-]{36}/(?:save/|image/|revisions/[0-9]+/package\.json)?)?)?\Z"
 )
 _AI_VISUAL_PATH = re.compile(
-    r"\A/workspace/campaigns/[0-9]+/ai-visual/(?:[0-9]+/(?:preview|image)/)?\Z"
+    r"\A/workspace/campaigns/[0-9]+/ai-visual/(?:[0-9]+/(?:(?:preview|image)/|package\.json))?\Z"
 )
 
 
