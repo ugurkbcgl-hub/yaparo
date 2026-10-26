@@ -249,3 +249,5 @@ h2 { font-size: 1.35rem; letter-spacing: -.025em; }
 .brand-copy-options{display:grid;gap:1rem;margin-block:1.25rem}
 
 .brand-copy-options button:disabled{background:#e2e6e0;color:#555e57;border:1px solid #c0c9c0;cursor:not-allowed}
+
+.hosted-trial-image { display: block; max-width: 100%; height: auto; margin-inline: auto; }

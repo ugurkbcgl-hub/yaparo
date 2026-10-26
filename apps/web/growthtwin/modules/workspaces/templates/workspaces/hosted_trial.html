@@ -5,6 +5,7 @@
 <a class="back-link" href="{% url 'brands:list' %}">← Markalarıma dön</a>
 <h1>Gerçek AI üretimi</h1>
 <p class="lead">Duru Studio için reklam metinleri</p>
+{% if image_trial_enabled %}<p><a class="button button-secondary" href="{% url 'brands:hosted_image_trial' %}">AI görsel üretimini aç</a></p>{% endif %}
 <p>Bu denemede gerçek bir AI hizmeti kullanılır. Yalnız aşağıdaki kurgusal marka bilgileri gönderilir; hesabındaki diğer marka, tasarım ve kampanyalar kullanılmaz.</p>
 <section class="summary-card"><h2>Üretim özeti</h2><ul>{% for fact in facts %}<li>{{ fact }}</li>{% endfor %}</ul><p>Hedef: koleksiyonu keşfetmeye çağıran kısa Türkçe reklam metinleri. Fiyat, indirim, stok, teslim süresi veya sonuç garantisi verilmez.</p></section>
 {% if variants %}

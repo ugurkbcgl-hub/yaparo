@@ -2,6 +2,7 @@
 
 import os
 
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import transaction
@@ -34,6 +35,7 @@ def preview(request):
             "job": job,
             "variants": variants,
             "facts": FACTS,
+            "image_trial_enabled": settings.LOCAL_HOSTED_IMAGE_TRIAL_ENABLED,
             "can_generate": job is None
             and bool(os.environ.get("OPENROUTER_API_KEY"))
             and os.environ.get("GROWTHTWIN_AI_EVAL_HARD_LIMIT_CONFIRMED") == "1",

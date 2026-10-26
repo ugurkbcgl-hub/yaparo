@@ -1,0 +1,17 @@
+{% extends 'campaigns/base.html' %}
+{% block title %}AI görsel üretimi{% endblock %}
+{% block scripts %}{% endblock %}
+{% block content %}<div class="narrow-column">
+<a class="back-link" href="{% url 'brands:hosted_trial' %}">← AI metinlerine dön</a>
+<h1>AI görsel üretimi</h1><p class="lead">Duru Studio için ilk görsel</p>
+<section class="summary-card"><h2>Ne üretilecek?</h2><p>Kurgusal Duru Studio için mat zeytin yeşili ve kum beji iki el yapımı seramik kupa. Sade bir masa, doğal yan ışık ve üst bölümde yazı eklemeye uygun boşluk. Dikey kompozisyon; görselin içinde yazı, logo, insan veya indirim etiketi olmayacak.</p><p>Yalnız bu sabit kurgusal bilgiler kullanılır. Hesabındaki marka bilgileri, belgeler ve fotoğraflar gönderilmez.</p></section>
+{% if job.status == 'completed' %}
+<p class="notice">Gerçek AI görseli kaydedildi. Bu sayfayı açmak veya indirmek yeniden üretim ve ücret oluşturmaz.</p>
+<figure class="summary-card"><img src="{% url 'brands:hosted_image_content' %}" alt="Duru Studio için AI ile üretilen kurgusal seramik kupa görseli" width="{{ job.width }}" height="{{ job.height }}" class="hosted-trial-image"><figcaption>Üretilen boyut: {{ job.width }} × {{ job.height }} piksel. Görseldeki kupalar kurgusaldır; gerçek bir ürünün birebir fotoğrafı değildir.</figcaption></figure>
+<p><a class="button button-primary" href="{% url 'brands:hosted_image_download' %}">Görseli indir</a></p>
+<details class="summary-card"><summary>Görsel ve maliyet bilgileri</summary><p>İstenen model: {{ job.model }}</p><p>İstenen sağlayıcı rotası: {{ job.provider }}</p><p>Gerçek maliyet: {{ job.actual_usd }} USD</p><p>Kaydedildi: {{ job.completed_at }}</p><p>Özgün dosya ve gösterilen PNG ayrı ölçüm ve doğrulama kayıtlarıyla korunur. Görsel hesabına özel sunulur.</p><p>Bu deneme tasarımına otomatik uygulanmaz ve reklam yayımlamaz.</p></details>
+{% elif job %}<section class="notice"><h2>Görsel henüz doğrulanmadı</h2><p>Bu denemeye ait iş kaydı var. İkinci çağrı veya otomatik yeniden deneme yapılmayacak. Yanıt ve maliyet doğrulanmadan yeni üretim açılmaz.</p>{% if job.actual_usd != None %}<p>Kaydedilen yanıt maliyeti: {{ job.actual_usd }} USD</p>{% endif %}</section><a href="{% url 'brands:hosted_image_trial' %}">Kaydedilen durumu kontrol et</a>
+{% elif can_generate %}<section class="summary-card"><h2>İlk görselini üret</h2><p>Tek çağrı için üst sınır 0,10 USD. Kullanılan gerçek tutar kaydedilir. Bu çalışma alanında bu deneme bir kez başlatılır; çift tıklama ikinci çağrı yapmaz. Üretimin tamamlanması biraz zaman alabilir.</p><form method="post" action="{% url 'brands:hosted_image_generate' %}">{% csrf_token %}<button class="button button-primary" type="submit" name="confirm" value="fixed-duru-image">AI görseli üret</button></form></section>
+{% else %}<p class="notice">Görsel hizmeti ve harcama sınırı doğrulanınca bu deneme açılacak.</p>{% endif %}
+<p>Bu görsel ayrı bir kurgusal denemedir; kayıtlı marka kimliğini veya kampanya tasarımını değiştirmez.</p>
+</div>{% endblock %}
