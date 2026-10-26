@@ -19,6 +19,7 @@ from django.views.decorators.http import (
 from growthtwin.modules.workspaces.hosted_ad_views import _closed
 
 from . import brand_ad_selection as service
+from . import brand_settings
 from .hosted_ad_views import ChoiceForm
 
 
@@ -118,6 +119,7 @@ def choose(request, draft_id):
             }
             for ad in service.options(owner=request.user, campaign_id=plan.pk)
         ]
+        setup_context = brand_settings.context(request.user, plan.pk)
     except (PermissionDenied, ObjectDoesNotExist) as error:
         raise Http404 from error
     except Exception:
@@ -131,6 +133,7 @@ def choose(request, draft_id):
             "snapshot": snapshot,
             "rows": rows,
             "selection_error": status == 409,
+            **setup_context,
         },
         status=status,
     )

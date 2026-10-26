@@ -53,7 +53,10 @@ selected identity-pinned editable creative with saved-only PNG and revision guar
 Actual revision2/export passed with old sources/ledger unchanged, USD0 new AI cost.
 ADR0070 adds explicit brand-bound new campaign plans and saved-revision choice/
 readonly in-site preview. Old campaigns stay unbound, old choices stay separate.
-Next: owned site setup for objective/audience/budget/schedule; spend/publish closed.
+ADR0071 adds owned versioned goal/audience/region/budget/date planning and consistent
+in-site summary. Actual plan1/readback passed; operational fields/choice/ledger
+unchanged, no spend/scheduler action. Next: destination and channel/creative
+compatibility/readiness gaps; spend/publish remain closed.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)

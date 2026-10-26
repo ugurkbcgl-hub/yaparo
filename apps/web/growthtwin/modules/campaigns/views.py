@@ -15,6 +15,7 @@ from django.utils.formats import number_format
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET, require_POST, require_safe
 
+from growthtwin.modules.campaigns import brand_settings
 from growthtwin.modules.campaigns.brand_ad_views import (
     reference_context as brand_ad_context,
 )
@@ -77,14 +78,39 @@ def _workspaces_for_user(user):
     return workspaces
 
 
-def _draft_rows(drafts):
-    return [
-        {
+def _draft_rows(drafts, owner):
+    rows = []
+    for draft in drafts:
+        row = {
             "draft": draft,
             "budget_display": _format_budget(draft.media_budget_minor),
         }
-        for draft in drafts
-    ]
+        if draft.brand_id is not None:
+            row.update(
+                brand_plan=True,
+                meta_display="Plan ayarları henüz kaydedilmedi",
+                budget_display="Plan bütçesi henüz belirlenmedi",
+            )
+            try:
+                context = brand_settings.context(owner, draft.pk)
+                saved = context.get("saved_plan")
+                if saved:
+                    row.update(
+                        meta_display=saved["goal"] + " · " + saved["region"],
+                        budget_display=saved["budget"] + " toplam medya bütçesi planı",
+                    )
+                elif not context["campaign_setup_enabled"]:
+                    row.update(
+                        meta_display="Plan ayarları bu oturumda kapalı",
+                        budget_display="Plan bilgisi kullanılamıyor",
+                    )
+            except Exception:
+                row.update(
+                    meta_display="Kaydedilmiş plan doğrulanamadı",
+                    budget_display="Plan bilgisi kullanılamıyor",
+                )
+        rows.append(row)
+    return rows
 
 
 def _format_budget(minor_units, currency="TRY"):
@@ -111,7 +137,7 @@ def campaign_list(request):
         request,
         "campaigns/list.html",
         {
-            "draft_rows": _draft_rows(drafts),
+            "draft_rows": _draft_rows(drafts, request.user),
             "synthetic_only": True,
             "closure_ui_enabled": settings.SYNTHETIC_CLOSURE_UI_ENABLED,
         },
@@ -291,6 +317,8 @@ def campaign_detail(request, draft_id):
         ),
         pk=draft_id,
     )
+    if draft.brand_id is not None:
+        return redirect("campaigns:brand_ad_choose", draft_id=draft.pk)
     return _campaign_detail_response(request, draft)
 
 
@@ -305,6 +333,8 @@ def campaign_journey_overview(request, draft_id):
         .select_related("workspace"),
         pk=draft_id,
     )
+    if draft.brand_id is not None:
+        return redirect("campaigns:brand_ad_choose", draft_id=draft.pk)
     return render(
         request,
         "campaigns/journey.html",

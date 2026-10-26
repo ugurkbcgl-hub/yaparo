@@ -25,13 +25,13 @@
       <div class="campaign-list">
         {% for row in draft_rows %}
           <div>
-          <a class="campaign-card" href="{% url 'campaigns:detail' row.draft.pk %}">
-            <span class="status-tag">Taslak · {{ row.draft.channel }}</span>
+          <a class="campaign-card{% if row.brand_plan %} brand-plan-card{% endif %}" href="{% url 'campaigns:detail' row.draft.pk %}">
+            <span class="status-tag">{% if row.brand_plan %}Site içi kampanya planı{% else %}Taslak · {{ row.draft.channel }}{% endif %}</span>
             <h3>{{ row.draft.name }}</h3>
-            <p>{{ row.draft.brand_name }} · {{ row.draft.target_city }}</p>
-            <p>{{ row.budget_display }} toplam medya bütçesi</p>
+            <p>{% if row.brand_plan %}{{ row.meta_display }}{% else %}{{ row.draft.brand_name }} · {{ row.draft.target_city }}{% endif %}</p>
+            <p>{{ row.budget_display }}{% if not row.brand_plan %} toplam medya bütçesi{% endif %}</p>
           </a>
-          <a class="journey-card-link" href="{% url 'campaigns:journey' row.draft.pk %}">{{ row.draft.name }} · Adımları gör →</a>
+          {% if row.brand_plan %}<a class="journey-card-link" href="{% url 'campaigns:brand_setup' row.draft.pk %}">{{ row.draft.name }} · Plan ayarları →</a>{% else %}<a class="journey-card-link" href="{% url 'campaigns:journey' row.draft.pk %}">{{ row.draft.name }} · Adımları gör →</a>{% endif %}
           </div>
         {% endfor %}
       </div>

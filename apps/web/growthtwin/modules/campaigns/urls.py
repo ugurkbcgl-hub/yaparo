@@ -5,6 +5,7 @@ from django.urls import path
 from growthtwin.modules.campaigns import (
     brand_ad_views,
     brand_copy_views,
+    brand_settings_views,
     design_views,
     hosted_ad_views,
     preview_views,
@@ -14,6 +15,7 @@ from growthtwin.modules.campaigns import (
 app_name = "campaigns"
 
 urlpatterns = [
+    path("<int:draft_id>/brand-setup/", brand_settings_views.setup, name="brand_setup"),
     path(
         "<int:draft_id>/brand-creative/", brand_ad_views.choose, name="brand_ad_choose"
     ),

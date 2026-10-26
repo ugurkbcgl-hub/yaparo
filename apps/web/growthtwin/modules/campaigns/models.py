@@ -1,5 +1,6 @@
 """Synthetic, workspace-owned campaign drafts."""
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -231,6 +232,43 @@ class CampaignBrandAdChoice(models.Model):
 
     def delete(self, *args, **kwargs):
         raise ValidationError("Marka reklam seçimi geçmişi silinemez.")
+
+
+class CampaignPlanRevision(models.Model):
+    """Append-only local planning parameters; never an operational instruction."""
+
+    campaign = models.ForeignKey(
+        WorkspaceCampaignDraft,
+        on_delete=models.PROTECT,
+        related_name="planning_revisions",
+    )
+    version = models.PositiveIntegerField()
+    request_id = models.UUIDField(unique=True, editable=False)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    payload = models.JSONField()
+    fingerprint = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = CampaignDesignChoiceQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("-version",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("campaign", "version"), name="campaign_plan_version_unique"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(version__gte=1),
+                name="campaign_plan_version_positive",
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Plan geçmişi değiştirilemez.")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Plan geçmişi tek başına silinemez.")
 
 
 class CampaignRehearsal(models.Model):
