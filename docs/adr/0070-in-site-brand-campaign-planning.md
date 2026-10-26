@@ -23,6 +23,10 @@ campaign/choice without changing later selections; stale new starts refuse.
 Selection requires same owned active brand AND workspace, current saved revision,
 source fingerprint and expected selection version. Exact replay validates the
 original context. Append-only history is an application contract, not SQL vault.
+The new choice protects its parent campaign from deletion as well as its source
+revision, retaining the creation nonce. Existing unbound campaign deletion remains
+unchanged. Protected-delete409 text is generic rather than claiming Google approval.
+Applied campaigns0011 is not rewritten: forward0012 changes this deletion policy.
 
 Existing-campaign select/read locks campaign SELF first, then the established
 brand/workspace→source document→ordered attempts→ad graph. New creation holds
@@ -52,7 +56,8 @@ historical preview→edit→explicit reselection, stale URL refusal, dirty-edito
 button and mobile overflow. Four PostgreSQL races cover simultaneous starts,
 competing choices, selection/edit consistency and creation replay versus legacy
 campaign/workspace locks. Required latest-head CI must pass before merge.
-Provider/budget spies remain untouched. Independent source review found no source,
+Protected ORM/HTTP deletion and subsequent replay retain exactly one campaign;
+unbound legacy deletion is tested separately. Provider/budget spies remain untouched. Independent source review found no source,
 tenant or lock blocker; its dirty-editor finding was fixed and tested.
 
 Actual SAME private DB received only forward campaigns0011 after backup
@@ -66,6 +71,9 @@ Independent browser desktop/mobile verified readonly saved content and no visibl
 download;39 prior application tables' old rows preserved and local ledger unchanged.
 Private evidence brand-campaign-live-evidence.json, brand-campaign-iab.png and
 brand-campaign-{1440,390}.png. No new AI/media cost, key or production deployment.
+Forward0012 subsequently preserved every row/table after consistent backup
+preview-before-brand-campaign-protect-20261026T214643Z.sqlite3; only its migration
+recorder row was added. Protected candidate/key/ledger remained untouched.
 
 Next: replace fixed synthetic campaign parameters with an owned in-site setup for
 objective, audience, budget and schedule, while keeping publishing/spend gates

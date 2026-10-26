@@ -8,6 +8,7 @@ from uuid import uuid4
 
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.db import close_old_connections, transaction
+from django.db.models.deletion import ProtectedError
 from django.test import (
     Client,
     TransactionTestCase,
@@ -65,6 +66,34 @@ class BrandCampaignFixture(BrandAdFixture):
 
 
 class BrandCampaignTests(BrandCampaignFixture, TransactionTestCase):
+    def test_campaign_delete_preserves_creation_history_and_replay_guard(self):
+        choice = self.begin()
+        with self.assertRaises(ProtectedError):
+            choice.campaign.delete()
+        self.client.force_login(self.owner)
+        response = self.client.post(
+            reverse("campaigns:delete", args=[choice.campaign_id]),
+            {"confirm_delete": "on"},
+        )
+        self.assertEqual(response.status_code, 409)
+        self.assertNotIn("Google test onayı", response.content.decode())
+        self.assertEqual(self.begin().pk, choice.pk)
+        self.assertEqual(WorkspaceCampaignDraft.objects.count(), 1)
+        legacy = WorkspaceCampaignDraft.objects.create(
+            workspace=self.workspace,
+            name="Bağsız eski örnek",
+            brief="Sentetik",
+            target_city="Ankara",
+            media_budget_minor=500000,
+        )
+        self.assertEqual(
+            self.client.post(
+                reverse("campaigns:delete", args=[legacy.pk]), {"confirm_delete": "on"}
+            ).status_code,
+            302,
+        )
+        self.assertEqual(WorkspaceCampaignDraft.objects.count(), 1)
+
     def test_start_replay_legacy_null_and_selected_revision_stays_pinned(self):
         legacy = WorkspaceCampaignDraft.objects.create(
             workspace=self.workspace,

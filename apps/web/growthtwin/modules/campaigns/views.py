@@ -535,7 +535,7 @@ def campaign_delete(request, draft_id):
         draft.delete()
     except ProtectedError:
         return HttpResponse(
-            "Bu taslağın kayıtlı Google test onayı var. İşlem geçmişini korumak için silinmedi.",
+            "Bu taslağın korunması gereken işlem veya seçim geçmişi var. Geçmişi korumak için silinmedi.",
             status=409,
         )
     return redirect("campaigns:list")

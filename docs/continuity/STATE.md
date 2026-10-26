@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 00:43 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 00:47 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -32,12 +32,13 @@ SELF→brand/workspace→source→attempt→ad. Creation replay never locks an e
 campaign under brand lock. Old choices stay separate; old selection paths admit
 only unbound campaigns. Historical selected content survives later draft edits;
 reselection invalidates old selection URLs. Private CSRF/body/method guards.
-Campaign start waits for checked image and fields matching saved content, using
+New choice protects its parent campaign/source revision: deletion409 retains
+create nonce; old unbound deletion remains available. Campaign start waits for checked image and fields matching saved content, using
 can_use_saved independently of export. New campaign preview is readonly with NO
 visible download/package action. Existing prototype exports are undecided.
 New campaign's Ankara/5000 TRY are fixed EXAMPLE planning values, not targeting or
 spend consent; empty destination/no flight. No provider, publish, media or AI cost.
-Final9 focused tests5 pass/4 PG-only skips; prior39 expanded new/legacy/backend/
+Final10 focused tests6 pass/4 PG-only skips; prior39 expanded new/legacy/backend/
 browser checks29 pass/10 PG-only skips. Four new PG races require CI. Ruff/drift
 passed; independent final source re-review no blocker after dirty-editor fix.
 Actual normal IAB created campaign3/choice1 from brand1 ad
@@ -102,7 +103,10 @@ Independent source re-review found no blocker. This is smoke, not quality benchm
 ## Same private preview — preserve it
 
 %TEMP%\yaparo-public-preview-q2ql3pkq / preview.sqlite3 / loopback8002.
-Schema workspaces0012 / campaigns0011. Forward campaigns0011 backup:
+Schema workspaces0012 / campaigns0012. Forward campaigns0012 backup:
+preview-before-brand-campaign-protect-20261026T214643Z.sqlite3; all current tables/
+rows intact, only migration recorder1 added. Never rerun completed upgrades.
+Previous forward campaigns0011 backup:
 preview-before-brand-campaign-20261026T180122Z.sqlite3; previous rows/columns
 preserved, old campaigns' new brand FKs allNULL at upgrade, new choice table empty.
 Standard migration+1 type+4 permissions only; never rerun this completed upgrade.

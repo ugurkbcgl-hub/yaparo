@@ -190,7 +190,7 @@ class CampaignBrandAdChoice(models.Model):
 
     campaign = models.ForeignKey(
         WorkspaceCampaignDraft,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="brand_ad_choices",
     )
     revision = models.ForeignKey(
