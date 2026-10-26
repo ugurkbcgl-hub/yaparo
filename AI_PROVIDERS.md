@@ -600,8 +600,20 @@ as its pinned provider and no fallback. No additional paid call was made by the
 tests. These two examples are smoke evidence, not a quality benchmark or a model
 promotion. See [actual samples, review and limitations](docs/product/live-brand-ai-sample.md).
 
-**Next:** implement a distinct owner-scoped hosted-result trial preview with
-source/provider/cost provenance, followed by explicit generation/job controls.
+### One-shot local website text trial — 2026-10-26
+
+ADR0060 adds a separate default-off, single-workspace local web trial over the
+same fixed fictional Duru request. An actual browser click returned3 candidates
+through GPT-6 Luna/Azure (486 input/455 output tokens), USD0.00027610. Result and
+cost are persisted in the existing private preview DB before settlement; refresh
+and repeated POST did not create another call or charge. Cumulative local spent
+is USD0.16161155, historical unresolved hold USD0.00078075 unchanged. Fresh key cap
+USD16/no reset and eligible priced Azure ZDR routing were rechecked. Account
+balance/credit usage was not inspected. No customer text/files or editable brand
+metadata is sent, and no campaign is changed. See [ADR0060](docs/adr/0060-one-shot-local-hosted-text-trial.md).
+
+**Next:** add a separate one-shot owned image trial over the same fixed fictional
+brief, including bounded durable bytes and true source/provider/cost provenance.
 Do not label hosted output as the offline synthetic-template profile. Preserve
 the unresolved hold, text USD0.01/image USD0.10 bounds and shared USD16 cap.
 Owner retains account balance checks. No real user data, OpenRouter video,

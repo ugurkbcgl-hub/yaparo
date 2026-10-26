@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 08:00 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 08:24 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,11 +16,11 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main74e15de (PR355 merged), required CI40270501727 and main CI40270939097
-succeeded. PR355 passed1039 Django tests (1035 pass/4 skips),27 browser checks.
-Branch codex/live-brand-generation; PR356 open, initial commit1e7e44b. Required
-CI40271930069 queued at snapshot; recheck the latest head/run before merging.
-Durable task: issue328. No migration/configured DB/protected TEST fixture change.
+Base main911f53c (PR356 merged), required CI40271981659 and main CI40272428978
+succeeded. Branch codex/hosted-text-trial; PR357 open, code commita81aebc, docs
+follow-up pending. Required CI must be checked on the latest head before merge.
+Durable task: issue328. One additive workspaces0006 migration; configured DB and
+protected TEST fixture untouched. Known private preview migration verified below.
 
 - Owner explicitly requested real AI generation. One actual GPT-6 Luna call through
   Azure returned3 Turkish Duru Studio candidates (486 input/440 output tokens),
@@ -30,19 +30,27 @@ Durable task: issue328. No migration/configured DB/protected TEST fixture change
 - Captures/private image are under %LOCALAPPDATA%\GrowthTwin\evaluations:
   brand-text-20261026T045335-0f83360e.jsonl;
   brand-image-20261026T045722-5bdfe523.jsonl and matching.jpg. Both settled.
-  Local ledger spent USD0.16133545; unresolved historical hold USD0.00078075
-  preserved. Key USD16/no-reset cap verified; no account balance/credit usage read.
+  These prior operator samples total USD0.0338936. See new website call below.
 - Fresh public endpoint/ZDR catalog and terms checked. New operator sample runner
   makes one fixed text OR image call, no retry, private fsynced results before
   settlement. Images request ZDR/data-collection denial/no fallback. Whole-repo
   output exclusion corrected; failures distinguish held/already-settled costs.
--14 focused no-network checks passed; Ruff/format/diff passed; independent review
-  completed with fixes. Required PR CI pending. See docs/product/live-brand-ai-sample.md.
-  One sample is not a benchmark, product-fidelity proof or production promotion.
-- Existing offline task/copy-apply profile remains separate. ADR0059 guarded apply
-  writes a saved revision and preserves campaign selection/history. Private known
-  launcher has copy preview/apply enabled; source defaults remain off. Website
-  Generate buttons have NOT been connected to these hosted services.
+- ADR0060 now adds a distinct default-off one-shot local website text trial. One
+  admitted workspace, fixed Duru facts only, no client/DB brand metadata sent.
+  Committed unique intent before reserve/call; ambient transactions refused.
+  Persist true model/provider/source/candidates/usage/cost before settlement.
+  Reservation/settlement ambiguity is unknown; any existing intent blocks retry.
+  No delete/reset, background worker, campaign apply or publishing endpoint.
+- Actual browser normal test login + generation succeeded: job1,3 variants,
+  GPT-6 Luna/Azure,486 input/455 output tokens, USD0.00027610. Reload and explicit
+  same POST preserved one job and unchanged spend/hold. Local spent USD0.16161155;
+  historical unresolved USD0.00078075 hold unchanged. Fresh key cap USD16/no reset
+  and priced Azure ZDR route checked; no account balance/credit usage inspected.
+-222 related local checks (216 pass/6 PG-only skips) before final ambiguity test;
+  final trial suite13 (12 pass/1 PG skip), mocked browser passed; real screenshots
+  reviewed. Ruff/format/migration drift/diff passed. Independent review fixes done;
+  required CI/actual PG concurrent-click test pending. See ADR0060. No quality or
+  production promotion. Existing offline template profile remains separate.
 
 ## Established local capabilities and limits
 
@@ -69,7 +77,17 @@ history stays separate. Current v4 browser checks preserve both mechanisms.
 
 Private root: %TEMP%\yaparo-public-preview-q2ql3pkq, DB preview.sqlite3.
 workspaces0005 and now campaigns0009 applied only here after private backups.
-The latest backup is preview-before-campaign-design.sqlite3 in that private root.
+The latest backup is preview-before-hosted-trial-20261026T051858Z.sqlite3 there.
+workspaces0006 applied only here: all previous rows compared unchanged; only the
+trial table, one migration/content type and four permissions added. Integrity OK.
+The real test then created trial1 for existing disposable test owner/workspace1;
+test password was reset only in memory for normal browser QA, never retained.
+Private launcher backup: serve_design_preview.before-hosted-trial.py. Current
+launcher admits LOCAL_HOSTED_TEXT_TRIAL_ENABLED for workspace1 and receives the
+existing protected key only in process memory. Source defaults stay False/None.
+Known loopback server PID3676 at snapshot; reverify exact process before restart.
+Real UI evidence: live-hosted-ui-evidence.json and live-hosted-text-{desktop,mobile}.png
+inside this private root. No automatic provider call occurs on server start/GET.
 First strict inventory check stopped on Django's expected post_migrate additions;
 no retry/reset occurred. Read-only comparison then verified ALL existing rows
 match backup exactly, with only one migration, one content type and four standard
@@ -112,8 +130,9 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Add a distinct owner-scoped hosted-result trial preview with true source/provider/
-cost provenance, then explicit generation/durable-job controls. Do not label these
-hosted results as offline synthetic-template output. Recheck mutable provider
-conditions before another paid batch; preserve historical hold. No customer data/
-publishing/new infrastructure; owner handles account balance checks.
+Add a separate one-shot owned image trial using the same fixed fictional Duru
+brief, bounded durable image bytes/source/hash/cost and private readback. Recheck
+provider conditions before any paid call. Never retry/reset existing text job1 or
+the historical unresolved hold, or label hosted output as offline templates.
+General brand binding/jobs/customer data/publishing remain later gates. Owner
+handles account balance checks; no new infrastructure.

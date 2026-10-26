@@ -21,9 +21,11 @@ remain open. See ADR-0042 and ADR-0043; this is a local synthetic slice.
 three Turkish fictional-brand copy candidates and one decoded/reviewed JPEG,
 USD0.0338936 total. Existing local ledger settled both; historical unresolved hold
 preserved. See [actual evidence](docs/product/live-brand-ai-sample.md). Next Y10
-slice: separate owner-scoped hosted-result trial preview with real provenance,
-then explicit generation/durable jobs. No hosted website button, production model
-qualification, customer data, publishing or deployment claimed.
+slice now implemented in ADR0060: an admitted local owner can explicitly request
+one fixed-source real text call through the website, with a committed unique intent,
+actual provenance/cost and no retry. Real browser call USD0.00027610,3 candidates;
+reload/repeat did not charge again. No production model qualification, customer
+data, publishing or deployment claimed. Next: one-shot owned image trial.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)
@@ -77,9 +79,12 @@ ADR-0057 adds shared strict JSON and ambiguity regressions across existing adapt
 **Current local Y11 slice:** ADR-0058 adds read-only brand-bound template candidate
 preview, default off. **Current:** ADR-0059 adds separate explicit stale-safe title/
 subtitle application as a saved revision, no truncation or campaign reselection.
-**Next:** source-grounded synthetic text evaluation preparation through the existing
-gateway. Hosted quality/execution and full Y09/Y13 accounting gates remain open;
-Y11 is not complete.
+**Current:** ADR0060 adds a separate, default-off one-shot fixed-fictional-source
+hosted text trial. It persists a unique paid intent and true result/cost, but is
+not a general queued/resumable job system or editable-brand generation profile.
+**Next:** one-shot owned image trial with bounded durable bytes/source/cost and
+readback. Hosted quality and full Y09/Y13 accounting gates remain open; Y11 is not
+complete.
 Customer gates remain open.
 Y05 is not complete.
 
