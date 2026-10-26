@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 10:04 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 10:23 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,10 +16,23 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base mainf9eaa6f (PR358 merged), required CI40278601392 and main CI40279275828
-succeeded. Branch codex/hosted-ad-draft; PR359 open at snapshot, code0ee86ad.
-Recheck required CI on latest head before merge. Durable task issue328.
-One additive workspaces0008 migration; configured DB/protected TEST untouched.
+Base main6bd216f (PR359 merged); required CI40283604347 passed1091 Django tests
+(4 skips) and31 browser tests. Branch codex/hosted-ad-formats; PR360 open at snapshot, code483a77e.
+Recheck latest-head required CI before merge. Main CI40284342258 also passed. Durable task issue328. Forward0009 replaces draft uniqueness with
+source/candidate/profile; it does not rewrite existing draft/history rows.
+
+- ADR0063 adds square1080×1080 and portrait1080×1350 profiles. Exact immutable
+  geometry in source manifest, separate UUID/history/replay for each format, full
+  proportional image fit with side space, no crop. Original overlay/alpha preserved.
+  Profile tamper/save-format changes refuse.19 focused tests:17 pass/2 PG skips;
+  browser exact-size/fit/mobile/alpha checks pass; independent review no blockers.
+  Full latest-head CI pending. No provider or ledger calls or new AI cost.
+  Same private DB forward0009 backup:preview-before-ad-formats-20261026T072051Z.sqlite3;
+  all old rows preserved. Source records/historical hold untouched. Browser normal
+  test login created square0bb917d8-d03b-4be6-9808-b2ed66cd9d82 and
+  portrait84e039da-c124-48f7-b811-a309d2360b01. ad-formats-evidence.json verifies
+  37 prior non-auth tables/rows preserved; only two drafts/history snapshots added. Do not reverse0009
+  automatically after multiple formats; old uniqueness can conflict (ADR0063).
 
 - ADR0062 adds an independent HostedAdDraft over completed text/image jobs, not a
   BrandCreativeDocument, palette fixture or inferred BrandIdentity. Explicit choice,
@@ -71,7 +84,7 @@ history stays separate. Current v4 browser checks preserve both mechanisms.
 ## Same disposable local preview
 
 Private root: %TEMP%\yaparo-public-preview-q2ql3pkq, DB preview.sqlite3.
-Current private schema: workspaces0008/campaigns0009. Before0008:
+Current private schema: workspaces0009/campaigns0009. Before0008:
 preview-before-hosted-ad-20261026T065103Z.sqlite3; all prior rows compared unchanged,
 only two draft/history tables, one migration, two content types/eight permissions
 added. After actual edit, preview-after-hosted-ad-20261026T065916Z.sqlite3 readback
@@ -129,9 +142,7 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Add a separate versioned layout profile with explicit square/portrait choices and
-exact-size PNG output over the same owned saved sources. Preserve this fixed overlay
-profile and existing draft/history; do not silently change old geometry or infer a
-brand binding. No provider call should be needed. Keep original paid jobs, historical
-hold and campaign choices unchanged. Customer data/publishing/general jobs remain
-later gates; owner handles account balance checks.
+Export a saved formatted HostedAdDraft as an owned package with exact PNG,
+profile/content revision and source manifest. Preserve existing source jobs and
+all original/profile-specific histories. No inferred brand/campaign selection or
+new provider call. General customer/publishing/storage readiness remains gated.

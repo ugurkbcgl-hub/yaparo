@@ -3,6 +3,7 @@
 import io
 import os
 import secrets
+from hashlib import sha256
 from pathlib import Path
 
 from django.test import LiveServerTestCase
@@ -10,6 +11,7 @@ from django.urls import reverse
 from PIL import Image
 from playwright.sync_api import expect, sync_playwright
 
+from growthtwin.modules.assets.raster_validation import normalize_raster
 from growthtwin.modules.workspaces.models import (
     HostedAdDraft,
     HostedImageTrial,
@@ -38,12 +40,14 @@ class HostedAdBrowserTests(SavedTrialsFixture, LiveServerTestCase):
                 page = context.new_page()
                 self.login(page, reverse("brands:hosted_image_trial"), password)
                 page.get_by_role("link", name="Metinle birleştir ve düzenle").click()
-                card = page.locator("section.summary-card").filter(
+                card = page.locator(".narrow-column > section.summary-card").filter(
                     has=page.get_by_role("heading", name="El yapımı seramik kupalar")
                 )
-                candidate = card.locator("input[name=candidate]").input_value()
-                source = card.locator("input[name=source]").input_value()
-                card.get_by_role("button", name="Bu metinle taslak oluştur").click()
+                candidate = card.locator("input[name=candidate]").first.input_value()
+                source = card.locator("input[name=source]").first.input_value()
+                card.get_by_role(
+                    "button", name="Bu ölçüyle oluştur — Özgün dikey · 768 × 1376"
+                ).click()
                 editor_url = page.url
                 expect(
                     page.get_by_role("button", name="Kayıtlı taslağı PNG indir")
@@ -158,3 +162,107 @@ class HostedAdBrowserTests(SavedTrialsFixture, LiveServerTestCase):
                 browser.close()
         draft.refresh_from_db()
         self.assertEqual(draft.revision, 1)
+
+    def test_explicit_square_and_portrait_export_keep_complete_photo(self):
+        legacy = self.create()
+        before = HostedAdDraft.objects.values().get(pk=legacy.pk)
+        password = secrets.token_urlsafe(32)
+        self.owner.set_password(password)
+        self.owner.save(update_fields=["password"])
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                page = browser.new_page()
+                self.login(page, reverse("brands:hosted_ad_choices"), password)
+                for label, height in (
+                    ("Kare · 1080 × 1080", 1080),
+                    ("Dikey · 1080 × 1350", 1350),
+                ):
+                    page.goto(
+                        self.live_server_url + reverse("brands:hosted_ad_choices")
+                    )
+                    card = page.locator(".narrow-column > section.summary-card").filter(
+                        has=page.get_by_role(
+                            "heading", name="El yapımı seramik kupalar"
+                        )
+                    )
+                    card.get_by_role(
+                        "button", name="Bu ölçüyle oluştur — " + label
+                    ).click()
+                    url = page.url
+                    expect(
+                        page.get_by_text(label + " · Kayıt", exact=False)
+                    ).to_be_visible()
+                    expect(page.locator("#ad-export")).to_be_enabled()
+                    page.get_by_label("Başlık").fill("Bu ölçü için reklam")
+                    page.locator("#ad-save").click()
+                    expect(page.locator("#ad-revision")).to_have_text("2")
+                    expect(page.locator("#ad-export")).to_be_enabled()
+                    with page.expect_download() as event:
+                        page.locator("#ad-export").click()
+                    png = Path(event.value.path()).read_bytes()
+                    with Image.open(io.BytesIO(png)) as image:
+                        self.assertEqual(image.size, (1080, height))
+                        # Entire portrait is fitted, with side space, not stretched/cropped.
+                        self.assertEqual(
+                            image.getpixel((540, height - 10))[:3], (36, 76, 59)
+                        )
+                        self.assertEqual(
+                            image.getpixel((10, height - 10))[:3], (245, 237, 223)
+                        )
+                        self.assertEqual(
+                            image.getpixel((540, height - 450))[:3], (232, 223, 204)
+                        )
+                    page.reload()
+                    expect(page.get_by_label("Başlık")).to_have_value(
+                        "Bu ölçü için reklam"
+                    )
+                    page.set_viewport_size({"width": 390, "height": 900})
+                    self.assertFalse(
+                        page.evaluate(
+                            "document.documentElement.scrollWidth > innerWidth"
+                        )
+                    )
+                    self.assertEqual(page.url, url)
+            finally:
+                browser.close()
+        self.assertEqual(HostedAdDraft.objects.values().get(pk=legacy.pk), before)
+        self.assertEqual(HostedAdDraft.objects.count(), 3)
+
+    def test_legacy_overlay_preserves_source_alpha_pixels(self):
+        with Image.open(io.BytesIO(bytes(self.image.png))) as source:
+            rgba = source.convert("RGBA")
+            rgba.putpixel((10, 1200), (200, 100, 50, 0))
+            rgba.putpixel((11, 1200), (100, 80, 60, 128))
+            stream = io.BytesIO()
+            rgba.save(stream, format="PNG")
+        original = stream.getvalue()
+        normalized = normalize_raster(original, declared_media_type="image/png")
+        HostedImageTrial.objects.filter(pk=self.image.pk).update(
+            original=original,
+            png=normalized.png,
+            original_sha256=sha256(original).hexdigest(),
+            png_sha256=normalized.derivative_sha256,
+            normalization_tool=normalized.tool,
+        )
+        draft = self.create()
+        password = secrets.token_urlsafe(32)
+        self.owner.set_password(password)
+        self.owner.save(update_fields=["password"])
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                page = browser.new_page()
+                self.login(
+                    page, reverse("brands:hosted_ad_editor", args=[draft.pk]), password
+                )
+                expect(page.locator("#ad-export")).to_be_enabled()
+                with page.expect_download() as event:
+                    page.locator("#ad-export").click()
+                with Image.open(event.value.path()) as exported:
+                    pixels = exported.convert("RGBA")
+                    self.assertEqual(pixels.getpixel((10, 1200))[3], 0)
+                    self.assertEqual(pixels.getpixel((11, 1200))[3], 128)
+                    self.assertEqual(pixels.getpixel((100, 1200)), (36, 76, 59, 255))
+            finally:
+                browser.close()

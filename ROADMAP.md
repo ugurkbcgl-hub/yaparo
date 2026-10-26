@@ -30,7 +30,9 @@ trial, actual768×1376 output/USD0.033625, durable original/PNG, private display
 exact download; refresh/replay do not charge again. ADR0062 adds a separate editable
 draft from saved text/image with source manifest, revision history, stale refusal
 and saved-only PNG. Actual revision2/export passed without another AI charge.
-Next: separate versioned square/portrait layout choice, preserving old drafts.
+ADR0063 adds separate square1080×1080/portrait1080×1350 drafts, immutable layout
+provenance and exact fitted-photo PNGs; original overlay/history are preserved.
+Next: owned saved formatted-draft export with source manifest and revision.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)

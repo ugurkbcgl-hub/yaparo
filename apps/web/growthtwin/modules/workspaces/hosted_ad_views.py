@@ -59,17 +59,29 @@ def choices(request):
         _, text, image, variants, _ = service.sources(request.user)
         rows = []
         for variant in variants:
-            *_, manifest, _ = service.sources(request.user, variant.key)
+            formats = []
+            for profile in service.LAYOUTS:
+                *_, manifest, _ = service.sources(
+                    request.user, variant.key, profile=profile
+                )
+                formats.append(
+                    {
+                        "profile": profile,
+                        "label": service.layout(profile)["label"],
+                        "source": digest(manifest),
+                        "draft": HostedAdDraft.objects.filter(
+                            owner=request.user,
+                            text_trial=text,
+                            image_trial=image,
+                            candidate_key=variant.key,
+                            profile=profile,
+                        ).first(),
+                    }
+                )
             rows.append(
                 {
                     "variant": asdict(variant),
-                    "source": digest(manifest),
-                    "draft": HostedAdDraft.objects.filter(
-                        owner=request.user,
-                        text_trial=text,
-                        image_trial=image,
-                        candidate_key=variant.key,
-                    ).first(),
+                    "formats": formats,
                 }
             )
     except (PermissionDenied, ObjectDoesNotExist) as error:
@@ -84,13 +96,14 @@ def choices(request):
 @require_POST
 @csrf_protect
 def create(request):
-    if not _closed(request.POST, {"candidate", "source"}):
+    if not _closed(request.POST, {"candidate", "source", "profile"}):
         return _error(request, 400)
     try:
         draft = service.create_draft(
             owner=request.user,
             candidate_key=request.POST.get("candidate"),
             expected_source=request.POST.get("source"),
+            profile=request.POST.get("profile", service.PROFILE),
         )
     except (PermissionDenied, ObjectDoesNotExist) as error:
         raise Http404 from error
@@ -108,6 +121,7 @@ def _editor(request, draft, form=None, *, status=200):
         }
     )
     image = draft.source_manifest["image"]
+    geometry = service.layout(draft.profile)
     response = render(
         request,
         "workspaces/hosted_ad_editor.html",
@@ -115,12 +129,16 @@ def _editor(request, draft, form=None, *, status=200):
             "draft": draft,
             "form": form,
             "failed_save": status != 200,
+            "layout_label": geometry["label"],
             "boot": {
                 "image_url": reverse(
                     "brands:hosted_ad_image", kwargs={"draft_id": draft.pk}
                 ),
-                "width": image["width"],
-                "height": image["height"],
+                "width": geometry["width"],
+                "height": geometry["height"],
+                "mode": geometry["mode"],
+                "source_width": image["width"],
+                "source_height": image["height"],
                 "sha256": image["png_sha256"],
                 "content": draft.content,
                 "revision": draft.revision,

@@ -198,6 +198,87 @@ class HostedAdDraftTests(SavedTrialsFixture, TransactionTestCase):
         self.assertEqual(draft.content["title"], "Yeni kayıt")
         self.assertEqual(draft.history.count(), 2)
 
+    def test_formats_have_separate_replay_history_and_immutable_manifests(self):
+        original = self.save(self.create(), title="Özgün kayıt")
+        before = HostedAdDraft.objects.values().get(pk=original.pk)
+        for profile in (service.SQUARE, service.PORTRAIT):
+            source = digest(service.sources(self.owner, "product", profile=profile)[-2])
+            response = self.post(
+                self.create_url,
+                {
+                    "candidate": "product",
+                    "source": source,
+                    "profile": profile,
+                },
+            )
+            self.assertEqual(response.status_code, 302)
+            draft = HostedAdDraft.objects.get(profile=profile)
+            self.assertNotEqual(draft.pk, original.pk)
+            self.assertEqual(draft.source_manifest["layout"], service.layout(profile))
+            draft = self.save(draft, title="Bu ölçüye özel")
+            replay = service.create_draft(
+                owner=self.owner,
+                candidate_key="product",
+                expected_source=source,
+                profile=profile,
+            )
+            self.assertEqual(replay.pk, draft.pk)
+            self.assertEqual(replay.content["title"], "Bu ölçüye özel")
+            self.assertEqual(replay.history.count(), 2)
+            page = self.client.get(reverse("brands:hosted_ad_editor", args=[draft.pk]))
+            self.assertEqual(page.context["boot"]["width"], 1080)
+            self.assertEqual(page.context["boot"]["source_width"], 768)
+            self.assertEqual(page.context["boot"]["mode"], "contain")
+        self.assertEqual(HostedAdDraft.objects.count(), 3)
+        self.assertEqual(HostedAdDraft.objects.values().get(pk=original.pk), before)
+        self.assertNotIn("layout", original.source_manifest)
+
+    def test_wrong_profile_source_and_geometry_tampering_refuse(self):
+        for profile in ("unknown", service.SQUARE):
+            with self.assertRaises(ValidationError):
+                service.create_draft(
+                    owner=self.owner,
+                    candidate_key="product",
+                    expected_source=self.source(),
+                    profile=profile,
+                )
+        self.assertFalse(HostedAdDraft.objects.exists())
+        source = digest(
+            service.sources(self.owner, "product", profile=service.SQUARE)[-2]
+        )
+        draft = service.create_draft(
+            owner=self.owner,
+            candidate_key="product",
+            expected_source=source,
+            profile=service.SQUARE,
+        )
+        manifest = {
+            **draft.source_manifest,
+            "layout": {**service.layout(service.SQUARE), "width": 1},
+        }
+        HostedAdDraft.objects.filter(pk=draft.pk).update(
+            source_manifest=manifest, source_fingerprint=digest(manifest)
+        )
+        with self.assertRaises(ValidationError):
+            service.checked_draft(self.owner, draft.pk)
+        self.assertEqual(draft.history.count(), 1)
+
+    def test_save_cannot_switch_format(self):
+        draft = self.create()
+        response = self.post(
+            reverse("brands:hosted_ad_save", args=[draft.pk]),
+            {
+                "revision": 1,
+                "source": draft.source_fingerprint,
+                **draft.content,
+                "profile": service.SQUARE,
+            },
+        )
+        self.assertEqual(response.status_code, 409)
+        draft.refresh_from_db()
+        self.assertEqual(draft.profile, service.PROFILE)
+        self.assertEqual(draft.history.count(), 1)
+
     def test_source_change_corruption_unsettled_and_wrong_fingerprint_refuse(self):
         with self.assertRaises(ValidationError):
             service.create_draft(

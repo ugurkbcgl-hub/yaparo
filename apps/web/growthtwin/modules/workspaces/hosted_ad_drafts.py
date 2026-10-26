@@ -21,7 +21,35 @@ from .models import (
 )
 
 PROFILE = "duru-saved-ai-overlay-v1"
+SQUARE = "duru-saved-ai-square-v2"
+PORTRAIT = "duru-saved-ai-portrait-v2"
+LAYOUTS = {
+    PROFILE: {
+        "label": "Özgün dikey · 768 × 1376",
+        "width": 768,
+        "height": 1376,
+        "mode": "overlay",
+    },
+    SQUARE: {
+        "label": "Kare · 1080 × 1080",
+        "width": 1080,
+        "height": 1080,
+        "mode": "contain",
+    },
+    PORTRAIT: {
+        "label": "Dikey · 1080 × 1350",
+        "width": 1080,
+        "height": 1350,
+        "mode": "contain",
+    },
+}
 LIMITS = {"title": 60, "body": 100, "cta": 30}
+
+
+def layout(profile):
+    if type(profile) is not str or profile not in LAYOUTS:
+        raise ValidationError("Kaydedilmiş bir reklam ölçüsü seçin.")
+    return dict(LAYOUTS[profile])
 
 
 def validate_content(value):
@@ -55,7 +83,8 @@ def admitted_workspace(owner):
     return hosted_image_trial.admitted_workspace(owner)
 
 
-def sources(owner, candidate_key=None):
+def sources(owner, candidate_key=None, *, profile=PROFILE):
+    geometry = layout(profile)
     workspace = admitted_workspace(owner)
     text = hosted_trial.read_trial(owner)
     image = hosted_image_trial.read_trial(owner)
@@ -73,7 +102,7 @@ def sources(owner, candidate_key=None):
     if variant is None:
         raise ValidationError("Kaydedilmiş bir metin seçin.")
     manifest = {
-        "profile": PROFILE,
+        "profile": profile,
         "workspace_id": workspace.pk,
         "owner_id": owner.pk,
         "text": {
@@ -101,6 +130,8 @@ def sources(owner, candidate_key=None):
         },
         "candidate": asdict(variant),
     }
+    if profile != PROFILE:
+        manifest["layout"] = geometry
     # This profile deliberately supports the evaluated portrait, not arbitrary
     # tiny/cropped fixtures. Geometry and font limits are fixed for this layout.
     if (image.width, image.height) != (768, 1376):
@@ -116,10 +147,11 @@ def checked_draft(owner, draft_id, *, lock=False):
     if lock:
         rows = rows.select_for_update()
     draft = rows.get(pk=draft_id, workspace=workspace, owner=owner)
-    _, text, image, _, manifest, png = sources(owner, draft.candidate_key)
+    _, text, image, _, manifest, png = sources(
+        owner, draft.candidate_key, profile=draft.profile
+    )
     if (
-        draft.profile != PROFILE
-        or draft.text_trial_id != text.pk
+        draft.text_trial_id != text.pk
         or draft.image_trial_id != image.pk
         or draft.source_manifest != manifest
         or draft.source_fingerprint != digest(manifest)
@@ -141,14 +173,19 @@ def _lock_sources(owner):
     HostedImageTrial.objects.select_for_update().get(workspace=workspace, owner=owner)
 
 
-def create_draft(*, owner, candidate_key, expected_source):
+def create_draft(*, owner, candidate_key, expected_source, profile=PROFILE):
     with transaction.atomic():
         _lock_sources(owner)
-        workspace, text, image, variant, manifest, _ = sources(owner, candidate_key)
+        workspace, text, image, variant, manifest, _ = sources(
+            owner, candidate_key, profile=profile
+        )
         if type(expected_source) is not str or expected_source != digest(manifest):
             raise ValidationError("Üretim kaydı değişmiş; güncel seçenekleri açın.")
         existing = HostedAdDraft.objects.filter(
-            text_trial=text, image_trial=image, candidate_key=candidate_key
+            text_trial=text,
+            image_trial=image,
+            candidate_key=candidate_key,
+            profile=profile,
         ).first()
         if existing is not None:
             return checked_draft(owner, existing.pk)[0]
@@ -166,7 +203,7 @@ def create_draft(*, owner, candidate_key, expected_source):
             text_trial=text,
             image_trial=image,
             candidate_key=candidate_key,
-            profile=PROFILE,
+            profile=profile,
             source_fingerprint=digest(manifest),
             source_manifest=manifest,
             content=content,

@@ -153,8 +153,8 @@ class HostedAdDraft(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=("text_trial", "image_trial", "candidate_key"),
-                name="hosted_ad_source_candidate_unique",
+                fields=("text_trial", "image_trial", "candidate_key", "profile"),
+                name="hosted_ad_source_candidate_profile_unique",
             ),
             models.CheckConstraint(
                 condition=models.Q(revision__gte=1), name="hosted_ad_revision_positive"
