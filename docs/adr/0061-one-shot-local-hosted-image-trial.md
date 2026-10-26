@@ -58,6 +58,9 @@ retained. Cumulative local spent USD0.19523655, historical hold USD0.00078075 in
 No account balance/credit usage inspected. Fresh public catalog route/capabilities/
 pricing/ZDR and key cap USD16/no reset were checked before the call. Independent
 source review passed; required CI/actual PostgreSQL race must pass before merge.
+The first CI run's only failure was the browser checking image dimensions before
+decode completed. Explicit auto-waiting complete/naturalWidth assertions replace
+the immediate check; targeted browser rerun passed without a paid provider call.
 
 Next: explicitly combine a selected saved real text and this owned image into a
 new editable ad draft, with true image/task provenance and preserved originals.

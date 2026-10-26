@@ -77,9 +77,8 @@ class HostedImageBrowserTests(LiveServerTestCase):
                     name="Duru Studio için AI ile üretilen kurgusal seramik kupa görseli",
                 )
                 expect(image).to_be_visible()
-                self.assertTrue(
-                    image.evaluate("i => i.complete && i.naturalWidth === 64")
-                )
+                expect(image).to_have_js_property("complete", True)
+                expect(image).to_have_js_property("naturalWidth", 64)
                 with page.expect_download() as event:
                     page.get_by_role("link", name="Görseli indir").click()
                 downloaded = Path(event.value.path()).read_bytes()

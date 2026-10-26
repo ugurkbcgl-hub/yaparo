@@ -45,6 +45,10 @@ One additive workspaces0007 migration; configured DB/protected TEST untouched.
   Ruff/format/migration drift/diff passed. Independent source review passed. Actual
   PG race/required PR CI pending. No commercial quality, malware/rights or release
   approval inferred. Existing offline template profile remains separate.
+- Initial PR CI ran1077 tests: only the new browser's immediate image-load assertion
+  failed (4 unrelated skips). It now polls complete/naturalWidth instead of measuring
+  before decode. Targeted browser rerun passed; latest full CI must be rechecked.
+  No provider retry/new charge was used for this test correction.
 - Earlier operator samples remain private under %LOCALAPPDATA%\GrowthTwin\evaluations:
   brand-text-20261026T045335-0f83360e.jsonl and
   brand-image-20261026T045722-5bdfe523.jsonl/matching.jpg. Both settled; do not rerun.
