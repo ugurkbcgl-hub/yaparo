@@ -1,0 +1,13 @@
+{% extends 'campaigns/base.html' %}
+{% block title %}Markana bağlı örnek metinler{% endblock %}
+{% block scripts %}{% endblock %}
+{% block content %}<div class="narrow-column">
+<a class="back-link" href="{% url 'campaigns:design' draft_id %}">← Kampanyanın tasarım seçimine dön</a>
+<h1>Markana bağlı örnek metinler</h1><p class="lead">{{ brand_name }}</p>
+<p>Marka sürümü {{ identity.version }} · Seçili tasarım kaydı {{ context.document_revision }} · {{ tone_label }} marka tonu</p>
+<p class="notice">Bunlar kurgusal şablon örnekleridir; yapay zekâya veya dış hizmete gönderilmedi. Adaylar kaydedilmedi, tasarımındaki metinler değiştirilmedi. Reklam yayını yapılmaz.</p>
+<div class="brand-copy-options">{% for variant in variants %}<section class="summary-card" style="border-top: 5px solid {{ identity.primary_color }}"><p>Örnek {{ forloop.counter }} · {{ variant.angle }}</p><h2>{{ variant.headline }}</h2><p>{{ variant.body }}</p><p><strong>Çağrı metni:</strong> {{ variant.call_to_action }}</p></section>{% endfor %}</div>
+<details class="summary-card"><summary>Hangi bilgilere dayandı?</summary><p>{{ source_text }}</p><p>Bu örnekler seçili tasarımın marka ve kaynak kaydına bağlıdır. Doğruluk, mevzuat uygunluğu veya yayın onayı anlamına gelmez.</p></details>
+<p><a class="button button-secondary" href="{% url 'campaigns:design_preview' draft_id selection_version %}">Seçili tasarımı görüntüle</a></p>
+<p><a href="{% url 'brand_documents:editor' context.brand_id context.document_id %}?campaign={{ draft_id }}">Tasarımın güncel kaydını düzenle</a></p><p>Örnek metinler editöre otomatik aktarılmaz. Düzenlemek istersen güncel tasarımını açabilirsin.</p>
+</div>{% endblock %}

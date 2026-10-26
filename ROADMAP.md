@@ -66,9 +66,10 @@ offline envelope implemented, zero-cost template only, no dispatch/reservation
 ledger. **Current Y10:** ADR-0056 records the isolated pinned typed-output parsing
 comparison; retain direct runtime adapters, no new product dependency. **Current:**
 ADR-0057 adds shared strict JSON and ambiguity regressions across existing adapters.
-**Next:** local brand-bound offline candidate preview with explicit review and
-preserved edits. Hosted quality, execution and full Y09/Y13 accounting gates remain
-open.
+**Current local Y11 slice:** ADR-0058 adds read-only brand-bound template candidate
+preview, default off, no hosted AI or writes. **Next:** explicit stale-safe candidate
+application with field-fit checks and preserved history. Hosted quality, execution
+and full Y09/Y13 accounting gates remain open; Y11 is not complete.
 Customer gates remain open.
 Y05 is not complete.
 

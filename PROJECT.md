@@ -36,8 +36,10 @@ execution, reservation ledger or provider promotion. ADR-0056 records the isolat
 Y10 typed-output comparison: retain direct runtime adapters for this scope; the
 experimental library remains outside product dependencies. ADR-0057 adds shared
 strict/duplicate-safe response parsing to existing adapters. No model quality
-claim. Next: local brand-bound offline template candidates with explicit review
-and preserved user edits; hosted execution retains separate gates.
+claim. ADR-0058 adds a default-off read-only local page for three brand-bound
+offline template candidates; no save/apply or user-edit replacement. Next: explicit
+stale-safe candidate application with field-fit validation and preserved history.
+Hosted execution retains separate gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot

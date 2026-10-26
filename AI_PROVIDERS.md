@@ -1,5 +1,12 @@
 # AI provider evaluation and current direction
 
+> **Local preview (2026-10-26):** [ADR-0058](docs/adr/0058-local-brand-copy-preview.md)
+> adds a default-off/DEBUG owner-scoped page for three deterministic template
+> candidates through the bound task contract. No hosted adapter, key, cost or
+> real model is used. Candidates are not saved/applied and no live-quality gate
+> is claimed; hosted/provider readiness remains separate.
+
+
 > **Strict response update (2026-10-25):** [ADR-0057](docs/adr/0057-strict-provider-json.md)
 > adds shared bounded/duplicate-safe JSON and exact inner candidate fields across
 > the three existing adapters.53 offline gateway/context checks passed. The extended
