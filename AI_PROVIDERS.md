@@ -625,9 +625,19 @@ was key hard cap USD16/no reset. No balance/credit usage was inspected.
 Cumulative local spent USD0.19523655; historical hold USD0.00078075 unchanged.
 See [ADR0061](docs/adr/0061-one-shot-local-hosted-image-trial.md).
 
-**Next:** combine a selected saved real text and owned AI image into a new editable
-draft with true task/source provenance, preserving originals and campaign choices.
-This next slice should not require another provider call.
+### Saved-output composition — 2026-10-26
+
+ADR0062 adds an independent editable draft over these saved text/image jobs. Its
+manifest preserves actual text provenance, requested image model/route, costs and
+hashes; it does not relabel the AI photo as a palette fixture or a brand identity.
+Actual browser composition/save reached revision2 and actual PNG export passed.
+Thirty-five previous tables and the local ledger compared unchanged. New provider
+calls/cost: zero; preview restarted without provider credentials. Existing text/
+image intents and historical hold remain untouched. General brand-bound hosted
+generation and provider promotion are still separate readiness gates.
+
+**Next:** add a separate versioned square/portrait layout profile over saved outputs,
+preserving old drafts/source metadata. No provider call should be needed.
 Do not label hosted output as the offline synthetic-template profile. Preserve
 the unresolved hold, text USD0.01/image USD0.10 bounds and shared USD16 cap.
 Owner retains account balance checks. No real user data, OpenRouter video,

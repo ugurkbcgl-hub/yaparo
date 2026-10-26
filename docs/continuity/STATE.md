@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 09:07 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 10:04 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,42 +16,36 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main10fb185 (PR357 merged), required CI40274018693 and main CI40274611818
-succeeded. Branch codex/hosted-image-trial; PR358 open at snapshot, code7419f04.
-Required CI must be rechecked on the latest head before merge. Durable task issue328.
-One additive workspaces0007 migration; configured DB/protected TEST untouched.
+Base mainf9eaa6f (PR358 merged), required CI40278601392 and main CI40279275828
+succeeded. Branch codex/hosted-ad-draft; PR359 open at snapshot, code0ee86ad.
+Recheck required CI on latest head before merge. Durable task issue328.
+One additive workspaces0008 migration; configured DB/protected TEST untouched.
 
-- ADR0060 text job1 remains completed/settled,3 real GPT-6 Luna/Azure candidates,
- 486 input/455 output tokens, USD0.00027610. It was compared exactly before/after
-  the image trial. No reset/retry or mutation of this paid intent is allowed.
-- ADR0061 adds a separate default-off one-shot image trial. Same fixed fictional
-  Duru IMAGE_PROMPT only; no editable brand/client/DB text, URL or file intake.
-  Unique committed workspace intent, no ambient transaction, no retry/delete/reset.
-  Bounded transport moved into AI gateway; operator script compatibility preserved.
-  Strict duplicate/finite JSON24MB for images; text default64KiB unchanged.
-- Store known cost before decode, original<=3MiB/hash before normalization, PNG<=8MiB
-  with4MP/4096-edge bounds and separate hash/dimensions/tool metadata. Only verified
-  PNG has owned display/download routes. Original has no route. Both cost phases
-  mark ambiguity unknown before ledger operations; received results precede settle.
-- Actual normal browser login + image button succeeded: image job1,768x1376 JPEG,
- 98,295 original bytes/592,509 PNG bytes, USD0.033625. Requested model Gemini3.1
-  Flash Lite Image/Google Vertex; API response does not independently prove route
-  identity. Download bytes equal saved PNG; refresh/replay made no new charge.
-  Agent reviewed actual image and mobile/desktop UI; no mobile overflow.
-- Local spent USD0.19523655; historical unresolved hold USD0.00078075 intact.
-  Fresh image catalog capabilities/price, active ZDR route and key USD16/no-reset
-  cap verified; no account balance/credit usage inspected. No new paid service.
--80 focused checks (78 pass/2 PG-only skips),14 raster/parser/browser checks passed;
-  Ruff/format/migration drift/diff passed. Independent source review passed. Actual
-  PG race/required PR CI pending. No commercial quality, malware/rights or release
-  approval inferred. Existing offline template profile remains separate.
-- Initial PR CI ran1077 tests: only the new browser's immediate image-load assertion
-  failed (4 unrelated skips). It now polls complete/naturalWidth instead of measuring
-  before decode. Targeted browser rerun passed; latest full CI must be rechecked.
-  No provider retry/new charge was used for this test correction.
-- Earlier operator samples remain private under %LOCALAPPDATA%\GrowthTwin\evaluations:
-  brand-text-20261026T045335-0f83360e.jsonl and
-  brand-image-20261026T045722-5bdfe523.jsonl/matching.jpg. Both settled; do not rerun.
+- ADR0062 adds an independent HostedAdDraft over completed text/image jobs, not a
+  BrandCreativeDocument, palette fixture or inferred BrandIdentity. Explicit choice,
+  immutable source manifest/fingerprint, unique text/image/candidate replay, fresh
+  active ownership and default-off local admission. Old Fabric v1-v4 untouched.
+- Writes lock workspace->text/image source->draft; expected revision/source CAS,
+  atomic append-only application history. Repeated creation reopens edited draft.
+  No provider/budget operation, campaign selection, new generation or publishing.
+- Fixed768x1376 Canvas2D layout: title/body/CTA/color edits. Server validates UTF16/
+  controls/colors/bounds; measured pixel fit is client-only, refuses overflow without
+  truncation. Private PNG loader checks no redirects, MIME/signature,8MiB, hash and
+  decoded dimensions. Only unchanged saved on-screen content can export revision-
+  named PNG; failed save retains fields and disables export. No fallback image.
+-236 related tests (227 pass/9 PG-only skips), including2 browser cases covering
+  replay-after-edit, stale-tab409, exact pixels/dimensions and403/wronghash refusals.
+  Provider/ledger spies forbid all calls. Ruff/format/migration drift/diff passed;
+  independent source review passed. Actual PG concurrent create/save/full CI pending.
+- Actual in-app normal test login created draft
+  fa426f70-5e12-4f5c-9b83-f40a72ac1c90 from first real candidate and saved CTA edit
+  as revision2; history1/2 retained. In-app download event did not return a path;
+  independent Chromium downloaded/reopened the actual saved PNG768x1376.35 prior
+  non-auth/session tables and local ledger compared unchanged. New AI costUSD0.
+- Previous paid text/image job1 stay completed/settled and unchanged: text3 variants,
+  GPT-6 Luna/Azure USD0.00027610; image768x1376, requested Gemini3.1 Flash Lite Image/
+  Google Vertex, USD0.033625. Historical local spent USD0.19523655 and unresolved
+  USD0.00078075 hold intact. Do not retry/reset intents or inspect account balance.
 
 ## Established local capabilities and limits
 
@@ -77,30 +71,33 @@ history stays separate. Current v4 browser checks preserve both mechanisms.
 ## Same disposable local preview
 
 Private root: %TEMP%\yaparo-public-preview-q2ql3pkq, DB preview.sqlite3.
-Current private schema includes workspaces0007 and campaigns0009. Before0007,
-preview-before-hosted-image-20261026T060228Z.sqlite3 was created. Every prior row
-compared unchanged after migration; additions only image table, one migration/
-content type and four permissions. Integrity passed. After the real call,
-preview-after-hosted-image-20261026T060425Z.sqlite3 was read independently: both
-image hashes/full decode/dimensions and existing text verified. Source DB was
-never replaced; this is backup readback, not configured DB restore proof.
+Current private schema: workspaces0008/campaigns0009. Before0008:
+preview-before-hosted-ad-20261026T065103Z.sqlite3; all prior rows compared unchanged,
+only two draft/history tables, one migration, two content types/eight permissions
+added. After actual edit, preview-after-hosted-ad-20261026T065916Z.sqlite3 readback
+verified source manifest/fingerprint and history1/2. Source DB was not replaced.
+This is local backup readback, not configured PostgreSQL/Heroku recovery proof.
 
-Private launcher backup: serve_design_preview.before-hosted-image.py. Current
-serve_design_preview.py admits text/image flags for workspace1 and gets the
-existing protected key only in process memory. Normal source defaults False/None.
-It binds loopback8002 and refuses pending migrations. Before restart verify the
-actual listener process matches this exact known script; launcher/child PIDs differ
-on Windows, so do not trust a recorded parent PID. Never replace an unknown listener.
-No automatic call occurs on server start/GET. Existing text/image intents block
-another dispatch. Do not reset/recreate the preview DB to get another call.
+Private launcher backup: serve_design_preview.before-hosted-ad.py. Current
+serve_design_preview.py admits text/image/ad-draft flags for workspace1, loopback
+8002, refuses pending migrations. Current editor preview process was started
+WITHOUT provider key or hard-cap assertion; do not add either for this offline
+composition slice. Normal source flags stay False/None. Verify exact listener
+process/script before restart; never replace an unknown listener. Do not recreate
+DB or reset paid intents to work around failures. Static assets were recollected.
 
-Actual evidence: live-hosted-image-evidence.json,
-live-hosted-image-{desktop,mobile}.png, live-duru-studio-ai.png in private root.
-Text evidence: live-hosted-ui-evidence.json and live-hosted-text-{desktop,mobile}.png.
-Existing disposable test owner's temporary password was restored to its original
-hash after QA; no plaintext retained. Browser tests used normal authentication.
-No authenticated owner session in the user's in-app browser is claimed; that tab
-may show login. Headless actual browser generation/readback/download were verified.
+Actual evidence: live-hosted-ad-evidence.json, live-hosted-ad-{1440,390}.png,
+duru-editable-ad-v2.png; hosted-ad-before.json hashes35 preexisting tables excluding
+normal auth/session changes and new draft tables. PNG SHA256:
+f7ca1903714e2342bb6b45fac2eb08a0c7b940675dd7862723c0a8fdf0ca38f5.
+Text/image evidence remains in prior live-hosted-{ui,image}-evidence.json files.
+
+Visible in-app browser test session was renewed with NORMAL login after restart
+and left on the saved draft; no password was reset this turn. Existing disposable
+login is protected at %USERPROFILE%\.yaparo\preview-test-login.dpapi. The existing
+private prepare_preview_login.py read mode can supply it in process memory; never
+print its output or run credential-rotation/default mode merely to log in.
+User/browser may later log out; reverify. Never store secrets in Git or snapshots.
 
 ## Preserved integration and release boundaries
 
@@ -132,9 +129,9 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Explicitly combine a selected saved real text and this owned AI image into a new
-editable ad draft, with genuine task/source provenance and preserved originals.
-Do not label the AI image as fixed palette material or alter a campaign selection
-implicitly. This next slice should need no provider call. Never retry/reset paid
-text/image job1 or the historical unresolved hold. Customer data/publishing/general
-jobs remain later gates; owner handles account balance checks.
+Add a separate versioned layout profile with explicit square/portrait choices and
+exact-size PNG output over the same owned saved sources. Preserve this fixed overlay
+profile and existing draft/history; do not silently change old geometry or infer a
+brand binding. No provider call should be needed. Keep original paid jobs, historical
+hold and campaign choices unchanged. Customer data/publishing/general jobs remain
+later gates; owner handles account balance checks.
