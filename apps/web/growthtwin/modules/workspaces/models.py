@@ -1,5 +1,7 @@
 """Synthetic workspace records owned by authenticated users."""
 
+from uuid import uuid4
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -129,6 +131,72 @@ class HostedImageTrial(models.Model):
     normalization_tool = models.CharField(max_length=80, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
+
+
+class HostedAdDraft(models.Model):
+    """Independent editable trial composition, never a synthetic brand scene."""
+
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    workspace = models.ForeignKey(Workspace, on_delete=models.PROTECT)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    text_trial = models.ForeignKey(HostedTextTrial, on_delete=models.PROTECT)
+    image_trial = models.ForeignKey(HostedImageTrial, on_delete=models.PROTECT)
+    candidate_key = models.CharField(max_length=80)
+    profile = models.CharField(max_length=64)
+    source_fingerprint = models.CharField(max_length=64)
+    source_manifest = models.JSONField()
+    content = models.JSONField()
+    revision = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=("text_trial", "image_trial", "candidate_key"),
+                name="hosted_ad_source_candidate_unique",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(revision__gte=1), name="hosted_ad_revision_positive"
+            ),
+        ]
+
+
+class HostedAdRevisionQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Taslak geçmişi değiştirilemez.")
+
+    def delete(self):
+        raise ValidationError("Taslak geçmişi tek başına silinemez.")
+
+    def bulk_update(self, objs, fields, **kwargs):
+        raise ValidationError("Taslak geçmişi değiştirilemez.")
+
+
+class HostedAdRevision(models.Model):
+    draft = models.ForeignKey(
+        HostedAdDraft, on_delete=models.CASCADE, related_name="history"
+    )
+    revision = models.PositiveIntegerField()
+    content = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = HostedAdRevisionQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("-revision",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("draft", "revision"), name="hosted_ad_history_revision_unique"
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Taslak geçmişi değiştirilemez.")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Taslak geçmişi tek başına silinemez.")
 
 
 class Brand(models.Model):

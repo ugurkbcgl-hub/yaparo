@@ -27,8 +27,10 @@ actual provenance/cost and no retry. Real browser call USD0.00027610,3 candidate
 reload/repeat did not charge again. No production model qualification, customer
 data, publishing or deployment claimed. ADR0061 adds the one-shot owned image
 trial, actual768×1376 output/USD0.033625, durable original/PNG, private display and
-exact download; refresh/replay do not charge again. Next: explicit new editable
-draft from saved real text/image with preserved originals and true provenance.
+exact download; refresh/replay do not charge again. ADR0062 adds a separate editable
+draft from saved text/image with source manifest, revision history, stale refusal
+and saved-only PNG. Actual revision2/export passed without another AI charge.
+Next: separate versioned square/portrait layout choice, preserving old drafts.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)
@@ -87,8 +89,11 @@ hosted text trial. It persists a unique paid intent and true result/cost, but is
 not a general queued/resumable job system or editable-brand generation profile.
 **Current:** ADR0061 implements the separate one-shot image trial with bounded
 original/PNG hashes and private readback/download; real browser generation and
-local backup readback passed. **Next:** explicit new editable ad draft using a
-selected saved real text/image, preserving source/task metadata and old records.
+local backup readback passed. **Current:** ADR0062 implements independent fixed-
+layout composition/edit/save/history/PNG from saved text/image; source records and
+campaigns are preserved. This is not BrandIdentity binding or generic Fabric scene
+conversion. **Next:** a separate versioned square/portrait layout profile with
+explicit choice and exact output, preserving the current profile and drafts.
 Hosted quality and full Y09/Y13 accounting gates remain open; Y11 is not complete.
 Customer gates remain open.
 Y05 is not complete.

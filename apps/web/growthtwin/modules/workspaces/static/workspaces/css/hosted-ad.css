@@ -1,0 +1,8 @@
+.hosted-ad-layout { display: grid; grid-template-columns: minmax(260px, 340px) minmax(0, 1fr); gap: 24px; align-items: start; }
+.hosted-ad-layout label { display: block; font-weight: 700; margin-bottom: 6px; }
+.hosted-ad-layout input:not([type=hidden]) { display: block; width: 100%; box-sizing: border-box; padding: 12px; border: 1px solid #b8c8bd; border-radius: 8px; font: inherit; }
+.hosted-ad-layout input[type=color] { height: 48px; }
+.hosted-ad-preview { width: 100%; max-width: 480px; margin-inline: auto; }
+#ad-canvas { display: block; width: 100%; height: auto; box-sizing: border-box; background: #f5eddf; border: 1px solid #d6ddd6; }
+#ad-status.error, .hosted-ad-layout .errorlist { color: #9b2630; }
+@media (max-width: 700px) { .hosted-ad-layout { grid-template-columns: minmax(0, 1fr); } }

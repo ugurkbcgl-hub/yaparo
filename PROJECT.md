@@ -50,8 +50,12 @@ not charge again. This trial is independent of editable brand/campaign identity;
 existing template controls stay separate. ADR0061 now adds the separate one-shot
 image trial: actual768×1376 image, USD0.033625, bounded original/PNG and hashes,
 private display/download, no repeat charge. Existing text remained unchanged.
-Next: explicitly combine saved real text and image into a new editable ad draft
-with genuine provenance, without replacing originals or campaign selections.
+ADR0062 now combines saved real text/image into an independent editable draft with
+true source manifest, stale-safe saves/history and saved-only PNG export. Actual
+draft fa426f70-5e12-4f5c-9b83-f40a72ac1c90 reached revision2 with sources/ledger
+unchanged and no AI cost. The fixed768×1376 Canvas2D profile edits text/CTA/color;
+old Fabric/brand/campaign contracts stay unchanged. Next: a separate versioned
+square/portrait layout profile and exact-size output, preserving existing drafts.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
