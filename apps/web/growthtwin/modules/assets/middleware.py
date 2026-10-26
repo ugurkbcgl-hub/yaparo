@@ -21,10 +21,11 @@ _DESIGN_PATH = re.compile(
 _READ_ONLY_DESIGN = re.compile(
     r"\A/workspace/campaigns/[0-9]+/design/[0-9]+/(?:preview|image|bundle|copy)/\Z"
 )
+_TRIAL_PATH = re.compile(r"\A/workspace/brands/ai-trial/(?:generate/)?\Z")
 
 
 def _headers(response, request):
-    if _DESIGN_PATH.fullmatch(request.path):
+    if _DESIGN_PATH.fullmatch(request.path) or _TRIAL_PATH.fullmatch(request.path):
         patch_cache_control(
             response, private=True, no_store=True, no_cache=True, max_age=0
         )
@@ -40,6 +41,14 @@ class ClosedSyntheticMaterialIntakeMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        if _TRIAL_PATH.fullmatch(request.path):
+            allowed = (
+                ("POST",) if request.path.endswith("/generate/") else ("GET", "HEAD")
+            )
+            if request.method not in allowed:
+                response = HttpResponse(status=405)
+                response["Allow"] = ", ".join(allowed)
+                return _headers(response, request)
         if _READ_ONLY_DESIGN.fullmatch(request.path) and request.method not in (
             "GET",
             "HEAD",
@@ -47,7 +56,9 @@ class ClosedSyntheticMaterialIntakeMiddleware:
             response = HttpResponse(status=405)
             response["Allow"] = "GET, HEAD"
             return _headers(response, request)
-        if request.method == "POST" and _PREPARE_PATH.fullmatch(request.path):
+        if request.method == "POST" and (
+            _PREPARE_PATH.fullmatch(request.path) or _TRIAL_PATH.fullmatch(request.path)
+        ):
             content_type = (
                 request.META.get("CONTENT_TYPE", "").split(";", 1)[0].strip().lower()
             )
