@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 20:00 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 20:04 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -17,7 +17,7 @@ Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base main bd877ff / PR364 merged; main CI40327599783 passed.
-Current branch codex/brand-bound-ai-generation; PR365 open, first code152dd01.
+Current branch codex/brand-bound-ai-generation; PR365 open, code6d89dd0 before final evidence note.
 Required CI pending for final head; recheck latest run before merge.
 Task issue328. Recheck head/PR/required CI before merge.
 
@@ -49,6 +49,8 @@ subsequent12 generation checks11 pass/1 PG skip, including JPEG/mismatch and HTT
 method/CSRF/intake/fingerprint. Browser mock journey/reload/repeatedPOST/mobile
 passed; actual user browser generation and key-free restart/readback passed.
 Both focused browser checks (copy/replay and decoded responsive image) passed.
+Actual normal HTTP login + two repeated generate POSTs per completed request
+returned saved results; attempt count and local ledger unchanged (key-free runtime).
 Ruff/format/drift passed; full required PostgreSQL CI pending.
 Independent source re-review found no blocker. This is smoke, not quality benchmark.
 

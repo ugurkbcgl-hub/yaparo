@@ -64,7 +64,9 @@ Actual evaluation on the same private preview DB:
   All old rows across36 prior non-auth/non-framework tables are preserved; new
   requests/attempts were added. Old fixed trials/drafts/campaign/Google fixture
   were not rebound. Readback after restart WITHOUT provider key/hard-cap assertion
-  still shows saved results. Private evidence brand-ai-live-evidence.json,
+  still shows saved results. Actual normal HTTP login and two repeated generate
+  POSTs per successful request returned saved results with attempt count/local
+  ledger unchanged. Private evidence brand-ai-replay-evidence.json, brand-ai-live-evidence.json,
   brand-ai-image-iab.png and brand-bound-real-image.png stays outside Git.
 
 Focused local checks cover successful/repeated intent, reservation failure,
