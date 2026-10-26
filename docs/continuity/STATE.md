@@ -18,7 +18,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base main74e15de (PR355 merged), required CI40270501727 and main CI40270939097
 succeeded. PR355 passed1039 Django tests (1035 pass/4 skips),27 browser checks.
-Branch codex/live-brand-generation; PR not yet created at snapshot. Recheck live CI.
+Branch codex/live-brand-generation; PR356 open, initial commit1e7e44b. Required
+CI40271930069 queued at snapshot; recheck the latest head/run before merging.
 Durable task: issue328. No migration/configured DB/protected TEST fixture change.
 
 - Owner explicitly requested real AI generation. One actual GPT-6 Luna call through
