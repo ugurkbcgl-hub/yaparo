@@ -93,6 +93,44 @@ class HostedTextTrial(models.Model):
     completed_at = models.DateTimeField(null=True, blank=True)
 
 
+class HostedImageTrial(models.Model):
+    """One durable paid image intent per admitted workspace; no implicit retries."""
+
+    workspace = models.OneToOneField(
+        Workspace, on_delete=models.PROTECT, related_name="hosted_image_trial"
+    )
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    profile = models.CharField(max_length=64)
+    source_hash = models.CharField(max_length=64)
+    status = models.CharField(
+        max_length=16,
+        choices=[
+            ("started", "Başlatıldı"),
+            ("received", "Yanıt saklandı"),
+            ("completed", "Tamamlandı"),
+            ("unverified", "Doğrulama gerekli"),
+        ],
+        default="started",
+    )
+    budget_state = models.CharField(max_length=16, default="not_reserved")
+    reserved_usd = models.DecimalField(max_digits=12, decimal_places=8)
+    actual_usd = models.DecimalField(
+        max_digits=12, decimal_places=8, null=True, blank=True
+    )
+    model = models.CharField(max_length=120, blank=True)
+    provider = models.CharField(max_length=80, blank=True)
+    original = models.BinaryField(default=bytes)
+    png = models.BinaryField(default=bytes)
+    original_sha256 = models.CharField(max_length=64, blank=True)
+    png_sha256 = models.CharField(max_length=64, blank=True)
+    source_media_type = models.CharField(max_length=32, blank=True)
+    width = models.PositiveIntegerField(default=0)
+    height = models.PositiveIntegerField(default=0)
+    normalization_tool = models.CharField(max_length=80, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+
 class Brand(models.Model):
     """One of two fixed synthetic brands in an explicitly owned workspace."""
 

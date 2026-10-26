@@ -46,13 +46,15 @@ def _float(value):
     return result
 
 
-def load_provider_object(raw):
+def load_provider_object(raw, *, max_bytes=MAX_JSON_BYTES):
     """Outer provider envelopes allow varying fields, but never ambiguity."""
     try:
         if (
-            type(raw) is not str
-            or not 0 < len(raw) <= MAX_JSON_BYTES
-            or len(raw.encode("utf-8")) > MAX_JSON_BYTES
+            type(max_bytes) is not int
+            or not 0 < max_bytes <= 24_000_000
+            or type(raw) is not str
+            or not 0 < len(raw) <= max_bytes
+            or len(raw.encode("utf-8")) > max_bytes
         ):
             raise InvalidProviderJSON("JSON boyutu veya türü geçersiz.")
         value = json.loads(

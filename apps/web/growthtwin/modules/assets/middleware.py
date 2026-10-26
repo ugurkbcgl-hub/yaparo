@@ -21,7 +21,9 @@ _DESIGN_PATH = re.compile(
 _READ_ONLY_DESIGN = re.compile(
     r"\A/workspace/campaigns/[0-9]+/design/[0-9]+/(?:preview|image|bundle|copy)/\Z"
 )
-_TRIAL_PATH = re.compile(r"\A/workspace/brands/ai-trial/(?:generate/)?\Z")
+_TRIAL_PATH = re.compile(
+    r"\A/workspace/brands/ai-trial/(?:generate/|image/(?:generate/|content/|download/)?)?\Z"
+)
 
 
 def _headers(response, request):

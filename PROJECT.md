@@ -47,9 +47,12 @@ separate default-off local web trial: one explicit real text call for a fixed Du
 brief, one committed workspace intent, saved candidates/usage/cost and no retry.
 The real browser call succeeded (3 candidates, USD0.00027610); reload/repeat did
 not charge again. This trial is independent of editable brand/campaign identity;
-existing template controls stay separate. Next: the same owned one-shot image
-trial with durable bytes/provenance. General jobs and hosted production execution
-retain separate quality/data/financial gates.
+existing template controls stay separate. ADR0061 now adds the separate one-shot
+image trial: actual768×1376 image, USD0.033625, bounded original/PNG and hashes,
+private display/download, no repeat charge. Existing text remained unchanged.
+Next: explicitly combine saved real text and image into a new editable ad draft
+with genuine provenance, without replacing originals or campaign selections.
+General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot

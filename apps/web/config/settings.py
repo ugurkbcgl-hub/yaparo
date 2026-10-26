@@ -202,3 +202,4 @@ SYNTHETIC_BRAND_COPY_APPLY_ENABLED = False
 # One explicitly admitted local workspace; fixed fictional text, never free input.
 LOCAL_HOSTED_TEXT_TRIAL_ENABLED = False
 LOCAL_HOSTED_TEXT_TRIAL_WORKSPACE_ID = None
+LOCAL_HOSTED_IMAGE_TRIAL_ENABLED = False

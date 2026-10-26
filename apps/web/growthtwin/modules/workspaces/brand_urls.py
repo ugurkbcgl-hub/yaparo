@@ -3,12 +3,33 @@
 from django.urls import path
 
 from growthtwin.modules.assets import views as asset_views
-from growthtwin.modules.workspaces import brand_views, hosted_trial_views
+from growthtwin.modules.workspaces import (
+    brand_views,
+    hosted_image_views,
+    hosted_trial_views,
+)
 
 app_name = "brands"
 urlpatterns = [
     path("", brand_views.brand_list, name="list"),
     path("ai-trial/", hosted_trial_views.preview, name="hosted_trial"),
+    path("ai-trial/image/", hosted_image_views.preview, name="hosted_image_trial"),
+    path(
+        "ai-trial/image/generate/",
+        hosted_image_views.generate,
+        name="hosted_image_generate",
+    ),
+    path(
+        "ai-trial/image/content/",
+        hosted_image_views.content,
+        name="hosted_image_content",
+    ),
+    path(
+        "ai-trial/image/download/",
+        hosted_image_views.content,
+        {"download": True},
+        name="hosted_image_download",
+    ),
     path(
         "ai-trial/generate/",
         hosted_trial_views.generate,
