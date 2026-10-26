@@ -3,6 +3,7 @@
 from django.urls import path
 
 from growthtwin.modules.assets import views as asset_views
+from growthtwin.modules.campaigns import brand_ad_views as brand_campaign_views
 from growthtwin.modules.workspaces import (
     brand_ad_views,
     brand_views,
@@ -14,6 +15,11 @@ from growthtwin.modules.workspaces import (
 
 app_name = "brands"
 urlpatterns = [
+    path(
+        "<int:brand_id>/ads/<uuid:draft_id>/campaign/",
+        brand_campaign_views.start,
+        name="brand_ad_campaign_start",
+    ),
     path("<int:brand_id>/ads/", brand_ad_views.choices, name="brand_ad_choices"),
     path("<int:brand_id>/ads/create/", brand_ad_views.create, name="brand_ad_create"),
     path(

@@ -1,5 +1,11 @@
 # Yaparo roadmap
 
+## Owner priority correction — 26 October 2026
+
+Download/export is undecided and deferred. Existing prototype PNG/ZIP controls are
+not a settled product requirement. Prioritize in-site creation/editing/campaign use;
+no brand package work is next. ADR0070 records the change and local campaign slice.
+
 
 ## Saved synthetic creative work — 24 October 2026
 
@@ -45,7 +51,9 @@ USD0.03419830; two initial billable failures remain held/unverified. Preserved
 history and key-free result readback verified. ADR0069 adds a separate explicitly
 selected identity-pinned editable creative with saved-only PNG and revision guards.
 Actual revision2/export passed with old sources/ledger unchanged, USD0 new AI cost.
-Next: saved-only brand creative package with exact PNG/source/provenance.
+ADR0070 adds explicit brand-bound new campaign plans and saved-revision choice/
+readonly in-site preview. Old campaigns stay unbound, old choices stay separate.
+Next: owned site setup for objective/audience/budget/schedule; spend/publish closed.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)

@@ -28,7 +28,10 @@ _AI_VISUAL_PATH = re.compile(
     r"\A/workspace/campaigns/[0-9]+/ai-visual/(?:[0-9]+/(?:(?:preview|image)/|package\.json))?\Z"
 )
 _BRIEF_PATH = re.compile(
-    r"\A/workspace/brands/[0-9]+/(?:production/(?:[0-9a-f-]{36}/(?:(?:generate|image)/)?)?|ads/(?:create/|[0-9a-f-]{36}/(?:(?:save|image)/)?)?)\Z"
+    r"\A/workspace/brands/[0-9]+/(?:production/(?:[0-9a-f-]{36}/(?:(?:generate|image)/)?)?|ads/(?:create/|[0-9a-f-]{36}/(?:(?:save|image|campaign)/)?)?)\Z"
+)
+_BRAND_CAMPAIGN_PATH = re.compile(
+    r"\A/workspace/campaigns/[0-9]+/brand-creative/(?:[0-9]+/(?:preview|image)/)?\Z"
 )
 
 
@@ -38,6 +41,7 @@ def _headers(response, request):
         or _TRIAL_PATH.fullmatch(request.path)
         or _AI_VISUAL_PATH.fullmatch(request.path)
         or _BRIEF_PATH.fullmatch(request.path)
+        or _BRAND_CAMPAIGN_PATH.fullmatch(request.path)
     ):
         patch_cache_control(
             response, private=True, no_store=True, no_cache=True, max_age=0
@@ -54,8 +58,20 @@ class ClosedSyntheticMaterialIntakeMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        if _BRAND_CAMPAIGN_PATH.fullmatch(request.path):
+            allowed = (
+                ("GET", "HEAD", "POST")
+                if request.path.endswith("/brand-creative/")
+                else ("GET", "HEAD")
+            )
+            if request.method not in allowed:
+                response = HttpResponse(status=405)
+                response["Allow"] = ", ".join(allowed)
+                return _headers(response, request)
         if _BRIEF_PATH.fullmatch(request.path):
-            if request.path.endswith(("/generate/", "/create/", "/save/")):
+            if request.path.endswith(
+                ("/generate/", "/create/", "/save/", "/campaign/")
+            ):
                 allowed = ("POST",)
             else:
                 allowed = (
@@ -99,6 +115,7 @@ class ClosedSyntheticMaterialIntakeMiddleware:
             or _TRIAL_PATH.fullmatch(request.path)
             or _AI_VISUAL_PATH.fullmatch(request.path)
             or _BRIEF_PATH.fullmatch(request.path)
+            or _BRAND_CAMPAIGN_PATH.fullmatch(request.path)
         ):
             content_type = (
                 request.META.get("CONTENT_TYPE", "").split(";", 1)[0].strip().lower()

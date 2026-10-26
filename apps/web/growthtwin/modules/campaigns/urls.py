@@ -3,6 +3,7 @@
 from django.urls import path
 
 from growthtwin.modules.campaigns import (
+    brand_ad_views,
     brand_copy_views,
     design_views,
     hosted_ad_views,
@@ -13,6 +14,19 @@ from growthtwin.modules.campaigns import (
 app_name = "campaigns"
 
 urlpatterns = [
+    path(
+        "<int:draft_id>/brand-creative/", brand_ad_views.choose, name="brand_ad_choose"
+    ),
+    path(
+        "<int:draft_id>/brand-creative/<int:selection_version>/preview/",
+        brand_ad_views.preview,
+        name="brand_ad_preview",
+    ),
+    path(
+        "<int:draft_id>/brand-creative/<int:selection_version>/image/",
+        brand_ad_views.image,
+        name="brand_ad_image",
+    ),
     path(
         "<int:draft_id>/ai-visual/<int:selection_version>/package.json",
         hosted_ad_views.package,

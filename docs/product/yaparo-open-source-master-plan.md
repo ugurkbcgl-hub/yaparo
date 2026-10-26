@@ -1,5 +1,9 @@
 # Yaparo: açık kaynakla sürdürülebilir ürün planı
 
+26 Ekim sahibi önceliği (ADR0070): site içinde içerik üretme, düzenleme ve kampanyada
+kullanma önde gelir. İndirme/dışa aktarma özelliğinin üründe bulunması kararı açık;
+aşağıdaki eski export/paket deneyleri kesin ürün kapsamı veya acil iş sayılmaz.
+
 Tarih: 23 Ekim 2026, Europe/Istanbul. Durum: kullanıcının yön değişikliği talebine dayanan uygulama planı; bileşenler aşağıdaki denemelerden geçmeden üretim seçimi sayılmaz. [ADR-0040](../adr/0040-owned-core-and-open-source-adoption.md), [repo araştırması](open-source-candidate-research.md) ve [iş sırası](yaparo-delivery-plan.md) birlikte okunur.
 
 ## 1. Ürün kararı ve bağımsızlığın ölçüsü

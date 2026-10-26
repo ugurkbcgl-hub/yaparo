@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 20:24 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 00:43 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -10,19 +10,43 @@ Usage monitoring is disabled; never query usage or restart monitors. Reviewed
 green PRs may merge under standing authorization; never push main directly.
 Existing approved OpenRouter evaluation pool USD16; owner handles balance checks.
 No new service/recharge, customer data, real account, media spend or publishing.
+Owner explicitly DEFERRED download/export decisions: no package work is next,
+old PNG/ZIP prototypes are not accepted product scope. Prioritize in-site use.
 
 ## Repository and current milestone
 
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
-Base main69840de / PR365 merged; required CI40363953742 passed1136 Django
-(4 skips)/41 browser checks, main CI40365248050 passed.
-Current branch codex/brand-ai-editable-creative; PR366 open, codea5dd224 before
-this handoff metadata commit. Required latest-head CI pending; recheck before merge.
-Task issue328. Recheck current head/PR/required CI before merge.
+Base main5ef33a8 / PR366 merged; required CI40368365017 passed1146 Django
+(4 skips)/43 browser checks; main CI40369845880 passed.
+Current branch codex/brand-creative-campaign-flow; PR not yet created at snapshot.
+Task issue328. Recheck head/PR/required CI before merge.
 
-Current ADR0069: separate default-off LOCAL_BRAND_AD_ENABLED owns explicit saved
+Current ADR0070: nullable PROTECT campaign.brand, no legacy backfill. Default-off
+LOCAL_BRAND_CAMPAIGN_ENABLED lets owner create a NEW synthetic campaign from an
+owned saved BrandAdDraft, immutable CampaignBrandAdChoice, replay-safe start and
+revision/version-bound explicit reselection. Existing-campaign locks are campaign
+SELF→brand/workspace→source→attempt→ad. Creation replay never locks an existing
+campaign under brand lock. Old choices stay separate; old selection paths admit
+only unbound campaigns. Historical selected content survives later draft edits;
+reselection invalidates old selection URLs. Private CSRF/body/method guards.
+Campaign start waits for checked image and fields matching saved content, using
+can_use_saved independently of export. New campaign preview is readonly with NO
+visible download/package action. Existing prototype exports are undecided.
+New campaign's Ankara/5000 TRY are fixed EXAMPLE planning values, not targeting or
+spend consent; empty destination/no flight. No provider, publish, media or AI cost.
+Final9 focused tests5 pass/4 PG-only skips; prior39 expanded new/legacy/backend/
+browser checks29 pass/10 PG-only skips. Four new PG races require CI. Ruff/drift
+passed; independent final source re-review no blocker after dirty-editor fix.
+Actual normal IAB created campaign3/choice1 from brand1 ad
+8e17aa42-009a-440a-a9e5-e87f755c9967 revision2 and opened selected preview1.
+Two actual authenticated create POST replays added no plan.39 prior application
+tables' old rows/column values preserved; old campaigns1/2 remain brandNULL.
+Ledger unchanged/new cost0. Private brand-campaign-live-evidence.json,
+brand-campaign-iab.png, brand-campaign-{1440,390}.png; mobile no overflow.
+
+Completed ADR0069: separate default-off LOCAL_BRAND_AD_ENABLED owns explicit saved
 text/image selection→BrandAdDraft→edit/save/reopen→saved PNG. Same brand/identity/
 source revision required; protected attempts/identity, full pinned provenance,
 brand→document→attempt→draft locks, unique create replay, CAS/history and private
@@ -32,7 +56,7 @@ not applied; no ZIP/general layers/campaign selection. No new provider or cost.
 10 new focused tests8 pass/2 PG skips, including second brand, long-name/mobile,
 valid different PNG hash refusal, stale/replay and private guards. Independent
 source review no blocker. Combined41 new/legacy/backend/browser checks passed (36 pass/5 PG skips);
-Ruff/format/drift passed. Required PostgreSQL CI pending.
+Ruff/format/drift passed; PR366 required PostgreSQL CI subsequently passed.
 Actual normal IAB created brand1 draft8e17aa42-009a-440a-a9e5-e87f755c9967 from
 request3/key slogan + request4 image, identity2, then saved CTA “Koleksiyonu tanı”
 as revision2. Normal independent Chromium login downloaded/verified768×1376 PNG;
@@ -77,14 +101,18 @@ Independent source re-review found no blocker. This is smoke, not quality benchm
 ## Same private preview — preserve it
 
 %TEMP%\yaparo-public-preview-q2ql3pkq / preview.sqlite3 / loopback8002.
-Schema workspaces0012 / campaigns0010. Forward0012 backup:
+Schema workspaces0012 / campaigns0011. Forward campaigns0011 backup:
+preview-before-brand-campaign-20261026T180122Z.sqlite3; previous rows/columns
+preserved, old campaigns' new brand FKs allNULL at upgrade, new choice table empty.
+Standard migration+1 type+4 permissions only; never rerun this completed upgrade.
+Previous forward workspaces0012 backup:
 preview-before-brand-ad-20261026T171740Z.sqlite3; old rows preserved, only two new
 empty tables/standard migration+2 content types+8 permissions at upgrade.
 Previous forward0011 backup:
 preview-before-brand-ai-20261026T163458Z.sqlite3. All old rows across36 prior
 non-auth/non-framework tables preserved; four requests/four attempts now exist.
 Old fixed trials/drafts/source/history/campaign choices remain independent.
-Current known serve_design_preview.py enables the new brand-ad flag locally,
+Current known serve_design_preview.py enables brand-ad and brand-campaign flags locally,
 restarted WITHOUT provider key or
 hard-cap assertion. Exact private brand-ai-approved.json permits only requests1–4;
 no new request automatically gets paid permission. Normal repo flags stay off.
@@ -121,7 +149,7 @@ was not verified by this product task; scheduling is not proof of work.
 
 ## Next action
 
-Add a saved-only brand creative package with exact rendered PNG, source PNG and
-pinned identity/request/result/edit provenance. Preserve the new overlay profile,
-old fixed drafts/campaign choices and failures/holds. Use saved outputs without
-another provider call; customer/publishing gates remain closed.
+Replace fixed synthetic campaign parameters with owned in-site objective/audience/
+budget/schedule setup. Keep publishing/spending/provider gates closed and old
+campaigns/choices/failures/holds intact. Download/export product decision remains
+open; do not build a package or prioritize downloads without an explicit decision.

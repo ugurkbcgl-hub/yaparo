@@ -42,3 +42,7 @@ and [Y01–Y32 delivery sequence](../product/yaparo-delivery-plan.md), accepted 
 ADR-0040. Begin with the synthetic brand/material/editor/export slice; protected
 Google candidate recovery is a separate integration workstream. No package or
 provider choice is production-approved merely because it appears in research.
+
+Owner priority correction (26 October 2026, ADR0070): download/export availability
+is undecided. Existing PNG/ZIP prototypes are not a customer feature commitment;
+no package work is next. Continue in-site brand→content→editing→campaign use.

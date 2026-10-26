@@ -15,6 +15,9 @@ from django.utils.formats import number_format
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_GET, require_POST, require_safe
 
+from growthtwin.modules.campaigns.brand_ad_views import (
+    reference_context as brand_ad_context,
+)
 from growthtwin.modules.campaigns.design_views import reference_context
 from growthtwin.modules.campaigns.eligibility import (
     synthetic_campaign_eligibility_preview,
@@ -201,6 +204,7 @@ def _campaign_detail_response(request, draft, *, bound_edit_form=None):
             "plan": plan,
             **reference_context(request.user, draft.pk),
             **hosted_ad_context(request.user, draft.pk),
+            **brand_ad_context(request.user, draft.pk),
             "eligibility_decision": synthetic_campaign_eligibility_preview(
                 evaluated_on=timezone.localdate()
             ),
