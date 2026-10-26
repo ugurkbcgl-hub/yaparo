@@ -612,8 +612,22 @@ USD16/no reset and eligible priced Azure ZDR routing were rechecked. Account
 balance/credit usage was not inspected. No customer text/files or editable brand
 metadata is sent, and no campaign is changed. See [ADR0060](docs/adr/0060-one-shot-local-hosted-text-trial.md).
 
-**Next:** add a separate one-shot owned image trial over the same fixed fictional
-brief, including bounded durable bytes and true source/provider/cost provenance.
+### One-shot local website image trial — 2026-10-26
+
+ADR0061 adds the separate default-off owned image trial. Actual browser generation
+returned a768×1376 JPEG,98,295 bytes, normalized to a592,509-byte metadata-free PNG.
+Provider-reported cost USD0.033625; original/hash/dimensions/cost and PNG/hash are
+durable in the private preview DB. Refresh/replay/download caused no additional
+charge and preserved the existing real text row. Model/route labels are explicitly
+requested identities, not independently returned provider metadata. Public image
+catalog capabilities/price and active Google Vertex ZDR route were rechecked, as
+was key hard cap USD16/no reset. No balance/credit usage was inspected.
+Cumulative local spent USD0.19523655; historical hold USD0.00078075 unchanged.
+See [ADR0061](docs/adr/0061-one-shot-local-hosted-image-trial.md).
+
+**Next:** combine a selected saved real text and owned AI image into a new editable
+draft with true task/source provenance, preserving originals and campaign choices.
+This next slice should not require another provider call.
 Do not label hosted output as the offline synthetic-template profile. Preserve
 the unresolved hold, text USD0.01/image USD0.10 bounds and shared USD16 cap.
 Owner retains account balance checks. No real user data, OpenRouter video,
