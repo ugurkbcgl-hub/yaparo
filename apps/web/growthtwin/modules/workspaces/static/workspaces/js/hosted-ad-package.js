@@ -1,7 +1,7 @@
 "use strict";
 // A bounded ZIP_STORED writer, not an archive importer or arbitrary file API.
 window.YaparoAdPackage = (() => {
-  const names = ["ad.png", "source.png", "draft.json", "manifest.json", "README.txt"];
+  const draftNames = ["ad.png", "source.png", "draft.json", "manifest.json", "README.txt"];
   const encoder = new TextEncoder();
   const table = Array.from({length:256},(_,n) => {
     for (let i=0;i<8;i++) n = (n&1) ? (0xedb88320^(n>>>1)) : n>>>1;
@@ -12,7 +12,9 @@ window.YaparoAdPackage = (() => {
     for (const byte of bytes) value = table[(value^byte)&255]^(value>>>8);
     return (value^0xffffffff)>>>0;
   }
-  function zip(files) {
+  function zip(files, kind="draft") {
+    if (!["draft","campaign"].includes(kind)) throw Error("kind");
+    const names = kind==="campaign" ? [...draftNames,"campaign.json"] : draftNames;
     if (Object.keys(files).length !== names.length || names.some(n => !(files[n] instanceof Uint8Array))) throw Error("files");
     const chunks=[], central=[]; let offset=0, total=0;
     for (const name of names) {

@@ -62,7 +62,10 @@ content/profile/revision and source manifest. Current owner/version checks and
 client hash/size checks refuse stale or changing inputs; no new AI charge.
 ADR0065 adds explicit same-workspace saved-AI revision selection for local campaigns,
 with a pinned read-only preview; later edits require explicit reselection. Brand
-identity and Search publishing are unchanged. Next: selected campaign source package.
+identity and Search publishing are unchanged. ADR0066 adds the selected campaign
+source ZIP with exact pinned snapshot and campaign-selection manifest; no new AI
+charge. Next: synthetic brand/brief/material-version contract for brand-aware
+hosted generation, preserving the fixed trial and existing unknown provenance.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact

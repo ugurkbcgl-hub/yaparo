@@ -5,7 +5,7 @@ from uuid import uuid4
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import never_cache
@@ -136,6 +136,12 @@ def preview(request, draft_id, selection_version):
                 "revision": snapshot["revision"],
                 "read_only": True,
                 "can_export": True,
+                "profile": snapshot["profile"],
+                "source_fingerprint": snapshot["source_fingerprint"],
+                "selection": service.selection_manifest(choice, snapshot),
+                "package_url": reverse(
+                    "campaigns:hosted_ad_package", args=[draft_id, choice.version]
+                ),
                 "content": snapshot["content"],
                 "width": geometry["width"],
                 "height": geometry["height"],
@@ -168,5 +174,24 @@ def image(request, draft_id, selection_version):
     except Exception:
         return _error()
     response = HttpResponse(png, content_type="image/png")
+    response["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
+@login_required
+@never_cache
+@require_safe
+def package(request, draft_id, selection_version):
+    if request.GET:
+        return HttpResponse(status=400)
+    try:
+        data = service.package_snapshot(
+            owner=request.user, campaign_id=draft_id, version=selection_version
+        )
+    except (PermissionDenied, ObjectDoesNotExist) as error:
+        raise Http404 from error
+    except Exception:
+        return _error()
+    response = JsonResponse(data, json_dumps_params={"ensure_ascii": False})
     response["X-Content-Type-Options"] = "nosniff"
     return response

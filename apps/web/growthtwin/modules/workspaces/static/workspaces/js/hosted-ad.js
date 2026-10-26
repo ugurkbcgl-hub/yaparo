@@ -70,7 +70,7 @@
       const saved = fields.every(key => value[key] === boot.content[key]);
       $("ad-save").disabled = !!boot.read_only;
       $("ad-export").disabled = !saved || !boot.can_export;
-      $("ad-package").disabled = !!boot.read_only || !saved || !boot.can_export || packaging;
+      $("ad-package").disabled = (!!boot.read_only && !boot.selection) || !saved || !boot.can_export || packaging;
       status(saved && boot.can_export ? "Kayıtlı taslak hazır. PNG indirebilirsin." : "Düzenleme ekranda. PNG indirmek için önce kaydet.");
     } catch {
       ctx.setTransform(1,0,0,1,0,0);
@@ -89,28 +89,41 @@
   const encode = text => new TextEncoder().encode(text);
   const hashBytes = async bytes => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(v=>v.toString(16).padStart(2,"0")).join("");
   $("ad-package").addEventListener("click",async () => {
-    if (boot.read_only || !ready || $("ad-package").disabled || packaging) return;
+    if ((boot.read_only && !boot.selection) || !ready || $("ad-package").disabled || packaging) return;
     packaging=true; $("ad-package").disabled=true;
     $("package-status").textContent="Paket hazırlanıyor…";
     try {
-      if (boot.package_url !== "/workspace/brands/ai-trial/drafts/"+boot.id+"/revisions/"+boot.revision+"/package.json") throw Error("url");
+      const campaign = boot.read_only && boot.selection;
+      const expectedURL=campaign ? "/workspace/campaigns/"+campaign.campaign_id+"/ai-visual/"+campaign.selection_version+"/package.json" : "/workspace/brands/ai-trial/drafts/"+boot.id+"/revisions/"+boot.revision+"/package.json";
+      if (boot.package_url !== expectedURL) throw Error("url");
       const png = await new Promise((resolve,reject)=>canvas.toBlob(b=>b ? resolve(b) : reject(Error("png")),"image/png"));
       const response=await fetch(boot.package_url,{credentials:"same-origin",redirect:"error",cache:"no-store",signal:AbortSignal.timeout(10000)});
       if (!response.ok || response.headers.get("Content-Type")?.split(";")[0] !== "application/json" || !response.body) throw Error("snapshot");
       const reader=response.body.getReader(), parts=[]; let length=0;
       try { while (true) { const {done,value}=await reader.read(); if (done) break; length+=value.length; if (length>131072) throw Error("size"); parts.push(value); } }
       finally { await reader.cancel(); }
-      const draftBytes=new Uint8Array(await new Blob(parts).arrayBuffer());
-      const snapshot=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(draftBytes));
+      let draftBytes=new Uint8Array(await new Blob(parts).arrayBuffer());
+      let snapshot=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(draftBytes));
+      if (campaign) {
+        const context=snapshot.campaign_selection;
+        if (snapshot.schema!=="yaparo-campaign-ai-package-snapshot-v1" || typeof snapshot.ad_json!=="string" || !context || Object.keys(context).length!==Object.keys(campaign).length || Object.keys(campaign).some(key=>context[key]!==campaign[key])) throw Error("selection");
+        draftBytes=encode(snapshot.ad_json);
+        if (await hashBytes(draftBytes)!==campaign.snapshot_sha256) throw Error("snapshot_hash");
+        snapshot=JSON.parse(snapshot.ad_json);
+      }
       if (snapshot.schema!=="yaparo-hosted-ad-snapshot-v1" || snapshot.draft_id!==boot.id || snapshot.revision!==boot.revision || snapshot.profile!==boot.profile || snapshot.source_fingerprint!==boot.source_fingerprint || snapshot.layout.width!==canvas.width || snapshot.layout.height!==canvas.height || snapshot.layout.mode!==boot.mode || snapshot.source_manifest.image.png_sha256!==boot.sha256 || fields.some(key=>snapshot.content[key]!==boot.content[key])) throw Error("binding");
       const files={"ad.png":new Uint8Array(await png.arrayBuffer()),"source.png":sourceBytes,"draft.json":draftBytes,
         "README.txt":encode("Yaparo reklam taslağı\n\nad.png: kaydedilmiş taslağın tarayıcı çıktısı.\nsource.png: üretimden kaydedilen kaynak görsel.\ndraft.json: metin, ölçü, sürüm ve kaynak dökümü.\nmanifest.json: dosya boyutları ve SHA256 özetleri.\n\nBu paket bir dijital imza, hak sahipliği, yayın veya mevzuat onayı değildir. Dosyalar özel içerik taşıyabilir; paylaşımını sen yönetirsin. Genel paket içe aktarma henüz yoktur. Yeniden çizim için aynı renderer ve sistem Arial yazı tipi gerekir; farklı tarayıcı/yazı tipleri pikselleri değiştirebilir.\n")};
       const entries={};
+      if (campaign) {
+        files["campaign.json"]=encode(JSON.stringify(campaign,null,2));
+        files["README.txt"]=encode(new TextDecoder().decode(files["README.txt"])+"\ncampaign.json: kampanya kimliği, seçim sürümü ve seçilen reklam kaydının bağı. Kampanya adı pakete sabitlenmez. Bu, yerel planlama kaydıdır; marka eşleşmesi veya reklam yayını izni değildir.\n");
+      }
       for (const [name,data] of Object.entries(files)) entries[name]={bytes:data.length,sha256:await hashBytes(data)};
-      files["manifest.json"]=encode(JSON.stringify({schema:"yaparo-hosted-ad-package-v1",draft_id:boot.id,revision:boot.revision,profile:boot.profile,width:canvas.width,height:canvas.height,client_rendered:true,files:entries},null,2));
+      files["manifest.json"]=encode(JSON.stringify({schema:campaign ? "yaparo-campaign-ai-package-v1" : "yaparo-hosted-ad-package-v1",draft_id:boot.id,revision:boot.revision,profile:boot.profile,width:canvas.width,height:canvas.height,client_rendered:true,files:entries,...(campaign ? {campaign_selection:campaign} : {})},null,2));
       if (!boot.can_export || fields.some(key=>values()[key]!==boot.content[key]) || $("ad-export").disabled) throw Error("changed");
-      const archive=window.YaparoAdPackage.zip(files), url=URL.createObjectURL(archive), link=document.createElement("a");
-      link.href=url; link.download="yaparo-ad-"+boot.id+"-v"+boot.revision+".zip"; link.click();
+      const archive=window.YaparoAdPackage.zip(files,campaign ? "campaign" : "draft"), url=URL.createObjectURL(archive), link=document.createElement("a");
+      link.href=url; link.download=campaign ? "yaparo-campaign-"+campaign.campaign_id+"-selection-"+campaign.selection_version+".zip" : "yaparo-ad-"+boot.id+"-v"+boot.revision+".zip"; link.click();
       setTimeout(()=>URL.revokeObjectURL(url),30000);
       $("package-status").textContent="Paket hazırlandı. İndirme tarayıcıya iletildi.";
     } catch {

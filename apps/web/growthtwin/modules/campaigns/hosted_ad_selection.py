@@ -1,11 +1,13 @@
 """Explicit local planning link, independent of Search approval and dispatch."""
 
+import json
 from uuid import UUID
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 
+from growthtwin.modules.ai_gateway.brand_tasks import digest
 from growthtwin.modules.workspaces import hosted_ad_drafts as ads
 from growthtwin.modules.workspaces.models import HostedAdDraft
 
@@ -119,3 +121,38 @@ def options(*, owner, campaign_id):
             continue
         rows.append(checked)
     return rows
+
+
+def selection_manifest(choice, snapshot):
+    """Immutable selection identity only; current campaign names are not pinned."""
+    return {
+        "schema": "yaparo-campaign-ai-selection-v1",
+        "campaign_id": str(choice.campaign_id),
+        "workspace_id": str(choice.campaign.workspace_id),
+        "choice_id": str(choice.pk),
+        "selection_version": choice.version,
+        "selected_at": choice.created_at.isoformat(),
+        "ad_revision_id": str(choice.revision_id),
+        "ad_id": snapshot["draft_id"],
+        "ad_revision": snapshot["revision"],
+        "profile": snapshot["profile"],
+        "source_fingerprint": snapshot["source_fingerprint"],
+        "snapshot_sha256": digest(snapshot),
+    }
+
+
+def package_snapshot(*, owner, campaign_id, version):
+    choice, snapshot, _ = selected(
+        owner=owner, campaign_id=campaign_id, version=version
+    )
+    return {
+        "schema": "yaparo-campaign-ai-package-snapshot-v1",
+        "campaign_selection": selection_manifest(choice, snapshot),
+        "ad_json": json.dumps(
+            snapshot,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+            allow_nan=False,
+        ),
+    }

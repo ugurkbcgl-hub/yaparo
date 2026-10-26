@@ -1,13 +1,16 @@
 """Choose, pin, edit elsewhere and explicitly reselect through the actual UI."""
 
+import json
 import secrets
 from hashlib import sha256
 from pathlib import Path
+from zipfile import ZipFile
 
 from django.test import LiveServerTestCase
 from django.urls import reverse
 from playwright.sync_api import expect, sync_playwright
 
+from growthtwin.modules.campaigns import hosted_ad_selection as selection
 from growthtwin.modules.campaigns.models import (
     CampaignHostedAdChoice,
     WorkspaceCampaignDraft,
@@ -44,7 +47,7 @@ class CampaignHostedAdBrowserTests(CampaignAdFixture, LiveServerTestCase):
                 )
                 expect(page.get_by_label("Başlık", exact=True)).not_to_be_editable()
                 expect(page.locator("#ad-save")).not_to_be_visible()
-                expect(page.locator("#ad-package")).to_be_disabled()
+                expect(page.locator("#ad-package")).to_be_enabled()
                 expect(page.locator("#ad-export")).to_be_enabled()
                 with page.expect_download() as event:
                     page.locator("#ad-export").click()
@@ -92,3 +95,136 @@ class CampaignHostedAdBrowserTests(CampaignAdFixture, LiveServerTestCase):
         self.assertEqual(
             WorkspaceCampaignDraft.objects.values().get(pk=self.plan.pk), before
         )
+
+    def package_login(self, page, password):
+        page.goto(
+            self.live_server_url
+            + reverse("campaigns:hosted_ad_preview", args=[self.plan.pk, 1])
+        )
+        page.locator("#id_username").fill(self.owner.username)
+        page.locator("#id_password").fill(password)
+        page.get_by_role("button", name="Giriş yap").click()
+
+    def test_six_file_package_pins_old_revision_then_denies_reselection(self):
+        self.choose()
+        self.ad = self.save(self.ad, title="Sonraki düzenleme")
+        password = secrets.token_urlsafe(32)
+        self.owner.set_password(password)
+        self.owner.save(update_fields=["password"])
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                context = browser.new_context()
+                page = context.new_page()
+                self.package_login(page, password)
+                expect(page.locator("#ad-package")).to_be_enabled()
+                with page.expect_download() as event:
+                    page.locator("#ad-export").click()
+                png = Path(event.value.path()).read_bytes()
+                with page.expect_download() as event:
+                    page.locator("#ad-package").click()
+                self.assertEqual(
+                    event.value.suggested_filename,
+                    f"yaparo-campaign-{self.plan.pk}-selection-1.zip",
+                )
+                with ZipFile(event.value.path()) as archive:
+                    self.assertIsNone(archive.testzip())
+                    self.assertEqual(
+                        set(archive.namelist()),
+                        {
+                            "ad.png",
+                            "source.png",
+                            "draft.json",
+                            "manifest.json",
+                            "README.txt",
+                            "campaign.json",
+                        },
+                    )
+                    self.assertEqual(archive.read("ad.png"), png)
+                    self.assertEqual(archive.read("source.png"), bytes(self.image.png))
+                    manifest = json.loads(archive.read("manifest.json"))
+                    campaign = json.loads(archive.read("campaign.json"))
+                    self.assertEqual(
+                        manifest["schema"], "yaparo-campaign-ai-package-v1"
+                    )
+                    self.assertEqual(manifest["campaign_selection"], campaign)
+                    self.assertEqual(campaign["campaign_id"], str(self.plan.pk))
+                    self.assertEqual(
+                        campaign["snapshot_sha256"],
+                        sha256(archive.read("draft.json")).hexdigest(),
+                    )
+                    snapshot = json.loads(archive.read("draft.json"))
+                    self.assertEqual(snapshot["revision"], 1)
+                    self.assertEqual(
+                        snapshot["content"]["title"], "El yapımı seramik kupalar"
+                    )
+                    self.assertEqual(
+                        set(manifest["files"]),
+                        set(archive.namelist()) - {"manifest.json"},
+                    )
+                    for name, meta in manifest["files"].items():
+                        data = archive.read(name)
+                        self.assertEqual(
+                            meta,
+                            {"bytes": len(data), "sha256": sha256(data).hexdigest()},
+                        )
+                other = context.new_page()
+                other.goto(
+                    self.live_server_url
+                    + reverse("campaigns:hosted_ad_choose", args=[self.plan.pk])
+                )
+                other.get_by_role("button", name="Bu kaydı kampanyaya seç").click()
+                downloads = []
+                page.on("download", lambda event: downloads.append(event))
+                page.locator("#ad-package").click()
+                expect(page.locator("#package-status")).to_contain_text(
+                    "Paket doğrulanamadı"
+                )
+                self.assertEqual(downloads, [])
+            finally:
+                browser.close()
+
+    def test_campaign_package_denies_changed_context_and_snapshot_bytes(self):
+        choice = self.choose()
+        data = selection.package_snapshot(
+            owner=self.owner, campaign_id=self.plan.pk, version=choice.version
+        )
+        password = secrets.token_urlsafe(32)
+        self.owner.set_password(password)
+        self.owner.save(update_fields=["password"])
+        altered = json.loads(data["ad_json"])
+        altered["source_manifest"]["text"]["usage"] = {"forged": 1}
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                page = browser.new_page()
+                self.package_login(page, password)
+                downloads = []
+                page.on("download", lambda event: downloads.append(event))
+                pattern = "**/ai-visual/1/package.json"
+                for payload in (
+                    {
+                        **data,
+                        "campaign_selection": {
+                            **data["campaign_selection"],
+                            "campaign_id": "99999",
+                        },
+                    },
+                    {**data, "ad_json": json.dumps(altered, ensure_ascii=False)},
+                ):
+                    page.route(
+                        pattern,
+                        lambda route, request, body=json.dumps(payload): route.fulfill(
+                            status=200, content_type="application/json", body=body
+                        ),
+                    )
+                    expect(page.locator("#ad-package")).to_be_enabled()
+                    page.locator("#ad-package").click()
+                    expect(page.locator("#package-status")).to_contain_text(
+                        "Paket doğrulanamadı"
+                    )
+                    self.assertEqual(downloads, [])
+                    page.unroute(pattern)
+                    page.reload()
+            finally:
+                browser.close()
