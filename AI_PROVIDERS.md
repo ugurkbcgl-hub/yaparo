@@ -583,10 +583,27 @@ provider routing](https://openrouter.ai/docs/guides/overview/multimodal/image-ge
 [ZDR eligible endpoints](https://openrouter.ai/docs/api/api-reference/endpoints/list-endpoints-zdr),
 and [Video Generation API and ZDR limitation](https://openrouter.ai/docs/guides/overview/multimodal/video-generation).
 
-**Next:** Continue non-billable local work. Preserve the USD 0.00078075
-reservation for the unresolved earlier GPT call; do not inspect the account
-balance or change privacy settings. Any further billable call requires
-renewed owner authorization. Preserve the text runner's default USD 0.01 call
-limit; the image exception is limited to this endpoint and the shared USD 16
-cap. Do not attempt video via OpenRouter, use real user files, or connect any
-model to product routes.
+### Renewed real hosted samples — 2026-10-26
+
+The owner's explicit real-AI request renewed authorization for two fixed synthetic
+calls using the existing key/ledger. GPT-6 Luna returned three Duru Studio Turkish
+copy variants through Azure,486 input/440 output tokens, USD0.0002686. Gemini3.1
+Flash Lite Image returned an actual768×1376 JPEG through the single requested
+Google Vertex route, USD0.033625. Both captures and the JPEG are stored outside
+Git, and costs settled. This session total USD0.0338936; cumulative local spent
+USD0.16133545; earlier unresolved USD0.00078075 hold remains unchanged. Key hard
+cap USD16/no reset was verified without inspecting balance or credit usage.
+
+Fresh public model/endpoint/ZDR catalogs and provider terms were checked. The
+bounded image request now explicitly enforces ZDR/data-collection denial as well
+as its pinned provider and no fallback. No additional paid call was made by the
+tests. These two examples are smoke evidence, not a quality benchmark or a model
+promotion. See [actual samples, review and limitations](docs/product/live-brand-ai-sample.md).
+
+**Next:** implement a distinct owner-scoped hosted-result trial preview with
+source/provider/cost provenance, followed by explicit generation/job controls.
+Do not label hosted output as the offline synthetic-template profile. Preserve
+the unresolved hold, text USD0.01/image USD0.10 bounds and shared USD16 cap.
+Owner retains account balance checks. No real user data, OpenRouter video,
+privacy-setting changes, production model promotion or publishing is authorized
+by this smoke result.

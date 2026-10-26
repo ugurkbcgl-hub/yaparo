@@ -17,6 +17,14 @@ remain open. See ADR-0042 and ADR-0043; this is a local synthetic slice.
 
 ## Active delivery plan — 2026-10-23
 
+**26 October real AI milestone:** two owner-authorized OpenRouter calls returned
+three Turkish fictional-brand copy candidates and one decoded/reviewed JPEG,
+USD0.0338936 total. Existing local ledger settled both; historical unresolved hold
+preserved. See [actual evidence](docs/product/live-brand-ai-sample.md). Next Y10
+slice: separate owner-scoped hosted-result trial preview with real provenance,
+then explicit generation/durable jobs. No hosted website button, production model
+qualification, customer data, publishing or deployment claimed.
+
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)
 and the [master plan](docs/product/yaparo-open-source-master-plan.md).
