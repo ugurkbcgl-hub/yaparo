@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 01:20 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 01:26 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -20,7 +20,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base main0bd422e / PR367 merged; required CI40407294248 passed1156 Django
 (4 skips)/44 browser checks; main CI40408645039 passed.
-Current branch codex/brand-campaign-setup; PR not yet created at snapshot.
+Current branch codex/brand-campaign-setup; PR368 open, implementation ad80bf8.
+Required CI pending; verify latest head before merging.
 Task issue328. Recheck actual head/PR/required CI before merge.
 
 Current ADR0071: separate default-off LOCAL_BRAND_CAMPAIGN_SETTINGS_ENABLED adds
