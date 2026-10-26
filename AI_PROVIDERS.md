@@ -1,5 +1,12 @@
 # AI provider evaluation and current direction
 
+> **Explicit local apply (2026-10-26):** [ADR-0059](docs/adr/0059-explicit-offline-copy-application.md)
+> adds a separate default-off action applying chosen deterministic template text
+> fields as a new design revision, with source/candidate/current-revision guards.
+> It does not call a model, truncate text, reselect the campaign or grant provider
+> spend/publication authority. Generic save history is not a generation audit.
+
+
 > **Local preview (2026-10-26):** [ADR-0058](docs/adr/0058-local-brand-copy-preview.md)
 > adds a default-off/DEBUG owner-scoped page for three deterministic template
 > candidates through the bound task contract. No hosted adapter, key, cost or

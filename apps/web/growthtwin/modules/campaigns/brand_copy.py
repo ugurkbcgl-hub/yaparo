@@ -13,14 +13,14 @@ from growthtwin.modules.workspaces.ai_context import (
 )
 
 
-def preview_brand_copy(*, owner, draft_id, selection_version):
+def preview_brand_copy(*, owner, draft_id, selection_version, task_id=None):
     if not settings.DEBUG or not settings.SYNTHETIC_BRAND_COPY_PREVIEW_ENABLED:
         raise PermissionDenied("Yerel örnek metin önizlemesi kapalı.")
     request = build_selected_brand_task(
         owner=owner,
         draft_id=draft_id,
         selection_version=selection_version,
-        task_id=uuid4(),
+        task_id=task_id if task_id is not None else uuid4(),
     )
     result = BrandCopyTaskResult(
         task_id=request.task_id,

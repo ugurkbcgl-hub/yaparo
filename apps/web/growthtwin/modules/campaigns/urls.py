@@ -13,6 +13,11 @@ app_name = "campaigns"
 
 urlpatterns = [
     path(
+        "<int:draft_id>/design/<int:selection_version>/copy/apply/",
+        brand_copy_views.apply_copy,
+        name="brand_copy_apply",
+    ),
+    path(
         "<int:draft_id>/design/<int:selection_version>/copy/",
         brand_copy_views.brand_copy,
         name="brand_copy",

@@ -37,9 +37,11 @@ Y10 typed-output comparison: retain direct runtime adapters for this scope; the
 experimental library remains outside product dependencies. ADR-0057 adds shared
 strict/duplicate-safe response parsing to existing adapters. No model quality
 claim. ADR-0058 adds a default-off read-only local page for three brand-bound
-offline template candidates; no save/apply or user-edit replacement. Next: explicit
-stale-safe candidate application with field-fit validation and preserved history.
-Hosted execution retains separate gates.
+offline template candidates. ADR-0059 adds separate default-off explicit title/
+subtitle application to a new saved revision with field-fit/current-revision/source
+checks and preserved history; campaign reselection stays separate. Next: meaningful
+brand-grounded synthetic text evaluation preparation using the existing gateway.
+Hosted product execution retains separate quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot

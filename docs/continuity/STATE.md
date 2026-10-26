@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 05:09 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 07:42 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,29 +16,34 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base maind3c5362 contains PR353, merged after current exact-head verification.
-Required CI40227564071 succeeded (1019 Django tests:1015 pass/4 skips;25 browser
-checks;5 isolated editor checks;288+288 isolated parsing runs). Recheck main CI.
-Branch codex/brand-copy-preview; PR not yet created at snapshot. Verify live Git/CI.
+Base mainfcf5917 (PR354 merged), required CI40257731616 and main CI40258270000
+succeeded. PR354 passed1027 Django tests (1023 pass/4 skips),26 browser checks.
+Known private preview launcher now has copy-preview flag True (backup saved), source
+flags remain False. Known process restarted without migrate; home/login HTTP200.
+Branch codex/apply-brand-copy; PR not yet created at snapshot. Recheck live Git/CI.
 Durable task: issue328. No migration/configured DB/provider/TEST fixture change.
 
-- ADR0058 adds default-off/DEBUG owner-scoped read-only three-candidate preview via
-  the bound task factory, only SyntheticTemplateGenerator, then full revalidation.
-  No live adapter/key/spend, candidate/task persistence or scene/campaign edits.
-- The selected snapshot stays pinned; current user edits/history are preserved.
-  UI labels fictional templates, displays source facts/identity metadata and links
-  separately to selection, selected preview and current editor. No apply action.
-- New copy route inherits GET/HEAD-only preparse unsafe/multipart refusal and private
-  no-store/noindex headers. CSP scripts none; HTML escaping verified. Base logout
-  remains available; task area contains no form/input/write controls.
-- Eight focused service/HTTP/browser checks passed, plus58 existing gateway/task/
-  design-view checks. Scope/flags/stale/archive/mid-build change/escaping/preparse
-  refusal and unchanged user revision2/title covered. Desktop/mobile no overflow;
-  screenshot reviewed. Source review no blocker. Ruff/format/migration drift/diff
-  passed; required CI pending.
-- Product flags stay off. After reviewed green merge, enable only the new preview
-  flag in the SAME private disposable preview launcher and restart its known process.
-  No new DB/migrate/reset or provider call. Existing release gates stay open.
+- ADR0059 adds separate default-off explicit title-only/title+subtitle application.
+  Server reconstructs the bound offline task and exact candidate digest; typed
+  single-valued POST has no client text/ownership. UTF16 scene field fit/no truncation.
+  Current saved scene's chosen text fields change; layout/colors/assets/CTA preserved.
+- Successful write appends existing save history; no-op/stale/replay rejects. Campaign
+  stays pinned to old snapshot until explicit reselection. Generic save reason is
+  not a durable AI generation/task/candidate audit; no extra provenance persisted.
+- Existing brand/workspace→document lock order, no draft lock. Revalidate inside
+  locks and scope latest exact choice in the same UPDATE via eligibility subquery.
+  Old _write_document calls default None unchanged; atomic failure rolls back.
+- 295 related local checks:281 pass/14 PostgreSQL-only skips. Actual browser stale
+  refusal preserves concurrent user title, then title/body actions create revisions
+ 4/5 with history/selection1 preserved. Final browser rerun and screenshot review
+  passed after disabled-button styling. Four new PG races require CI before merge:
+  two applies, editor/apply, committed reselection-before-UPDATE, legacy edit locks.
+- Closed CSRF form/size/preparse/unknown+duplicate field refusal, private errors,
+  scope/flag/source/hash/no-partial-write covered. Final independent source review
+  found no blocker. Ruff/format/migration drift/diff passed; required CI pending.
+  No hosted API/key/spend/billing/production change.
+- After green merge only enable apply flag in same private launcher and restart
+  its known process; do not migrate/reset or create a new preview database.
 
 ## Established local capabilities and limits
 
@@ -108,8 +113,8 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Define and implement explicit application of an owned offline candidate to a new
-saved document revision. Recheck owner/selection/current revision, validate title/
-subtitle field fit (no silent truncation), preserve history and reject stale posts.
-Do not grant hosted provider, spend, real-data or publishing authority. Inspect
-current editor/task/save contracts before choosing the smallest reversible design.
+Prepare meaningful brand/source-grounded synthetic text evaluation using the existing
+gateway. Inspect current task/copy/claim contracts, then recheck live provider model,
+terms/privacy/cost conditions before any permitted evaluation call. Do not connect
+hosted generation to product routes or infer quality from template parsing tests.
+No real data/new paid infrastructure; owner handles account balance checks.

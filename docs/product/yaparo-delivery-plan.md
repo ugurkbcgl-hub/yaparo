@@ -96,8 +96,10 @@ ADR-0057 ortak ayrıştırıcıyla bilinmeyen iç alanları, yinelenen anahtarla
 belirsiz/bozuk JSON’u reddeder; genişletilmiş çevrimdışı küme mod başına288 yürütme
 yapar. Bu model kalitesi veya iddia doğruluğu değerlendirmesi değildir.
 ADR-0058 ilk yerel Y11 diliminde marka bağlı üç şablon adayını salt okunur gösterir;
-AI çağrısı/kayıt/uygulama yapmaz, kullanıcı düzenlemelerini korur. Sıradaki adım
-açık aday uygulama, sürüm denetimi, alanlara sığma ve geçmişin korunmasıdır.
+AI çağrısı yapmaz. ADR-0059 ayrı kapalı bayrakla açık başlık/açıklama uygulamasını
+yeni kayıt olarak ekler; kaynak/güncel sürüm/alan sınırı doğrulanır, geçmiş korunur,
+metin kısaltılmaz ve kampanya kendiliğinden yeniden seçilmez. Sıradaki adım mevcut
+geçitle anlamlı kaynak-bağlı sentetik metin değerlendirmesinin hazırlanmasıdır.
 
 
 | ID | İş / bağımlılık | Teslim ve tamamlanma ölçütü |

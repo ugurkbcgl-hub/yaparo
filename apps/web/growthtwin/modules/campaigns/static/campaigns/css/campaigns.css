@@ -247,3 +247,5 @@ h2 { font-size: 1.35rem; letter-spacing: -.025em; }
 .google-test-content pre { max-width: 100%; overflow: auto; padding: 1rem; background: var(--surface); }
 
 .brand-copy-options{display:grid;gap:1rem;margin-block:1.25rem}
+
+.brand-copy-options button:disabled{background:#e2e6e0;color:#555e57;border:1px solid #c0c9c0;cursor:not-allowed}
