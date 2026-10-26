@@ -39,9 +39,13 @@ strict/duplicate-safe response parsing to existing adapters. No model quality
 claim. ADR-0058 adds a default-off read-only local page for three brand-bound
 offline template candidates. ADR-0059 adds separate default-off explicit title/
 subtitle application to a new saved revision with field-fit/current-revision/source
-checks and preserved history; campaign reselection stays separate. Next: meaningful
-brand-grounded synthetic text evaluation preparation using the existing gateway.
-Hosted product execution retains separate quality/data/financial gates.
+checks and preserved history; campaign reselection stays separate. On26 October,
+two explicitly authorized real hosted calls produced three fictional-brand Turkish
+texts and one actual JPEG, total USD0.0338936, with captured costs/source metadata.
+See [live brand sample](docs/product/live-brand-ai-sample.md). Next: an owner-scoped
+hosted-result trial preview with honest provider/source/cost provenance, then
+explicit durable generation jobs. Website Generate controls remain offline;
+hosted production execution retains separate quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot

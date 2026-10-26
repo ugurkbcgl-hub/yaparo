@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 07:42 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 08:00 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,34 +16,32 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base mainfcf5917 (PR354 merged), required CI40257731616 and main CI40258270000
-succeeded. PR354 passed1027 Django tests (1023 pass/4 skips),26 browser checks.
-Known private preview launcher now has copy-preview flag True (backup saved), source
-flags remain False. Known process restarted without migrate; home/login HTTP200.
-Branch codex/apply-brand-copy; PR not yet created at snapshot. Recheck live Git/CI.
-Durable task: issue328. No migration/configured DB/provider/TEST fixture change.
+Base main74e15de (PR355 merged), required CI40270501727 and main CI40270939097
+succeeded. PR355 passed1039 Django tests (1035 pass/4 skips),27 browser checks.
+Branch codex/live-brand-generation; PR not yet created at snapshot. Recheck live CI.
+Durable task: issue328. No migration/configured DB/protected TEST fixture change.
 
-- ADR0059 adds separate default-off explicit title-only/title+subtitle application.
-  Server reconstructs the bound offline task and exact candidate digest; typed
-  single-valued POST has no client text/ownership. UTF16 scene field fit/no truncation.
-  Current saved scene's chosen text fields change; layout/colors/assets/CTA preserved.
-- Successful write appends existing save history; no-op/stale/replay rejects. Campaign
-  stays pinned to old snapshot until explicit reselection. Generic save reason is
-  not a durable AI generation/task/candidate audit; no extra provenance persisted.
-- Existing brand/workspace→document lock order, no draft lock. Revalidate inside
-  locks and scope latest exact choice in the same UPDATE via eligibility subquery.
-  Old _write_document calls default None unchanged; atomic failure rolls back.
-- 295 related local checks:281 pass/14 PostgreSQL-only skips. Actual browser stale
-  refusal preserves concurrent user title, then title/body actions create revisions
- 4/5 with history/selection1 preserved. Final browser rerun and screenshot review
-  passed after disabled-button styling. Four new PG races require CI before merge:
-  two applies, editor/apply, committed reselection-before-UPDATE, legacy edit locks.
-- Closed CSRF form/size/preparse/unknown+duplicate field refusal, private errors,
-  scope/flag/source/hash/no-partial-write covered. Final independent source review
-  found no blocker. Ruff/format/migration drift/diff passed; required CI pending.
-  No hosted API/key/spend/billing/production change.
-- After green merge only enable apply flag in same private launcher and restart
-  its known process; do not migrate/reset or create a new preview database.
+- Owner explicitly requested real AI generation. One actual GPT-6 Luna call through
+  Azure returned3 Turkish Duru Studio candidates (486 input/440 output tokens),
+  USD0.0002686; one real Gemini3.1 Flash Lite Image call pinned to Google Vertex
+  returned a decoded/reviewed768×1376 JPEG, USD0.033625. Total USD0.0338936.
+  Fixed fictional brand only; no customer input, production route or publishing.
+- Captures/private image are under %LOCALAPPDATA%\GrowthTwin\evaluations:
+  brand-text-20261026T045335-0f83360e.jsonl;
+  brand-image-20261026T045722-5bdfe523.jsonl and matching.jpg. Both settled.
+  Local ledger spent USD0.16133545; unresolved historical hold USD0.00078075
+  preserved. Key USD16/no-reset cap verified; no account balance/credit usage read.
+- Fresh public endpoint/ZDR catalog and terms checked. New operator sample runner
+  makes one fixed text OR image call, no retry, private fsynced results before
+  settlement. Images request ZDR/data-collection denial/no fallback. Whole-repo
+  output exclusion corrected; failures distinguish held/already-settled costs.
+-14 focused no-network checks passed; Ruff/format/diff passed; independent review
+  completed with fixes. Required PR CI pending. See docs/product/live-brand-ai-sample.md.
+  One sample is not a benchmark, product-fidelity proof or production promotion.
+- Existing offline task/copy-apply profile remains separate. ADR0059 guarded apply
+  writes a saved revision and preserves campaign selection/history. Private known
+  launcher has copy preview/apply enabled; source defaults remain off. Website
+  Generate buttons have NOT been connected to these hosted services.
 
 ## Established local capabilities and limits
 
@@ -113,8 +111,8 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Prepare meaningful brand/source-grounded synthetic text evaluation using the existing
-gateway. Inspect current task/copy/claim contracts, then recheck live provider model,
-terms/privacy/cost conditions before any permitted evaluation call. Do not connect
-hosted generation to product routes or infer quality from template parsing tests.
-No real data/new paid infrastructure; owner handles account balance checks.
+Add a distinct owner-scoped hosted-result trial preview with true source/provider/
+cost provenance, then explicit generation/durable-job controls. Do not label these
+hosted results as offline synthetic-template output. Recheck mutable provider
+conditions before another paid batch; preserve historical hold. No customer data/
+publishing/new infrastructure; owner handles account balance checks.

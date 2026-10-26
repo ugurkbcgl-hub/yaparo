@@ -64,11 +64,11 @@ def _local_directory() -> Path:
     local_data = os.environ.get("LOCALAPPDATA")
     local_root = Path(local_data) if local_data else Path.home() / "AppData/Local"
     result_directory = local_root / "GrowthTwin" / "evaluations" / "visual"
-    repository_root = Path(__file__).resolve().parents[2]
-    result_directory.mkdir(parents=True, exist_ok=True)
+    repository_root = Path(__file__).resolve().parents[3]
     resolved_directory = result_directory.resolve()
     if resolved_directory.is_relative_to(repository_root):
         raise OSError("Evaluation results must be stored outside the repository.")
+    resolved_directory.mkdir(parents=True, exist_ok=True)
     return resolved_directory
 
 
@@ -79,14 +79,19 @@ def _append_jsonl(path: Path, record: dict[str, object]) -> None:
         os.fsync(capture.fileno())
 
 
-def _request_body() -> bytes:
+def _request_body(prompt: str = SYNTHETIC_PROMPT) -> bytes:
     payload = {
         "model": MODEL,
-        "prompt": SYNTHETIC_PROMPT,
+        "prompt": prompt,
         "n": 1,
         "resolution": "1K",
         "aspect_ratio": "9:16",
-        "provider": {"only": [PROVIDER], "allow_fallbacks": False},
+        "provider": {
+            "only": [PROVIDER],
+            "allow_fallbacks": False,
+            "zdr": True,
+            "data_collection": "deny",
+        },
     }
     body = json.dumps(payload, ensure_ascii=True, separators=(",", ":")).encode()
     if len(body) > MAX_PROMPT_BYTES:
@@ -108,13 +113,15 @@ def _image_format(image_bytes: bytes) -> tuple[str, str]:
     raise ImageEvaluationFailure("invalid_image_format")
 
 
-def _generate(api_key: str) -> tuple[bytes, str, float]:
+def _generate(
+    api_key: str, *, prompt: str = SYNTHETIC_PROMPT
+) -> tuple[bytes, str, float]:
     connection = HTTPSConnection("openrouter.ai", timeout=TIMEOUT_SECONDS)
     try:
         connection.request(
             "POST",
             "/api/v1/images",
-            body=_request_body(),
+            body=_request_body(prompt),
             headers={
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
