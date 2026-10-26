@@ -8,6 +8,7 @@
     <p class="lead">{{ draft.brand_name }} · {{ draft.target_city }} · Google Search</p>
     <a class="button button-secondary" href="{% url 'campaigns:journey' draft.pk %}">Kampanya adımlarını gör →</a>
     {% include 'campaigns/design_reference.html' %}
+    {% if hosted_ad_campaign_enabled %}<p><a class="button button-secondary" href="{% url 'campaigns:hosted_ad_choose' draft.pk %}">AI reklam görselini seç veya önizle</a></p>{% endif %}
 
     <aside class="notice" role="note">
       <strong>Önizleme · yayınlanmadı</strong>

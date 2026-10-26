@@ -251,19 +251,24 @@ def export_snapshot(*, owner, draft_id, revision):
         draft, _ = checked_draft(owner, draft_id, lock=True)
         if draft.revision != revision:
             raise ValidationError("Taslak değişmiş; güncel kaydı yeniden açın.")
-        return {
-            "schema": "yaparo-hosted-ad-snapshot-v1",
-            "draft_id": str(draft.pk),
-            "revision": draft.revision,
-            "profile": draft.profile,
-            "layout": layout(draft.profile),
-            "content": dict(draft.content),
-            "source_fingerprint": draft.source_fingerprint,
-            "source_manifest": draft.source_manifest,
-            "renderer": {
-                "version": "hosted-ad-canvas-v2",
-                "engine": "browser Canvas2D",
-                "font": "system Arial",
-                "pixel_portability": "browser and installed fonts may affect pixels",
-            },
-        }
+        return snapshot_data(draft, draft.revision, draft.content)
+
+
+def snapshot_data(draft, revision, content):
+    """Build metadata only after the caller validates ownership/source/history."""
+    return {
+        "schema": "yaparo-hosted-ad-snapshot-v1",
+        "draft_id": str(draft.pk),
+        "revision": revision,
+        "profile": draft.profile,
+        "layout": layout(draft.profile),
+        "content": validate_content(content),
+        "source_fingerprint": draft.source_fingerprint,
+        "source_manifest": draft.source_manifest,
+        "renderer": {
+            "version": "hosted-ad-canvas-v2",
+            "engine": "browser Canvas2D",
+            "font": "system Arial",
+            "pixel_portability": "browser and installed fonts may affect pixels",
+        },
+    }

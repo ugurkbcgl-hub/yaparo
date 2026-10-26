@@ -135,6 +135,49 @@ class CampaignDesignChoice(models.Model):
         raise ValidationError("Tasarım seçimi geçmişi tek başına silinemez.")
 
 
+class CampaignHostedAdChoice(models.Model):
+    """Separate append-only hosted-trial visual planning reference."""
+
+    campaign = models.ForeignKey(
+        WorkspaceCampaignDraft,
+        on_delete=models.CASCADE,
+        related_name="hosted_ad_choices",
+    )
+    revision = models.ForeignKey(
+        "workspaces.HostedAdRevision",
+        on_delete=models.PROTECT,
+        related_name="campaign_choices",
+    )
+    snapshot = models.JSONField()
+    version = models.PositiveIntegerField()
+    request_id = models.UUIDField(unique=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = CampaignDesignChoiceQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("-version",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("campaign", "version"), name="campaign_hosted_ad_version_unique"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(version__gte=1),
+                name="campaign_hosted_ad_version_positive",
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Görsel seçimi geçmişi değiştirilemez.")
+        if self.campaign.workspace_id != self.revision.draft.workspace_id:
+            raise ValidationError("Görsel aynı çalışma alanına ait olmalıdır.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Görsel seçimi geçmişi tek başına silinemez.")
+
+
 class CampaignRehearsal(models.Model):
     """Synthetic lifecycle only; never authorizes external dispatch."""
 
