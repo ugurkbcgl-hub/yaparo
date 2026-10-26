@@ -73,8 +73,11 @@ no retry. Actual new request3 returned3 Turkish candidates (USD0.00055630);
 request4 returned768×1376 image (USD0.03364200), both identity2/source revision1.
 Two initial billable failures remain unverified with reserved cost preserved;
 see ADR0068 for limitations and exact evidence. Normal switches remain off.
-Next: explicitly compose owned saved brand outputs into an identity-pinned
-editable creative with immutable provenance, without another provider call.
+ADR0069 now adds that explicit composition into a separate identity-pinned
+BrandAdDraft: owned saved result selection, text/color edit, history/stale/replay
+guards and saved-only768×1376 PNG. Actual revision2/export and unchanged source/
+ledger verified, USD0 new AI cost. Logo binary is not applied; fixed overlay only.
+Next: saved-only brand creative package with exact PNG/source/provenance.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact

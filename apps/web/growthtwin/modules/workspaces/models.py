@@ -242,6 +242,38 @@ class BrandGenerationAttempt(models.Model):
     completed_at = models.DateTimeField(null=True)
 
 
+class BrandAdDraft(models.Model):
+    """Explicit composition of two owned, identity-pinned saved results."""
+
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    brand = models.ForeignKey("Brand", on_delete=models.PROTECT)
+    identity = models.ForeignKey("BrandIdentity", on_delete=models.PROTECT)
+    text_attempt = models.ForeignKey(
+        BrandGenerationAttempt, on_delete=models.PROTECT, related_name="copy_drafts"
+    )
+    image_attempt = models.ForeignKey(
+        BrandGenerationAttempt, on_delete=models.PROTECT, related_name="image_drafts"
+    )
+    candidate_key = models.CharField(max_length=80)
+    profile = models.CharField(max_length=64)
+    source_fingerprint = models.CharField(max_length=64)
+    source_manifest = models.JSONField()
+    content = models.JSONField()
+    revision = models.PositiveIntegerField(default=1)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=("text_attempt", "image_attempt", "candidate_key"),
+                name="brand_ad_source_candidate_unique",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(revision__gte=1), name="brand_ad_revision_positive"
+            ),
+        ]
+
+
 class HostedAdRevisionQuerySet(models.QuerySet):
     def update(self, **kwargs):
         raise ValidationError("Taslak geçmişi değiştirilemez.")
@@ -267,6 +299,31 @@ class HostedAdRevision(models.Model):
         constraints = [
             models.UniqueConstraint(
                 fields=("draft", "revision"), name="hosted_ad_history_revision_unique"
+            )
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self._state.adding or self.pk is not None:
+            raise ValidationError("Taslak geçmişi değiştirilemez.")
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Taslak geçmişi tek başına silinemez.")
+
+
+class BrandAdRevision(models.Model):
+    draft = models.ForeignKey(
+        BrandAdDraft, on_delete=models.CASCADE, related_name="history"
+    )
+    revision = models.PositiveIntegerField()
+    content = models.JSONField()
+    objects = HostedAdRevisionQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("-revision",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("draft", "revision"), name="brand_ad_history_unique"
             )
         ]
 

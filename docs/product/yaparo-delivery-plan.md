@@ -91,7 +91,10 @@ Yeni talep3/4 kaydedildi ve maliyeti kesinleştirildi (toplam0,03419830 USD).
 İlk iki ücretli başarısızlık belirsiz/bekletilmiş kalır; sıfırlanmaz veya tekrar
 çalıştırılmaz. Genel müşteri girdisi, üretim sağlayıcısı, kuyruk ve yeniden deneme
 hazır sayılmaz. Sıradaki dar dilim bu sahip olunan çıktıları marka kimliğine bağlı
-düzenlenebilir reklama açık seçimle aktarmak; yeni AI çağrısı gerektirmez.
+düzenlenebilir reklama açık seçimle aktarmak; ADR0069 bu dar dilimi tamamlar:
+markaya bağlı ayrı taslak, başlık/açıklama/çağrı/renk, kayıt geçmişi ve PNG.
+Gerçek kayıt2/PNG doğrulandı; yeni AI maliyeti0 USD. Logo dosyası uygulanmaz.
+Sıradaki dilim kayıtlı marka reklamının kaynak ve kimlik bilgileriyle ZIP paketi.
 
 ADR-0055 ilk çevrimdışı marka/kaynak/sürüm bağlı görev ve sonuç sözleşmesini ekler.
 Mevcut geçit korunur; yalnız deterministik sentetik adaptör ve sıfır maliyet kabul

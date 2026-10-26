@@ -28,7 +28,7 @@ _AI_VISUAL_PATH = re.compile(
     r"\A/workspace/campaigns/[0-9]+/ai-visual/(?:[0-9]+/(?:(?:preview|image)/|package\.json))?\Z"
 )
 _BRIEF_PATH = re.compile(
-    r"\A/workspace/brands/[0-9]+/production/(?:[0-9a-f-]{36}/(?:(?:generate|image)/)?)?\Z"
+    r"\A/workspace/brands/[0-9]+/(?:production/(?:[0-9a-f-]{36}/(?:(?:generate|image)/)?)?|ads/(?:create/|[0-9a-f-]{36}/(?:(?:save|image)/)?)?)\Z"
 )
 
 
@@ -55,7 +55,7 @@ class ClosedSyntheticMaterialIntakeMiddleware:
 
     def __call__(self, request):
         if _BRIEF_PATH.fullmatch(request.path):
-            if request.path.endswith("/generate/"):
+            if request.path.endswith(("/generate/", "/create/", "/save/")):
                 allowed = ("POST",)
             else:
                 allowed = (

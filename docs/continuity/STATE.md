@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 20:04 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 20:24 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,10 +16,30 @@ No new service/recharge, customer data, real account, media spend or publishing.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
-Base main bd877ff / PR364 merged; main CI40327599783 passed.
-Current branch codex/brand-bound-ai-generation; PR365 open, code6d89dd0 before final evidence note.
-Required CI pending for final head; recheck latest run before merge.
-Task issue328. Recheck head/PR/required CI before merge.
+Base main69840de / PR365 merged; required CI40363953742 passed1136 Django
+(4 skips)/41 browser checks, main CI40365248050 passed.
+Current branch codex/brand-ai-editable-creative; PR366 open, codea5dd224 before
+this handoff metadata commit. Required latest-head CI pending; recheck before merge.
+Task issue328. Recheck current head/PR/required CI before merge.
+
+Current ADR0069: separate default-off LOCAL_BRAND_AD_ENABLED owns explicit saved
+text/image selection→BrandAdDraft→edit/save/reopen→saved PNG. Same brand/identity/
+source revision required; protected attempts/identity, full pinned provenance,
+brand→document→attempt→draft locks, unique create replay, CAS/history and private
+CSRF routes. Separate brand-ad.js wraps actual name, palette text/accent, fixed
+768×1376 overlay, measured no-truncation fit and verified private PNG. Logo binary
+not applied; no ZIP/general layers/campaign selection. No new provider or cost.
+10 new focused tests8 pass/2 PG skips, including second brand, long-name/mobile,
+valid different PNG hash refusal, stale/replay and private guards. Independent
+source review no blocker. Combined41 new/legacy/backend/browser checks passed (36 pass/5 PG skips);
+Ruff/format/drift passed. Required PostgreSQL CI pending.
+Actual normal IAB created brand1 draft8e17aa42-009a-440a-a9e5-e87f755c9967 from
+request3/key slogan + request4 image, identity2, then saved CTA “Koleksiyonu tanı”
+as revision2. Normal independent Chromium login downloaded/verified768×1376 PNG;
+lower source pixels exact, desktop/mobile passed. IAB download clicked but path
+not observed. Private brand-ad-live-evidence.json, brand-ad-real-v2.png,
+brand-ad-iab.png, brand-ad-{1440,390}.png.37 preexisting non-auth/non-framework
+tables and local ledger unchanged after composition; new draft/history1/2 only.
 
 ADR0068 adds default-off LOCAL_BRAND_AI_ENABLED plus exact reviewed synthetic
 request UUID/fingerprint admission, independent of ADR0067's unauthorized envelope.
@@ -51,17 +71,21 @@ passed; actual user browser generation and key-free restart/readback passed.
 Both focused browser checks (copy/replay and decoded responsive image) passed.
 Actual normal HTTP login + two repeated generate POSTs per completed request
 returned saved results; attempt count and local ledger unchanged (key-free runtime).
-Ruff/format/drift passed; full required PostgreSQL CI pending.
+Ruff/format/drift passed; PR365 full required PostgreSQL CI subsequently passed.
 Independent source re-review found no blocker. This is smoke, not quality benchmark.
 
 ## Same private preview — preserve it
 
 %TEMP%\yaparo-public-preview-q2ql3pkq / preview.sqlite3 / loopback8002.
-Schema workspaces0011 / campaigns0010. Forward0011 backup:
+Schema workspaces0012 / campaigns0010. Forward0012 backup:
+preview-before-brand-ad-20261026T171740Z.sqlite3; old rows preserved, only two new
+empty tables/standard migration+2 content types+8 permissions at upgrade.
+Previous forward0011 backup:
 preview-before-brand-ai-20261026T163458Z.sqlite3. All old rows across36 prior
 non-auth/non-framework tables preserved; four requests/four attempts now exist.
 Old fixed trials/drafts/source/history/campaign choices remain independent.
-Current known serve_design_preview.py process restarted WITHOUT provider key or
+Current known serve_design_preview.py enables the new brand-ad flag locally,
+restarted WITHOUT provider key or
 hard-cap assertion. Exact private brand-ai-approved.json permits only requests1–4;
 no new request automatically gets paid permission. Normal repo flags stay off.
 Verify exact listener command before restarting. Never recreate/replace DB or
@@ -97,7 +121,7 @@ was not verified by this product task; scheduling is not proof of work.
 
 ## Next action
 
-Compose the owned completed brand text/image results into an explicitly selected,
-identity-pinned editable creative with immutable request/source/cost provenance.
-Preserve old drafts/campaign choices and failures/holds; use saved outputs without
-another provider call. Keep general customer/provider/publishing gates closed.
+Add a saved-only brand creative package with exact rendered PNG, source PNG and
+pinned identity/request/result/edit provenance. Preserve the new overlay profile,
+old fixed drafts/campaign choices and failures/holds. Use saved outputs without
+another provider call; customer/publishing gates remain closed.

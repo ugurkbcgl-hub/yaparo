@@ -3,6 +3,7 @@
 from uuid import UUID, uuid4
 
 from django import forms
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http import Http404, HttpResponse
@@ -163,7 +164,12 @@ def detail(request, brand_id, request_id):
     return render(
         request,
         "workspaces/production_brief_detail.html",
-        {"plan": plan, "generation": job, "can_generate": can_generate},
+        {
+            "plan": plan,
+            "generation": job,
+            "can_generate": can_generate,
+            "can_compose": settings.LOCAL_BRAND_AD_ENABLED,
+        },
     )
 
 
