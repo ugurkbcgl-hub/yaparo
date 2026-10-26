@@ -5,7 +5,7 @@ from dataclasses import asdict
 from django import forms
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views.decorators.cache import never_cache
@@ -143,6 +143,12 @@ def _editor(request, draft, form=None, *, status=200):
                 "content": draft.content,
                 "revision": draft.revision,
                 "id": str(draft.pk),
+                "profile": draft.profile,
+                "source_fingerprint": draft.source_fingerprint,
+                "package_url": reverse(
+                    "brands:hosted_ad_package",
+                    kwargs={"draft_id": draft.pk, "revision": draft.revision},
+                ),
                 "can_export": status == 200,
             },
         },
@@ -211,5 +217,24 @@ def image(request, draft_id):
         return HttpResponse("Taslak görseli doğrulanamadı.", status=409)
     response = HttpResponse(png, content_type="image/png")
     response["Content-Length"] = str(len(png))
+    response["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
+@login_required
+@never_cache
+@require_safe
+def package(request, draft_id, revision):
+    if request.GET:
+        return _error(request, 400)
+    try:
+        snapshot = service.export_snapshot(
+            owner=request.user, draft_id=draft_id, revision=revision
+        )
+    except (PermissionDenied, ObjectDoesNotExist) as error:
+        raise Http404 from error
+    except Exception:
+        return _error(request)
+    response = JsonResponse(snapshot, json_dumps_params={"ensure_ascii": False})
     response["X-Content-Type-Options"] = "nosniff"
     return response

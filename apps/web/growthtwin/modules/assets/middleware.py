@@ -22,7 +22,7 @@ _READ_ONLY_DESIGN = re.compile(
     r"\A/workspace/campaigns/[0-9]+/design/[0-9]+/(?:preview|image|bundle|copy)/\Z"
 )
 _TRIAL_PATH = re.compile(
-    r"\A/workspace/brands/ai-trial/(?:generate/|image/(?:generate/|content/|download/)?|drafts/(?:create/|[0-9a-f-]{36}/(?:save/|image/)?)?)?\Z"
+    r"\A/workspace/brands/ai-trial/(?:generate/|image/(?:generate/|content/|download/)?|drafts/(?:create/|[0-9a-f-]{36}/(?:save/|image/|revisions/[0-9]+/package\.json)?)?)?\Z"
 )
 
 

@@ -27,6 +27,11 @@ urlpatterns = [
         name="hosted_ad_save",
     ),
     path(
+        "ai-trial/drafts/<uuid:draft_id>/revisions/<int:revision>/package.json",
+        hosted_ad_views.package,
+        name="hosted_ad_package",
+    ),
+    path(
         "ai-trial/drafts/<uuid:draft_id>/image/",
         hosted_ad_views.image,
         name="hosted_ad_image",
