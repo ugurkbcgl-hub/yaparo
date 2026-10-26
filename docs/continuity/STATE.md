@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 15:02 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 15:03 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -18,7 +18,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base main0388f8f (PR362 merged), required CI40317099228 passed1109 Django tests
 (4 skips)/36 browser tests; main CI40318090943 also passed.
-Current branch codex/campaign-ai-source-package; PR not created at snapshot.
+Current branch codex/campaign-ai-source-package; PR363 open at snapshot,
+code16fb355. Verify latest-head required CI before merge.
 Task issue328. No new migration; private schema workspaces0009/campaigns0010.
 
 - ADR0066 adds separate six-file campaign ZIP with campaign.json, pinned canonical
