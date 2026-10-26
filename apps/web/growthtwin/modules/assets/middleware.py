@@ -22,7 +22,7 @@ _READ_ONLY_DESIGN = re.compile(
     r"\A/workspace/campaigns/[0-9]+/design/[0-9]+/(?:preview|image|bundle|copy)/\Z"
 )
 _TRIAL_PATH = re.compile(
-    r"\A/workspace/brands/ai-trial/(?:generate/|image/(?:generate/|content/|download/)?)?\Z"
+    r"\A/workspace/brands/ai-trial/(?:generate/|image/(?:generate/|content/|download/)?|drafts/(?:create/|[0-9a-f-]{36}/(?:save/|image/)?)?)?\Z"
 )
 
 
@@ -45,7 +45,9 @@ class ClosedSyntheticMaterialIntakeMiddleware:
     def __call__(self, request):
         if _TRIAL_PATH.fullmatch(request.path):
             allowed = (
-                ("POST",) if request.path.endswith("/generate/") else ("GET", "HEAD")
+                ("POST",)
+                if request.path.endswith(("/generate/", "/create/", "/save/"))
+                else ("GET", "HEAD")
             )
             if request.method not in allowed:
                 response = HttpResponse(status=405)
