@@ -195,6 +195,8 @@ def brand_detail(request, brand_id):
             .select_related("identity")
             .order_by("-created_at"),
             "material_rows": material_rows,
+            "production_brief_enabled": settings.DEBUG
+            and settings.LOCAL_BRAND_PRODUCTION_BRIEF_ENABLED,
             "can_generate_raster": settings.DEBUG
             and settings.SYNTHETIC_MATERIAL_PERSISTENCE_ENABLED,
         },

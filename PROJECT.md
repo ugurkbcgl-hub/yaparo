@@ -64,8 +64,10 @@ ADR0065 adds explicit same-workspace saved-AI revision selection for local campa
 with a pinned read-only preview; later edits require explicit reselection. Brand
 identity and Search publishing are unchanged. ADR0066 adds the selected campaign
 source ZIP with exact pinned snapshot and campaign-selection manifest; no new AI
-charge. Next: synthetic brand/brief/material-version contract for brand-aware
-hosted generation, preserving the fixed trial and existing unknown provenance.
+charge. ADR0067 adds versioned owner-entered synthetic brand briefs pinned to actual
+identity/source/material versions. Old requests survive source edits; new requests
+use the current identity. No AI dispatch or inferred binding for fixed Duru trials.
+Next: separately gated brand-bound execution/result adapter rehearsal.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact

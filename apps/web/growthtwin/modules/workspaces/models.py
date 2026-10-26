@@ -162,6 +162,66 @@ class HostedAdDraft(models.Model):
         ]
 
 
+class BrandProductionRequestQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Üretim talepleri değiştirilemez.")
+
+    def delete(self):
+        raise ValidationError("Üretim talebi geçmişi tek başına silinemez.")
+
+    def bulk_update(self, objs, fields, **kwargs):
+        raise ValidationError("Üretim talepleri değiştirilemez.")
+
+
+class BrandProductionRequest(models.Model):
+    """Pinned brand/source/brief plan, not a hosted job or spend permission."""
+
+    id = models.UUIDField(primary_key=True, editable=False)
+    brand = models.ForeignKey(
+        "Brand", on_delete=models.PROTECT, related_name="production_requests"
+    )
+    identity = models.ForeignKey("BrandIdentity", on_delete=models.PROTECT)
+    source_revision = models.ForeignKey(
+        "BrandCreativeRevision", on_delete=models.PROTECT
+    )
+    version = models.PositiveIntegerField()
+    brief = models.JSONField()
+    envelope = models.JSONField()
+    fingerprint = models.CharField(max_length=64)
+    created_at = models.DateTimeField(auto_now_add=True)
+    objects = BrandProductionRequestQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("-version",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("brand", "version"), name="brand_production_version_unique"
+            ),
+            models.CheckConstraint(
+                condition=models.Q(version__gte=1),
+                name="brand_production_version_positive",
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if (
+            not self._state.adding
+            or self.pk is None
+            or type(self).objects.filter(pk=self.pk).exists()
+        ):
+            raise ValidationError("Üretim talebi geçmişi değiştirilemez.")
+        if (
+            self.identity.brand_id != self.brand_id
+            or self.source_revision.document.identity_id != self.identity_id
+        ):
+            raise ValidationError("Marka, kimlik ve kaynak eşleşmiyor.")
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Üretim talebi geçmişi tek başına silinemez.")
+
+
 class HostedAdRevisionQuerySet(models.QuerySet):
     def update(self, **kwargs):
         raise ValidationError("Taslak geçmişi değiştirilemez.")
