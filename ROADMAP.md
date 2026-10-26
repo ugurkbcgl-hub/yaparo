@@ -39,7 +39,11 @@ revisions, stale-safe choices and pinned read-only preview; no Search dispatch o
 brand binding. ADR0066 adds the pinned campaign source ZIP and exact snapshot
 hash/selection metadata. ADR0067 adds owned versioned briefs, identity/source/material snapshot contracts
 and no-I/O mock receipt validation. Current new source required; old requests
-remain pinned. Next: brand-bound execution/result adapter rehearsal with mocks.
+remain pinned. ADR0068 now adds separately reviewed one-shot brand-bound real
+text/image generation. New synthetic request3/4 completed and settled, total
+USD0.03419830; two initial billable failures remain held/unverified. Preserved
+history and key-free result readback verified. Next: compose these owned saved
+outputs into an explicitly selected identity-pinned editable creative, no AI call.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)

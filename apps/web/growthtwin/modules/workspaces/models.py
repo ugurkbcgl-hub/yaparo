@@ -222,6 +222,26 @@ class BrandProductionRequest(models.Model):
         raise ValidationError("Üretim talebi geçmişi tek başına silinemez.")
 
 
+class BrandGenerationAttempt(models.Model):
+    """One durable evaluation intent per approved synthetic production request."""
+
+    request = models.OneToOneField(
+        BrandProductionRequest, on_delete=models.PROTECT, related_name="generation"
+    )
+    fingerprint = models.CharField(max_length=64)
+    input_hash = models.CharField(max_length=64)
+    kind = models.CharField(max_length=8)
+    status = models.CharField(max_length=16, default="started")
+    budget_state = models.CharField(max_length=16, default="not_reserved")
+    reserved_usd = models.DecimalField(max_digits=12, decimal_places=8)
+    actual_usd = models.DecimalField(max_digits=12, decimal_places=8, null=True)
+    output = models.JSONField(default=dict)
+    original = models.BinaryField(default=bytes)
+    png = models.BinaryField(default=bytes)
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True)
+
+
 class HostedAdRevisionQuerySet(models.QuerySet):
     def update(self, **kwargs):
         raise ValidationError("Taslak geçmişi değiştirilemez.")

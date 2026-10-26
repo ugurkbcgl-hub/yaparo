@@ -85,6 +85,14 @@ Y01–Y03 yerel seçim kararı ADR-0041 ile kaydedildi; yaratıcı çalışma ba
 
 ## B — Değiştirilebilir AI üretimi ve maliyet
 
+26 Ekim güncellemesi: ADR0067 marka kimliği/brief/kaynak sürümlerini sabitler;
+ADR0068 ayrı incelenmiş sentetik taleplerde tek gerçek metin/görsel üretimini ekler.
+Yeni talep3/4 kaydedildi ve maliyeti kesinleştirildi (toplam0,03419830 USD).
+İlk iki ücretli başarısızlık belirsiz/bekletilmiş kalır; sıfırlanmaz veya tekrar
+çalıştırılmaz. Genel müşteri girdisi, üretim sağlayıcısı, kuyruk ve yeniden deneme
+hazır sayılmaz. Sıradaki dar dilim bu sahip olunan çıktıları marka kimliğine bağlı
+düzenlenebilir reklama açık seçimle aktarmak; yeni AI çağrısı gerektirmez.
+
 ADR-0055 ilk çevrimdışı marka/kaynak/sürüm bağlı görev ve sonuç sözleşmesini ekler.
 Mevcut geçit korunur; yalnız deterministik sentetik adaptör ve sıfır maliyet kabul
 edilir. Sunucudaki seçime göre istek tekrar kurularak kampanyalar arası sonuç ve
