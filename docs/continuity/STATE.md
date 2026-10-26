@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 10:39 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 13:58 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -18,7 +18,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base mainca54002 (PR360 merged), required CI40285500335 passed1096 Django tests
 (4 skips)/33 browser tests; main CI40286189012 passed. Current branch
-codex/hosted-ad-package; PR not created at snapshot, verify current head/PR/CI.
+codex/hosted-ad-package; PR361 open at snapshot, code c20706d. Verify latest-head
+required CI before merge.
 Task issue328. No new migration; private schema remains workspaces0009.
 
 - ADR0064 adds current saved-draft ZIP with ad.png,source.png,draft.json,
