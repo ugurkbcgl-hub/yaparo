@@ -17,8 +17,8 @@ Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
 Base main6bd216f (PR359 merged); required CI40283604347 passed1091 Django tests
-(4 skips) and31 browser tests. Branch codex/hosted-ad-formats; recheck latest PR/CI
-before merge. Durable task issue328. Forward0009 replaces draft uniqueness with
+(4 skips) and31 browser tests. Branch codex/hosted-ad-formats; PR360 open at snapshot, code483a77e.
+Recheck latest-head required CI before merge. Main CI40284342258 also passed. Durable task issue328. Forward0009 replaces draft uniqueness with
 source/candidate/profile; it does not rewrite existing draft/history rows.
 
 - ADR0063 adds square1080×1080 and portrait1080×1350 profiles. Exact immutable
@@ -29,7 +29,9 @@ source/candidate/profile; it does not rewrite existing draft/history rows.
   Full latest-head CI pending. No provider or ledger calls or new AI cost.
   Same private DB forward0009 backup:preview-before-ad-formats-20261026T072051Z.sqlite3;
   all old rows preserved. Source records/historical hold untouched. Browser normal
-  test login created square0bb917d8-d03b-4be6-9808-b2ed66cd9d82. Do not reverse0009
+  test login created square0bb917d8-d03b-4be6-9808-b2ed66cd9d82 and
+  portrait84e039da-c124-48f7-b811-a309d2360b01. ad-formats-evidence.json verifies
+  37 prior non-auth tables/rows preserved; only two drafts/history snapshots added. Do not reverse0009
   automatically after multiple formats; old uniqueness can conflict (ADR0063).
 
 - ADR0062 adds an independent HostedAdDraft over completed text/image jobs, not a

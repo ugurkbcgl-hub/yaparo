@@ -43,7 +43,9 @@ remain. Required CI still must verify PostgreSQL races and broader tests before 
 The same known private preview DB was consistently backed up before forward0009.
 All existing rows were compared unchanged; only a migration recorder row was added.
 No protected Google fixture or configured database was accessed. Normal test login
-then created a new square draft from actual previously saved text/image sources.
+then created square and portrait drafts from actual saved text/image sources.
+A subsequent read compared37 non-auth tables: all prior rows preserved, only two
+new draft/history snapshots added (ad-formats-evidence.json in the private root).
 No provider credential was loaded or added to the preview server.
 
 Next: export a saved formatted draft as an owned source-manifest package, keeping
