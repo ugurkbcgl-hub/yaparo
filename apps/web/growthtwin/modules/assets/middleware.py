@@ -27,6 +27,7 @@ _TRIAL_PATH = re.compile(
 _AI_VISUAL_PATH = re.compile(
     r"\A/workspace/campaigns/[0-9]+/ai-visual/(?:[0-9]+/(?:(?:preview|image)/|package\.json))?\Z"
 )
+_BRIEF_PATH = re.compile(r"\A/workspace/brands/[0-9]+/production/(?:[0-9a-f-]{36}/)?\Z")
 
 
 def _headers(response, request):
@@ -34,6 +35,7 @@ def _headers(response, request):
         _DESIGN_PATH.fullmatch(request.path)
         or _TRIAL_PATH.fullmatch(request.path)
         or _AI_VISUAL_PATH.fullmatch(request.path)
+        or _BRIEF_PATH.fullmatch(request.path)
     ):
         patch_cache_control(
             response, private=True, no_store=True, no_cache=True, max_age=0
@@ -50,6 +52,16 @@ class ClosedSyntheticMaterialIntakeMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
+        if _BRIEF_PATH.fullmatch(request.path):
+            allowed = (
+                ("GET", "HEAD", "POST")
+                if request.path.endswith("/production/")
+                else ("GET", "HEAD")
+            )
+            if request.method not in allowed:
+                response = HttpResponse(status=405)
+                response["Allow"] = ", ".join(allowed)
+                return _headers(response, request)
         if _AI_VISUAL_PATH.fullmatch(request.path):
             allowed = (
                 ("GET", "HEAD", "POST")
@@ -81,6 +93,7 @@ class ClosedSyntheticMaterialIntakeMiddleware:
             _PREPARE_PATH.fullmatch(request.path)
             or _TRIAL_PATH.fullmatch(request.path)
             or _AI_VISUAL_PATH.fullmatch(request.path)
+            or _BRIEF_PATH.fullmatch(request.path)
         ):
             content_type = (
                 request.META.get("CONTENT_TYPE", "").split(";", 1)[0].strip().lower()
@@ -93,7 +106,12 @@ class ClosedSyntheticMaterialIntakeMiddleware:
             if (
                 content_type != "application/x-www-form-urlencoded"
                 or body_length < 1
-                or body_length > _MAX_FORM_BODY_BYTES
+                or body_length
+                > (
+                    16 * 1024
+                    if _BRIEF_PATH.fullmatch(request.path)
+                    else _MAX_FORM_BODY_BYTES
+                )
             ):
                 return _headers(HttpResponse(status=415), request)
         return _headers(self.get_response(request), request)

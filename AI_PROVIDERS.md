@@ -1,5 +1,12 @@
 # AI provider evaluation and current direction
 
+> **Brand/brief preparation (26 October 2026):** ADR0067 adds owned immutable
+> brand-identity/brief/source-material request versions and a no-I/O mock receipt.
+> Execution remains unauthorized, provider None and cost ceiling zero. Existing
+> paid fixed Duru results remain separate; no retroactive brand binding, API call,
+> provider credential read or account balance query. This is preparation, not model output.
+
+
 > **Explicit local apply (2026-10-26):** [ADR-0059](docs/adr/0059-explicit-offline-copy-application.md)
 > adds a separate default-off action applying chosen deterministic template text
 > fields as a new design revision, with source/candidate/current-revision guards.

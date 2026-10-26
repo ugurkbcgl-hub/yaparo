@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 15:03 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 15:57 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,11 +16,31 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main0388f8f (PR362 merged), required CI40317099228 passed1109 Django tests
-(4 skips)/36 browser tests; main CI40318090943 also passed.
-Current branch codex/campaign-ai-source-package; PR363 open at snapshot,
-code16fb355. Verify latest-head required CI before merge.
-Task issue328. No new migration; private schema workspaces0009/campaigns0010.
+Base main14603b2 (PR363 merged); required CI40319643050 passed1113 Django tests
+(4 skips)/38 browser tests, main CI40320638629 passed. Branch
+codex/brand-production-brief; PR364 open at snapshot, code098b2af. Recheck latest
+head and required CI before merge.
+Task issue328. Additive workspaces0010 BrandProductionRequest; campaigns0010 unchanged.
+
+- ADR0067 adds default-off LOCAL_BRAND_PRODUCTION_BRIEF_ENABLED/DEBUG owner UI
+  for synthetic brief capture: current BrandIdentity + bound saved source revision,
+  hero/logo material version metadata, description/audience/objective/deliverable.
+  Append-only per-brand versions/UUID replay, expected-version/current-source guards,
+  protected source FKs and locked readback reconstructing envelope/fingerprint.
+  Old requests remain pinned after source/identity edits; no fixed Duru rebind.
+  Strict zero-cost unauthorized/no-provider envelope and no-I/O mock receipt only.
+ 18 focused new/legacy context/browser tests:17 pass/1 PG skip; two-brand isolation,
+  old pinned reads, stale/replay/corruption/scope/brief/receipt types/CSRF/escaping,
+  two request versions/stale preserved fields/mobile verified. Independent review
+  no blockers; PG competing-version/full CI required before merge.
+  Same private DB forward0010 backup:preview-before-brand-production-20261026T125102Z.sqlite3.
+  Old rows preserved; initial request table empty. Actual normal UI created new
+  bound source4b2de5c5-17bd-4835-a928-25f7a0588efc for brand1 identity2, then request
+  2b55f540-7f83-4b07-aec4-0b25d975a22d version1/source revision1. Old designs were
+  unbound, not modified. Actual readback pins palette/brief/scene digest and2 materials.
+  38 prior non-auth tables preserved; only new source/catalog/binding/request rows
+  and standard migration/type/permissions added. Private brand-production-brief-
+  evidence.json and brand-production-brief-iab.png. No API call/cost/provider secret read.
 
 - ADR0066 adds separate six-file campaign ZIP with campaign.json, pinned canonical
   ad_json bytes/hash and exact selection identity. Versioned private JSON route
@@ -30,7 +50,7 @@ Task issue328. No new migration; private schema workspaces0009/campaigns0010.
   Independent five-file package and readonly form/save contracts remain unchanged.
  36 focused tests:32 pass/4 PG skips, including9 browser journeys; six-file CRC/
   hashes/PNG/source/pinned old revision, wrong context/digest and stale refusal pass.
-  Ruff/format/drift/diff and independent source review passed; latest full CI pending.
+  Ruff/format/drift/diff and independent source review passed; PR363 full CI passed.
   Actual normal browser campaign1/selection1 package-ready message; independent
   Chromium downloaded/verified all6 files and1080x1350 PNG. All38 non-auth tables
   unchanged. Private campaign-selected-source-package.zip, campaign-ai-package-
@@ -96,7 +116,7 @@ history stays separate. Current v4 browser checks preserve both mechanisms.
 ## Same disposable local preview
 
 Private root: %TEMP%\yaparo-public-preview-q2ql3pkq, DB preview.sqlite3.
-Current private schema: workspaces0009/campaigns0010. Before0008:
+Current private schema: workspaces0010/campaigns0010. Before0008:
 preview-before-hosted-ad-20261026T065103Z.sqlite3; all prior rows compared unchanged,
 only two draft/history tables, one migration, two content types/eight permissions
 added. After actual edit, preview-after-hosted-ad-20261026T065916Z.sqlite3 readback
@@ -104,7 +124,8 @@ verified source manifest/fingerprint and history1/2. Source DB was not replaced.
 This is local backup readback, not configured PostgreSQL/Heroku recovery proof.
 
 Private launcher backup: serve_design_preview.before-hosted-ad.py. Current
-serve_design_preview.py admits text/image/ad-draft/campaign-choice flags for workspace1, loopback
+serve_design_preview.py admits text/image/ad-draft/campaign-choice for workspace1
+and local brand-production brief flags, loopback
 8002, refuses pending migrations. Current editor preview process was started
 WITHOUT provider key or hard-cap assertion; do not add either for this offline
 composition slice. Normal source flags stay False/None. Verify exact listener
@@ -154,7 +175,7 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Define and test immutable BrandIdentity/brief/material-version bindings for the
-next brand-aware hosted-generation task/result slice using synthetic mocked
-transport first. Preserve fixed Duru trial/source/profile/selection histories and
-unknown brand provenance; do not retroactively bind them or enable production jobs.
+Build a separately gated brand-bound execution/result rehearsal from an owned
+BrandProductionRequest using mocked transport first, revalidating sources before
+and after the attempt. No paid call, real data, retry/queue or spending permission
+is granted by the saved envelope. Preserve old trials/hold/source/selection history.

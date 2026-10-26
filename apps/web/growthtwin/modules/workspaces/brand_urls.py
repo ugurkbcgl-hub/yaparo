@@ -8,10 +8,21 @@ from growthtwin.modules.workspaces import (
     hosted_ad_views,
     hosted_image_views,
     hosted_trial_views,
+    production_brief_views,
 )
 
 app_name = "brands"
 urlpatterns = [
+    path(
+        "<int:brand_id>/production/",
+        production_brief_views.compose,
+        name="production_compose",
+    ),
+    path(
+        "<int:brand_id>/production/<uuid:request_id>/",
+        production_brief_views.detail,
+        name="production_request",
+    ),
     path("", brand_views.brand_list, name="list"),
     path("ai-trial/", hosted_trial_views.preview, name="hosted_trial"),
     path("ai-trial/drafts/", hosted_ad_views.choices, name="hosted_ad_choices"),
