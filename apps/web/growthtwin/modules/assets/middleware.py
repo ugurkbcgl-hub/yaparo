@@ -31,7 +31,7 @@ _BRIEF_PATH = re.compile(
     r"\A/workspace/brands/[0-9]+/(?:production/(?:[0-9a-f-]{36}/(?:(?:generate|image)/)?)?|ads/(?:create/|[0-9a-f-]{36}/(?:(?:save|image|campaign)/)?)?)\Z"
 )
 _BRAND_CAMPAIGN_PATH = re.compile(
-    r"\A/workspace/campaigns/[0-9]+/brand-creative/(?:[0-9]+/(?:preview|image)/)?\Z"
+    r"\A/workspace/campaigns/[0-9]+/(?:brand-setup/|brand-creative/(?:[0-9]+/(?:preview|image)/)?)\Z"
 )
 
 
@@ -61,7 +61,7 @@ class ClosedSyntheticMaterialIntakeMiddleware:
         if _BRAND_CAMPAIGN_PATH.fullmatch(request.path):
             allowed = (
                 ("GET", "HEAD", "POST")
-                if request.path.endswith("/brand-creative/")
+                if request.path.endswith(("/brand-creative/", "/brand-setup/"))
                 else ("GET", "HEAD")
             )
             if request.method not in allowed:

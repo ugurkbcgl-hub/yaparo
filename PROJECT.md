@@ -88,7 +88,11 @@ ledger verified, USD0 new AI cost. Logo binary is not applied; fixed overlay onl
 ADR0070 adds explicit new brand-bound synthetic campaign plans and pinned saved
 creative selection/readonly site preview. Legacy campaigns remain unbound; no
 downloads, provider calls or publishing added. Fixed city/budget are only examples.
-Next: owned site setup for campaign objective/audience/budget/schedule, gates closed.
+ADR0071 now adds owned versioned in-site planning goal/audience/region/TRY budget/
+inclusive dates with stale/replay guards and consistent list/overview. Operational
+publisher fields and selected creative remain unchanged; no schedule/spend action.
+Actual plan1/readback passed with40 prior application tables/ledger unchanged.
+Next: destination and channel/creative compatibility/readiness gaps, gates closed.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact

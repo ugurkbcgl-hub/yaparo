@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 00:47 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 01:20 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -18,13 +18,32 @@ old PNG/ZIP prototypes are not accepted product scope. Prioritize in-site use.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
-Base main5ef33a8 / PR366 merged; required CI40368365017 passed1146 Django
-(4 skips)/43 browser checks; main CI40369845880 passed.
-Current branch codex/brand-creative-campaign-flow; PR367 open, code9cd5361 before
-this handoff metadata commit. Required latest-head CI pending; recheck before merge.
-Task issue328. Recheck head/PR/required CI before merge.
+Base main0bd422e / PR367 merged; required CI40407294248 passed1156 Django
+(4 skips)/44 browser checks; main CI40408645039 passed.
+Current branch codex/brand-campaign-setup; PR not yet created at snapshot.
+Task issue328. Recheck actual head/PR/required CI before merge.
 
-Current ADR0070: nullable PROTECT campaign.brand, no legacy backfill. Default-off
+Current ADR0071: separate default-off LOCAL_BRAND_CAMPAIGN_SETTINGS_ENABLED adds
+owned versioned goal/audience/region/TRY budget/start/end planning. Protected
+CampaignPlanRevision carries campaign/brand/workspace/actor context, closed JSON,
+digest and request UUID. Campaign SELF→brand/workspace locks, expected-version
+stale refusal, exact historical replay without rollback/expiry. Minor-unit integer
+budget,1..365 inclusive days; fresh writes check Istanbul today after locks.
+No legacy operational objective/city/budget/flight changes, ad reselection, provider,
+scheduler or spending action. Bound list/detail/journey use current plan overview;
+corrupt plan refuses instead of showing legacy example data. No new downloads.
+Nine backend tests7 pass/2 PG skips, one browser journey passed: Turkish comma
+budget, save/reopen/list, stale input preservation, long-text mobile. Combined20
+settings/brand-campaign/backend/browser checks14 pass/6 PG skips;50 existing
+campaign/journey checks passed. Lint/format/drift and independent review passed.
+Actual normal IAB saved campaign3 plan1:traffic, synthetic audience, İstanbul,
+250050 kuruş,1–7 November2026 (7 inclusive days). Form2500,50 and list/overview
+2.500,50 TRY agree. Two authenticated save replays added no row.40 previous
+application tables including legacy fields/ad choice/hold are unchanged; ledger
+unchanged/new cost0. Private brand-settings-live-evidence.json,
+brand-settings-iab.png, brand-settings-{1440,390}.png, brand-settings-list.png.
+
+Completed ADR0070: nullable PROTECT campaign.brand, no legacy backfill. Default-off
 LOCAL_BRAND_CAMPAIGN_ENABLED lets owner create a NEW synthetic campaign from an
 owned saved BrandAdDraft, immutable CampaignBrandAdChoice, replay-safe start and
 revision/version-bound explicit reselection. Existing-campaign locks are campaign
@@ -39,7 +58,7 @@ visible download/package action. Existing prototype exports are undecided.
 New campaign's Ankara/5000 TRY are fixed EXAMPLE planning values, not targeting or
 spend consent; empty destination/no flight. No provider, publish, media or AI cost.
 Final10 focused tests6 pass/4 PG-only skips; prior39 expanded new/legacy/backend/
-browser checks29 pass/10 PG-only skips. Four new PG races require CI. Ruff/drift
+browser checks29 pass/10 PG-only skips. Four new PG races passed PR367 CI. Ruff/drift
 passed; independent final source re-review no blocker after dirty-editor fix.
 Actual normal IAB created campaign3/choice1 from brand1 ad
 8e17aa42-009a-440a-a9e5-e87f755c9967 revision2 and opened selected preview1.
@@ -103,7 +122,10 @@ Independent source re-review found no blocker. This is smoke, not quality benchm
 ## Same private preview — preserve it
 
 %TEMP%\yaparo-public-preview-q2ql3pkq / preview.sqlite3 / loopback8002.
-Schema workspaces0012 / campaigns0012. Forward campaigns0012 backup:
+Schema workspaces0012 / campaigns0013. Forward campaigns0013 backup:
+preview-before-brand-settings-20261026T221231Z.sqlite3; all prior rows preserved,
+new plan table initially empty; only migration/type/permissions at upgrade.
+Previous forward campaigns0012 backup:
 preview-before-brand-campaign-protect-20261026T214643Z.sqlite3; all current tables/
 rows intact, only migration recorder1 added. Never rerun completed upgrades.
 Previous forward campaigns0011 backup:
@@ -117,7 +139,7 @@ Previous forward0011 backup:
 preview-before-brand-ai-20261026T163458Z.sqlite3. All old rows across36 prior
 non-auth/non-framework tables preserved; four requests/four attempts now exist.
 Old fixed trials/drafts/source/history/campaign choices remain independent.
-Current known serve_design_preview.py enables brand-ad and brand-campaign flags locally,
+Current known serve_design_preview.py enables brand-ad/campaign/settings flags locally,
 restarted WITHOUT provider key or
 hard-cap assertion. Exact private brand-ai-approved.json permits only requests1–4;
 no new request automatically gets paid permission. Normal repo flags stay off.
@@ -154,7 +176,7 @@ was not verified by this product task; scheduling is not proof of work.
 
 ## Next action
 
-Replace fixed synthetic campaign parameters with owned in-site objective/audience/
-budget/schedule setup. Keep publishing/spending/provider gates closed and old
-campaigns/choices/failures/holds intact. Download/export product decision remains
-open; do not build a package or prioritize downloads without an explicit decision.
+Assess destination and channel/creative compatibility and show concrete in-site
+readiness gaps for brand plans. Plan settings are not publishing/spend authority.
+Preserve old fields, chosen creative and all uncertain holds. Download/export stays
+an open product decision; do not return to package work without owner direction.

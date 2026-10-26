@@ -100,7 +100,10 @@ markaya bağlı ayrı taslak, başlık/açıklama/çağrı/renk, kayıt geçmiş
 Gerçek kayıt2/PNG doğrulandı; yeni AI maliyeti0 USD. Logo dosyası uygulanmaz.
 ADR0070 yeni, açık marka bağlı kampanya taslağı ve seçili reklam sürümünün site içi
 önizlemesini ekler. Eski kampanyalar tahmini markaya bağlanmaz. Sıradaki dilim
-amaç/kitle/bütçe/süre ayarlarını site içinde yönetmek; yayın/harcama kapıları kapalı.
+amaç/kitle/bütçe/süre ayarlarını site içinde yönetmek; ADR0071 bu dilimi ayrı plan
+geçmişi, kuruş hassasiyeti, tarih/iki sekme denetimi ve tutarlı özetle tamamlar.
+Operasyonel yayın alanları ve reklam seçimi korunur. Sıradaki adım hedef adres ve
+kanal/reklam biçimi uygunluğunun hazırlık eksiklerini göstermek; yayın/harcama kapalı.
 
 ADR-0055 ilk çevrimdışı marka/kaynak/sürüm bağlı görev ve sonuç sözleşmesini ekler.
 Mevcut geçit korunur; yalnız deterministik sentetik adaptör ve sıfır maliyet kabul
