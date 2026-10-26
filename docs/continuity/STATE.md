@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 01:26 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 02:22 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -18,11 +18,21 @@ old PNG/ZIP prototypes are not accepted product scope. Prioritize in-site use.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
-Base main0bd422e / PR367 merged; required CI40407294248 passed1156 Django
-(4 skips)/44 browser checks; main CI40408645039 passed.
-Current branch codex/brand-campaign-setup; PR368 open, implementation ad80bf8.
-Required CI pending; verify latest head before merging.
-Task issue328. Recheck actual head/PR/required CI before merge.
+Base mainabc2093 / PR368 merged; required CI40412311595 passed1166 Django
+(4 skips)/45 browser checks; main CI40413608566 passed.
+Current branch codex/unified-journey-prototype; PR pending at snapshot.
+Owner explicitly requested a simpler unified-flow draft before integration.
+Isolated experiments/unified-journey serves allowlisted static prototype on8013:
+request → three distinct examples → same-flow edit → plan → summary, optional
+identity/style, desktop helper/mobile toggle. Fixed local cards/helper only;
+no actual AI, channel efficacy, upload, DB, persistence, export, spend or publishing.
+Open-tab memory only; refresh loses input as visibly disclosed. Existing8002 and
+private data/ledgers untouched. Draft contract: docs/product/unified-journey-draft.md.
+Review fixes preserve request context with previous trio and edited-title undo;
+image picker keyboard-accessible. Focused flow/mobile/server checks passed3.
+Actual IAB desktop and390px visual review completed. Private evidence:
+%TEMP%\yaparo-journey-8zlbw6__ (iab-start/start/concepts/summary/mobile PNGs).
+Final source review/PR to recheck. No provider key was loaded.
 
 Current ADR0071: separate default-off LOCAL_BRAND_CAMPAIGN_SETTINGS_ENABLED adds
 owned versioned goal/audience/region/TRY budget/start/end planning. Protected
@@ -177,7 +187,7 @@ was not verified by this product task; scheduling is not proof of work.
 
 ## Next action
 
-Assess destination and channel/creative compatibility and show concrete in-site
-readiness gaps for brand plans. Plan settings are not publishing/spend authority.
-Preserve old fields, chosen creative and all uncertain holds. Download/export stays
-an open product decision; do not return to package work without owner direction.
+Review the unified journey prototype with the owner before product integration.
+Then map the accepted UX to existing owned creative/editor/campaign contracts.
+Do not wire paid AI or replace current flows yet. Download/export stays undecided;
+real accounts, customer files, payment and publishing gates remain closed.

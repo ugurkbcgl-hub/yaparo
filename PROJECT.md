@@ -1,5 +1,16 @@
 # Yaparo project brief
 
+## Unified journey prototype — 27 October 2026
+
+The owner prioritized reviewing a simpler single-workspace journey BEFORE more
+integration: request → three distinct concepts → campaign plan → final review,
+with optional identity/style and a contextual helper. The local clickable draft
+is in `experiments/unified-journey`; see
+[interaction scope](docs/product/unified-journey-draft.md). It uses fixed examples,
+not real AI or channel recommendations. Existing editor/brand/campaign contracts
+remain intact. Next: owner UX review, then map the accepted flow to owned data.
+No provider call, upload, persistence, spend, download or publishing is added.
+
 ## Current owner priority — 26 October 2026
 
 Keep the core journey inside the website: brand→AI content→editing→campaign use.
