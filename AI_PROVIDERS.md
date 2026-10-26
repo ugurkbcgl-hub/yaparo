@@ -1,5 +1,12 @@
 # AI provider evaluation and current direction
 
+> **Strict response update (2026-10-25):** [ADR-0057](docs/adr/0057-strict-provider-json.md)
+> adds shared bounded/duplicate-safe JSON and exact inner candidate fields across
+> the three existing adapters.53 offline gateway/context checks passed. The extended
+> isolated comparison now runs288 cases per normal/-O mode. No provider call,
+> credential change, model selection or claim-safety approval occurred.
+
+
 > **Typed-output comparison (2026-10-25):** [ADR-0056](docs/adr/0056-typed-output-offline-comparison.md)
 > records a pinned isolated PydanticAI experiment. Controlled normal/-O runs each
 > completed234 executions without model access. Retain the direct runtime boundary;

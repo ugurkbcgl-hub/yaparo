@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-25 22:21 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-25 22:45 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,31 +16,29 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main4e68a13 (PR351 merged); required CI40224456006 and main CI40224948006
-succeeded. PR351 passed1012 Django tests (1008 pass/4 skips),25 browser checks
-and5 isolated-editor checks. No UI or product provider change.
-Branch codex/typed-output-evaluation; PR not yet created at snapshot. Verify live.
+Base main271f9e6 (PR352 merged). Required CI40225671245 and main CI40226199587
+succeeded. Product runtime dependencies unchanged; pinned typed experiment is isolated.
+Branch codex/strict-provider-json; PR not yet created at snapshot. Verify live.
 Durable task: issue328. No migration/configured DB/provider/TEST fixture change.
 
-- ADR0056 records actual isolated typed-output evaluation. Tagged license, Python
-  compatibility and testing docs reviewed. PydanticAI-slim2.61.0/Pydantic2.14.1,
- 18 exact distributions incl pip, no provider extras or product dependency change.
-- Actual direct adapter with mocked HTTP and actual FunctionModel share the same
-  three existing briefs and13 controlled response cases, three repetitions. Normal
-  and -O each234 executions; fresh runner compares observed outcomes. No model
-  requests/cost. Package install/advisory lookup network is separate from the
-  guarded comparison; tracing off. Not OS network isolation or latency comparison.
-- Direct accepted9/39 brief-case pairs; typed6/39. Three differences are ignored
-  unknown-root fields in direct. Both accept shaped unsupported claim; no quality,
-  grounding, rights or production approval claimed. Retain direct product boundary;
-  experimental typed library is not promoted. Next fix direct strict-parser gap.
-- Fresh Windows isolated install, pipcheck and audit passed (no known vulnerabilities
-  at date). Normal/optimized observed results agree. Explicit checks survive -O;
-  Python DNS/socket/async transport guards and no-retry checks reviewed. Final
-  independent source review found no blocker. Required CI pending; no UI restart.
-- New CI step recreates/audits isolated experiment, then removes its own temp env.
-  Initial private trial venv: %USERPROFILE%\.yaparo\typed-output-v261, no keys.
-  Raw synthetic report is private; repository experiment README carries findings.
+- ADR0057 introduces shared64KiB bounded UTF8 JSON object loading: duplicate decoded
+  keys anywhere, nonfinite/overflow floats, invalid roots/trailing/deep JSON reject.
+  Outer metadata remains flexible; generated candidate root/variant fields exact,
+ 1–5 variants with bounded nonblank encodable strings. Domain validator retained.
+- All three existing adapters use the helper for outer and inner JSON. Credentials,
+  models, request/accounting/retry/source and product routes unchanged. Generic
+  failures hide provider text; HTTP closes on failure. No live API/key lookup.
+- 53 new-parser/existing-gateway/brand-context checks passed, including all three
+  actual adapters with mocked connections, Unicode, duplicate/escaped keys,
+  ambiguous metadata, shape/size/depth errors and non-publishable semantics.
+- Extended isolated comparison:3 briefs/16 cases/3 repetitions/2 paths =288 per
+  normal and -O mode. Both passed without external calls/cost. Direct now rejects
+  unknown fields and duplicate root/variant keys; typed JSON accepts duplicate
+  fixtures. Both accept shaped unsupported claim; no grounding/quality approval.
+  Original ADR0056/PR352 13-case baseline remains historical, explicitly labeled.
+- Independent source review found no blocker; reviewer reran7 new checks successfully.
+  Ruff/format/migration drift/diff passed. Required PR CI pending. No UI change or
+  restart required. Existing release gates remain.
 
 ## Established local capabilities and limits
 
@@ -110,7 +108,7 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Reject unknown top-level generated-response fields and inspect duplicate/malformed
-JSON handling in the existing direct adapters using no-network regression tests.
-Preserve provider/accounting limits, source-bound task contracts and untouched
-product routes; do not add a provider, SDK runtime dependency or paid call.
+Expose owned brand-bound offline template candidates in the local creative journey,
+with explicit review/selection and preserved user edits. Keep the selected snapshot
+and source contracts; do not wire a hosted provider, financial dispatch or automatic
+publishing. Inspect current UI/task contracts before implementation.

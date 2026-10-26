@@ -2,6 +2,14 @@
 
 25 October2026. Y10 structural experiment; not a product integration.
 
+ADR0056/PR352 recorded the original13-case baseline below. ADR0057 extends the
+CURRENT runner to16 cases after the owned strict-parser correction:288 runs per
+normal/optimized mode,576 total. Unknown-root fields now reject in both paths.
+New duplicate-root and duplicate-variant-key cases reject in direct parsing but
+are accepted by the typed JSON decoder in these controlled fixtures; a non-object
+root rejects in both. Application claim checks are still separate. The current
+runner expects the corrected direct behavior; the baseline is historical.
+
 Run `run.py` with the existing development Python (which supplies pip-audit).
 The runner creates and removes its own temporary virtual environment, installs
 only exact pinned binary wheels from requirements.txt, checks dependencies and
@@ -26,7 +34,7 @@ Fresh Windows setup: pip check passed; pip-audit found no known vulnerabilities
 at this date. This is not a comprehensive supply-chain, transitive-license or
 production safety certification. Linux is also exercised by required CI.
 
-## Equal fixtures, explicit limits
+## Original baseline: equal fixtures, explicit limits
 
 Use the SAME three existing synthetic benchmark briefs and SAME13 controlled
 response cases for both paths, three repetitions per case. Direct path executes
@@ -68,10 +76,10 @@ NOT a fair adapter/provider latency comparison or performance SLA.
 
 Retain the current direct adapter in the product. Do not adopt PydanticAI as a
 runtime dependency for this narrow parsing task: the demonstrated extra-field
-benefit can be implemented with a smaller owned boundary correction. The isolated
+benefit has now been implemented with a smaller owned boundary correction. The isolated
 experiment stays as reproducible evidence; larger orchestration needs may justify
-a later comparison. Next: fix the direct output parser's unknown-root-field gap
-and rerun the relevant contract tests. Candidate claim grounding remains separate.
+a later comparison. The corrected direct boundary and extended ambiguity regressions are recorded in
+ADR0057. Candidate claim grounding remains separate.
 
 Upgrades require an explicit requirements/guard version change, fresh dependency
 and license review, audit and identical-fixture rerun. Rollback is removing the

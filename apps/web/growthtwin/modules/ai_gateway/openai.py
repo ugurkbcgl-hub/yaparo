@@ -14,8 +14,9 @@ from growthtwin.modules.ai_gateway.creative_format import (
     CREATIVE_SCHEMA,
     CREATIVE_SYSTEM_PROMPT,
 )
-from growthtwin.modules.content.creative import CreativeVariant
 from growthtwin.modules.content.planning import CampaignBrief
+
+from .provider_json import load_provider_object, parse_creative_variants
 
 OPENAI_HOST = "api.openai.com"
 OPENAI_PATH = "/v1/responses"
@@ -131,7 +132,7 @@ class OpenAICreativeGenerator:
             response_body = response.read(MAX_RESPONSE_BYTES + 1)
             if response.status != 200 or len(response_body) > MAX_RESPONSE_BYTES:
                 raise OSError
-            payload = json.loads(response_body.decode("utf-8"))
+            payload = load_provider_object(response_body.decode("utf-8"))
             usage = payload["usage"]
             input_tokens = usage["input_tokens"]
             output_tokens = usage["output_tokens"]
@@ -170,10 +171,7 @@ class OpenAICreativeGenerator:
                 for content in item.get("content", ())
                 if content.get("type") == "output_text"
             )
-            generated = json.loads(text)
-            variants = tuple(
-                CreativeVariant(**variant) for variant in generated["variants"]
-            )
+            variants = parse_creative_variants(text)
         except (
             KeyError,
             TypeError,
