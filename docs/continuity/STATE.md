@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 20:23 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 20:24 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -18,7 +18,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base main69840de / PR365 merged; required CI40363953742 passed1136 Django
 (4 skips)/41 browser checks, main CI40365248050 passed.
-Current branch codex/brand-ai-editable-creative; PR not yet created at snapshot.
+Current branch codex/brand-ai-editable-creative; PR366 open, codea5dd224 before
+this handoff metadata commit. Required latest-head CI pending; recheck before merge.
 Task issue328. Recheck current head/PR/required CI before merge.
 
 Current ADR0069: separate default-off LOCAL_BRAND_AD_ENABLED owns explicit saved
