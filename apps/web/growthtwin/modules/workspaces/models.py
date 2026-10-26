@@ -61,6 +61,38 @@ class Workspace(models.Model):
         return self.name
 
 
+class HostedTextTrial(models.Model):
+    """One durable paid intent per admitted workspace; no implicit retries."""
+
+    workspace = models.OneToOneField(
+        Workspace, on_delete=models.PROTECT, related_name="hosted_text_trial"
+    )
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    profile = models.CharField(max_length=64)
+    source_hash = models.CharField(max_length=64)
+    status = models.CharField(
+        max_length=16,
+        choices=[
+            ("started", "Başlatıldı"),
+            ("received", "Yanıt saklandı"),
+            ("completed", "Tamamlandı"),
+            ("unverified", "Doğrulama gerekli"),
+        ],
+        default="started",
+    )
+    budget_state = models.CharField(max_length=16, default="not_reserved")
+    reserved_usd = models.DecimalField(max_digits=12, decimal_places=8)
+    actual_usd = models.DecimalField(
+        max_digits=12, decimal_places=8, null=True, blank=True
+    )
+    model = models.CharField(max_length=120, blank=True)
+    provider = models.CharField(max_length=80, blank=True)
+    usage = models.JSONField(default=dict)
+    variants = models.JSONField(default=list)
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+
+
 class Brand(models.Model):
     """One of two fixed synthetic brands in an explicitly owned workspace."""
 

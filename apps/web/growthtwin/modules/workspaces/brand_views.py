@@ -6,7 +6,7 @@ import uuid
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied, ValidationError
 from django.db import transaction
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -79,6 +79,13 @@ def _identity_row(identity):
 @never_cache
 @require_safe
 def brand_list(request):
+    from .hosted_trial import admitted_workspace
+
+    try:
+        admitted_workspace(request.user)
+        hosted_trial_enabled = True
+    except (ObjectDoesNotExist, PermissionDenied):
+        hosted_trial_enabled = False
     brands = Brand.objects.filter(
         workspace__owner=request.user, is_archived=False
     ).select_related("workspace")
@@ -92,6 +99,7 @@ def brand_list(request):
         {
             "rows": rows,
             "has_workspace": Workspace.objects.filter(owner=request.user).exists(),
+            "hosted_trial_enabled": hosted_trial_enabled,
         },
     )
 

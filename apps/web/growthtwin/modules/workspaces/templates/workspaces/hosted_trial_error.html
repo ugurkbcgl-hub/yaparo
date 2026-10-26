@@ -1,0 +1,4 @@
+{% extends 'campaigns/base.html' %}
+{% block title %}Üretim doğrulanamadı{% endblock %}
+{% block scripts %}{% endblock %}
+{% block content %}<div class="narrow-column"><h1>Üretim doğrulanamadı</h1><p>İstek veya sonuç güvenli biçimde doğrulanamadı. Otomatik yeniden deneme yapılmadı.</p><a href="{% url 'brands:hosted_trial' %}">Kaydedilen durumu kontrol et</a></div>{% endblock %}

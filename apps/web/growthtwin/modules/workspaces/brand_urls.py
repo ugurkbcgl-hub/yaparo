@@ -3,11 +3,17 @@
 from django.urls import path
 
 from growthtwin.modules.assets import views as asset_views
-from growthtwin.modules.workspaces import brand_views
+from growthtwin.modules.workspaces import brand_views, hosted_trial_views
 
 app_name = "brands"
 urlpatterns = [
     path("", brand_views.brand_list, name="list"),
+    path("ai-trial/", hosted_trial_views.preview, name="hosted_trial"),
+    path(
+        "ai-trial/generate/",
+        hosted_trial_views.generate,
+        name="hosted_trial_generate",
+    ),
     path("new/", brand_views.brand_create, name="create"),
     path("prepare/", brand_views.prepare_workspace, name="prepare"),
     path(

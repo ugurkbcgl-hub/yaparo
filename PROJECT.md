@@ -42,10 +42,14 @@ subtitle application to a new saved revision with field-fit/current-revision/sou
 checks and preserved history; campaign reselection stays separate. On26 October,
 two explicitly authorized real hosted calls produced three fictional-brand Turkish
 texts and one actual JPEG, total USD0.0338936, with captured costs/source metadata.
-See [live brand sample](docs/product/live-brand-ai-sample.md). Next: an owner-scoped
-hosted-result trial preview with honest provider/source/cost provenance, then
-explicit durable generation jobs. Website Generate controls remain offline;
-hosted production execution retains separate quality/data/financial gates.
+See [live brand sample](docs/product/live-brand-ai-sample.md). ADR0060 now adds a
+separate default-off local web trial: one explicit real text call for a fixed Duru
+brief, one committed workspace intent, saved candidates/usage/cost and no retry.
+The real browser call succeeded (3 candidates, USD0.00027610); reload/repeat did
+not charge again. This trial is independent of editable brand/campaign identity;
+existing template controls stay separate. Next: the same owned one-shot image
+trial with durable bytes/provenance. General jobs and hosted production execution
+retain separate quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact
 800×800/800×1000 PNG export. Existing v1–v3 stay unchanged; format/source cannot
