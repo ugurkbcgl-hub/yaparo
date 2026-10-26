@@ -1,17 +1,21 @@
 """Saved-output draft editing, stale refusal and real PNG export in Chromium."""
 
 import io
+import json
 import os
 import secrets
 from hashlib import sha256
 from pathlib import Path
+from zipfile import ZipFile
 
 from django.test import LiveServerTestCase
 from django.urls import reverse
 from PIL import Image
 from playwright.sync_api import expect, sync_playwright
 
+from growthtwin.modules.ai_gateway.brand_tasks import digest
 from growthtwin.modules.assets.raster_validation import normalize_raster
+from growthtwin.modules.workspaces import hosted_ad_drafts as service
 from growthtwin.modules.workspaces.models import (
     HostedAdDraft,
     HostedImageTrial,
@@ -264,5 +268,163 @@ class HostedAdBrowserTests(SavedTrialsFixture, LiveServerTestCase):
                     self.assertEqual(pixels.getpixel((10, 1200))[3], 0)
                     self.assertEqual(pixels.getpixel((11, 1200))[3], 128)
                     self.assertEqual(pixels.getpixel((100, 1200)), (36, 76, 59, 255))
+            finally:
+                browser.close()
+
+    def test_package_contains_saved_pixels_sources_and_verified_file_hashes(self):
+        password = secrets.token_urlsafe(32)
+        self.owner.set_password(password)
+        self.owner.save(update_fields=["password"])
+        drafts = []
+        for profile in service.LAYOUTS:
+            source = digest(service.sources(self.owner, "product", profile=profile)[-2])
+            drafts.append(
+                (
+                    profile,
+                    service.create_draft(
+                        owner=self.owner,
+                        candidate_key="product",
+                        expected_source=source,
+                        profile=profile,
+                    ),
+                )
+            )
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                page = browser.new_page()
+                for profile, draft in drafts:
+                    url = self.live_server_url + reverse(
+                        "brands:hosted_ad_editor", args=[draft.pk]
+                    )
+                    if profile == service.PROFILE:
+                        self.login(
+                            page,
+                            reverse("brands:hosted_ad_editor", args=[draft.pk]),
+                            password,
+                        )
+                    else:
+                        page.goto(url)
+                    expect(page.locator("#ad-package")).to_be_enabled()
+                    page.get_by_label("Başlık").fill("Kaydedilmemiş metin")
+                    expect(page.locator("#ad-package")).to_be_disabled()
+                    page.get_by_label("Başlık").fill(draft.content["title"])
+                    expect(page.locator("#ad-package")).to_be_enabled()
+                    with page.expect_download() as event:
+                        page.locator("#ad-export").click()
+                    exact_png = Path(event.value.path()).read_bytes()
+                    with page.expect_download() as event:
+                        page.locator("#ad-package").click()
+                    self.assertTrue(event.value.suggested_filename.endswith("-v1.zip"))
+                    with ZipFile(event.value.path()) as archive:
+                        self.assertIsNone(archive.testzip())
+                        self.assertEqual(
+                            set(archive.namelist()),
+                            {
+                                "ad.png",
+                                "source.png",
+                                "draft.json",
+                                "manifest.json",
+                                "README.txt",
+                            },
+                        )
+                        self.assertEqual(archive.read("ad.png"), exact_png)
+                        self.assertEqual(
+                            archive.read("source.png"), bytes(self.image.png)
+                        )
+                        snapshot = json.loads(archive.read("draft.json"))
+                        self.assertEqual(snapshot["content"], draft.content)
+                        self.assertEqual(
+                            snapshot["source_manifest"], draft.source_manifest
+                        )
+                        self.assertEqual(snapshot["profile"], profile)
+                        manifest = json.loads(archive.read("manifest.json"))
+                        self.assertEqual(manifest["revision"], 1)
+                        self.assertTrue(manifest["client_rendered"])
+                        self.assertEqual(
+                            set(manifest["files"]),
+                            set(archive.namelist()) - {"manifest.json"},
+                        )
+                        for name, meta in manifest["files"].items():
+                            data = archive.read(name)
+                            self.assertEqual(
+                                meta,
+                                {
+                                    "bytes": len(data),
+                                    "sha256": sha256(data).hexdigest(),
+                                },
+                            )
+            finally:
+                browser.close()
+        for _, draft in drafts:
+            self.assertEqual(draft.history.count(), 1)
+
+    def test_package_denies_stale_corrupt_snapshot_and_edit_during_fetch(self):
+        draft = self.create()
+        snapshot = service.export_snapshot(
+            owner=self.owner, draft_id=draft.pk, revision=1
+        )
+        password = secrets.token_urlsafe(32)
+        self.owner.set_password(password)
+        self.owner.save(update_fields=["password"])
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            try:
+                context = browser.new_context()
+                page = context.new_page()
+                self.login(
+                    page, reverse("brands:hosted_ad_editor", args=[draft.pk]), password
+                )
+                downloads = []
+                page.on("download", lambda event: downloads.append(event))
+                pattern = "**/revisions/1/package.json"
+                for body in (
+                    "{",
+                    "a" * 131073,
+                    json.dumps({**snapshot, "revision": 2}),
+                ):
+                    page.route(
+                        pattern,
+                        lambda route, request, b=body: route.fulfill(
+                            status=200, content_type="application/json", body=b
+                        ),
+                    )
+                    page.locator("#ad-package").click()
+                    expect(page.locator("#package-status")).to_contain_text(
+                        "Paket doğrulanamadı"
+                    )
+                    self.assertEqual(downloads, [])
+                    page.unroute(pattern)
+                    page.reload()
+                    expect(page.locator("#ad-package")).to_be_enabled()
+
+                def change_during_fetch(route, request):
+                    page.get_by_label("Başlık").fill("İndirme sırasında değişti")
+                    route.fulfill(
+                        status=200,
+                        content_type="application/json",
+                        body=json.dumps(snapshot),
+                    )
+
+                page.route(pattern, change_during_fetch)
+                page.locator("#ad-package").click()
+                expect(page.locator("#package-status")).to_contain_text(
+                    "Paket doğrulanamadı"
+                )
+                self.assertEqual(downloads, [])
+                page.unroute(pattern)
+                page.reload()
+                expect(page.locator("#ad-package")).to_be_enabled()
+                other = context.new_page()
+                other.goto(page.url)
+                expect(other.locator("#ad-save")).to_be_enabled()
+                other.get_by_label("Başlık").fill("Başka sekmenin kaydı")
+                other.locator("#ad-save").click()
+                expect(other.locator("#ad-revision")).to_have_text("2")
+                page.locator("#ad-package").click()
+                expect(page.locator("#package-status")).to_contain_text(
+                    "Paket doğrulanamadı"
+                )
+                self.assertEqual(downloads, [])
             finally:
                 browser.close()

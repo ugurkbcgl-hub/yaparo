@@ -4,7 +4,7 @@
   const boot = JSON.parse($("hosted-ad-boot").textContent);
   const form = $("ad-form"), canvas = $("ad-canvas"), ctx = canvas.getContext("2d");
   const fields = ["title", "body", "cta", "color"], limits = {title:60,body:100,cta:30};
-  let photo, ready = false;
+  let photo, sourceBytes, ready = false, packaging = false;
   const values = () => Object.fromEntries(fields.map(key => [key, form.elements[key].value]));
   function status(text, error=false) { $("ad-status").textContent = text; $("ad-status").classList.toggle("error", error); }
   function validate(value) {
@@ -38,7 +38,7 @@
     return {title,body,cta,end};
   }
   function render() {
-    $("ad-save").disabled = true; $("ad-export").disabled = true;
+    $("ad-save").disabled = true; $("ad-export").disabled = true; $("ad-package").disabled = true;
     if (!ready) return;
     try {
       const value = values(); validate(value); const boxes = layout(value);
@@ -70,6 +70,7 @@
       const saved = fields.every(key => value[key] === boot.content[key]);
       $("ad-save").disabled = false;
       $("ad-export").disabled = !saved || !boot.can_export;
+      $("ad-package").disabled = !saved || !boot.can_export || packaging;
       status(saved && boot.can_export ? "Kayıtlı taslak hazır. PNG indirebilirsin." : "Düzenleme ekranda. PNG indirmek için önce kaydet.");
     } catch {
       ctx.setTransform(1,0,0,1,0,0);
@@ -85,6 +86,37 @@
     link.download = "duru-ad-"+boot.id+"-v"+boot.revision+".png";
     link.href = canvas.toDataURL("image/png"); link.click();
   });
+  const encode = text => new TextEncoder().encode(text);
+  const hashBytes = async bytes => Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(v=>v.toString(16).padStart(2,"0")).join("");
+  $("ad-package").addEventListener("click",async () => {
+    if (!ready || $("ad-package").disabled || packaging) return;
+    packaging=true; $("ad-package").disabled=true;
+    $("package-status").textContent="Paket hazırlanıyor…";
+    try {
+      if (boot.package_url !== "/workspace/brands/ai-trial/drafts/"+boot.id+"/revisions/"+boot.revision+"/package.json") throw Error("url");
+      const png = await new Promise((resolve,reject)=>canvas.toBlob(b=>b ? resolve(b) : reject(Error("png")),"image/png"));
+      const response=await fetch(boot.package_url,{credentials:"same-origin",redirect:"error",cache:"no-store",signal:AbortSignal.timeout(10000)});
+      if (!response.ok || response.headers.get("Content-Type")?.split(";")[0] !== "application/json" || !response.body) throw Error("snapshot");
+      const reader=response.body.getReader(), parts=[]; let length=0;
+      try { while (true) { const {done,value}=await reader.read(); if (done) break; length+=value.length; if (length>131072) throw Error("size"); parts.push(value); } }
+      finally { await reader.cancel(); }
+      const draftBytes=new Uint8Array(await new Blob(parts).arrayBuffer());
+      const snapshot=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(draftBytes));
+      if (snapshot.schema!=="yaparo-hosted-ad-snapshot-v1" || snapshot.draft_id!==boot.id || snapshot.revision!==boot.revision || snapshot.profile!==boot.profile || snapshot.source_fingerprint!==boot.source_fingerprint || snapshot.layout.width!==canvas.width || snapshot.layout.height!==canvas.height || snapshot.layout.mode!==boot.mode || snapshot.source_manifest.image.png_sha256!==boot.sha256 || fields.some(key=>snapshot.content[key]!==boot.content[key])) throw Error("binding");
+      const files={"ad.png":new Uint8Array(await png.arrayBuffer()),"source.png":sourceBytes,"draft.json":draftBytes,
+        "README.txt":encode("Yaparo reklam taslağı\n\nad.png: kaydedilmiş taslağın tarayıcı çıktısı.\nsource.png: üretimden kaydedilen kaynak görsel.\ndraft.json: metin, ölçü, sürüm ve kaynak dökümü.\nmanifest.json: dosya boyutları ve SHA256 özetleri.\n\nBu paket bir dijital imza, hak sahipliği, yayın veya mevzuat onayı değildir. Dosyalar özel içerik taşıyabilir; paylaşımını sen yönetirsin. Genel paket içe aktarma henüz yoktur. Yeniden çizim için aynı renderer ve sistem Arial yazı tipi gerekir; farklı tarayıcı/yazı tipleri pikselleri değiştirebilir.\n")};
+      const entries={};
+      for (const [name,data] of Object.entries(files)) entries[name]={bytes:data.length,sha256:await hashBytes(data)};
+      files["manifest.json"]=encode(JSON.stringify({schema:"yaparo-hosted-ad-package-v1",draft_id:boot.id,revision:boot.revision,profile:boot.profile,width:canvas.width,height:canvas.height,client_rendered:true,files:entries},null,2));
+      if (!boot.can_export || fields.some(key=>values()[key]!==boot.content[key]) || $("ad-export").disabled) throw Error("changed");
+      const archive=window.YaparoAdPackage.zip(files), url=URL.createObjectURL(archive), link=document.createElement("a");
+      link.href=url; link.download="yaparo-ad-"+boot.id+"-v"+boot.revision+".zip"; link.click();
+      setTimeout(()=>URL.revokeObjectURL(url),30000);
+      $("package-status").textContent="Paket hazırlandı. İndirme tarayıcıya iletildi.";
+    } catch {
+      $("package-status").textContent="Paket doğrulanamadı. Güncel kaydı yeniden açıp dene; mevcut taslağın korunuyor.";
+    } finally { packaging=false; render(); }
+  });
   (async () => {
     try {
       if (!/^\/workspace\/brands\/ai-trial\/drafts\/[0-9a-f-]{36}\/image\/$/.test(boot.image_url)) throw Error("url");
@@ -98,6 +130,7 @@
       if (bytes.length < 24 || [137,80,78,71,13,10,26,10].some((v,i)=>bytes[i]!==v)) throw Error("png");
       const hash = Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes))).map(v=>v.toString(16).padStart(2,"0")).join("");
       if (hash !== boot.sha256) throw Error("hash");
+      sourceBytes=bytes;
       photo = await createImageBitmap(blob);
       if (photo.width !== boot.source_width || photo.height !== boot.source_height || canvas.width !== boot.width || canvas.height !== boot.height || !["overlay","contain"].includes(boot.mode)) throw Error("dimensions");
       ready = true; render();

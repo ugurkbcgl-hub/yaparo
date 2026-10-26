@@ -32,7 +32,9 @@ draft from saved text/image with source manifest, revision history, stale refusa
 and saved-only PNG. Actual revision2/export passed without another AI charge.
 ADR0063 adds separate square1080×1080/portrait1080×1350 drafts, immutable layout
 provenance and exact fitted-photo PNGs; original overlay/history are preserved.
-Next: owned saved formatted-draft export with source manifest and revision.
+ADR0064 adds current saved-format ZIP with exact PNG, source/content/revision
+and manifest; browser assembly is integrity metadata, not a signed attestation.
+Next: explicit owned saved-revision visual planning reference for a local campaign.
 
 Owner direction: build a sustainable Yaparo-owned product using maintained,
 self-hostable components and replaceable AI services. Follow [ADR-0040](docs/adr/0040-owned-core-and-open-source-adoption.md)

@@ -57,7 +57,10 @@ unchanged and no AI cost. The fixed768×1376 Canvas2D profile edits text/CTA/col
 old Fabric/brand/campaign contracts stay unchanged. ADR0063 adds explicit square
 1080×1080 and portrait1080×1350 profiles, with independent drafts/history, complete
 proportional photo placement and exact PNG output. Original geometry stays intact.
-Next: owned revision/source-manifest export for these independent formatted drafts.
+ADR0064 adds saved-only ZIP export with exact canvas PNG, verified source PNG,
+content/profile/revision and source manifest. Current owner/version checks and
+client hash/size checks refuse stale or changing inputs; no new AI charge.
+Next: explicit pinned local campaign visual reference to an owned saved draft.
 General jobs and hosted production execution retain quality/data/financial gates.
 
 ADR-0051 adds explicit square/portrait choice for new scene v4 designs and exact

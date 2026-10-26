@@ -279,6 +279,53 @@ class HostedAdDraftTests(SavedTrialsFixture, TransactionTestCase):
         self.assertEqual(draft.profile, service.PROFILE)
         self.assertEqual(draft.history.count(), 1)
 
+    def test_export_snapshot_is_owned_current_private_and_read_only(self):
+        draft = self.create()
+        before = HostedAdDraft.objects.values().get(pk=draft.pk)
+        url = reverse("brands:hosted_ad_package", args=[draft.pk, 1])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["content"], draft.content)
+        self.assertEqual(data["source_manifest"], draft.source_manifest)
+        self.assertEqual(data["source_fingerprint"], draft.source_fingerprint)
+        self.assertEqual(data["layout"]["width"], 768)
+        self.assertIn("no-store", response["Cache-Control"])
+        self.assertEqual(response["X-Robots-Tag"], "noindex, nofollow")
+        self.assertEqual(response["X-Content-Type-Options"], "nosniff")
+        self.assertEqual(self.client.head(url).status_code, 200)
+        self.assertEqual(self.post(url, {"x": "y"}).status_code, 405)
+        self.assertEqual(self.client.get(url + "?profile=forged").status_code, 400)
+        self.assertEqual(HostedAdDraft.objects.values().get(pk=draft.pk), before)
+        self.assertEqual(draft.history.count(), 1)
+        self.save(draft, title="Yeni kayıt")
+        self.assertEqual(self.client.get(url).status_code, 409)
+        self.assertEqual(
+            self.client.get(
+                reverse("brands:hosted_ad_package", args=[draft.pk, 2])
+            ).status_code,
+            200,
+        )
+        self.client.logout()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("no-store", response["Cache-Control"])
+
+    def test_snapshot_denies_foreign_owner_disabled_and_corrupt_source(self):
+        draft = self.create()
+        url = reverse("brands:hosted_ad_package", args=[draft.pk, 1])
+        foreign = get_user_model().objects.create_user(username="package-foreign")
+        self.client.force_login(foreign)
+        self.assertEqual(self.client.get(url).status_code, 404)
+        self.client.force_login(self.owner)
+        with override_settings(LOCAL_HOSTED_AD_DRAFT_ENABLED=False):
+            self.assertEqual(self.client.get(url).status_code, 404)
+        HostedImageTrial.objects.filter(pk=self.image.pk).update(png=b"corrupt")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 409)
+        self.assertIn("no-store", response["Cache-Control"])
+        self.assertEqual(draft.history.count(), 1)
+
     def test_source_change_corruption_unsettled_and_wrong_fingerprint_refuse(self):
         with self.assertRaises(ValidationError):
             service.create_draft(

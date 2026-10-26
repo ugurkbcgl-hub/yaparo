@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-26 10:23 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-26 13:58 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -16,10 +16,27 @@ Budget and product decisions remain in PROJECT.md and accepted ADRs.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Base main6bd216f (PR359 merged); required CI40283604347 passed1091 Django tests
-(4 skips) and31 browser tests. Branch codex/hosted-ad-formats; PR360 open at snapshot, code483a77e.
-Recheck latest-head required CI before merge. Main CI40284342258 also passed. Durable task issue328. Forward0009 replaces draft uniqueness with
-source/candidate/profile; it does not rewrite existing draft/history rows.
+Base mainca54002 (PR360 merged), required CI40285500335 passed1096 Django tests
+(4 skips)/33 browser tests; main CI40286189012 passed. Current branch
+codex/hosted-ad-package; PR361 open at snapshot, code c20706d. Verify latest-head
+required CI before merge.
+Task issue328. No new migration; private schema remains workspaces0009.
+
+- ADR0064 adds current saved-draft ZIP with ad.png,source.png,draft.json,
+  manifest.json and README.txt. Owned version-addressed JSON locks/rechecks current
+  saved source/history; stale/foreign/disabled/corrupt requests refuse. Browser
+  checks snapshot binding and saved fields again after async export; no client
+  image upload. Narrow fixed-five-entry bounded ZIP_STORED writer, per-file hashes.
+  Client-rendered provenance, NOT a signed/server-rendered/rights approval artifact.
+ 23 focused tests:21 pass/2 PG skips; six browser tests cover all profile packages,
+  PNG equality/CRC/hashes/source, malformed/oversized/stale/edit-during-fetch cases.
+  Independent review no blockers; full latest-head required CI pending.
+  Actual in-app package-ready message and independent Chromium ZIP readback on
+  portrait84e039da-c124-48f7-b811-a309d2360b01 revision1. Actual source hash/1080x1350
+  verified;37 non-auth DB tables unchanged. Private duru-portrait-source-package.zip,
+  ad-package-evidence.json and live-ad-package-{1440,390}.png. No new AI cost or
+  provider credential, database/source/history/hold change. Test login renewed
+  normally from existing protected credential, no rotation. User tab remains open.
 
 - ADR0063 adds square1080×1080 and portrait1080×1350 profiles. Exact immutable
   geometry in source manifest, separate UUID/history/replay for each format, full
@@ -142,7 +159,7 @@ this product task. A schedule must never be presented as proof of work performed
 
 ## Next action
 
-Export a saved formatted HostedAdDraft as an owned package with exact PNG,
-profile/content revision and source manifest. Preserve existing source jobs and
-all original/profile-specific histories. No inferred brand/campaign selection or
-new provider call. General customer/publishing/storage readiness remains gated.
+Add explicit owned saved HostedAdDraft revision selection as a local campaign's
+visual planning reference with a pinned read-only preview and source/ownership
+checks. No inferred BrandIdentity binding, Search dispatch/publish change, new AI
+call or customer launch. Preserve existing sources, profiles, histories and hold.
