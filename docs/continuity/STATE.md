@@ -20,7 +20,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base mainabc2093 / PR368 merged; required CI40412311595 passed1166 Django
 (4 skips)/45 browser checks; main CI40413608566 passed.
-Current branch codex/unified-journey-prototype; PR pending at snapshot.
+Current branch codex/unified-journey-prototype; PR369 open, implementation36a0a4f.
+Required CI pending. Owner UX review before integration; do not claim merged.
 Owner explicitly requested a simpler unified-flow draft before integration.
 Isolated experiments/unified-journey serves allowlisted static prototype on8013:
 request → three distinct examples → same-flow edit → plan → summary, optional
@@ -32,7 +33,7 @@ Review fixes preserve request context with previous trio and edited-title undo;
 image picker keyboard-accessible. Focused flow/mobile/server checks passed3.
 Actual IAB desktop and390px visual review completed. Private evidence:
 %TEMP%\yaparo-journey-8zlbw6__ (iab-start/start/concepts/summary/mobile PNGs).
-Final source review/PR to recheck. No provider key was loaded.
+Independent final source review found no blocker. No provider key was loaded.
 
 Current ADR0071: separate default-off LOCAL_BRAND_CAMPAIGN_SETTINGS_ENABLED adds
 owned versioned goal/audience/region/TRY budget/start/end planning. Protected
