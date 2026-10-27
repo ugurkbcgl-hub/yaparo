@@ -53,14 +53,16 @@ AI results, ledgers and private Google candidate are untouched.
   operational platform boundary proof. No GPS, geocoder, tile/CDN request.
 - Fourteen researched digital channel families, explicit geo/account/route
   qualifiers. Documented geo candidates selectable; unknown precision disabled0.
-  User can deselect or set relative priorities; integer-kuruş shares sum exactly.
+  User can deselect or set direct numeric/drag percentages; basis-point and
+  integer-kuruş shares sum exactly. Compact grouped rows hide detail behind
+  disclosures and a book-outline guide button.
   Actual accounts/formats/inventory and enforcement are still unqualified.
 - Explicit hypothetical scenario math per channel/total, shared editable CPM/CTR/
   density/repetition. No real platform forecast, market rate, population or unique
-  reach. Budget/scope/priority/assumptions update outputs; duration updates daily
+  reach. Budget/scope/percentage/assumptions update outputs; duration updates daily
   budget only. Never infer which channel performs better from these examples.
 - Invalid center/radius/area/budget/assumptions or no chosen candidate refuses a
-  fresh summary. All form, map, checkbox and priority changes lock stale review.
+  fresh summary. All form, map, checkbox and percentage changes lock stale review.
   Final snapshot binds clipped geometry, channel shares and scenario assumptions.
 - See [Turkey channel catalog and formulas](turkey-channel-catalog-draft.md) and
   experiment third-party notices for sources, qualification gaps and asset hashes.
@@ -74,7 +76,7 @@ AI results, ledgers and private Google candidate are untouched.
 
 Focused browser checks cover selection→edit→alternative→undo→new/previous trio,
 plan shares→review,1/800km and invalid boundaries, actual Turkey intersection,
-channel selection/priority, conserved kuruş, scenario dependencies, asset hashes,
+channel selection/percentage, conserved kuruş, scenario dependencies, asset hashes,
 stale-summary lock including
 progress navigation/map clicks, changed-brief history binding, refresh/reset, no outbound
 requests, literal handling of markup, mobile overflow/helper, and server allowlist,
@@ -113,9 +115,15 @@ presence settings and verified account/campaign capabilities in real integration
 no fallback to interest-in-area or broader targeting without explicit consent.
 
 
-Turkey/channel update evidence: six focused checks passed, including actual
+Prior Turkey/channel revision: six focused checks passed, including actual
 80km Edirne circle clipping with no residual outside polygon, foreign center
-refusal, user deselection/all-off/priority, scenario budget/CPM/area dependency,
+refusal, user deselection/all-off/percentage, scenario budget/CPM/area dependency,
 mobile and pinned third-party asset integrity. Independent source review found
 no blocker; npm audit reported no vulnerabilities. No new runtime dependency was
 added to Django, no paid API was called and no existing private record was read.
+
+Seven focused checks now include direct70/30,33.33/66.67, zero-other fallback,
+100/0 transitions, invalid101 blocking, exact percent/cent sums, stable range-node
+identity during repeated drag inputs, grouped14 entries, closed descriptions,
+booklet open/close, stale summary locks and custom mixture preservation while
+coordinates are temporarily empty. Main website/backend remains unchanged.

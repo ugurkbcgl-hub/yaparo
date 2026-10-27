@@ -131,9 +131,11 @@ class JourneyTest(unittest.TestCase):
             self.assertEqual(page.locator("#radius-range").input_value(), str(radius))
             self.assertIn(f"{radius} km", page.locator("#geo-status").inner_text())
             self.assertIn("%100", page.locator("#geo-total").inner_text())
-            self.assertEqual(page.locator(".geo-excluded").count(), 12)
-            for excluded in page.locator(".geo-excluded").all():
-                self.assertIn("%0", excluded.inner_text())
+            self.assertEqual(page.locator(".channel-disabled").count(), 12)
+            for excluded in page.locator(".channel-disabled").all():
+                self.assertEqual(
+                    excluded.locator("input[type=number]").input_value(), "0.00"
+                )
         for radius in ("0", "801", "1.5", ""):
             page.locator("#radius-number").fill(radius)
             self.assertEqual(page.locator("#radius-number").input_value(), radius)
@@ -204,7 +206,7 @@ class JourneyTest(unittest.TestCase):
         self.assertEqual(proof["outside"], 0)
         self.assertFalse(proof["verified"])
         self.assertEqual(proof["cents"], 300000)
-        self.assertEqual(page.locator(".geo-channel").count(), 14)
+        self.assertEqual(page.locator(".channel-line").count(), 14)
         page.locator('[data-channel="microsoft"] input[type=checkbox]').uncheck()
         self.assertEqual(page.locator("#google").input_value(), "100")
         page.locator('[data-channel="google"] input[type=checkbox]').uncheck()
@@ -212,7 +214,7 @@ class JourneyTest(unittest.TestCase):
         self.assertIsNone(page.evaluate("YaparoGeo.snapshot()"))
         page.locator('[data-channel="google"] input[type=checkbox]').check()
         page.locator('[data-channel="microsoft"] input[type=checkbox]').check()
-        page.locator('[data-channel="microsoft"] select').select_option("10")
+        page.locator('[data-channel="microsoft"] input[type=number]').fill("90.91")
         shares = page.evaluate("YaparoGeo.snapshot().channels.map(c=>c.amountCents)")
         self.assertEqual(sum(shares), 300000)
         self.assertGreater(shares[1], shares[0] * 9)
@@ -258,6 +260,83 @@ class JourneyTest(unittest.TestCase):
             page.evaluate("document.documentElement.scrollWidth<=innerWidth")
         )
         page.screenshot(path=str(self.evidence / "turkey-mobile.png"), full_page=True)
+        page.close()
+
+    def test_percentage_mixer_rebalance_drag_and_booklet(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1100})
+        page.goto(self.origin)
+        page.get_by_role("button", name="Bir işletmeyi tanıt").click()
+        page.get_by_role("button", name="Üç yaklaşımı keşfet").click()
+        page.locator(".choose").first.click()
+        page.locator("#content-next").click()
+        google = page.locator('[data-channel="google"] input[type=number]')
+        microsoft = page.locator('[data-channel="microsoft"] input[type=number]')
+        google.fill("70")
+        self.assertEqual(microsoft.input_value(), "30.00")
+        page.locator("#geo-mode").select_option("radius")
+        page.locator("#latitude").fill("")
+        self.assertIsNone(page.evaluate("YaparoGeo.snapshot()"))
+        self.assertIn("Dağıtılan ₺0", page.locator("#allocation-money").inner_text())
+        page.locator("#latitude").fill("41.005")
+        self.assertEqual(google.input_value(), "70.00")
+        self.assertEqual(microsoft.input_value(), "30.00")
+        self.assertEqual(page.locator(".channel-group").count(), 3)
+        self.assertEqual(page.locator(".channel-line").count(), 14)
+        self.assertEqual(page.locator(".channel-inline-details[open]").count(), 0)
+        page.evaluate(
+            "window.retainedRange=document.querySelector('[data-channel=google] input[type=range]')"
+        )
+        bar = page.locator('[data-channel="google"] input[type=range]')
+        for value in ("75", "80", "33.33", "100", "0", "50"):
+            bar.fill(value)
+            bar.dispatch_event("input")
+            result = page.evaluate(
+                """() => ({same:retainedRange===document.querySelector('[data-channel=google] input[type=range]'),sum:YaparoGeo.snapshot().channels.reduce((n,c)=>n+Math.round(c.share*100),0),cents:YaparoGeo.snapshot().channels.reduce((n,c)=>n+c.amountCents,0)})"""
+            )
+            self.assertTrue(result["same"])
+            self.assertEqual(result["sum"], 10000)
+            self.assertEqual(result["cents"], 300000)
+        google.fill("101")
+        self.assertIsNone(page.evaluate("YaparoGeo.snapshot()"))
+        self.assertIn("Geçerli paylar", page.locator("#geo-total").inner_text())
+        self.assertIn("Dağıtılan ₺0", page.locator("#allocation-money").inner_text())
+        google.fill("33.33")
+        self.assertEqual(microsoft.input_value(), "66.67")
+        page.locator('[data-channel="google"] .channel-book').click()
+        self.assertTrue(page.locator("#channel-guide").is_visible())
+        self.assertEqual(
+            page.locator("#channel-guide-title").inner_text(), "Google Ads"
+        )
+        self.assertIn(
+            "gerçek platform tahmini değildir",
+            page.locator("#channel-guide-content").inner_text(),
+        )
+        page.get_by_role("button", name="Kanal rehberini kapat").click()
+        page.locator("#geo-mode").select_option("country")
+        google.fill("33.33")
+        total = page.evaluate(
+            "YaparoGeo.snapshot().channels.reduce((n,c)=>n+Math.round(c.share*100),0)"
+        )
+        self.assertEqual(total, 10000)
+        page.locator("#audience").fill("Sentetik kitle")
+        page.locator("#destination").fill("Örnek sayfa")
+        page.locator("#plan-form button[type=submit]").click()
+        page.get_by_role("button", name="Planı düzenle", exact=True).click()
+        google.fill("44.44")
+        self.assertTrue(page.get_by_role("button", name="4 Son kontrol").is_disabled())
+        page.locator("#plan-form button[type=submit]").click()
+        self.assertIn("Google Ads %44.44", page.locator("#review-values").inner_text())
+        page.get_by_role("button", name="Planı düzenle", exact=True).click()
+        page.screenshot(
+            path=str(self.evidence / "percentage-desktop.png"), full_page=True
+        )
+        page.set_viewport_size({"width": 390, "height": 844})
+        self.assertTrue(
+            page.evaluate("document.documentElement.scrollWidth<=innerWidth")
+        )
+        page.screenshot(
+            path=str(self.evidence / "percentage-mobile.png"), full_page=True
+        )
         page.close()
 
     def test_static_asset_integrity(self):

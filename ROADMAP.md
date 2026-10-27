@@ -11,7 +11,9 @@ not real AI or channel recommendations. Existing editor/brand/campaign contracts
 remain intact. Next: owner UX review, then map the accepted flow to owned data.
 Geography now clips center/radius1..800km to pinned Turkey land polygons.
 Fourteen researched digital-channel families are shown, with unknown conditions
-explicit; users select documented geo candidates and adjust budget priorities.
+explicit; users select documented geo candidates and set percentages with numeric fields
+and dynamic range bars (total100). Compact groups, hidden descriptions and book
+guides replace tall channel cards.
 Dynamic numbers are only a clearly labelled hypothetical scenario with editable
 assumptions, not platform forecasts or unique reach. See the Turkey channel
 catalog draft; actual account, creative suitability and platform enforcement stay

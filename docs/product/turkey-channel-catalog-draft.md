@@ -28,9 +28,15 @@ remains disconnected and incapable of charging or publishing.
 
 Only documented geo-type candidates for the requested precision are selectable;
 unknown/unsupported candidates stay0 with a reason and source. User may deselect
-any eligible candidate and choose relative priority1..10. Initial priorities are
-equal, not a claimed performance ranking. Integer-kuruş allocations conserve the
-whole budget exactly. No selected candidate means unallocated budget and no final
+any eligible candidate and enter percentages directly (0..100, up to two decimal
+places), or drag stable native range controls. One channel's new share is fixed;
+the remainder redistributes proportionally across the other selected channels.
+When all other shares are zero, the remainder splits equally. Largest-remainder
+apportionment conserves10000 percentage basis points and integer-kuruş budgets.
+A single selected channel stays100; all-off leaves budget unallocated. Initial
+shares are equal, not a claimed performance ranking. Temporary invalid geography
+allocates0 and blocks review while preserving the last valid custom mixture.
+Invalid manual percentages retain their input, allocate0 and block review. No selected candidate means unallocated budget and no final
 summary. Account, format, policy and actual boundary execution remain separate
 closed production gates even for selectable candidates.
 
@@ -60,5 +66,20 @@ people/km² and repeat factor2. These defaults do not rank platforms.
   never sum channel audiences as unique reach. User-entered assumptions and their
   clipped geography/channel allocations are pinned to the final local summary.
 
-Changing plan/geo/channel/priority/assumptions invalidates the old review. Values
+Changing plan/geo/channel/percentage/assumptions invalidates the old review. Values
 cannot create network, forecast, payment, customer-data or publishing operations.
+
+
+## Compact mixer interaction — owner revision
+
+All14 catalog entries stay accessible in three collapsible groups: documented
+radius candidates, broad-country candidates, and geo conditions awaiting checks.
+The last group is not labelled incapable of local targeting. Each row has a
+checkbox, leading numeric percent field, broad range bar, closed summary/details
+and an accessible book-outline button. The book dialog gives formats, current
+location reason, account/route qualifications, calculation limits and the primary
+source. Unknown geo controls remain disabled0, while their guides are accessible.
+
+Nodes remain mounted during drag/input so pointer capture/focus is not lost.
+Geography changes reconcile only when valid; temporary missing coordinates do not
+silently reset a user mixture. All relevant edits invalidate the previous review.

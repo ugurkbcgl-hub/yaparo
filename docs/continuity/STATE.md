@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 08:46 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 09:10 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -20,8 +20,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base mainabc2093 / PR368 merged; required CI40412311595 passed1166 Django
 (4 skips)/45 browser checks; main CI40413608566 passed.
-Current branch codex/unified-journey-prototype; PR369 open; prior implementationea5ff75.
-Prior headea5ff75 CI40454155066 passed. Turkey/catalog update pending latest-head CI.
+Current branch codex/unified-journey-prototype; PR369 open; prior implementationa0c647e.
+Prior heada0c647e CI40457258411 passed. Compact mixer update pending latest-head CI.
 Owner UX review before integration; do not claim merged.
 Owner explicitly requested a simpler unified-flow draft before integration.
 Isolated experiments/unified-journey serves allowlisted static prototype on8013:
@@ -37,16 +37,25 @@ foreign parts removed and outside-land centers rejected; approximate vector only
 not street map or operational serving proof. MIT polygon-clipping0.15.7 vendored,
 lock/licenses/hashes retained; npm audit no reported vulnerabilities.
 14 researched digital-channel families; user chooses documented geo candidates
-and relative priorities1..10. Unknown/unsupported precision0. Integer-kuruş
+with direct0..100 two-decimal percentages and stable native range bars. Other
+selected shares rebalance proportionally (equal fallback when zero), exact10000
+basis points plus conserved integer-kuruş budgets. One channel stays100; all-off
+no allocation.14 compact rows grouped as local/broad/unknown, closed descriptions
+and book-outline guide dialogs. Unknown/unsupported precision0. Integer-kuruş
 allocation conserved; no selected candidate means no allocation/summary. Google+
 Microsoft radius geo candidates, wider country catalog qualified separately.
 Shared explicit hypothetical CPM/CTR/density/repetition produce scenario metrics;
 not real forecasts/market rates/population/unique reach or channel ranking.
-All plan/geo/channel/priority/assumption changes invalidate stale review. Snapshot
-pins clippedgeometry/assumptions/allocations. Six focused checks passed (including
-80km Edirne outside-difference0, foreign center, priorities, budgets/CPM/area,
+All plan/geo/channel/percentage/assumption changes invalidate stale review. Snapshot
+pins clippedgeometry/assumptions/allocations. Seven focused checks passed (including
+80km Edirne outside-difference0, foreign center, percentages, budgets/CPM/area,
 mobile and asset hashes). Independent source review found no blocker.
-Private evidence: %TEMP%\yaparo-journey-4ofpibtn (turkey-channels/turkey-mobile PNGs).
+New mixer tests additionally cover70/30,33.33,100/0, exact sums, stable drag nodes,
+invalid101, booklet/grouping/mobile and preserved custom mixture through invalid
+coordinates. No blocker in independent final review.
+Private evidence: %TEMP%\yaparo-journey-6qx0qe62 (percentage-desktop/mobile PNGs).
+Actual IAB verified70/30 changes, folded descriptions, grouped rows and book dialog
+open/close. Private percentage-iab.png and booklet-iab.png in the same temp root.
 Actual IAB confirmed Edirne80km: approximately8789km² /44% inside, clipped to
 Turkey; private turkey-iab.png. User-facing prototype remains on8013. No API/DB/GPS/paid operation; no provider
 key loaded. Docs: unified-journey-draft.md and turkey-channel-catalog-draft.md.
