@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 02:22 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 08:13 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -21,7 +21,8 @@ Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base mainabc2093 / PR368 merged; required CI40412311595 passed1166 Django
 (4 skips)/45 browser checks; main CI40413608566 passed.
 Current branch codex/unified-journey-prototype; PR369 open, implementation36a0a4f.
-Required CI pending. Owner UX review before integration; do not claim merged.
+Prior headb37289a CI40419437450 passed. Geography update pending latest-head CI.
+Owner UX review before integration; do not claim merged.
 Owner explicitly requested a simpler unified-flow draft before integration.
 Isolated experiments/unified-journey serves allowlisted static prototype on8013:
 request → three distinct examples → same-flow edit → plan → summary, optional
@@ -30,9 +31,16 @@ no actual AI, channel efficacy, upload, DB, persistence, export, spend or publis
 Open-tab memory only; refresh loses input as visibly disclosed. Existing8002 and
 private data/ledgers untouched. Draft contract: docs/product/unified-journey-draft.md.
 Review fixes preserve request context with previous trio and edited-title undo;
-image picker keyboard-accessible. Focused flow/mobile/server checks passed3.
+image picker keyboard-accessible. Geography update: area/country/point-radius1..800km,
+example centers/manual coordinates/local schematic; no live map/geocoder/GPS.
+Google geo-type support sourced from official help/API limits; Meta current limits
+unknown, TikTok radius/account unverified/Phase2. Zero shares for excluded/unknown,
+100 for single documented geo candidate; not account/creative/publishing proof.
+Invalid inputs allocate0, never clamp/widen; plan edits/map clicks invalidate stale
+summary/top-stage4. Independent re-review found no blocker. Four focused browser/
+server checks passed, including1/800/out-of-range, invalidated summary and mobile.
 Actual IAB desktop and390px visual review completed. Private evidence:
-%TEMP%\yaparo-journey-8zlbw6__ (iab-start/start/concepts/summary/mobile PNGs).
+%TEMP%\yaparo-journey-g10uridr (radius-iab/radius-desktop/radius-mobile PNGs).
 Independent final source review found no blocker. No provider key was loaded.
 
 Current ADR0071: separate default-off LOCAL_BRAND_CAMPAIGN_SETTINGS_ENABLED adds

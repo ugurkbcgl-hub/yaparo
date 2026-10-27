@@ -9,7 +9,12 @@ is in `experiments/unified-journey`; see
 [interaction scope](docs/product/unified-journey-draft.md). It uses fixed examples,
 not real AI or channel recommendations. Existing editor/brand/campaign contracts
 remain intact. Next: owner UX review, then map the accepted flow to owned data.
-No provider call, upload, persistence, spend, download or publishing is added.
+Geography now offers named area/country or center/radius1..800km, with a local
+schematic/coordinates. Candidate allocation excludes unsupported/unknown geo
+capabilities (no silent widening); only Google geo-type support is verified,
+Meta remains unknown and TikTok unverified/Phase2. This is not actual account or
+creative suitability. No provider call, upload, persistence, spend, download or
+publishing is added.
 
 ## Current owner priority — 26 October 2026
 

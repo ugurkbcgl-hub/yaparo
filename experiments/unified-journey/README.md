@@ -21,7 +21,7 @@ python experiments/unified-journey/check.py
 ```
 
 The focused check starts its own ephemeral loopback server/browser, checks flow
-continuity and safety boundaries, saves screenshots to a printed private temp
+continuity,1..800km point-radius/invalid/stale-summary handling and safety boundaries, saves screenshots to a printed private temp
 directory, and closes its test processes. It never loads the application DB.
 These checks are explicit/manual for this isolated draft; existing CI does not
 discover this experiment automatically.
