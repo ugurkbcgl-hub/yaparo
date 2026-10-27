@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 09:10 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 09:43 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -21,7 +21,11 @@ Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base mainabc2093 / PR368 merged; required CI40412311595 passed1166 Django
 (4 skips)/45 browser checks; main CI40413608566 passed.
 Current branch codex/unified-journey-prototype; PR369 open; prior implementationa0c647e.
-Prior heada0c647e CI40457258411 passed. Compact mixer update pending latest-head CI.
+Prior head576ba19 CI40459582124 FAILED existing package browser rejection test.
+Failure was not reproduced; focused test passed twice under isolated SQLite.
+Test-only witness now checks exact intercepted URL/body hash and named subcases;
+rejection/no-download assertions preserved. Root cause unproven. Latest-head CI
+still required; never claim green/merged before checking.
 Owner UX review before integration; do not claim merged.
 Owner explicitly requested a simpler unified-flow draft before integration.
 Isolated experiments/unified-journey serves allowlisted static prototype on8013:
@@ -36,29 +40,29 @@ geodesic circle intersected with pinned NaturalEarth Turkey multipolygon, offsho
 foreign parts removed and outside-land centers rejected; approximate vector only,
 not street map or operational serving proof. MIT polygon-clipping0.15.7 vendored,
 lock/licenses/hashes retained; npm audit no reported vulnerabilities.
-14 researched digital-channel families; user chooses documented geo candidates
-with direct0..100 two-decimal percentages and stable native range bars. Other
-selected shares rebalance proportionally (equal fallback when zero), exact10000
-basis points plus conserved integer-kuruş budgets. One channel stays100; all-off
-no allocation.14 compact rows grouped as local/broad/unknown, closed descriptions
-and book-outline guide dialogs. Unknown/unsupported precision0. Integer-kuruş
-allocation conserved; no selected candidate means no allocation/summary. Google+
-Microsoft radius geo candidates, wider country catalog qualified separately.
-Shared explicit hypothetical CPM/CTR/density/repetition produce scenario metrics;
-not real forecasts/market rates/population/unique reach or channel ranking.
-All plan/geo/channel/percentage/assumption changes invalidate stale review. Snapshot
-pins clippedgeometry/assumptions/allocations. Seven focused checks passed (including
-80km Edirne outside-difference0, foreign center, percentages, budgets/CPM/area,
-mobile and asset hashes). Independent source review found no blocker.
-New mixer tests additionally cover70/30,33.33,100/0, exact sums, stable drag nodes,
-invalid101, booklet/grouping/mobile and preserved custom mixture through invalid
-coordinates. No blocker in independent final review.
-Private evidence: %TEMP%\yaparo-journey-6qx0qe62 (percentage-desktop/mobile PNGs).
-Actual IAB verified70/30 changes, folded descriptions, grouped rows and book dialog
-open/close. Private percentage-iab.png and booklet-iab.png in the same temp root.
-Actual IAB confirmed Edirne80km: approximately8789km² /44% inside, clipped to
-Turkey; private turkey-iab.png. User-facing prototype remains on8013. No API/DB/GPS/paid operation; no provider
-key loaded. Docs: unified-journey-draft.md and turkey-channel-catalog-draft.md.
+14 researched digital-channel families; all manually selectable as hypothetical
+user scenarios. Unknown geo selections have amber book icon and persisted
+geoEligible=false/hypotheticalOnly/manualUnverifiedScenario qualifiers; not real
+account, geo, format or publishing proof. Initial/recommended selections only
+use documented geo candidates. Only checked channels occupy compact29px upper
+percentage rows; unchecked nodes move to bar-free grouped pool below. Stable
+controls, restored keyboard focus, exact10000bp/kuruş, direct percentages.
+Wide inline view preserves campaign fields and reopens invalid hidden fields.
+AI suggestion button is explicitly LOCAL SIMULATION, not real AI/platform query.
+Every press reads current DOM context, new revision/id/time, resets manual mix,
+explains fixed geo/goal/budget rule; metadata provider/model null externalQueryfalse.
+Manual edits mark suggestion stale. Actual fresh-query gateway/cost/late-response
+validation requirements remain pending and recorded in channel catalog.
+8 focused prototype checks passed (all-channel select/move, compactness, repeated
+fresh conditions/reset, unverified qualifiers, wide view/invalid form recovery,
+no outbound calls plus prior math/clipping/mobile/source checks). Source review
+no blocker. Private evidence %TEMP%\yaparo-journey-3neeoc_8 (compact-selection/mobile).
+Actual IAB confirmed Meta manually moves to upper pool (3selected/11remaining),
+recommendation#1 resets to documented2 and shows reasons, subsequent manual
+selection marks it stale. Wide view visible; selection-iab.png/suggestion-iab.png
+in the same evidence root. Existing8002/privateDB/AI ledger untouched,
+no provider key loaded, no API/GPS/spend/publish. Docs: unified-journey-draft.md,
+turkey-channel-catalog-draft.md. Latest CI pending; PR369 remains open.
 
 Current ADR0071: separate default-off LOCAL_BRAND_CAMPAIGN_SETTINGS_ENABLED adds
 owned versioned goal/audience/region/TRY budget/start/end planning. Protected

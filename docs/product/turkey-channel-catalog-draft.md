@@ -26,19 +26,28 @@ remains disconnected and incapable of charging or publishing.
 
 ## Budget and boundary rules in the prototype
 
-Only documented geo-type candidates for the requested precision are selectable;
-unknown/unsupported candidates stay0 with a reason and source. User may deselect
-any eligible candidate and enter percentages directly (0..100, up to two decimal
-places), or drag stable native range controls. One channel's new share is fixed;
-the remainder redistributes proportionally across the other selected channels.
-When all other shares are zero, the remainder splits equally. Largest-remainder
-apportionment conserves10000 percentage basis points and integer-kuruş budgets.
-A single selected channel stays100; all-off leaves budget unallocated. Initial
-shares are equal, not a claimed performance ranking. Temporary invalid geography
-allocates0 and blocks review while preserving the last valid custom mixture.
-Invalid manual percentages retain their input, allocate0 and block review. No selected candidate means unallocated budget and no final
-summary. Account, format, policy and actual boundary execution remain separate
-closed production gates even for selectable candidates.
+All14 channels can now be MANUALLY selected for a hypothetical UX scenario, as
+explicitly requested by the owner. This supersedes the earlier prototype rule
+that disabled unknown candidates. No capability or operational gate is promoted:
+manual unknown selections carry geoEligible=false/hypotheticalOnly=true and a
+manualUnverifiedScenario summary flag. Amber book buttons and final summary
+qualifiers retain the uncertainty. Actual account/format/policy/boundary readiness
+is still closed, and nothing can publish or spend.
+
+Only selected checkboxes enter the upper compact percentage mixer. Deselecting
+moves the same node to a bar-free grouped pool below. Labels are abbreviated only
+in the pool; accessible names, titles and book guides retain full channel names.
+Inputs accept0..100 with two decimals; a changed target redistributes the remainder
+proportionally (equal fallback when all others0). Percent basis points and kuruş
+remain conserved. One selected channel100, all-off unallocated. Initial defaults
+use only documented geo-type candidates. Temporary invalid geography preserves
+last custom shares while allocations0/review blocked. Invalid percent input stays
+visible, stops allocation and blocks review. Controls stay mounted during drag;
+focus returns after moving and revealing a pool group.
+
+A wide inline view hides only the campaign-fields panel without clearing values.
+Invalid hidden campaign fields restore normal view before browser validation
+focuses them. It is not a modal, new page or new campaign.
 
 Turkey restriction means the geodesic radius polygon INTERSECTED with the locally
 pinned Natural Earth Turkey land polygon. Offshore/foreign parts are excluded;
@@ -70,16 +79,27 @@ Changing plan/geo/channel/percentage/assumptions invalidates the old review. Val
 cannot create network, forecast, payment, customer-data or publishing operations.
 
 
-## Compact mixer interaction — owner revision
+## Repeatable recommendation interaction — prototype vs future integration
 
-All14 catalog entries stay accessible in three collapsible groups: documented
-radius candidates, broad-country candidates, and geo conditions awaiting checks.
-The last group is not labelled incapable of local targeting. Each row has a
-checkbox, leading numeric percent field, broad range bar, closed summary/details
-and an accessible book-outline button. The book dialog gives formats, current
-location reason, account/route qualifications, calculation limits and the primary
-source. Unknown geo controls remain disabled0, while their guides are accessible.
+The button is labelled AI distribution suggestion with an adjacent LOCAL
+SIMULATION badge. Each press reads current DOM fields again, assigns a new
+revision/id/time, overwrites manual selections/shares, and explains the result.
+It does not call a model, query current prices or refresh external platform data.
+Same conditions can yield the same recommendation. Manual edits mark it stale;
+final snapshot pins its context, reasons and provider/model=null/externalQuery=false.
 
-Nodes remain mounted during drag/input so pointer capture/focus is not lost.
-Geography changes reconcile only when valid; temporary missing coordinates do not
-silently reset a user mixture. All relevant edits invalidate the previous review.
+The explicit local heuristic uses geo/goal/budget: verified geo candidates only,
+search candidates for visit/lead/traffic goals, image-plannable candidates for
+awareness. Audio/video candidates remain outside this image-only recommendation.
+At most2 candidates for budget<1000TRY, otherwise3; this is a prototype simplicity
+rule, NOT platform minimum spend or performance evidence. Equal initial shares,
+not a ranking. No unverified geo candidate is automatically recommended even
+though all can be manually added to a hypothetical plan.
+
+The owner's intended real integration still requires a fresh application-gateway
+request for each explicit recommendation action, actual current provider/platform
+facts with timestamps, cost accounting, deduplicated double-click/replay handling,
+strict allowed-channel/total-percent checks and explanation. A late response must
+not overwrite newer manual edits or source conditions. Missing/stale geo/forecast
+proof must not be guessed. Read AI_PROVIDERS.md and applicable ADRs before this API
+work. Do not describe the current simulation as completing that integration.

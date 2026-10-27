@@ -103,7 +103,7 @@ class JourneyTest(unittest.TestCase):
         self.assertTrue(page.locator("#chat-input").is_visible())
         page.locator("#chat-input").fill("Neden bu kanallar?")
         page.get_by_role("button", name="Mesajı gönder").click()
-        self.assertIn("payı %0", page.locator("#chat-log").inner_text())
+        self.assertIn("pay ayırmaz", page.locator("#chat-log").inner_text())
         page.get_by_role("button", name="Yardımcıyı kapat").click()
         page.locator("#brief").fill(
             "<img src=x onerror=alert(1)> sentetik bir tanıtım örneği istiyorum."
@@ -131,8 +131,8 @@ class JourneyTest(unittest.TestCase):
             self.assertEqual(page.locator("#radius-range").input_value(), str(radius))
             self.assertIn(f"{radius} km", page.locator("#geo-status").inner_text())
             self.assertIn("%100", page.locator("#geo-total").inner_text())
-            self.assertEqual(page.locator(".channel-disabled").count(), 12)
-            for excluded in page.locator(".channel-disabled").all():
+            self.assertEqual(page.locator(".geo-unverified").count(), 12)
+            for excluded in page.locator(".geo-unverified").all():
                 self.assertEqual(
                     excluded.locator("input[type=number]").input_value(), "0.00"
                 )
@@ -208,6 +208,11 @@ class JourneyTest(unittest.TestCase):
         self.assertEqual(proof["cents"], 300000)
         self.assertEqual(page.locator(".channel-line").count(), 14)
         page.locator('[data-channel="microsoft"] input[type=checkbox]').uncheck()
+        self.assertTrue(
+            page.locator('[data-channel="microsoft"] input[type=checkbox]').evaluate(
+                "el=>el===document.activeElement"
+            )
+        )
         self.assertEqual(page.locator("#google").input_value(), "100")
         page.locator('[data-channel="google"] input[type=checkbox]').uncheck()
         self.assertIn("Toplam %0", page.locator("#geo-total").inner_text())
@@ -227,6 +232,7 @@ class JourneyTest(unittest.TestCase):
             "YaparoGeo.snapshot().channels.reduce((n,c)=>n+c.impressions,0)"
         )
         self.assertAlmostEqual(second, first * 2)
+        page.locator(".mixer-help>summary").click()
         page.locator(".scenario-assumptions summary").click()
         page.locator("#scenario-cpm").fill("200")
         third = page.evaluate(
@@ -280,7 +286,7 @@ class JourneyTest(unittest.TestCase):
         page.locator("#latitude").fill("41.005")
         self.assertEqual(google.input_value(), "70.00")
         self.assertEqual(microsoft.input_value(), "30.00")
-        self.assertEqual(page.locator(".channel-group").count(), 3)
+        self.assertEqual(page.locator(".pool-group").count(), 3)
         self.assertEqual(page.locator(".channel-line").count(), 14)
         self.assertEqual(page.locator(".channel-inline-details[open]").count(), 0)
         page.evaluate(
@@ -337,6 +343,125 @@ class JourneyTest(unittest.TestCase):
         page.screenshot(
             path=str(self.evidence / "percentage-mobile.png"), full_page=True
         )
+        page.close()
+
+    def test_selected_pool_all_channels_and_fresh_suggestion(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1100})
+        unexpected = []
+        page.on(
+            "request",
+            lambda request: (
+                unexpected.append(request.url)
+                if not request.url.startswith(self.origin + "/")
+                else None
+            ),
+        )
+        page.goto(self.origin)
+        page.get_by_role("button", name="Bir işletmeyi tanıt").click()
+        page.get_by_role("button", name="Üç yaklaşımı keşfet").click()
+        page.locator(".choose").first.click()
+        page.locator("#content-next").click()
+        self.assertEqual(
+            page.locator("#selected-channel-rows .channel-line").count(), 2
+        )
+        self.assertEqual(page.locator(".channel-pool .channel-line").count(), 12)
+        self.assertEqual(
+            page.locator('input[type=range][aria-label$="pay çubuğu"]:visible').count(),
+            2,
+        )
+        meta = page.locator('[data-channel="meta"] input[type=checkbox]')
+        self.assertTrue(meta.is_enabled())
+        meta.check()
+        self.assertEqual(
+            page.locator("#selected-channel-rows [data-channel=meta]").count(), 1
+        )
+        snap = page.evaluate("YaparoGeo.snapshot()")
+        self.assertTrue(snap["manualUnverifiedScenario"])
+        self.assertFalse(
+            next(c for c in snap["channels"] if c["id"] == "meta")["geoEligible"]
+        )
+        self.assertEqual(sum(c["amountCents"] for c in snap["channels"]), 300000)
+        meta.uncheck()
+        self.assertEqual(page.locator(".channel-pool [data-channel=meta]").count(), 1)
+        self.assertFalse(
+            page.locator("[data-channel=meta] input[type=range]").is_visible()
+        )
+        for checkbox in page.locator(".channel-line input[type=checkbox]").all():
+            checkbox.check()
+        self.assertEqual(
+            page.locator("#selected-channel-rows .channel-line").count(), 14
+        )
+        self.assertEqual(page.locator(".channel-pool .channel-line").count(), 0)
+        self.assertLess(page.locator(".selected-mix").bounding_box()["height"], 520)
+        self.assertEqual(
+            sum(
+                round(c["share"] * 100)
+                for c in page.evaluate("YaparoGeo.snapshot().channels")
+            ),
+            10000,
+        )
+        page.locator("#ai-distribution").click()
+        first = page.evaluate("YaparoGeo.snapshot().suggestion")
+        self.assertEqual(first["revision"], 1)
+        self.assertFalse(first["externalQuery"])
+        self.assertIsNone(first["provider"])
+        self.assertEqual(
+            page.locator("#selected-channel-rows .channel-line").count(), 2
+        )
+        self.assertIn(
+            "neden", page.locator("#suggestion-explanation").inner_text().lower()
+        )
+        page.locator("[data-channel=google] input[type=number]").fill("77")
+        self.assertIn("değiştirildi", page.locator("#suggestion-status").inner_text())
+        page.locator("#geo-mode").select_option("country")
+        page.locator("#goal").select_option("awareness")
+        page.locator("#budget").fill("2000")
+        page.locator("#ai-distribution").click()
+        second = page.evaluate("YaparoGeo.snapshot()")
+        self.assertEqual(second["suggestion"]["revision"], 2)
+        self.assertNotEqual(first["id"], second["suggestion"]["id"])
+        self.assertEqual(second["suggestion"]["context"]["budget"], 2000)
+        self.assertEqual(second["suggestion"]["context"]["goal"], "awareness")
+        self.assertEqual(second["suggestion"]["context"]["geo"]["mode"], "country")
+        self.assertEqual(len(second["channels"]), 3)
+        self.assertTrue(all(c["geoEligible"] for c in second["channels"]))
+        page.locator("#ai-distribution").click()
+        third = page.evaluate("YaparoGeo.snapshot().suggestion")
+        self.assertEqual(third["revision"], 3)
+        self.assertFalse(third["stale"])
+        page.locator("#budget").fill("500")
+        page.locator("#ai-distribution").click()
+        fourth = page.evaluate("YaparoGeo.snapshot()")
+        self.assertEqual(fourth["suggestion"]["revision"], 4)
+        self.assertEqual(len(fourth["channels"]), 2)
+        self.assertEqual(sum(c["amountCents"] for c in fourth["channels"]), 50000)
+        page.locator("#suggestion-explanation").evaluate("el=>el.open=false")
+        page.locator("#mixer-view").click()
+        frame = page.locator("#plan-form>.plan-grid>.panel").first
+        self.assertFalse(frame.is_visible())
+        self.assertLess(
+            page.locator("#distribution-panel").bounding_box()["height"], 750
+        )
+        page.locator("#distribution-panel").screenshot(
+            path=str(self.evidence / "compact-selection.png")
+        )
+        page.locator("#plan-form button[type=submit]").click()
+        self.assertTrue(frame.is_visible())
+        page.locator("#audience").fill("Sentetik örnek kitle")
+        page.locator("#destination").fill("Örnek tanıtım sayfası")
+        page.locator("#mixer-view").click()
+        page.locator("#ai-distribution").click()
+        self.assertEqual(
+            page.evaluate("YaparoGeo.snapshot().suggestion.context.audience"),
+            "Sentetik örnek kitle",
+        )
+        page.locator("#suggestion-explanation").evaluate("el=>el.open=false")
+        page.set_viewport_size({"width": 390, "height": 844})
+        self.assertTrue(
+            page.evaluate("document.documentElement.scrollWidth<=innerWidth")
+        )
+        page.screenshot(path=str(self.evidence / "compact-mobile.png"), full_page=True)
+        self.assertEqual(unexpected, [])
         page.close()
 
     def test_static_asset_integrity(self):

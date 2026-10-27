@@ -4,9 +4,11 @@ window.YaparoGeo = (() => {
   const country = window.YaparoTurkey.geometry.coordinates;
   const options = window.YaparoChannels;
   const decisions = new Map(), shares = new Map(), shareErrors = new Set(), views = new Map();
+  const shortNames={microsoft:'Microsoft',tiktok:'TikTok',linkedin:'LinkedIn',pinterest:'Pinterest',snap:'Snapchat',spotify:'Spotify',amazon:'Amazon DSP',yandex:'Yandex',taboola:'Taboola',teads:'Teads',reddit:'Reddit'};
   let selectionKey = "";
   const groupViews = new Map();
-  let groupMode = null;
+  let initializedSelection = false;
+  let lastSuggestion = null, suggestionRevision = 0;
   const EARTH = 6371.0088;
   const presets = {istanbul:[41.005,29.04],ankara:[39.9179,32.8627],izmir:[38.4189,27.1287]};
   const money = n => new Intl.NumberFormat('tr-TR',{style:'currency',currency:'TRY',maximumFractionDigits:2}).format(n);
@@ -146,7 +148,9 @@ window.YaparoGeo = (() => {
   function calculate(geo) {
     const budget=Number(el('budget').value),valid=Number.isInteger(budget)&&budget>=100&&budget<=1000000;
     const rows=options.map(channel=>({...channel,...support(channel,geo)}));
-    for(const row of rows)row.selected=row.eligible&&decisions.get(row.id)!==false;
+    if(!initializedSelection&&geo){for(const row of rows)decisions.set(row.id,row.eligible);initializedSelection=true;}
+    // Selection is a hypothetical user plan, not approval or geo capability proof.
+    for(const row of rows)row.selected=decisions.get(row.id)===true;
     const selected=rows.filter(row=>row.selected),ids=selected.map(row=>row.id);
     // Editing a coordinate is not an instruction to reset the last valid mixture.
     if(geo)reconcile(ids);
@@ -164,28 +168,37 @@ window.YaparoGeo = (() => {
     }
     return {rows,valid:valid&&Boolean(geo)&&ids.length>0&&Boolean(assumption)&&validShares,budget,assumption,validShares};
   }
-  function changed(){document.dispatchEvent(new Event('yaparo-geography-change'));}
+  function markSuggestionStale(){if(lastSuggestion){lastSuggestion.stale=true;el('suggestion-status').textContent='Elle veya koşullarla değiştirildi · Öneriyi yeniden hesaplayabilirsin.';}}
+  function changed(origin='manual'){if(origin!=='suggestion')markSuggestionStale();document.dispatchEvent(new Event('yaparo-geography-change'));}
   function booklet(row) {
     const dialog=el('channel-guide');el('channel-guide-title').textContent=row.name;
     const content=el('channel-guide-content');content.replaceChildren();
-    const entries=[['Reklam alanı',row.detail],['Konum durumu',row.why],['Erişim ve koşullar',row.route],['Pay ve sonuç',row.selected?`%${row.share.toFixed(2)} · ${money(row.amountCents/100)} senaryo bütçesi`:'Bu seçimde bütçe ayrılmıyor'],['Yüzde nasıl değişir?','Bir kanalın yüzdesini değiştirdiğinde kalan pay diğer seçili kanallara mevcut oranlarıyla dağılır. Oranları sıfırsa eşit bölünür. Tek kanal seçiliyse payı %100 kalır.'],['Hesabın sınırları','Gösterim/tıklama gerçek platform tahmini değildir. Ortak örnek varsayımlar kullanılır; sektör, içerik biçimi, hesap izinleri, envanter ve gerçek performans doğrulanmadı. Türkiye sınırında kesmenin gerçek platformda uygulanması ayrıca bekliyor.']];
+    const entries=[['Reklam alanı',row.detail],['Konum durumu',row.why],['Erişim ve koşullar',row.route],['Pay ve sonuç',row.selected?`%${row.share.toFixed(2)} · ${money(row.amountCents/100)} senaryo bütçesi${row.impressions==null?'':` · ≈${count(row.impressions)} gösterim / ≈${count(row.clicks)} tıklama`}`:'Bu seçimde bütçe ayrılmıyor'],['Manuel seçim sınırı',row.eligible?'Coğrafi tür belgeli olsa da gerçek hesap/format uygunluğu bekliyor.':'Bu kanalı taslakta seçip pay ayırabilirsin; konum koşulu doğrulanmış sayılmaz. Yerel öneri bunu seçmez, gerçek harcama veya yayın açılamaz.'],['Yüzde nasıl değişir?','Bir kanalın yüzdesini değiştirdiğinde kalan pay diğer seçili kanallara mevcut oranlarıyla dağılır. Oranları sıfırsa eşit bölünür. Tek kanal seçiliyse payı %100 kalır.'],['Hesabın sınırları','Gösterim/tıklama gerçek platform tahmini değildir. Ortak örnek varsayımlar kullanılır; sektör, içerik biçimi, hesap izinleri, envanter ve gerçek performans doğrulanmadı. Türkiye sınırında kesmenin gerçek platformda uygulanması ayrıca bekliyor.']];
     for(const [heading,text]of entries){const h=document.createElement('h3'),p=document.createElement('p');h.textContent=heading;p.textContent=text;content.append(h,p);}
     const source=document.createElement('a');source.href=row.source;source.target='_blank';source.rel='noreferrer noopener';source.textContent='Resmî koşulları incele ↗';content.append(source);dialog.showModal();
   }
   function buildChannels() {
     if(views.size)return;
     const container=el('geo-channels');container.replaceChildren();
-    const groups=[['local','Konum çevresine uygun','Belgelenen yarıçap adayları'],['wide','Ülke / geniş alan adayları','Kesin yarıçap koşulları ayrıca doğrulanmalı'],['unknown','Konum koşulları doğrulama bekleyenler','Bilinmiyor, desteklemiyor anlamına gelmez']];
+    const selected=document.createElement('section');selected.className='selected-mix';
+    const heading=document.createElement('h3');heading.id='selected-title';heading.textContent='Reklam verilecekler';
+    const rows=document.createElement('div');rows.id='selected-channel-rows';
+    const empty=document.createElement('p');empty.id='selected-empty';empty.className='hint';empty.textContent='Aşağıdan kanal seç; payları burada ayarla.';
+    selected.append(heading,rows,empty);container.append(selected);
+    const pool=document.createElement('section');pool.className='channel-pool';
+    const poolTitle=document.createElement('h3');poolTitle.id='pool-title';poolTitle.textContent='Diğer kanallar';pool.append(poolTitle);
+    const groups=[['local','Konum çevresi adayları'],['wide','Ülke / geniş alan adayları'],['unknown','Konum koşulları doğrulama bekleyenler']];
     const bodies=new Map();
-    for(const [id,title,description]of groups){const section=document.createElement('details');section.className='channel-group';section.dataset.group=id;const heading=document.createElement('summary'),hint=document.createElement('p'),body=document.createElement('div');const size=options.filter(c=>(c.radius?'local':c.country?'wide':'unknown')===id).length;heading.textContent=`${title} · ${size}`;hint.textContent=description;hint.className='hint';section.append(heading,hint,body);bodies.set(id,body);groupViews.set(id,section);container.append(section);}
+    for(const [id,title]of groups){const section=document.createElement('section');section.className='pool-group';section.dataset.group=id;const heading=document.createElement('h4'),body=document.createElement('div');heading.textContent=title;body.className='pool-choices';section.append(heading,body);bodies.set(id,body);groupViews.set(id,section);pool.append(section);}
+    container.append(pool);
     for(const channel of options) {
       const section=document.createElement('section');section.className='channel-line';section.dataset.channel=channel.id;
       const head=document.createElement('div');head.className='channel-line-heading';
       const label=document.createElement('label');label.className='channel-select';
       const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.setAttribute('aria-label',`${channel.name} kanalını seç`);
       checkbox.addEventListener('change',()=>{decisions.set(channel.id,checkbox.checked);update();changed();});
-      const name=document.createElement('strong');name.textContent=channel.name;label.append(checkbox,name);
-      const book=document.createElement('button');book.type='button';book.className='channel-book';book.innerHTML='<svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M12 5C8 2 4 2 2 3v15c3-1 6-1 10 2 4-3 7-3 10-2V3c-2-1-6-1-10 2Zm0 0v15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';book.title='Kanal rehberi';book.setAttribute('aria-label',`${channel.name} kanal rehberi`);book.addEventListener('click',()=>booklet(current.rows.find(row=>row.id===channel.id)));
+      const name=document.createElement('strong');name.textContent=channel.name;name.title=channel.name;label.append(checkbox,name);
+      const book=document.createElement('button');book.type='button';book.className='channel-book';book.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M12 5C8 2 4 2 2 3v15c3-1 6-1 10 2 4-3 7-3 10-2V3c-2-1-6-1-10 2Zm0 0v15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';book.title='Kanal rehberi';book.setAttribute('aria-label',`${channel.name} kanal rehberi`);book.addEventListener('click',()=>booklet(current.rows.find(row=>row.id===channel.id)));
       head.append(label,book);
       const bar=document.createElement('div');bar.className='channel-percent-bar';
       const numberLabel=document.createElement('label');numberLabel.className='percent-entry';
@@ -194,34 +207,61 @@ window.YaparoGeo = (() => {
       number.addEventListener('input',()=>setShare(channel.id,number.value));
       number.addEventListener('blur',()=>{if(!shareErrors.has(channel.id))number.value=((shares.get(channel.id)||0)/100).toFixed(2);});
       range.addEventListener('input',()=>{shareErrors.delete(channel.id);number.setCustomValidity('');number.removeAttribute('aria-invalid');setShare(channel.id,range.value);});
-      bar.append(numberLabel,range);
-      const details=document.createElement('details');details.className='channel-inline-details';
-      const summary=document.createElement('summary');summary.textContent='Özet ve açıklama';const estimate=document.createElement('p'),reason=document.createElement('p');details.append(summary,estimate,reason);
-      section.append(head,bar,details);
-      bodies.get(channel.radius?'local':channel.country?'wide':'unknown').append(section);
-      views.set(channel.id,{section,checkbox,number,range,estimate,reason});
+      bar.append(numberLabel,range);section.append(head,bar);
+      const group=channel.radius?'local':channel.country?'wide':'unknown';
+      bodies.get(group).append(section);views.set(channel.id,{section,checkbox,name,number,range,book,group,poolBody:bodies.get(group)});
     }
   }
   function renderChannels(result) {
     buildChannels();
-    const mode=el('geo-mode').value;
-    if(mode!==groupMode){groupViews.get('local').open=true;groupViews.get('wide').open=mode==='country';groupViews.get('unknown').open=false;groupMode=mode;}
-    const selectedCount=result.rows.filter(row=>row.selected).length;
+    const selected=result.rows.filter(row=>row.selected),selectedCount=selected.length;
+    let focusAfterMove=null;
     for(const row of result.rows) {
-      const view=views.get(row.id);view.section.classList.toggle('channel-disabled',!row.eligible);view.checkbox.checked=row.selected;view.checkbox.disabled=!row.eligible;
-      const disabled=!row.selected||selectedCount===1;
-      view.number.disabled=view.range.disabled=disabled;
-      if(!shareErrors.has(row.id)) {view.number.setCustomValidity('');view.number.removeAttribute('aria-invalid');if(document.activeElement!==view.number)view.number.value=row.share.toFixed(2);}
+      const view=views.get(row.id),target=row.selected?el('selected-channel-rows'):view.poolBody;
+      // Keep the node mounted during drag; only a checkbox changes its container.
+      if(view.section.parentElement!==target){const focused=view.section.contains(document.activeElement)?document.activeElement:null;target.append(view.section);if(focused)focusAfterMove=focused;}
+      view.section.classList.toggle('is-selected',row.selected);view.section.classList.toggle('geo-unverified',!row.eligible);
+      view.checkbox.checked=row.selected;view.checkbox.disabled=false;view.name.textContent=shortNames[row.id]||row.name;
+      view.book.title=row.eligible?'Kanal rehberi':'Konum koşulu doğrulanmadı · Yalnız taslak seçimi';
+      const disabled=!row.selected||selectedCount===1;view.number.disabled=view.range.disabled=disabled;
+      if(!shareErrors.has(row.id)){view.number.setCustomValidity('');view.number.removeAttribute('aria-invalid');if(document.activeElement!==view.number)view.number.value=row.share.toFixed(2);}
       if(document.activeElement!==view.range)view.range.value=row.share;
-      view.range.style.setProperty('--share',`${row.share}%`);
-      view.estimate.textContent=row.selected?`Senaryo bütçesi ${money(row.amountCents/100)} · ${row.impressions==null?'Geçerli alan/varsayım bekleniyor':`≈${count(row.impressions)} gösterim · ≈${count(row.clicks)} tıklama`}`:'%0 bütçe · Bu seçim için senaryo hesabı yok';
-      view.reason.textContent=`${row.why} ${row.route}`;
     }
-    const allocated=result.rows.reduce((n,row)=>n+row.amountCents,0),totalImpressions=result.rows.reduce((n,row)=>n+(row.impressions||0),0),totalClicks=result.rows.reduce((n,row)=>n+(row.clicks||0),0);
-    el('google').value=result.rows.find(row=>row.id==='google').share;
-    el('allocation-money').textContent=`Dağıtılan ${money(allocated/100)} · Kalan ${money(Math.max(0,(Number.isFinite(result.budget)?result.budget:0)*100-allocated)/100)} · Günlük ${money(allocated/100/Math.max(1,Number(el('duration').value)||1))}`;
-    el('geo-total').textContent=!result.validShares?'Yüzdeyi 0–100 arasında, en fazla iki ondalıkla gir. Geçerli paylar bekleniyor.':allocated?`Toplam %100 · ${selectedCount} seçili kanal`:'Toplam %0 · Seçili uygun kanal yok veya alanlar geçersiz';
-    el('scenario-totals').textContent=result.valid?`Senaryo: ≈${count(totalImpressions)} gösterim · ≈${count(totalClicks)} tıklama`:'Hesap için geçerli konum, bütçe, yüzdeler, varsayımlar ve en az bir uygun kanal seç.';
+    for(const section of groupViews.values())section.hidden=section.querySelector('.pool-choices').children.length===0;
+    if(focusAfterMove)focusAfterMove.focus({preventScroll:true});
+    el('selected-title').textContent=`Reklam verilecekler · ${selectedCount}`;el('selected-empty').hidden=selectedCount>0;
+    el('pool-title').textContent=`Diğer kanallar · ${options.length-selectedCount}`;
+    const allocated=result.rows.reduce((n,row)=>n+row.amountCents,0),impressions=result.rows.reduce((n,row)=>n+(row.impressions||0),0),clicks=result.rows.reduce((n,row)=>n+(row.clicks||0),0);
+    const unverified=selected.filter(row=>!row.eligible&&row.share>0).length;
+    el('google').value=allocated?result.rows.find(row=>row.id==='google').share:0;
+    el('allocation-money').textContent=`Dağıtılan ${money(allocated/100)} · Kalan ${money(Math.max(0,(Number.isFinite(result.budget)?result.budget:0)*100-allocated)/100)}`;
+    el('geo-total').textContent=!result.validShares?'Yüzdeyi 0–100 arasında, en fazla iki ondalıkla gir. Geçerli paylar bekleniyor.':allocated?`Toplam %100 · ${selectedCount} seçili${unverified?` · ${unverified} konum doğrulaması bekliyor`:''}`:'Toplam %0 · Kanal seçimi veya geçerli alanlar bekleniyor';
+    el('scenario-totals').textContent=result.valid?`Senaryo: ≈${count(impressions)} gösterim · ≈${count(clicks)} tıklama`:'Geçerli alanlar ve en az bir seçili kanal bekleniyor.';
+  }
+  function recommendationContext() {
+    return {geo:read(),goal:el('goal').value,budget:Number(el('budget').value),days:Number(el('duration').value),start:el('start').value,
+      audience:el('audience').value.trim(),destination:el('destination').value.trim(),assumptions:assumptions(),
+      previousSelections:current.rows.filter(row=>row.selected).map(row=>({id:row.id,share:row.share}))};
+  }
+  function recommend() {
+    const context=recommendationContext(),revision=++suggestionRevision;
+    if(!context.geo||!Number.isInteger(context.budget)||context.budget<100||context.budget>1000000){el('suggestion-status').textContent='Öneri oluşturulmadı: geçerli Türkiye konumu ve bütçe gir.';return;}
+    const available=options.filter(channel=>support(channel,context.geo).eligible);
+    const imageOnly=available.filter(channel=>!['tiktok','spotify'].includes(channel.id));
+    const searchGoal=context.goal!=='awareness';
+    let chosen=searchGoal?imageOnly.filter(channel=>['google','microsoft'].includes(channel.id)):imageOnly;
+    // Explicit design heuristic, NOT market/AI evidence or platform minimums.
+    const maximum=context.budget<1000?2:3;chosen=chosen.slice(0,maximum);
+    for(const channel of options)decisions.set(channel.id,chosen.some(candidate=>candidate.id===channel.id));
+    initializedSelection=true;selectionKey='';shares.clear();shareErrors.clear();
+    const now=new Date();
+    lastSuggestion={id:`local-suggestion-${revision}`,revision,createdAt:now.toISOString(),engine:'local-rules-v1',provider:null,model:null,externalQuery:false,stale:false,
+      context:{...context,geo:{mode:context.geo.mode,label:context.geo.label,radiusKm:context.geo.radiusKm,lat:context.geo.lat,lon:context.geo.lon}},
+      reasons:[`${context.geo.label}: yalnız bu hassasiyette coğrafi desteği belgeli adaylar önerildi.`,searchGoal?'Ziyaret / talep amacı için arama adayları seçildi. Bu örnek kural, performans üstünlüğü kanıtı değildir.':'Tanınırlık amacı için belgelenmiş, görselle planlanabilen adaylar seçildi; bu bir performans sıralaması değildir.',`Toplam ${money(context.budget)} için en fazla ${maximum} adayla eşit başlangıç payı verildi. Bu taslak sadelik kuralıdır; platform minimum bütçesi değildir.`,`${context.days} gün · ${context.start}: süre günlük bütçeyi etkiler. Ses/video üretimi ve coğrafi doğrulaması eksik adaylar öneriye alınmadı.`]};
+    update();changed('suggestion');
+    el('suggestion-status').textContent=`#${revision} · ${now.toLocaleTimeString('tr-TR')} · Güncel alanlarla yeniden hesaplandı`;
+    const reasons=el('suggestion-reasons');reasons.replaceChildren();for(const text of lastSuggestion.reasons){const li=document.createElement('li');li.textContent=text;reasons.append(li);}
+    el('suggestion-explanation').hidden=false;el('suggestion-explanation').open=true;
   }
   function update() {
     const mode=el('geo-mode').value,radius=mode==='radius';
@@ -233,7 +273,7 @@ window.YaparoGeo = (() => {
     el('geo-status').textContent=geo?`${geo.label} · Yalnız Türkiye içinde kalan alan hedeflenir (taslak).`:'Konum geçersiz. Merkez Türkiye kara alanında ve yarıçap 1–800 km tam sayı olmalı; otomatik taşıma/genişletme yok.';
     el('radius-label').textContent=radius&&geo?`${geo.radiusKm} km`:'';
     if(radius&&geo)el('radius-range').value=geo.radiusKm;
-    el('allocation-reason').textContent='Kanalları seç, yüzdeyi yaz veya çubuğu sürükle. Diğer seçili paylar otomatik dengelenir; toplam %100 kalır. Kitap simgesi kanal rehberini açar. Hiçbir kanal bağlı değildir.';
+    el('allocation-reason').textContent='Payı yaz veya sürükle. Kanal seçtikçe üst alana taşınır.';
     draw(geo);renderChannels(current);return geo;
   }
   for(const id of ['geo-mode','region','radius-number','scenario-cpm','scenario-ctr','scenario-density','scenario-frequency'])el(id).addEventListener(id==='geo-mode'?'change':'input',()=>{update();changed();});
@@ -244,10 +284,17 @@ window.YaparoGeo = (() => {
     if(el('geo-mode').value!=='radius')return;
     const rect=el('geo-map').getBoundingClientRect();el('longitude').value=(25.5+(event.clientX-rect.left)/rect.width*19.5).toFixed(6);el('latitude').value=(42.5-(event.clientY-rect.top)/rect.height*7).toFixed(6);el('geo-center').value='custom';update();changed();
   });
+  el('mixer-view').addEventListener('click',()=>{const wide=el('distribution-panel').classList.toggle('mixer-wide');el('mixer-view').setAttribute('aria-expanded',String(wide));el('mixer-view').textContent=wide?'⤡ Normal görünüm':'⤢ Geniş görünüm';el('distribution-panel').scrollIntoView({block:'start',behavior:'smooth'});});
+  el('plan-form').addEventListener('invalid',event=>{const frame=el('plan-form').querySelector('.panel');if(frame.contains(event.target)){el('distribution-panel').classList.remove('mixer-wide');el('mixer-view').setAttribute('aria-expanded','false');el('mixer-view').textContent='⤢ Geniş görünüm';}},true);
+  el('ai-distribution').addEventListener('click',recommend);
+  el('plan-form').addEventListener('input',markSuggestionStale);
+  el('plan-form').addEventListener('change',markSuggestionStale);
   return Object.freeze({update,inside,geometry,snapshot(){
     const geo=update();if(!geo||!current.valid)return null;
     return {...geo,checked:'2026-10-27',country:'TR',boundarySource:window.YaparoTurkey.source,operationalBoundaryVerified:false,
-      assumptions:current.assumption,channels:current.rows.filter(row=>row.selected).map(({id,name,share,amountCents,impressions,clicks})=>({id,name,share,amountCents,impressions,clicks})),
+      assumptions:current.assumption,suggestion:lastSuggestion?JSON.parse(JSON.stringify(lastSuggestion)):null,
+      manualUnverifiedScenario:current.rows.some(row=>row.selected&&!row.eligible&&row.share>0),
+      channels:current.rows.filter(row=>row.selected).map(({id,name,share,amountCents,impressions,clicks,eligible,why})=>({id,name,share,amountCents,impressions,clicks,geoEligible:eligible,geoReason:why,hypotheticalOnly:true})),
       exclusions:current.rows.filter(row=>!row.selected).map(row=>`${row.name}: ${row.eligible?'Kullanıcı seçmedi':row.why}`).join(' · ')};
   }});
 })();

@@ -31,3 +31,11 @@ map/GPS/geocoder or forecast API. Data/dependency provenance and update procedur
 `third-party/README.md`. `../../docs/product/turkey-channel-catalog-draft.md`
 records the14 channel candidates, actual/unknown capability distinctions and
 hypothetical formulas. None is a connected production channel.
+
+Current mixer: checked channels above with percentages; unchecked compact catalog
+below without visible bars. All14 can be added manually as hypothetical scenarios;
+unknown geo is flagged and never becomes production permission. The AI suggestion
+button is an explicit LOCAL SIMULATION: fresh form context each press, fixed
+rules, no model/platform/price request. Real fresh-query integration is still
+pending. Wide view preserves values and returns invalid hidden campaign fields
+for validation. Run check.py for8 current focused prototype tests.

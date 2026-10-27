@@ -52,10 +52,12 @@ AI results, ledgers and private Google candidate are untouched.
   centers refused. Approximate country vector/coordinates, not a street map or
   operational platform boundary proof. No GPS, geocoder, tile/CDN request.
 - Fourteen researched digital channel families, explicit geo/account/route
-  qualifiers. Documented geo candidates selectable; unknown precision disabled0.
-  User can deselect or set direct numeric/drag percentages; basis-point and
-  integer-kuruş shares sum exactly. Compact grouped rows hide detail behind
-  disclosures and a book-outline guide button.
+  qualifiers. Documented geo candidates selectable; unknown precision excluded by the recommendation (manual scenario override only).
+  All14 can be manually added as hypothetical plans with unknown geo explicitly
+  flagged. Only checked entries have compact percentage bars above; unchecked
+  choices move to a grouped, bar-free pool below. Book guides hold descriptions.
+  Wide inline view preserves campaign fields. Direct percentages conserve basis
+  points/kuruş and keep controls stable during drag.
   Actual accounts/formats/inventory and enforcement are still unqualified.
 - Explicit hypothetical scenario math per channel/total, shared editable CPM/CTR/
   density/repetition. No real platform forecast, market rate, population or unique
@@ -127,3 +129,20 @@ Seven focused checks now include direct70/30,33.33/66.67, zero-other fallback,
 identity during repeated drag inputs, grouped14 entries, closed descriptions,
 booklet open/close, stale summary locks and custom mixture preservation while
 coordinates are temporarily empty. Main website/backend remains unchanged.
+
+
+Current selection/proposal revision: eight focused prototype checks passed.
+All channels manually selectable with unverified qualifiers; upper/lower node
+movement and keyboard focus preserved, all14 selected remain compact, no bars
+for unchecked choices. Recommendation button re-reads fresh fields/revision each
+press, resets custom shares, omits unverified geo, marks later edits stale and
+records provider/model null / externalQuery false. It is a LOCAL SIMULATION,
+not a completed model/API integration. Wide view and invalid hidden form-field
+recovery passed. Real fresh-query acceptance criteria are in the channel catalog.
+
+Repository CI at576ba19 failed an existing package browser rejection test, not a
+prototype test. It was not reproduced locally; a bounded test-only change now
+witnesses the exact intercepted response body/hash and names malformed/oversized/
+stale subcases without weakening rejection/no-download assertions. Two isolated
+focused runs passed; underlying root cause remains unproven. Latest-head full CI
+is required before merge. This adds no package feature or export product decision.
