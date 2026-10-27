@@ -12,6 +12,12 @@ ASSETS = {
     "/styles.css": ("styles.css", "text/css; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
     "/geo.js": ("geo.js", "text/javascript; charset=utf-8"),
+    "/channels.js": ("channels.js", "text/javascript; charset=utf-8"),
+    "/turkey-boundary.js": ("turkey-boundary.js", "text/javascript; charset=utf-8"),
+    "/vendor/polygon-clipping-0.15.7.js": (
+        "vendor/polygon-clipping-0.15.7.js",
+        "text/javascript; charset=utf-8",
+    ),
 }
 
 

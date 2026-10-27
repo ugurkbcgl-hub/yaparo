@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 08:13 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 08:46 Europe/Istanbul (+03:00). Recheck mutable facts.
 
 ## Objective and preferences
 
@@ -20,8 +20,8 @@ Remote: https://github.com/ugurkbcgl-hub/yaparo
 Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
 Base mainabc2093 / PR368 merged; required CI40412311595 passed1166 Django
 (4 skips)/45 browser checks; main CI40413608566 passed.
-Current branch codex/unified-journey-prototype; PR369 open, implementation36a0a4f.
-Prior headb37289a CI40419437450 passed. Geography update pending latest-head CI.
+Current branch codex/unified-journey-prototype; PR369 open; prior implementationea5ff75.
+Prior headea5ff75 CI40454155066 passed. Turkey/catalog update pending latest-head CI.
 Owner UX review before integration; do not claim merged.
 Owner explicitly requested a simpler unified-flow draft before integration.
 Isolated experiments/unified-journey serves allowlisted static prototype on8013:
@@ -31,17 +31,25 @@ no actual AI, channel efficacy, upload, DB, persistence, export, spend or publis
 Open-tab memory only; refresh loses input as visibly disclosed. Existing8002 and
 private data/ledgers untouched. Draft contract: docs/product/unified-journey-draft.md.
 Review fixes preserve request context with previous trio and edited-title undo;
-image picker keyboard-accessible. Geography update: area/country/point-radius1..800km,
-example centers/manual coordinates/local schematic; no live map/geocoder/GPS.
-Google geo-type support sourced from official help/API limits; Meta current limits
-unknown, TikTok radius/account unverified/Phase2. Zero shares for excluded/unknown,
-100 for single documented geo candidate; not account/creative/publishing proof.
-Invalid inputs allocate0, never clamp/widen; plan edits/map clicks invalidate stale
-summary/top-stage4. Independent re-review found no blocker. Four focused browser/
-server checks passed, including1/800/out-of-range, invalidated summary and mobile.
-Actual IAB desktop and390px visual review completed. Private evidence:
-%TEMP%\yaparo-journey-g10uridr (radius-iab/radius-desktop/radius-mobile PNGs).
-Independent final source review found no blocker. No provider key was loaded.
+image picker keyboard-accessible. Current Turkey/catalog update: radius1..800km
+geodesic circle intersected with pinned NaturalEarth Turkey multipolygon, offshore/
+foreign parts removed and outside-land centers rejected; approximate vector only,
+not street map or operational serving proof. MIT polygon-clipping0.15.7 vendored,
+lock/licenses/hashes retained; npm audit no reported vulnerabilities.
+14 researched digital-channel families; user chooses documented geo candidates
+and relative priorities1..10. Unknown/unsupported precision0. Integer-kuruş
+allocation conserved; no selected candidate means no allocation/summary. Google+
+Microsoft radius geo candidates, wider country catalog qualified separately.
+Shared explicit hypothetical CPM/CTR/density/repetition produce scenario metrics;
+not real forecasts/market rates/population/unique reach or channel ranking.
+All plan/geo/channel/priority/assumption changes invalidate stale review. Snapshot
+pins clippedgeometry/assumptions/allocations. Six focused checks passed (including
+80km Edirne outside-difference0, foreign center, priorities, budgets/CPM/area,
+mobile and asset hashes). Independent source review found no blocker.
+Private evidence: %TEMP%\yaparo-journey-4ofpibtn (turkey-channels/turkey-mobile PNGs).
+Actual IAB confirmed Edirne80km: approximately8789km² /44% inside, clipped to
+Turkey; private turkey-iab.png. User-facing prototype remains on8013. No API/DB/GPS/paid operation; no provider
+key loaded. Docs: unified-journey-draft.md and turkey-channel-catalog-draft.md.
 
 Current ADR0071: separate default-off LOCAL_BRAND_CAMPAIGN_SETTINGS_ENABLED adds
 owned versioned goal/audience/region/TRY budget/start/end planning. Protected

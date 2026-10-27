@@ -74,7 +74,7 @@ class JourneyTest(unittest.TestCase):
         page.locator("#destination").fill("Örnek tanıtım sayfasını ziyaret edecek")
         self.assertIn("Toplam %100", page.locator("#geo-total").inner_text())
         page.get_by_role("button", name="Planın özetini gör").click()
-        self.assertIn("Google Ads %100", page.locator("#review-values").inner_text())
+        self.assertIn("Google Ads %50.0", page.locator("#review-values").inner_text())
         self.assertIn("Bana özel", page.locator("#final-creative").inner_text())
         page.get_by_role("button", name="Taslak deneyimini tamamla").click()
         self.assertIn("yayını yapılmadı", page.locator("#finish-status").inner_text())
@@ -131,7 +131,7 @@ class JourneyTest(unittest.TestCase):
             self.assertEqual(page.locator("#radius-range").input_value(), str(radius))
             self.assertIn(f"{radius} km", page.locator("#geo-status").inner_text())
             self.assertIn("%100", page.locator("#geo-total").inner_text())
-            self.assertEqual(page.locator(".geo-excluded").count(), 2)
+            self.assertEqual(page.locator(".geo-excluded").count(), 12)
             for excluded in page.locator(".geo-excluded").all():
                 self.assertIn("%0", excluded.inner_text())
         for radius in ("0", "801", "1.5", ""):
@@ -150,10 +150,10 @@ class JourneyTest(unittest.TestCase):
         page.screenshot(path=str(self.evidence / "radius-desktop.png"), full_page=True)
         page.locator("#plan-form button[type=submit]").click()
         summary = page.locator("#review-values").inner_text()
-        self.assertIn("37 km yarıçap", summary)
-        self.assertIn("29.02500", summary)
-        self.assertIn("Meta %0", summary)
-        self.assertIn("TikTok %0", summary)
+        self.assertIn("37 km ∩ Türkiye", summary)
+        self.assertIn("29.04000", summary)
+        self.assertIn("Meta:", summary)
+        self.assertIn("TikTok:", summary)
         page.get_by_role("button", name="Planı düzenle", exact=True).click()
         page.locator("#radius-number").fill("801")
         self.assertTrue(page.get_by_role("button", name="4 Son kontrol").is_disabled())
@@ -177,6 +177,98 @@ class JourneyTest(unittest.TestCase):
         page.locator("#region").fill(" ")
         self.assertIn("Toplam %0", page.locator("#geo-total").inner_text())
         page.close()
+
+    def test_turkey_intersection_and_scenario_choices(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1100})
+        page.goto(self.origin)
+        page.get_by_role("button", name="Bir işletmeyi tanıt").click()
+        page.get_by_role("button", name="Üç yaklaşımı keşfet").click()
+        page.locator(".choose").first.click()
+        page.locator("#content-next").click()
+        page.locator("#geo-mode").select_option("radius")
+        page.locator("#latitude").fill("41.677")
+        page.locator("#longitude").fill("26.555")
+        page.locator("#radius-number").fill("80")
+        proof = page.evaluate("""() => {
+            const s=YaparoGeo.snapshot();
+            return {has:s!==null,area:s?.areaKm2,raw:s?.rawAreaKm2,
+              outside:s?polygonClipping.difference(s.polygons,YaparoTurkey.geometry.coordinates).length:null,
+              center:YaparoGeo.inside([26.555,41.677]),
+              verified:s?.operationalBoundaryVerified,
+              cents:s?.channels.reduce((n,c)=>n+c.amountCents,0)};
+        }""")
+        self.assertTrue(proof["has"])
+        self.assertTrue(proof["center"])
+        self.assertGreater(proof["area"], 0)
+        self.assertLess(proof["area"], proof["raw"] * 0.9)
+        self.assertEqual(proof["outside"], 0)
+        self.assertFalse(proof["verified"])
+        self.assertEqual(proof["cents"], 300000)
+        self.assertEqual(page.locator(".geo-channel").count(), 14)
+        page.locator('[data-channel="microsoft"] input[type=checkbox]').uncheck()
+        self.assertEqual(page.locator("#google").input_value(), "100")
+        page.locator('[data-channel="google"] input[type=checkbox]').uncheck()
+        self.assertIn("Toplam %0", page.locator("#geo-total").inner_text())
+        self.assertIsNone(page.evaluate("YaparoGeo.snapshot()"))
+        page.locator('[data-channel="google"] input[type=checkbox]').check()
+        page.locator('[data-channel="microsoft"] input[type=checkbox]').check()
+        page.locator('[data-channel="microsoft"] select').select_option("10")
+        shares = page.evaluate("YaparoGeo.snapshot().channels.map(c=>c.amountCents)")
+        self.assertEqual(sum(shares), 300000)
+        self.assertGreater(shares[1], shares[0] * 9)
+        page.locator("#geo-mode").select_option("country")
+        first = page.evaluate(
+            "YaparoGeo.snapshot().channels.reduce((n,c)=>n+c.impressions,0)"
+        )
+        page.locator("#budget").fill("6000")
+        second = page.evaluate(
+            "YaparoGeo.snapshot().channels.reduce((n,c)=>n+c.impressions,0)"
+        )
+        self.assertAlmostEqual(second, first * 2)
+        page.locator(".scenario-assumptions summary").click()
+        page.locator("#scenario-cpm").fill("200")
+        third = page.evaluate(
+            "YaparoGeo.snapshot().channels.reduce((n,c)=>n+c.impressions,0)"
+        )
+        self.assertAlmostEqual(third, second / 2)
+        page.locator("#geo-mode").select_option("radius")
+        page.locator("#latitude").fill("36.2")
+        page.locator("#longitude").fill("37.16")
+        self.assertIn("Toplam %0", page.locator("#geo-total").inner_text())
+        self.assertIsNone(page.evaluate("YaparoGeo.snapshot()"))
+        page.locator("#geo-center").select_option("ankara")
+        page.locator("#radius-number").fill("80")
+        page.locator("#scenario-density").fill("1")
+        page.locator("#scenario-frequency").fill("1")
+        big = page.evaluate(
+            "YaparoGeo.snapshot().channels.reduce((n,c)=>n+c.impressions,0)"
+        )
+        page.locator("#radius-number").fill("1")
+        small = page.evaluate(
+            "YaparoGeo.snapshot().channels.reduce((n,c)=>n+c.impressions,0)"
+        )
+        self.assertLess(small, big)
+        page.locator("#radius-number").fill("80")
+        page.locator("#geo-center").select_option("custom")
+        page.locator("#latitude").fill("41.677")
+        page.locator("#longitude").fill("26.555")
+        page.screenshot(path=str(self.evidence / "turkey-channels.png"), full_page=True)
+        page.set_viewport_size({"width": 390, "height": 844})
+        self.assertTrue(
+            page.evaluate("document.documentElement.scrollWidth<=innerWidth")
+        )
+        page.screenshot(path=str(self.evidence / "turkey-mobile.png"), full_page=True)
+        page.close()
+
+    def test_static_asset_integrity(self):
+        import hashlib
+
+        hashes = json.loads((ROOT / "asset-hashes.json").read_text())
+        for name, expected in hashes.items():
+            target = (
+                ROOT / "dist" / ("vendor" if name.startswith("polygon-") else "") / name
+            )
+            self.assertEqual(hashlib.sha256(target.read_bytes()).hexdigest(), expected)
 
     def test_server_exposes_only_allowlisted_gets(self):
         with urlopen(self.origin) as response:

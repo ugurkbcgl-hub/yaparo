@@ -25,3 +25,9 @@ continuity,1..800km point-radius/invalid/stale-summary handling and safety bound
 directory, and closes its test processes. It never loads the application DB.
 These checks are explicit/manual for this isolated draft; existing CI does not
 discover this experiment automatically.
+
+Turkey clipping and channel scenarios use tracked offline data/bundle; no CDN,
+map/GPS/geocoder or forecast API. Data/dependency provenance and update procedure:
+`third-party/README.md`. `../../docs/product/turkey-channel-catalog-draft.md`
+records the14 channel candidates, actual/unknown capability distinctions and
+hypothetical formulas. None is a connected production channel.

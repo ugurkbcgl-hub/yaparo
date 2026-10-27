@@ -47,23 +47,23 @@ AI results, ledgers and private Google candidate are untouched.
   no claim that a model actually applied it.
 - Fixed-rule helper responses, visibly identified as a simulation. Arbitrary
   conversational production and semantic brief extraction are NOT implemented.
-- Geography-aware candidate allocation replaces the arbitrary Google/Meta slider.
-  Choose a named area, Turkey, or a point/radius. Radius is integer1..800km,
-  selectable via number/slider; center via example points, lat/lon fields or a
-  local schematic. Local equirectangular distance display, not a street map,
-  geocoder, device location or administrative-border proof. Draft coordinate box
-  35.5..42.5N /25.5..45E is a UI bound, not legal Turkey boundaries.
-- Only Google geo-type support is documented for this draft. Meta exact current
-  geo/campaign limits were not verified: zero allocation, explicitly UNKNOWN,
-  not a claim that Meta cannot target locally. TikTok radius not documented in
-  reviewed source; its Turkey/account integration is also unverified/Phase2.
-  Excluded/unknown candidates receive0, the single geo candidate100. No assertion
-  of account, sector, creative/campaign compatibility, efficacy or connection.
-- Invalid center/radius/area/budget yields zero shares, no silent clamping,
-  widening or transfer. Form changes and schematic center selection invalidate
-  the prior plan and lock stage4 until a fresh valid summary is submitted.
-  Summary pins center/radius and exclusions. Actual provider limits and account
-  permission must be rechecked before integration; docs alone cannot permit spend.
+- Turkey-only geography with geodesic radius1..800km intersected against pinned
+  Natural Earth Turkey polygons; offshore/foreign parts removed, outside-land
+  centers refused. Approximate country vector/coordinates, not a street map or
+  operational platform boundary proof. No GPS, geocoder, tile/CDN request.
+- Fourteen researched digital channel families, explicit geo/account/route
+  qualifiers. Documented geo candidates selectable; unknown precision disabled0.
+  User can deselect or set relative priorities; integer-kuruş shares sum exactly.
+  Actual accounts/formats/inventory and enforcement are still unqualified.
+- Explicit hypothetical scenario math per channel/total, shared editable CPM/CTR/
+  density/repetition. No real platform forecast, market rate, population or unique
+  reach. Budget/scope/priority/assumptions update outputs; duration updates daily
+  budget only. Never infer which channel performs better from these examples.
+- Invalid center/radius/area/budget/assumptions or no chosen candidate refuses a
+  fresh summary. All form, map, checkbox and priority changes lock stale review.
+  Final snapshot binds clipped geometry, channel shares and scenario assumptions.
+- See [Turkey channel catalog and formulas](turkey-channel-catalog-draft.md) and
+  experiment third-party notices for sources, qualification gaps and asset hashes.
 - Complete plan/review in browser memory. No local/session storage, cookie,
   database write, export, payment, launch button or real campaign creation.
   Refresh/closing loses the draft, explicitly disclosed in the UI.
@@ -73,7 +73,9 @@ AI results, ledgers and private Google candidate are untouched.
 ## Validation and decisions
 
 Focused browser checks cover selection→edit→alternative→undo→new/previous trio,
-plan shares→review,1/800km and invalid boundaries, stale-summary lock including
+plan shares→review,1/800km and invalid boundaries, actual Turkey intersection,
+channel selection/priority, conserved kuruş, scenario dependencies, asset hashes,
+stale-summary lock including
 progress navigation/map clicks, changed-brief history binding, refresh/reset, no outbound
 requests, literal handling of markup, mobile overflow/helper, and server allowlist,
 Host and POST boundaries. Visual review checks desktop and390px layouts.
@@ -109,3 +111,11 @@ These are geo-type capability notes, not a recommendation to buy Google inventor
 or a production allocation policy. Strictly local intent must use appropriate
 presence settings and verified account/campaign capabilities in real integration;
 no fallback to interest-in-area or broader targeting without explicit consent.
+
+
+Turkey/channel update evidence: six focused checks passed, including actual
+80km Edirne circle clipping with no residual outside polygon, foreign center
+refusal, user deselection/all-off/priority, scenario budget/CPM/area dependency,
+mobile and pinned third-party asset integrity. Independent source review found
+no blocker; npm audit reported no vulnerabilities. No new runtime dependency was
+added to Django, no paid API was called and no existing private record was read.
