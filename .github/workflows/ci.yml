@@ -88,6 +88,7 @@ jobs:
         timeout-minutes: 2
         run: |
           node experiments/decision-studio/engine.test.cjs
+          node experiments/decision-studio/production.test.cjs
           node experiments/decision-studio/simulation.test.cjs
           python experiments/decision-studio/test_sources.py
           node --check experiments/decision-studio/dist/app.js

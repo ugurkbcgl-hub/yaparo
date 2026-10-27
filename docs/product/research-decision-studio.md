@@ -18,8 +18,12 @@ See prototype README for this separation and the bounded test contract.
 
 - Progressive structured brief, preserving free text. Communication job, desired
   action, business model and media optimization objective remain separate fields.
-- Three creative directions retain angle, hook, benefit/message, CTA, tone,
-  static format and user edit revision; later campaign planning uses that context.
+- Plan-first (ADR0072): brief → channel/material requirements → three shared
+  creative ideas → explicit placement-specific demo adaptations → review.
+  Organic-only skips paid budgeting; combined includes both destination types.
+  Shared core angle/hook/message/CTA/tone/revision is separate from output format.
+  Video permission/material affects channel feasibility; rendering/cost/spec
+  qualification stays pending. Changes invalidate the relevant downstream slice.
 -20products replace14platform families. Paid, managed/partner and owned channels
   are different purchase paths; CRM/organic do not receive a paid media share.
 - Explain eligibility, useful test minimum, demand/economy/capacity cap, data date,

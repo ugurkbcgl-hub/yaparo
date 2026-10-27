@@ -4,8 +4,8 @@
 
 Current owner priority: rebuild the draft from the supplied Turkey research and
 review a new visual system. Implemented isolated8014 draft:
-structured/conditional brief → three fixed creative routes + editing →20product
-decision cards → review; research score/minimum/cap allocation with an explicit
+structured/conditional brief →20product channel/material plan → three shared
+creative concepts + editing → placement adaptations → review; research score/minimum/cap allocation with an explicit
 unallocated balance. No real AI/forecast/account qualification. SC01 reproduction
 and context/policy/unknown-data refusal are checked locally. Next: owner review,
 then complete typed forms/policy evidence and map accepted contracts to Django.
@@ -19,9 +19,16 @@ with Apply and fresh synthetic budget scenarios. Historical source reproduction
 and missing-data refusal remain separate modes. Authored observations are NOT
 platform forecasts; actual LLM/providers remain unconnected in this prototype.
 
+Plan-first follow-up: paid / organic / combined routes, channel-bound production
+requirements, shared core revisions and explicit text/image demo adaptation.
+Search does not request an image. Video/material preference gates paid selection;
+video rendering, uploads, actual costs and current placement specs remain pending.
+See ADR0072. Next UX work: qualify detailed placement specs/material reuse and
+actual production estimates before enabling any charged generation.
+
 Source/freshness slice implemented: TCMB/ECB public FX, dates/expiry/cache,
 context/quality checks, source picker and refresh UI. ECB live readback verified;
-TCMB unavailable locally. Ad forecast connectors remain access_required. Next:
+TCMB unavailable locally. Ad forecast connectors remain access_required. Separate integration follow-up:
 qualify the first read-only account forecast adapter with access proof, preserving
 protected TEST state. See [source contract](docs/product/source-freshness-layer.md).
 

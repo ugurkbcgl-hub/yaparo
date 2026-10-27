@@ -1,11 +1,12 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 15:17 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-27 18:12 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
-Owned-core/open-source plan ADR0040/Y01–Y32. Current8014 UX: progressive brief,
-3creative directions/editing, explainable product-level ad plan, review.
+Owned-core/open-source plan ADR0040/Y01–Y32. Current8014 UX (ADR0072): brief → channel/material plan →3shared creative
+ideas/editing + placement-specific demo adaptations → review. Paid/organic/both
+routes explicit. Organic skips media budget; no finished content before planning.
 User authorized source connection/freshness layer after the authored dynamic demo.
 Local synthetic only; no real customer/account/spend/publishing readiness implied.
 No usage checks/monitors. Reviewed green PRs may merge, never direct main push.
@@ -17,11 +18,40 @@ Download/export remains undecided/deferred. Preserve private data/ledger/TEST st
 C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
 Branch codex/unified-journey-prototype; PR369 OPEN for owner UX review.
-Baseline9944b3d CI40498591371 SUCCESS verified. That does not verify the new source
-layer; check exact new head/CI after push. Main base abc2093 / PR368.
+Source head9d2d4bf CI40503047926 SUCCESS verified. New plan-first changes require
+their own exact-head CI after push. Main base abc2093 / PR368.
 No production deployment or application database migration this turn.
 
-## Current milestone: real public source + freshness layer
+## Current milestone: plan before production
+
+Owner supplied request replaces content-first flow; see ADR0072. The local8014
+journey now collects paid/organic/both intent, plans channels/material needs first,
+shows3shared concepts, then explicitly creates only selected placement demo
+adaptations. production.js has closed prototype recipes for20products and5organic
+destinations. Search gets text, not an image. Unknown recipes/tasks/video stay
+pending. No current placement-spec, optimized variant-count or price claim.
+
+Video preference + available-material declaration feed paid engine feasibility;
+missing video excludes video-requiring paid products. Available video does not
+imply a renderer/rights/scan/production readiness. Organic-only needs no paid
+budget/forecast. Combined route includes organic destinations and paid rows.
+Empty paid plan cannot enter creation. Pending-only organic video shows0outputs.
+Shared core edits invalidate adaptations without rerunning media allocation.
+Input/source/material/allocation changes clear preview DOM and production binding;
+re-confirm production after recomputing. Assistant proposals pin organic/material
+context. Fixed manual control DOM-event bubbling that falsely staled allocation.
+No hosted AI/cost reservation, upload, DB migration, account or publish action.
+
+9focused browser journeys passed12.8s: paid order/edit/history/reasons, organic
+and combined, video-only pending/stale assistant, Search-only text, material
+replan, source refresh, mobile/literal text and HTTP boundaries. Production Node
+contract plus existing engine/simulation/source8tests and Ruff/syntax passed.
+Evidence %TEMP%/yaparo-decision-1rekdplw. plan-first-live-iab.png is actual
+IAB readback: distinct Search text and Feed image previews. During the open-page
+check the real FX record expired/refreshed; stale adaptation was cleared and
+explicit replan/reconfirmation worked. No new ad/AI query. Previous8002/8013/private state preserved.
+
+## Public source + freshness layer preserved
 
 experiments/decision-studio still serves127.0.0.1:8014. Existing8013/8002 preserved.
 New sources.py: normalized source record/lifecycle checks, fixed HTTPS public FX
@@ -75,7 +105,7 @@ privacy/recovery/account/spend/launch gates remain open.
 
 ## Verification actually run
 
-8offline source tests and5isolated browser journeys passed; unit/browser sources
+8offline source tests and9isolated browser journeys passed; unit/browser sources
 are injected fixtures and make no external calls. Includes ECB cross/issuer,
 source/fetch dates, expiry/cache/restart/failure/concurrency, context/quality,
 HTTP origin/closed schema/no arbitrary URL, refresh→stale→recompute→review/source
@@ -99,6 +129,7 @@ ownership/replay/financial contracts remain authoritative for real integration.
 
 ## Next action
 
-Qualify the first account-authorized read-only advertising forecast adapter
-against this snapshot/freshness contract. Check actual access/readiness before
-querying; preserve protected TEST state and never promote simulation to live data.
+Review the plan-first local journey, then qualify versioned placement specs,
+material reuse/rights and production cost/capability contracts before enabling
+charged generation. Account-authorized read-only ad forecasts remain a separate
+integration follow-up; preserve protected TEST state and all launch gates.

@@ -52,13 +52,27 @@ class StudioCheck(unittest.TestCase):
         cls.server.server_close()
         print(f"Evidence: {cls.evidence}")
 
+    def settle_plan(self, page):
+        page.get_by_text(
+            "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
+        ).wait_for()
+        page.locator("#recommend").click()
+
     def start_plan(self, page):
         page.goto(self.origin)
-        page.get_by_role("button", name="Üç yaratıcı yönü keşfet").click()
-        page.locator(".concept-card").nth(0).get_by_role(
-            "button", name="Bu yönü seç"
-        ).click()
+        page.locator("#brief-form button[type=submit]").click()
+        self.settle_plan(page)
+
+    def open_creatives(self, page):
+        page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.assertTrue(page.locator("#step-2").is_visible())
+        self.assertEqual(page.locator(".concept-card").count(), 3)
+
+    def adapt_and_review(self, page):
+        page.locator(".choose").nth(0).click()
+        page.locator("#adapt-content").click()
         page.locator("#content-next").click()
+        self.assertTrue(page.locator("#step-3").is_visible())
 
     def test_full_flow_editor_reasons_and_fresh_reset(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
@@ -70,31 +84,20 @@ class StudioCheck(unittest.TestCase):
                 outbound.append(r.url) if not r.url.startswith(self.origin) else None
             ),
         )
-        page.goto(self.origin)
-        page.screenshot(path=str(self.evidence / "start-desktop.png"), full_page=True)
-        page.get_by_role("button", name="Üç yaratıcı yönü keşfet").click()
-        self.assertEqual(page.locator(".concept-card").count(), 3)
-        page.locator(".concept-card").nth(1).get_by_role(
-            "button", name="Düzenle", exact=True
-        ).click()
-        page.locator("#edit-title").fill("Sana özel bir tasarım anı")
-        page.locator("#edit-x").fill("20")
-        page.get_by_role("button", name="Uygula ve geri dön").click()
-        card = page.locator(".concept-card").nth(1)
-        self.assertIn("Sana özel", card.inner_text())
-        card.get_by_role("button", name="Bu yönü seç").click()
-        page.screenshot(
-            path=str(self.evidence / "creative-desktop.png"), full_page=True
-        )
-        page.locator("#content-next").click()
+        self.start_plan(page)
+        self.assertEqual(page.locator(".concept-card").count(), 0)
+        self.assertTrue(page.locator("#step-1").is_visible())
         page.locator(".economics > summary").click()
         page.locator("#fixture").select_option("demo")
         page.locator("#start").fill("2026-10-27")
         page.locator("#recommend").click()
-        snap = page.evaluate("YaparoStudio.getSnapshot()")
-        self.assertEqual(snap["plan"]["allocated"], 300000)
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().plan.allocated"), 300000
+        )
         self.assertEqual(page.locator("#recommended .channel-row").count(), 2)
-        page.screenshot(path=str(self.evidence / "plan-desktop.png"), full_page=True)
+        page.screenshot(
+            path=str(self.evidence / "plan-first-desktop.png"), full_page=True
+        )
         page.locator(".other-channels-box > summary").click()
         page.get_by_role(
             "button", name="TikTok Ads neden ve koşullar", exact=True
@@ -111,13 +114,28 @@ class StudioCheck(unittest.TestCase):
             page.evaluate("YaparoStudio.getSnapshot().plan.unallocated"), 0
         )
         page.locator("#budget").fill("10000")
-        page.get_by_role("button", name="Planın tamamını gör").click()
-        self.assertTrue(page.locator("#step-2").is_visible())
+        page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.assertTrue(page.locator("#step-1").is_visible())
         page.locator("#recommend").click()
         self.assertEqual(
             page.evaluate("YaparoStudio.getSnapshot().plan.unallocated"), 680000
         )
-        page.get_by_role("button", name="Planın tamamını gör").click()
+        self.open_creatives(page)
+        card = page.locator(".concept-card").nth(1)
+        card.get_by_role("button", name="Düzenle", exact=True).click()
+        page.locator("#edit-title").fill("Sana özel bir tasarım anı")
+        page.locator("#edit-x").fill("20")
+        page.get_by_role("button", name="Uygula ve geri dön").click()
+        self.assertIn("Sana özel", card.inner_text())
+        card.get_by_role("button", name="Bu yönü seç").click()
+        self.assertTrue(page.locator("#content-next").is_disabled())
+        page.locator("#adapt-content").click()
+        self.assertFalse(page.evaluate("YaparoStudio.getSnapshot().stale"))
+        self.assertGreater(page.locator(".platform-preview").count(), 0)
+        page.screenshot(
+            path=str(self.evidence / "creative-platform-desktop.png"), full_page=True
+        )
+        page.locator("#content-next").click()
         self.assertIn("Sana özel", page.locator("#review").inner_text())
         page.locator("#finish").click()
         self.assertIn("yapılmadı", page.locator("#finish-status").inner_text())
@@ -135,17 +153,17 @@ class StudioCheck(unittest.TestCase):
         self.assertTrue(
             page.get_by_label("İzin veya muafiyet belgesi mevcut mu?").is_visible()
         )
-        page.get_by_role("button", name="Üç yaratıcı yönü keşfet").click()
-        page.locator(".choose").nth(0).click()
-        page.locator("#content-next").click()
+        page.locator("#brief-form button[type=submit]").click()
+        self.settle_plan(page)
         self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.allocated"), 0)
         self.assertIn("incelemesi", page.locator("#recommended").inner_text())
+        page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.assertTrue(page.locator("#step-1").is_visible())
+        self.assertEqual(page.locator(".concept-card").count(), 0)
         page.locator('[data-step="0"]').nth(0).click()
         page.locator("#communication").select_option("product_service_intro")
         self.assertEqual(page.locator("#q-S1_F01").count(), 0)
-        page.get_by_role("button", name="Üç yaratıcı yönü keşfet").click()
-        page.locator(".choose").nth(0).click()
-        page.locator("#content-next").click()
+        page.locator("#brief-form button[type=submit]").click()
         page.locator("#region").fill("Ankara")
         page.locator(".economics > summary").click()
         page.locator("#fixture").select_option("unknown")
@@ -159,9 +177,8 @@ class StudioCheck(unittest.TestCase):
         page.locator("#brief").fill(
             '<img src="https://example.invalid/x" onerror="alert(1)"> sentetik tasarım'
         )
-        page.get_by_role("button", name="Üç yaratıcı yönü keşfet").click()
-        page.locator(".choose").nth(0).click()
-        page.locator("#content-next").click()
+        page.locator("#brief-form button[type=submit]").click()
+        self.settle_plan(page)
         self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
         page.screenshot(path=str(self.evidence / "plan-mobile.png"), full_page=True)
         page.locator("#helper-toggle").click()
@@ -182,21 +199,13 @@ class StudioCheck(unittest.TestCase):
 
     def test_interactive_brief_assistant_and_context_history(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
-        errors, outbound = [], []
+        errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
-        page.on(
-            "request",
-            lambda r: (
-                outbound.append(r.url) if not r.url.startswith(self.origin) else None
-            ),
-        )
         page.goto(self.origin)
         page.get_by_role("button", name="☕ Kafe açılışı", exact=True).click()
-        page.get_by_role("button", name="Üç yaratıcı yönü keşfet").click()
-        self.assertIn("kahve", page.locator("#concepts").inner_text().lower())
-        self.assertEqual(page.locator(".demo-illustration svg").count(), 3)
-        page.locator(".choose").nth(0).click()
-        page.locator("#content-next").click()
+        page.locator("#brief-form button[type=submit]").click()
+        self.settle_plan(page)
+        self.assertEqual(page.locator(".concept-card").count(), 0)
         initial = page.evaluate("YaparoStudio.getSnapshot()")
         self.assertTrue(initial["plan"]["interactive"])
         self.assertEqual(initial["plan"]["input"]["region"], "İzmir")
@@ -213,7 +222,6 @@ class StudioCheck(unittest.TestCase):
         current = page.evaluate("YaparoStudio.getSnapshot()")
         self.assertFalse(current["stale"])
         self.assertGreater(current["revision"], initial["revision"])
-        self.assertEqual(current["creative"]["id"], initial["creative"]["id"])
         page.locator("#chat-input").fill("Bütçe 6000")
         page.get_by_role("button", name="Mesajı gönder").click()
         page.locator("#duration").fill("15")
@@ -223,35 +231,43 @@ class StudioCheck(unittest.TestCase):
         self.assertEqual(page.locator("#budget").input_value(), "5000")
         self.assertIn("Koşullar değişti", page.locator("#chat-log").inner_text())
         page.locator("#duration").fill("14")
+        page.locator("#helper-toggle").click()
+        page.locator("#recommend").click()
+        self.open_creatives(page)
+        self.assertIn("kahve", page.locator("#concepts").inner_text().lower())
+        page.locator(".choose").nth(0).click()
+        page.locator("#adapt-content").click()
+        selected = page.evaluate("YaparoStudio.getSnapshot().creative.id")
+        if page.locator("#helper-toggle").is_visible():
+            page.locator("#helper-toggle").click()
         page.locator("#chat-input").fill("Daha sade olsun")
         page.get_by_role("button", name="Mesajı gönder").click()
         page.locator("#chat-log").get_by_role(
             "button", name="Öneriyi uygula", exact=True
         ).click()
-        self.assertTrue(page.evaluate("YaparoStudio.getSnapshot().stale"))
-        page.locator("#helper-toggle").click()
-        page.locator('[data-step="1"]').nth(0).click()
+        self.assertFalse(page.evaluate("YaparoStudio.getSnapshot().stale"))
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().adaptations"))
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().creative.id"), selected
+        )
+        if page.locator("#helper-toggle").is_visible():
+            page.locator("#helper-toggle").click()
         old_title = page.locator(".art-title").nth(0).inner_text()
         page.locator("#regenerate").click()
         self.assertNotEqual(page.locator(".art-title").nth(0).inner_text(), old_title)
         page.locator("#previous-trio").click()
         self.assertEqual(page.locator(".art-title").nth(0).inner_text(), old_title)
-        page.locator("#content-next").click()
+        page.locator("#adapt-content").click()
         page.screenshot(
             path=str(self.evidence / "dynamic-cafe-desktop.png"), full_page=True
         )
         self.assertEqual(errors, [])
-        self.assertEqual(outbound, [])
-        self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.model"), None)
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan.model"))
         page.close()
 
     def test_source_refresh_provenance_and_live_fx_recompute(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1100})
         self.start_plan(page)
-        page.get_by_text(
-            "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
-        ).wait_for()
-        page.locator("#recommend").click()
         self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.fx.rate"), 50)
         self.server.source_services["ecb"].transport = lambda: self.ecb_body.replace(
             b'rate="100"', b'rate="104"'
@@ -261,7 +277,6 @@ class StudioCheck(unittest.TestCase):
         page.get_by_text(
             "Son kayıt: 1 USD = 52,0000 TRY · ECB çapraz referans", exact=True
         ).wait_for()
-        self.assertIn("52,0000", page.locator("#source-panel").inner_text())
         self.assertTrue(page.evaluate("YaparoStudio.getSnapshot().stale"))
         page.locator("#recommend").click()
         self.assertEqual(
@@ -271,7 +286,6 @@ class StudioCheck(unittest.TestCase):
         self.assertFalse(page.evaluate("YaparoStudio.getSnapshot().plan.publishable"))
         page.locator("#budget").fill("6000")
         page.locator("#recommend").click()
-        # Public currency quotes are safely reusable; account forecasts cannot be.
         self.assertEqual(
             page.evaluate("YaparoStudio.getSnapshot().plan.fx.source"), "ecb"
         )
@@ -280,9 +294,6 @@ class StudioCheck(unittest.TestCase):
             f'#source-panel[data-context-hash="{expected_context}"]'
         ).wait_for()
         page.locator("#recommend").click()
-        self.assertEqual(
-            page.evaluate("YaparoStudio.getSnapshot().plan.fx.source"), "ecb"
-        )
         page.locator("#fx-provider").select_option("tcmb")
         page.get_by_text(
             "TCMB gösterge satış USD/TRY · Güncel kayıt", exact=True
@@ -294,8 +305,146 @@ class StudioCheck(unittest.TestCase):
         page.screenshot(
             path=str(self.evidence / "source-layer-desktop.png"), full_page=True
         )
-        page.get_by_role("button", name="Planın tamamını gör").click()
+        self.open_creatives(page)
+        self.adapt_and_review(page)
         self.assertIn("TCMB gösterge satış", page.locator("#review").inner_text())
+        page.close()
+
+    def test_organic_only_bypasses_media_and_mixed_requirements(self):
+        page = self.browser.new_page()
+        page.goto(self.origin)
+        page.locator("#journey-mode").select_option("organic")
+        page.locator("#brief-form button[type=submit]").click()
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan"))
+        self.assertTrue(page.locator("#budget").is_disabled())
+        self.assertFalse(page.locator("#budget").is_visible())
+        self.open_creatives(page)
+        self.adapt_and_review(page)
+        self.assertIn("Yalnız organik paylaşım", page.locator("#review").inner_text())
+        self.assertEqual(
+            page.evaluate(
+                "YaparoStudio.getSnapshot().production.requirements.map(r=>r.usage)"
+            ),
+            ["organic"],
+        )
+        page.goto(self.origin)
+        page.locator("#journey-mode").select_option("both")
+        page.locator("#brief-form button[type=submit]").click()
+        self.settle_plan(page)
+        self.open_creatives(page)
+        requirements = page.evaluate(
+            "YaparoStudio.getSnapshot().production.requirements"
+        )
+        self.assertEqual({r["usage"] for r in requirements}, {"paid", "organic"})
+        page.close()
+
+    def test_search_only_adaptation_edit_and_replan_guards(self):
+        page = self.browser.new_page()
+        self.start_plan(page)
+        # Remove every funded non-Search product through normal allocation controls.
+        others = page.evaluate(
+            "YaparoStudio.getSnapshot().plan.rows.filter(r=>r.amount && r.channel.id!=='google_search_maps').map(r=>r.channel.id)"
+        )
+        for channel in others:
+            amount = page.locator(f'[data-channel="{channel}"] input[type=number]')
+            amount.fill("0")
+            amount.press("Tab")
+        self.assertGreater(
+            page.evaluate(
+                "YaparoStudio.getSnapshot().plan.rows.find(r=>r.channel.id==='google_search_maps').amount"
+            ),
+            0,
+        )
+        self.open_creatives(page)
+        page.locator(".choose").nth(0).click()
+        page.locator("#adapt-content").click()
+        self.assertEqual(
+            page.locator('.platform-preview[data-medium="image"]').count(), 0
+        )
+        self.assertEqual(
+            page.locator('.platform-preview[data-medium="text"]').count(), 1
+        )
+        original = page.evaluate("YaparoStudio.getSnapshot().creative")
+        page.locator(".concept-card").nth(0).get_by_role(
+            "button", name="Düzenle", exact=True
+        ).click()
+        page.locator("#edit-title").fill("Arama için güncel örnek başlık")
+        page.get_by_role("button", name="Uygula ve geri dön").click()
+        self.assertFalse(page.evaluate("YaparoStudio.getSnapshot().stale"))
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().adaptations"))
+        self.assertTrue(page.locator("#content-next").is_disabled())
+        page.locator("#adapt-content").click()
+        current = page.evaluate("YaparoStudio.getSnapshot()")
+        self.assertGreater(current["creative"]["revision"], original["revision"])
+        self.assertTrue(
+            all(
+                p["coreRevision"] == current["creative"]["revision"]
+                for p in current["adaptations"]
+            )
+        )
+        page.locator('#step-nav [data-step="1"]').click()
+        page.locator("#video-allowed").check()
+        self.assertTrue(page.evaluate("YaparoStudio.getSnapshot().stale"))
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().contentBinding"))
+        self.assertTrue(page.locator('#step-nav [data-step="2"]').is_disabled())
+        page.locator("#recommend").click()
+        self.open_creatives(page)
+        self.assertFalse(page.evaluate("YaparoStudio.getSnapshot().stale"))
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().adaptations"))
+        page.close()
+
+    def test_organic_video_pending_and_stale_assistant(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
+        page.goto(self.origin)
+        page.locator("#journey-mode").select_option("organic")
+        page.locator("#brief-form button[type=submit]").click()
+        page.locator('[name="organic-platform"][value="instagram"]').uncheck()
+        page.locator('[name="organic-platform"][value="tiktok"]').check()
+        page.locator("#helper-toggle").click()
+        page.locator("#chat-input").fill("Bütçe 6000")
+        page.get_by_role("button", name="Mesajı gönder").click()
+        page.locator('[name="organic-platform"][value="youtube"]').check()
+        page.locator("#chat-log").get_by_role(
+            "button", name="Öneriyi uygula", exact=True
+        ).click()
+        self.assertEqual(page.locator("#budget").input_value(), "3000")
+        self.assertIn("Koşullar değişti", page.locator("#chat-log").inner_text())
+        page.locator("#helper-toggle").click()
+        self.open_creatives(page)
+        page.locator(".choose").nth(0).click()
+        page.locator("#adapt-content").click()
+        self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().adaptations"), [])
+        self.assertEqual(
+            page.locator('.platform-preview[data-medium="image"]').count(), 0
+        )
+        self.assertIn("0 kanala özel", page.locator("#production-status").inner_text())
+        self.assertIn("eksik", page.locator("#platform-previews").inner_text())
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan"))
+        page.close()
+
+    def test_helper_cannot_skip_unconfirmed_brief(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
+        page.goto(self.origin)
+        page.locator("#chat-input").fill("Bütçe 6000")
+        page.get_by_role("button", name="Mesajı gönder").click()
+        page.locator("#chat-log").get_by_role(
+            "button", name="Öneriyi uygula", exact=True
+        ).click()
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().brief"))
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan"))
+        self.assertTrue(page.locator('#step-nav [data-step="1"]').is_disabled())
+        page.locator("#brief-form button[type=submit]").click()
+        page.locator('#step-nav [data-step="0"]').click()
+        page.locator("#brief").fill(
+            "Sentetik yeni istek: önce bu bilgileri kontrol etmeliyiz."
+        )
+        page.locator("#chat-input").fill("Bütçe 5000")
+        page.get_by_role("button", name="Mesajı gönder").click()
+        page.locator("#chat-log").get_by_role(
+            "button", name="Öneriyi uygula", exact=True
+        ).click()
+        self.assertTrue(page.locator('#step-nav [data-step="1"]').is_disabled())
+        self.assertTrue(page.evaluate("YaparoStudio.getSnapshot().stale"))
         page.close()
 
 

@@ -15,8 +15,18 @@ This is authored local response logic, not an LLM. Generation provenance records
 `authored_demo_response`, its version, modelnull and externalQueryfalse.
 
 Four-step single-workspace flow: structured communication job + business model +
-desired action + free text + audience/sector → three fixed creative directions →
-campaign decision → review. Optional identity/message and question-level
+desired action + free text + audience/sector → channel/material plan → shared
+creative concepts and placement adaptations → review. Paid, organic-only and
+combined routes are explicit; organic has no required media budget/decision.
+`production.js` uses closed demo recipes for allocated products and selected
+organic destinations. Search requests text, not images. Shared concepts are not
+finished ads; explicit adaptation pins their ID/revision and recipe requirement.
+Editing a concept clears adaptations without rerunning channel allocation. Plan,
+source, material or allocation changes require re-confirming the production plan.
+Missing video excludes video-requiring paid products. Even with video available,
+rendering is pending; no fake video is emitted. No uploads, provider generation,
+price quote or publishing readiness is added. Detailed versioned placement specs,
+rights/material reuse and cost approval remain follow-ups (ADR0072). Optional identity/message and question-level
 `showWhen` conditional notes; no repeated business/intent collection. Creative
 angle/hook/tone/CTA/static format and local edit revisions survive navigation.
 Text/position editor, similar option, undo and previous trio stay within the flow.

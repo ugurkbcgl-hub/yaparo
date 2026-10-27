@@ -4,9 +4,10 @@
 
 The owner requested rebuilding the prototype and design from the supplied Turkey
 decision report/workbook. The preferred local draft is now
-`experiments/decision-studio` on8014: structured progressive brief → three
-metadata-bearing fixed creative routes/editor → explainable product-level channel
-decision → review.20products,8expert dimensions, meaningful test minima and capped
+`experiments/decision-studio` on8014: structured progressive brief → explainable channel/material plan → three
+shared creative concepts/editor → placement-specific demo adaptations → review.
+Organic-only skips paid media planning; paid and combined routes remain distinct.
+See [plan-first decision](docs/adr/0072-plan-before-placement-production.md).20products,8expert dimensions, meaningful test minima and capped
 integer allocation leave excess budget unallocated. AI is not the allocation
 authority. Source observations are SC01 illustrative only, never live forecasts;
 different context/missing data refuses allocation. Source defects and incomplete
