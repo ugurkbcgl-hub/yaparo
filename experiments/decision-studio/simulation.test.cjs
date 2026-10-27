@@ -1,0 +1,31 @@
+const assert=require('node:assert/strict');
+global.window=global;
+require('./dist/data.js');require('./dist/simulation.js');require('./dist/engine.js');
+const S=YaparoSimulation,D=YaparoResearch,E=YaparoDecision;
+const source=JSON.stringify(D.forecasts);
+const base={budget:5000,days:14,value:500,margin:40,cpa:100,capacity:20,goal:'store_visits',business:'local_retail',audience:'local_nearby',sector:'food_hospitality',geo:'district_city',region:'İzmir',start:'2026-11-01',measurement:'basic_utm',fixture:'interactive',communication:'product_service_intro',action:'visit_store',risk:'normal',readiness:'core',video:false,catalog:false,tracking:false};
+const run=patch=>{const i={...base,...patch};return E.evaluate(i,D,S.forecast(i,D));};
+const p=run({});assert(p.interactive);assert(p.allocated>0);assert.equal(p.bound,false);assert.equal(p.publishable,false);assert.equal(p.externalQuery,false);assert.equal(p.quality,'authored_simulation_NOT_market_data');
+assert.deepEqual(p.rows.map(r=>r.amount),run({}).rows.map(r=>r.amount));
+assert.equal(run({readiness:'none'}).allocated,0);
+assert.equal(run({risk:'health'}).allocated,0);assert.equal(run({communication:'fundraising'}).allocated,0);
+const small=run({geo:'radius_local',radius:1,budget:20000});
+const big=run({geo:'radius_local',radius:40,budget:20000});
+assert(big.allocated>small.allocated);
+for(const r of big.rows.filter(r=>r.amount))assert(r.f.radiusSupported);
+const altered={...base,region:'Ankara'};assert.equal(E.evaluate(altered,D,S.forecast(base,D)).allocated,0);
+assert.equal(E.evaluate(base,D).allocated,0);
+assert.equal(JSON.stringify(D.forecasts),source);
+for(const [key,preset] of Object.entries(S.profiles)){
+ const brief={description:preset.noun,sector:preset.sector,identity:'Sentetik Örnek',action:preset.action,audience:'Sentetik yetişkin kitle',communication:'product_service_intro',branch:{}};
+ const cards=S.cards(brief,1);assert.equal(new Set(cards.map(c=>c.title)).size,3);assert.equal(new Set(cards.map(c=>c.angle)).size,3);
+ assert(cards.every(c=>c.provenance.externalQuery===false&&c.context.identity===brief.identity));
+ assert.notEqual(cards[0].title,S.cards(brief,2)[0].title,key);
+ assert.notEqual(cards[0].title,S.alternative(cards[0],brief).title,key);
+}
+assert.equal(S.profile({description:'kahve dükkânı',sector:'other'}).theme,'coffee');
+assert.equal(S.profile({description:'ekip takip yazılımı',sector:'other'}).theme,'software');
+assert.deepEqual(S.intent('Bütçeyi 5.000 yap, 14 gün sürsün').patch,{budget:'5000',duration:'14'});
+assert.equal(S.intent('İzmir 8 km').patch.radius,'8');assert.equal(S.intent('daha sade olsun').type,'simplify');
+assert.equal(S.intent('bütçe -1').patch.budget,undefined);assert.equal(S.intent('bütçe 2000000').patch.budget,undefined);
+console.log('Interactive authored-demo checks passed: context binding, dynamic caps, scenarios, source isolation, history inputs and command parsing.');

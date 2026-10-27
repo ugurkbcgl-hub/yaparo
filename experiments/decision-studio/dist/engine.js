@@ -10,7 +10,8 @@
     cap_below_useful_minimum: 'Faydalı tavan anlamlı test minimumundan düşük', score_below_threshold: 'Uzman uygunluk puanı eşik altında',
     owned_action: 'Ücretli medya dışında destekleyici aksiyon', portfolio_limit: 'Bu bütçede seçilen kanallara öncelik verildi',
     insufficient_budget: 'Kalan bütçe anlamlı bir testi karşılamıyor', geo_unverified: 'Bu ürünün seçilen yarıçapı uygulaması doğrulanmadı',
-    audience_unverified: 'Asgari kitle doğrulaması eksik', stale_forecast: 'Örnek tahmin tarihinden farklı plan: yeniden tahmin gerekli'
+    audience_unverified: 'Asgari kitle doğrulaması eksik', stale_forecast: 'Örnek tahmin tarihinden farklı plan: yeniden tahmin gerekli',
+    minimum_unverified: 'Teknik minimum / hesap para birimi doğrulanmadı'
   };
   function policy(input) {
     return input.communication === 'fundraising' || input.action === 'donate' || input.business === 'nonprofit_fundraising' ||
@@ -18,7 +19,7 @@
       ['health_medical','finance_insurance','public_political','real_estate','recruitment','nonprofit_social_cause'].includes(input.sector) ||
       ['sale_promotion','public_issue','recruitment','reputation'].includes(input.communication);
   }
-  function evaluate(input, data) {
+  function evaluate(input, data, simulation=null) {
     if (!finite(input.budget,0,1000000) || !Number.isInteger(input.days) || !finite(input.days,1,365) ||
         !finite(input.value,0,100000000) || !finite(input.margin,0,100) || !finite(input.cpa,0,10000000) ||
         !Number.isInteger(input.capacity) || !finite(input.capacity,0,1000000) ||
@@ -26,16 +27,18 @@
       throw new Error('Bütçe, süre, yarıçap ve ekonomi alanlarını kontrol et.');
     }
     const total = cents(input.budget), blocked = policy(input);
+    const interactive = input.fixture === 'interactive' && simulation?.kind === 'authored_simulation' && simulation.signature === JSON.stringify(input);
     // Only SC01 has forecast fixtures. Never rebind its observations to other audiences/regions/dates.
     const bound = input.fixture === 'demo' && input.goal === 'store_visits' && input.business === 'local_retail' &&
       input.audience === 'local_nearby' && input.sector === 'fashion_beauty_lifestyle' && input.geo === 'district_city' &&
       input.region.trim().toLocaleLowerCase('tr-TR') === 'istanbul, kadıköy' && input.days === 7 &&
       input.measurement === 'basic_utm' && input.start === '2026-10-27';
+    const contextBound = bound || interactive;
     const profitCPA = Math.min(input.cpa, input.value * input.margin / 100);
     // Capacity and profitability are a SHARED portfolio cap, not counted once per channel.
     const businessCap = Math.min(total, Math.floor(input.capacity * input.days * profitCPA * 100));
     const rows = data.channels.map(channel => {
-      const f = data.forecasts.find(x => x.channelId === channel.id);
+      const f = (interactive ? simulation.forecasts : data.forecasts).find(x => x.channelId === channel.id);
       const owned = channel.tier === 'non_paid_recommendation';
       const fx = channel.currency === 'USD' ? 49.7627 : 1;
       const platform = channel.id === 'spotify' ? null : Math.ceil(Math.max(channel.dailyMinimum * input.days,channel.lifetimeMinimum) * fx * 100);
@@ -48,17 +51,18 @@
       const assetReady = !!f?.assetReady && (!channel.assets.some(a => /^(vertical_video|horizontal_or_vertical_video|audio_or_video|vertical_video_or_ar)$/.test(a)) || input.video);
       if (!assetReady && !owned) reasons.push('asset_not_ready');
       if (channel.id === 'google_pmax_shopping' && (!input.catalog || !input.tracking)) reasons.push('asset_not_ready');
-      if ((!bound || !f?.hasForecast) && !owned) reasons.push('forecast_missing');
-      if (input.geo === 'radius_local' && !owned) reasons.push('geo_unverified');
-      if (channel.minimumAudience > 0 && !owned) reasons.push('audience_unverified');
+      if ((!contextBound || !f?.hasForecast) && !owned) reasons.push('forecast_missing');
+      if (input.geo === 'radius_local' && !(interactive && f?.radiusSupported) && !owned) reasons.push('geo_unverified');
+      if (channel.minimumAudience > 0 && !(interactive && f?.uniqueReach >= channel.minimumAudience) && !owned) reasons.push('audience_unverified');
       if (platform !== null && platform > total && !owned) reasons.push('below_platform_minimum');
+      if (platform === null && !owned) reasons.push('minimum_unverified');
       let useful = 0;
       if (!owned && f) {
         const relevant = ['awareness','reach','video_views','engagement'].includes(input.goal) ? f.cpm * 10 :
           input.goal === 'traffic' ? f.cpc * 40 : Math.max(f.cpa * 8,f.cpc * 40,f.cpm * 10);
         useful = Math.ceil(Math.max((platform || 0)/100,f.baseUsefulMinimum,relevant) * 100);
       }
-      const demand = bound && f?.hasForecast ? cents(f.potentialBudget) : null;
+      const demand = contextBound && f?.hasForecast ? cents(f.potentialBudget) : null;
       const cap = owned ? 0 : demand === null ? null : Math.min(total,demand,businessCap);
       const budgetScore = platform !== null && total < platform ? 0 : total < useful ? 1 : total < useful * 1.5 ? 3 : 5;
       const dimensions = { objective:input.goal,business_model:input.business,audience:input.audience,sector:input.sector,
@@ -102,8 +106,8 @@
       remaining -= assigned;
     }
     const allocated = rows.reduce((s,r)=>s+r.amount,0);
-    return {version:data.version,createdAt:new Date().toISOString(),input:{...input},bound,blocked,total,businessCap,rows,
-      allocated,unallocated:total-allocated,externalQuery:false,model:null,quality:'demo_illustrative',publishable:false};
+    return {version:data.version,createdAt:new Date().toISOString(),input:{...input},bound,interactive,blocked,total,businessCap,rows,
+      allocated,unallocated:total-allocated,externalQuery:false,model:null,quality:interactive?'authored_simulation_NOT_market_data':'demo_illustrative',simulationVersion:interactive?simulation.version:null,publishable:false};
   }
   function manual(plan,id,amount) {
     const row = plan.rows.find(r=>r.channel.id===id);

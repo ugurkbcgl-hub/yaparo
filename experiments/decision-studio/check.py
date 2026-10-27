@@ -70,6 +70,10 @@ class StudioCheck(unittest.TestCase):
             path=str(self.evidence / "creative-desktop.png"), full_page=True
         )
         page.locator("#content-next").click()
+        page.locator(".economics > summary").click()
+        page.locator("#fixture").select_option("demo")
+        page.locator("#start").fill("2026-10-27")
+        page.locator("#recommend").click()
         snap = page.evaluate("YaparoStudio.getSnapshot()")
         self.assertEqual(snap["plan"]["allocated"], 300000)
         self.assertEqual(page.locator("#recommended .channel-row").count(), 2)
@@ -126,6 +130,8 @@ class StudioCheck(unittest.TestCase):
         page.locator(".choose").nth(0).click()
         page.locator("#content-next").click()
         page.locator("#region").fill("Ankara")
+        page.locator(".economics > summary").click()
+        page.locator("#fixture").select_option("unknown")
         page.locator("#recommend").click()
         self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.allocated"), 0)
         page.close()
@@ -156,6 +162,71 @@ class StudioCheck(unittest.TestCase):
         with self.assertRaises(HTTPError) as host:
             urlopen(Request(self.origin, headers={"Host": "invalid.example"}))
         self.assertEqual(host.exception.code, 403)
+
+    def test_interactive_brief_assistant_and_context_history(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
+        errors, outbound = [], []
+        page.on("pageerror", lambda e: errors.append(str(e)))
+        page.on(
+            "request",
+            lambda r: (
+                outbound.append(r.url) if not r.url.startswith(self.origin) else None
+            ),
+        )
+        page.goto(self.origin)
+        page.get_by_role("button", name="☕ Kafe açılışı", exact=True).click()
+        page.get_by_role("button", name="Üç yaratıcı yönü keşfet").click()
+        self.assertIn("kahve", page.locator("#concepts").inner_text().lower())
+        self.assertEqual(page.locator(".demo-illustration svg").count(), 3)
+        page.locator(".choose").nth(0).click()
+        page.locator("#content-next").click()
+        initial = page.evaluate("YaparoStudio.getSnapshot()")
+        self.assertTrue(initial["plan"]["interactive"])
+        self.assertEqual(initial["plan"]["input"]["region"], "İzmir")
+        self.assertGreater(initial["plan"]["allocated"], 0)
+        page.locator("#helper-toggle").click()
+        page.locator("#chat-input").fill("Bütçe 5000, 14 gün")
+        page.get_by_role("button", name="Mesajı gönder").click()
+        self.assertEqual(page.locator("#budget").input_value(), "3000")
+        page.locator("#chat-log").get_by_role(
+            "button", name="Öneriyi uygula", exact=True
+        ).click()
+        self.assertEqual(page.locator("#budget").input_value(), "5000")
+        self.assertEqual(page.locator("#duration").input_value(), "14")
+        current = page.evaluate("YaparoStudio.getSnapshot()")
+        self.assertFalse(current["stale"])
+        self.assertGreater(current["revision"], initial["revision"])
+        self.assertEqual(current["creative"]["id"], initial["creative"]["id"])
+        page.locator("#chat-input").fill("Bütçe 6000")
+        page.get_by_role("button", name="Mesajı gönder").click()
+        page.locator("#duration").fill("15")
+        page.locator("#chat-log").get_by_role(
+            "button", name="Öneriyi uygula", exact=True
+        ).click()
+        self.assertEqual(page.locator("#budget").input_value(), "5000")
+        self.assertIn("Koşullar değişti", page.locator("#chat-log").inner_text())
+        page.locator("#duration").fill("14")
+        page.locator("#chat-input").fill("Daha sade olsun")
+        page.get_by_role("button", name="Mesajı gönder").click()
+        page.locator("#chat-log").get_by_role(
+            "button", name="Öneriyi uygula", exact=True
+        ).click()
+        self.assertTrue(page.evaluate("YaparoStudio.getSnapshot().stale"))
+        page.locator("#helper-toggle").click()
+        page.locator('[data-step="1"]').nth(0).click()
+        old_title = page.locator(".art-title").nth(0).inner_text()
+        page.locator("#regenerate").click()
+        self.assertNotEqual(page.locator(".art-title").nth(0).inner_text(), old_title)
+        page.locator("#previous-trio").click()
+        self.assertEqual(page.locator(".art-title").nth(0).inner_text(), old_title)
+        page.locator("#content-next").click()
+        page.screenshot(
+            path=str(self.evidence / "dynamic-cafe-desktop.png"), full_page=True
+        )
+        self.assertEqual(errors, [])
+        self.assertEqual(outbound, [])
+        self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.model"), None)
+        page.close()
 
 
 if __name__ == "__main__":

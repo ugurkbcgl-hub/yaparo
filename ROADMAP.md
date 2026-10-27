@@ -13,6 +13,12 @@ See [research plan](docs/product/research-decision-studio.md) and prototype READ
 for missing ZIP, incomplete source branch rows and retained launch gates. Keep
 old8013/8002 and protected account/ledger/history intact; no new paid service.
 
+Owner's follow-up dynamic-demo request now works locally: five authored starter
+profiles, contextual3-way creative/CTA/illustration/edit/history, helper proposals
+with Apply and fresh synthetic budget scenarios. Historical source reproduction
+and missing-data refusal remain separate modes. Authored observations are NOT
+platform forecasts; actual LLM/providers remain unconnected in this prototype.
+
 ## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more

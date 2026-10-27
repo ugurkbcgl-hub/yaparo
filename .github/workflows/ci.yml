@@ -88,6 +88,7 @@ jobs:
         timeout-minutes: 2
         run: |
           node experiments/decision-studio/engine.test.cjs
+          node experiments/decision-studio/simulation.test.cjs
           node --check experiments/decision-studio/dist/app.js
           python -m ruff format --check --config apps/web/pyproject.toml experiments/decision-studio
           python -m ruff check --config apps/web/pyproject.toml experiments/decision-studio

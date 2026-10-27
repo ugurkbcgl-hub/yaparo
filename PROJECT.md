@@ -12,6 +12,12 @@ authority. Source observations are SC01 illustrative only, never live forecasts;
 different context/missing data refuses allocation. Source defects and incomplete
 form/policy integration are explicit. See
 [research scope and integration order](docs/product/research-decision-studio.md).
+The follow-up now adds a default dynamic authored-demo mode: contextual creative
+copy/CTA/illustrations and assistant proposals, plus new synthetic observations
+for current conditions. It is separate from source SC01 reproduction; no market
+forecast or live LLM is claimed. Helper changes require Apply. All scenario
+observations explicitly carry authored-simulation provenance and remain
+nonpublishable; original source observations are unchanged.
 Owner UX review precedes Django/provider integration. Previous8013 and8002 remain
 intact; no stack, database, cost, publishing or export decision changed.
 

@@ -7,6 +7,15 @@ owned Django domain model or production/security/provider decisions.
 
 ## Product decisions for this draft
 
+Owner follow-up: make the prototype work dynamically with agent-authored content
+and query responses, approximating the real journey. Implemented prepared local
+responses, not a new hosted AI admission. Default interactive simulation varies
+by selected brief/profile/geo/goal/duration/assets, distinct from the exact source
+reproduction and missing-data modes. UI, result provenance, guides and final
+review label all generated observations as authored simulation, not market data.
+The helper previews allowlisted changes before Apply; paid actions stay absent.
+See prototype README for this separation and the bounded test contract.
+
 - Progressive structured brief, preserving free text. Communication job, desired
   action, business model and media optimization objective remain separate fields.
 - Three creative directions retain angle, hook, benefit/message, CTA, tone,

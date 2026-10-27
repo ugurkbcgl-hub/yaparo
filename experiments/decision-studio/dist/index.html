@@ -5,7 +5,7 @@
   <meta name="description" content="Yaparo reklam stüdyosu — araştırmaya dayalı yerel deneyim taslağı.">
   <title>Yaparo · Reklam stüdyosu</title>
   <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="refinements.css">
-  <script src="data.js" defer></script><script src="engine.js" defer></script><script src="app.js" defer></script>
+  <script src="data.js" defer></script><script src="simulation.js" defer></script><script src="engine.js" defer></script><script src="app.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Çalışmaya geç</a>
@@ -25,11 +25,12 @@
     </aside>
     <div class="workspace">
       <header class="topbar"><div class="breadcrumb">Çalışma alanın <span>/</span> <strong>Yeni reklam çalışması</strong></div><span class="prototype-badge"><span></span>Yerel prototip</span></header>
-      <div class="demo-banner"><span class="demo-icon" aria-hidden="true">◇</span><p><strong>Birlikte deneyelim.</strong> Yalnız sentetik örnek kullan. Gerçek AI, canlı tahmin ve reklam yayını yok. Bilgiler bu sekmede kalır; yenileyince silinir.</p></div>
+      <div class="demo-banner"><span class="demo-icon" aria-hidden="true">◇</span><p><strong>Dinamik deneyim modu.</strong> Hazırlanmış içerik ve asistan yanıtları talebine uyarlanır. Kanal rakamları temsili simülasyondur; gerçek AI / platform sorgusu ve yayın yapılmaz. Yalnız sentetik örnek kullan; yenileyince bilgiler silinir.</p></div>
       <div class="content-shell">
         <main id="main" tabindex="-1">
           <section id="step-0" class="step">
             <div class="eyebrow">ÖNCE SENİ ANLAYALIM</div><h1>Ne için sesini<br>duyurmak istiyorsun?</h1><p class="lead">Uzun bir brief hazırlamana gerek yok. Birkaç seçim ve kendi cümlelerinle başlayalım.</p>
+            <div id="scenario-examples" class="scenario-examples" aria-label="Örnek senaryolar"></div>
             <form id="brief-form" class="brief-form">
               <div class="question-block"><div class="field-heading"><span class="field-index">1</span><label for="communication">Bu çalışma ne için?</label></div><select id="communication" required aria-describedby="communication-hint"></select><p class="hint" id="communication-hint">Anlatmak istediğin işi seç. Reklam hedefini birazdan ayrıca belirleyeceğiz.</p></div>
               <div class="field-pair"><div><label for="business">Nasıl bir iş yapıyorsun?</label><select id="business" required></select></div><div><label for="action">Gören kişi ne yapsın?</label><select id="action" required></select></div></div>
@@ -43,7 +44,8 @@
           </section>
           <section id="step-1" class="step" hidden>
             <div class="eyebrow">AYNI İSTEK. ÜÇ FARKLI BAKIŞ.</div><h1>Hangisi senin<br>anlatmak istediğin?</h1><p class="lead">Bir yön seç, küçük dokunuşlarla kendine göre düzenle. Her kartın mesajı, tonu ve çağrısı bir bütün.</p>
-            <p class="inline-notice">Bu kartlar etkileşim taslağıdır; gerçek AI üretimi değildir.</p>
+            <p class="inline-notice">Talebine uyarlanan hazırlanmış demo içerikleri. Canlı AI üretimi değildir.</p>
+            <p id="creative-context" class="creative-context"></p>
             <div id="concepts" class="concept-grid"></div>
             <div class="form-footer"><button type="button" id="regenerate" class="secondary">↻ Başka bir üçlü gör</button><button type="button" id="content-next" class="primary" disabled>Reklamını planla <span aria-hidden="true">↗</span></button></div>
             <button type="button" data-step="0" class="text-button">← İsteğimi düzenle</button>
@@ -65,7 +67,7 @@
               <p class="hint">Bölge adı şu an bir plan notu. Konum haritası ve gerçek hedefleme bağlı değil. Örnek tahmin başka bir bölgeye taşınmaz.</p>
               <div class="field-pair"><div><label for="measurement">Ölçüm hazırlığı</label><select id="measurement"></select></div><div><label for="intent-summary">Önceki seçimlerin</label><p id="intent-summary"></p></div></div>
               <details class="optional-details economics"><summary><span>İş ekonomisi, kapasite ve hazırlık</span><span class="optional-tag">Daha isabetli plan</span></summary><div class="details-inner"><div class="field-pair four-fields"><div><label for="order-value">Ortalama sipariş değeri (TL)</label><input id="order-value" type="number" min="0" max="10000000" value="500"></div><div><label for="margin">Katkı marjı (%)</label><input id="margin" type="number" min="0" max="100" value="40"></div><div><label for="cpa">Kabul edilebilir edinme maliyeti (TL)</label><input id="cpa" type="number" min="0" max="1000000" value="100"></div><div><label for="capacity">Günlük müşteri kapasitesi</label><input id="capacity" type="number" min="0" max="1000000" value="20"></div></div><div class="check-group"><label class="check-label"><input id="tracking" type="checkbox">Dönüşüm ölçümüm hazır</label><label class="check-label"><input id="video" type="checkbox">Dikey videom var</label><label class="check-label"><input id="catalog" type="checkbox">Ürün kataloğum / feed’im var</label></div><label for="fixture">Tahmin verisiyle deneme</label><select id="fixture"><option value="demo">3.000 TL örneğine ait temsili veriler</option><option value="unknown">Doğrulanmış tahmin verisi yok</option></select></div></details>
-              <div class="decision-toolbar"><div><strong>Planını nedenleriyle gör.</strong><p>Örnek veriler kullanılır; canlı platform tahmini değildir.</p></div><button id="recommend" type="button" class="primary">✧ Dağılımı yeniden öner</button></div>
+              <div class="decision-toolbar"><div><strong>Planını nedenleriyle gör.</strong><p>Temsili senaryo · gerçek erişim / satış tahmini değildir.</p></div><button id="recommend" type="button" class="primary">✧ Dağılımı yeniden öner</button></div>
               <p id="decision-status" class="status-line" role="status" aria-live="polite">Koşullarını belirle, öneriyi oluştur.</p>
               <div id="plan-summary" class="plan-summary"></div>
               <div class="channel-section-heading"><h2>Planında yer alanlar</h2><span>Payları değiştirebilirsin</span></div>

@@ -13,6 +13,7 @@ ASSETS = {
     "/refinements.css": ("refinements.css", "text/css; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
     "/engine.js": ("engine.js", "text/javascript; charset=utf-8"),
+    "/simulation.js": ("simulation.js", "text/javascript; charset=utf-8"),
     "/data.js": ("data.js", "text/javascript; charset=utf-8"),
 }
 

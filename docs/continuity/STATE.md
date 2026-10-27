@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 13:18 Europe/Istanbul (+03:00). Recheck Git/PR/CI before acting.
+Verified: 2026-10-27 14:00 Europe/Istanbul (+03:00). Recheck Git/PR/CI before acting.
 
 ## Objective and standing preferences
 
@@ -18,8 +18,9 @@ protected Google TEST candidate must not be reset or retried implicitly.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Feature branch: codex/unified-journey-prototype; PR369 remains the review record.
-Previous pushed head a6e4fb7 had required CI40462804545 SUCCESS. This does not
-verify the new research changes. New head/CI must be checked after push.
+Research head41aa9d7 had required CI40487502326 SUCCESS, verified this turn.
+That success does not verify the current authored-dynamic-demo changes; check
+their new exact head/CI after push. PR369 remains open for owner UX review.
 Main base abc2093 / PR368. No production deployment or database change this turn.
 
 ## Current milestone: research decision studio
@@ -32,6 +33,16 @@ Structured brief separates communication job/business/action/free text/audience/
 sector; optional identity/message and source showWhen conditional notes. Three
 fixed example routes retain angle/hook/message/CTA/tone/static format/revisions;
 position/text editor, similar/undo/previous trio. Not real AI creative/chat.
+
+Owner follow-up requested realistic dynamic behavior with our authored responses.
+Default interactive mode now uses simulation.js (yaparo-authored-demo-v1): five
+starter profiles, contextual copy/CTA/theme illustrations, new trios/alternatives,
+history and editor body/CTA visible. Helper parses bounded prepared intents;
+budget/days/radius/city and creative changes preview Apply before mutation.
+Applying plan changes recomputes with selection intact; changing the initial
+brief requires new creative confirmation. Unsupported requests receive guidance.
+No real AI call was made and no provider credential loaded. Existing OpenRouter
+runtime was inspected as source only; its admission/ledger were not changed.
 
 Source report DOCX and workbook XLSX in owner's Yaparo Araştırma folder were read
 without editing. Normalized dist/data.js contains79questions/249options/
@@ -48,9 +59,15 @@ capacity/profit cap counted once, unallocated balance retained. Technical vs
 useful minimum vs cap visible. Paid/partner/owned separated; owned gets no spend.
 Manual TL/range with percentage display stays within caps; recompute resets it.
 Input changes mark decision stale and require recompute before final review.
-Forecast fixtures bind only exact dated2026-10-27/7days/Kadıköy/local retail/
+In historical reproduction mode, forecast fixtures bind only dated2026-10-27/7days/Kadıköy/local retail/
 nearby/style/static/basicUTM/store-visits context. Different context or missing
 forecast yields no allocation; no invented equal mix. Budget10000TRY leaves6800.
+New interactive mode creates separate synthetic CPC/CPM/CPA/reach/account
+assumptions from current context and pins an exact context signature. Original
+research data is unchanged. Labels/guides/final review explicitly state authored
+simulation, not market forecasts; new timestamps mean local construction only.
+No-account and policy simulations refuse; radius admits only catalog-described
+radius candidates as DEMO assumptions, never operational qualification.
 All results externalQueryfalse/modelnull/publishablefalse. Actual gateways/cache/
 currentFX/semantic legal evidence/full79typed questions still pending. Previous
 Turkey clipped-polygon map not yet migrated; radius input refuses allocation.
@@ -59,12 +76,16 @@ See docs/product/research-decision-studio.md and experiment README for full scop
 ## Checks actually run
 
 Node engine check: exact sample/all20scores, policy/unknown/stale/manual/cap cases,
-88budget boundaries and dataset counts passed. Three isolated browser tests
+88budget boundaries and dataset counts passed. Additional simulation checks:
+context binding, source immutability, dynamic radii/readiness/policy, profiles,
+bounded command parsing. Four isolated browser tests
 passed: full edit/select/recompute/review, conditional policy/missing forecast,
-mobile/helper/literal text/no outbound or storage and Host/path guards.
+mobile/helper/literal text/no outbound or storage and Host/path guards; assistant
+Apply, source-context history and creative selection retention are also tested.
 Ruff check/format passed. Private screenshots:
-%TEMP%\yaparo-decision-dduretz4 (desktop/mobile/creative/start). Final heading/
-desktop-helper positioning refinements were included in the last passing run.
+%TEMP%\yaparo-decision-lf5k4zuw (desktop/mobile/creative/dynamic-cafe).
+Late helper Apply refusal after changed conditions is included in the final
+passing browser run; unknown technical minimum remains an explicit exclusion.
 New CI step runs these checks without provider access. Current new CI unverified.
 Existing8002/DB/AI ledger untouched; cost0, no provider credentials loaded.
 
