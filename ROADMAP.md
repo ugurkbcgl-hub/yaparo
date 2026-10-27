@@ -32,6 +32,12 @@ TCMB unavailable locally. Ad forecast connectors remain access_required. Separat
 qualify the first read-only account forecast adapter with access proof, preserving
 protected TEST state. See [source contract](docs/product/source-freshness-layer.md).
 
+Brief UX correction implemented: one short panel at a time, grouped purpose/
+business/sector, context-bound action shortlist, explicit sales destination,
+current-only branch answers and retained risk. Full canonical coverage preserved.
+Next UX review: wording/unknown paths, then typed conditional evidence/conflict
+validation. See [progressive brief](docs/product/progressive-brief.md).
+
 ## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more

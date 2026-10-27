@@ -17,6 +17,7 @@ ASSETS = {
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
     "/engine.js": ("engine.js", "text/javascript; charset=utf-8"),
     "/simulation.js": ("simulation.js", "text/javascript; charset=utf-8"),
+    "/brief-flow.js": ("brief-flow.js", "text/javascript; charset=utf-8"),
     "/production.js": ("production.js", "text/javascript; charset=utf-8"),
     "/sources.js": ("sources.js", "text/javascript; charset=utf-8"),
     "/data.js": ("data.js", "text/javascript; charset=utf-8"),

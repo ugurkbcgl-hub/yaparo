@@ -58,9 +58,91 @@ class StudioCheck(unittest.TestCase):
         ).wait_for()
         page.locator("#recommend").click()
 
+    def complete_brief(
+        self,
+        page,
+        *,
+        communication="product_service_intro",
+        business="local_retail",
+        sector="fashion_beauty_lifestyle",
+        destination="physical_store",
+        action="visit_store",
+        mode="paid",
+        description=None,
+        submit=True,
+    ):
+        """Exercise visible narrowing controls; never patch application state."""
+        for _ in range(4):
+            if page.locator("#brief-back").is_visible():
+                page.locator("#brief-back").click()
+        groups = {
+            "communication": {
+                "offer": [
+                    "product_service_intro",
+                    "launch",
+                    "sale_promotion",
+                    "lead_request",
+                ],
+                "news": ["announcement", "event", "celebration"],
+                "knowledge": ["education", "membership"],
+                "people": ["recruitment", "fundraising"],
+                "public": ["reputation", "public_issue", "unsure"],
+            },
+            "business": {
+                "shop": ["local_retail", "ecommerce_dtc", "marketplace_seller"],
+                "service": ["local_service", "b2b_leadgen"],
+                "digital": ["saas_subscription", "mobile_app", "media_creator"],
+                "participation": ["event", "nonprofit_fundraising"],
+                "team": ["employer_recruitment"],
+            },
+            "sector": {
+                "products": [
+                    "fashion_beauty_lifestyle",
+                    "retail_ecommerce",
+                    "automotive",
+                ],
+                "experience": [
+                    "food_hospitality",
+                    "travel_tourism",
+                    "entertainment_events",
+                ],
+                "services": [
+                    "professional_services",
+                    "local_home_services",
+                    "real_estate",
+                ],
+                "tech": ["technology_saas", "industrial_b2b"],
+                "expert": ["education_training", "health_medical", "finance_insurance"],
+                "community": [
+                    "nonprofit_social_cause",
+                    "recruitment",
+                    "public_political",
+                    "other",
+                ],
+            },
+        }
+        for kind, value in [
+            ("communication", communication),
+            ("business", business),
+            ("sector", sector),
+        ]:
+            group = next(k for k, values in groups[kind].items() if value in values)
+            page.locator(f"#{kind}-family").select_option(group)
+            page.locator(f"#{kind}").select_option(value)
+            page.locator("#brief-next").click()
+        if page.locator("#q-S1_B02").is_visible():
+            page.locator("#q-S1_B02").select_option(destination)
+        page.locator("#action").select_option(action)
+        page.locator("#brief-next").click()
+        page.locator("#journey-mode").select_option(mode)
+        if description is not None:
+            page.locator("#brief").fill(description)
+        if submit:
+            page.locator("#brief-submit").click()
+
     def start_plan(self, page):
         page.goto(self.origin)
-        page.locator("#brief-form button[type=submit]").click()
+        self.complete_brief(page)
         self.settle_plan(page)
 
     def open_creatives(self, page):
@@ -149,21 +231,31 @@ class StudioCheck(unittest.TestCase):
     def test_unknown_context_policy_and_conditional_questions(self):
         page = self.browser.new_page()
         page.goto(self.origin)
-        page.locator("#communication").select_option("fundraising")
+        self.complete_brief(
+            page,
+            communication="fundraising",
+            business="nonprofit_fundraising",
+            sector="nonprofit_social_cause",
+            action="donate",
+            submit=False,
+        )
         self.assertTrue(
             page.get_by_label("İzin veya muafiyet belgesi mevcut mu?").is_visible()
         )
-        page.locator("#brief-form button[type=submit]").click()
+        page.locator("#q-S1_F01").select_option("association")
+        page.locator("#brief-submit").click()
         self.settle_plan(page)
         self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.allocated"), 0)
         self.assertIn("incelemesi", page.locator("#recommended").inner_text())
         page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
         self.assertTrue(page.locator("#step-1").is_visible())
         self.assertEqual(page.locator(".concept-card").count(), 0)
-        page.locator('[data-step="0"]').nth(0).click()
-        page.locator("#communication").select_option("product_service_intro")
+        page.locator('#step-nav [data-step="0"]').click()
+        self.complete_brief(page)
         self.assertEqual(page.locator("#q-S1_F01").count(), 0)
-        page.locator("#brief-form button[type=submit]").click()
+        self.assertNotIn(
+            "S1_F01", page.evaluate("YaparoStudio.getSnapshot().brief.branch")
+        )
         page.locator("#region").fill("Ankara")
         page.locator(".economics > summary").click()
         page.locator("#fixture").select_option("unknown")
@@ -174,10 +266,10 @@ class StudioCheck(unittest.TestCase):
     def test_mobile_literal_text_and_boundaries(self):
         page = self.browser.new_page(viewport={"width": 390, "height": 844})
         page.goto(self.origin)
-        page.locator("#brief").fill(
-            '<img src="https://example.invalid/x" onerror="alert(1)"> sentetik tasarım'
+        self.complete_brief(
+            page,
+            description='<img src="https://example.invalid/x" onerror="alert(1)"> sentetik tasarım',
         )
-        page.locator("#brief-form button[type=submit]").click()
         self.settle_plan(page)
         self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
         page.screenshot(path=str(self.evidence / "plan-mobile.png"), full_page=True)
@@ -202,8 +294,9 @@ class StudioCheck(unittest.TestCase):
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
         page.goto(self.origin)
+        page.locator(".brief-examples > summary").click()
         page.get_by_role("button", name="☕ Kafe açılışı", exact=True).click()
-        page.locator("#brief-form button[type=submit]").click()
+        self.complete_brief(page, sector="food_hospitality")
         self.settle_plan(page)
         self.assertEqual(page.locator(".concept-card").count(), 0)
         initial = page.evaluate("YaparoStudio.getSnapshot()")
@@ -313,8 +406,7 @@ class StudioCheck(unittest.TestCase):
     def test_organic_only_bypasses_media_and_mixed_requirements(self):
         page = self.browser.new_page()
         page.goto(self.origin)
-        page.locator("#journey-mode").select_option("organic")
-        page.locator("#brief-form button[type=submit]").click()
+        self.complete_brief(page, mode="organic")
         self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan"))
         self.assertTrue(page.locator("#budget").is_disabled())
         self.assertFalse(page.locator("#budget").is_visible())
@@ -328,8 +420,7 @@ class StudioCheck(unittest.TestCase):
             ["organic"],
         )
         page.goto(self.origin)
-        page.locator("#journey-mode").select_option("both")
-        page.locator("#brief-form button[type=submit]").click()
+        self.complete_brief(page, mode="both")
         self.settle_plan(page)
         self.open_creatives(page)
         requirements = page.evaluate(
@@ -396,8 +487,7 @@ class StudioCheck(unittest.TestCase):
     def test_organic_video_pending_and_stale_assistant(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
         page.goto(self.origin)
-        page.locator("#journey-mode").select_option("organic")
-        page.locator("#brief-form button[type=submit]").click()
+        self.complete_brief(page, mode="organic")
         page.locator('[name="organic-platform"][value="instagram"]').uncheck()
         page.locator('[name="organic-platform"][value="tiktok"]').check()
         page.locator("#helper-toggle").click()
@@ -433,10 +523,12 @@ class StudioCheck(unittest.TestCase):
         self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().brief"))
         self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan"))
         self.assertTrue(page.locator('#step-nav [data-step="1"]').is_disabled())
-        page.locator("#brief-form button[type=submit]").click()
+        self.complete_brief(page)
         page.locator('#step-nav [data-step="0"]').click()
-        page.locator("#brief").fill(
-            "Sentetik yeni istek: önce bu bilgileri kontrol etmeliyiz."
+        self.complete_brief(
+            page,
+            description="Sentetik yeni istek: önce bu bilgileri kontrol etmeliyiz.",
+            submit=False,
         )
         page.locator("#chat-input").fill("Bütçe 5000")
         page.get_by_role("button", name="Mesajı gönder").click()
@@ -445,6 +537,106 @@ class StudioCheck(unittest.TestCase):
         ).click()
         self.assertTrue(page.locator('#step-nav [data-step="1"]').is_disabled())
         self.assertTrue(page.evaluate("YaparoStudio.getSnapshot().stale"))
+        page.close()
+
+    def test_brief_cascade_visible_load_and_parent_changes(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
+        page.goto(self.origin)
+        self.assertLessEqual(page.locator("#brief-form select:visible").count(), 2)
+        self.assertFalse(page.locator("#brief").is_visible())
+        self.assertFalse(page.locator("#brief-submit").is_visible())
+        page.locator("#communication-family").select_option("people")
+        self.assertEqual(
+            page.locator("#communication option").evaluate_all(
+                "ns=>ns.map(n=>n.value).filter(Boolean)"
+            ),
+            ["recruitment", "fundraising"],
+        )
+        page.locator("#communication").select_option("fundraising")
+        page.locator("#communication-family").select_option("offer")
+        self.assertEqual(page.locator("#communication").input_value(), "")
+        self.assertFalse(
+            page.locator("#communication option[value=fundraising]").count()
+        )
+        page.screenshot(
+            path=str(self.evidence / "brief-start-desktop.png"), full_page=True
+        )
+        page.locator("#communication").select_option("product_service_intro")
+        page.locator("#brief-next").click()
+        page.locator("#brief-back").focus()
+        page.locator("#brief-back").press("Enter")
+        self.assertTrue(page.locator("#communication-family").is_visible())
+        self.assertFalse(page.locator("#business-family").is_visible())
+        self.complete_brief(page, submit=False)
+        page.locator("#brief-back").click()
+        actions = page.locator("#action option").evaluate_all(
+            "ns=>ns.map(n=>n.value).filter(Boolean)"
+        )
+        self.assertIn("visit_store", actions)
+        self.assertNotIn("donate", actions)
+        self.assertNotIn("apply_job", actions)
+        self.assertNotIn("download_app", actions)
+        self.assertLess(len(actions), 16)
+        page.locator("#q-S1_B02").select_option("own_website")
+        self.assertEqual(page.locator("#action").input_value(), "")
+        self.assertIn(
+            "buy_online",
+            page.locator("#action option").evaluate_all("ns=>ns.map(n=>n.value)"),
+        )
+        page.locator("#action").select_option("buy_online")
+        page.locator("#brief-next").click()
+        page.locator("#brief-submit").click()
+        brief = page.evaluate("YaparoStudio.getSnapshot().brief")
+        self.assertEqual(brief["business"], "local_retail")
+        self.assertEqual(brief["action"], "buy_online")
+        self.assertEqual(brief["branch"]["S1_B02"], "own_website")
+        page.close()
+
+    def test_brief_hidden_notes_pruned_and_risk_preserved(self):
+        page = self.browser.new_page(viewport={"width": 390, "height": 844})
+        page.goto(self.origin)
+        self.complete_brief(
+            page,
+            communication="fundraising",
+            business="nonprofit_fundraising",
+            sector="nonprofit_social_cause",
+            action="donate",
+            submit=False,
+        )
+        page.locator("#q-S1_F01").select_option("association")
+        page.locator("#brief-form .optional-details").filter(
+            has=page.locator("#risk")
+        ).locator("summary").click()
+        page.locator("#risk").select_option("health")
+        self.complete_brief(page, submit=False)
+        self.assertEqual(page.locator("#q-S1_F01").count(), 0)
+        self.assertEqual(page.locator("#risk").input_value(), "health")
+        page.locator("#brief-back").click()
+        page.locator("#brief-back").click()
+        page.locator("#sector-family").select_option("tech")
+        sectors = page.locator("#sector option").evaluate_all(
+            "ns=>ns.map(n=>n.value).filter(Boolean)"
+        )
+        self.assertEqual(set(sectors), {"technology_saas", "industrial_b2b"})
+        self.assertEqual(page.locator("#sector").input_value(), "")
+        page.locator("#sector").select_option("technology_saas")
+        page.locator("#brief-back").click()
+        page.locator("#business-family").select_option("digital")
+        self.assertEqual(page.locator("#business").input_value(), "")
+        self.assertNotIn(
+            "local_retail",
+            page.locator("#business option").evaluate_all("ns=>ns.map(n=>n.value)"),
+        )
+        self.assertEqual(page.locator("#action").input_value(), "")
+        self.complete_brief(page)
+        brief = page.evaluate("YaparoStudio.getSnapshot().brief")
+        self.assertNotIn("S1_F01", brief["branch"])
+        self.assertEqual(brief["risk"], "health")
+        self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
+        page.locator('#step-nav [data-step="0"]').click()
+        page.locator(".brief-examples > summary").click()
+        page.get_by_role("button", name="☕ Kafe açılışı", exact=True).click()
+        self.assertEqual(page.locator("#risk").input_value(), "health")
         page.close()
 
 

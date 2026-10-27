@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 18:12 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-27 18:30 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -18,11 +18,43 @@ Download/export remains undecided/deferred. Preserve private data/ledger/TEST st
 C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
 Branch codex/unified-journey-prototype; PR369 OPEN for owner UX review.
-Source head9d2d4bf CI40503047926 SUCCESS verified. New plan-first changes require
-their own exact-head CI after push. Main base abc2093 / PR368.
+Plan-first baseline6bf2c85 CI40528740554 SUCCESS verified. Current brief UX
+changes require their own exact-head CI after push. Main base abc2093 / PR368.
 No production deployment or application database migration this turn.
 
-## Current milestone: plan before production
+## Current milestone: progressive, category-narrowing brief
+
+Owner reported first stage still overwhelming, with unrelated late options.
+Read report section4.1/4.4 and recovered rule structure. Source visibility rules
+are not full option compatibility; the new owned policy is yaparo-brief-flow-v1.
+See docs/product/progressive-brief.md. Source DOCX/XLSX/package/data unchanged.
+
+8014 first stage now has5short panels, one visible at a time: purpose family/job,
+business family/model, sector family/sector, applicable destination/action, then
+free text/audience/usage + relevant optional notes. Initial taxonomy blank;
+only one selector visible initially. Child lists reveal only after parent choice.
+14communication jobs/11business models/18sectors/16actions stay reachable. CTA
+shortlists have at most5items. Explicit S1_B02 destination lets a physical shop
+sell online; business and sector remain independent classifications.
+
+Changed parents clear incompatible selections, without silently choosing a child.
+Recursive source showWhen pruning removes hidden branch answers from memory and
+payload; risks persist even when a starter profile/helper replaces the example.
+Summary chips/Back/progress permit correction. Enter retains native button
+activation. Prepared scenario buttons are in a collapsed optional drawer.
+No account/API/model/paid service/DB/deploy/publish action added. 8002/8013 and
+protected TEST/ledger state preserved. Full79typed questions/94rules and conflict/
+unknown-answer evidence are not claimed complete.
+
+11browser journeys passed26.6s, covering prior plan/content/helper/source/mobile
+and new cascade/payload/risk paths. After review fixes,2focused cascade/risk/
+keyboard checks passed3.4s. Brief pure Node checks verify canonical coverage,
+context/destination override and recursive pruning. Existing production/engine/
+simulation Node checks, Ruff/format/syntax passed. Exact new CI pending after push.
+Evidence %TEMP%/yaparo-decision-vbwzkvwm (11journeys) and1t6czzkg (focusedchecks).
+brief-start-live-iab.png in first evidence directory is actual new initial IAB UI.
+
+## Previous milestone: plan before production
 
 Owner supplied request replaces content-first flow; see ADR0072. The local8014
 journey now collects paid/organic/both intent, plans channels/material needs first,
@@ -129,7 +161,7 @@ ownership/replay/financial contracts remain authoritative for real integration.
 
 ## Next action
 
-Review the plan-first local journey, then qualify versioned placement specs,
-material reuse/rights and production cost/capability contracts before enabling
-charged generation. Account-authorized read-only ad forecasts remain a separate
-integration follow-up; preserve protected TEST state and all launch gates.
+Owner review of the progressive first stage: wording and uncertain cases. Then
+extend typed conditional fields/evidence-backed conflict handling within the
+accepted plan-first flow. Platform specs/material/cost qualification and live ad
+forecasts remain separate gated follow-ups; preserve protected TEST and launch gates.

@@ -14,6 +14,15 @@ an explicit Apply button. Text/CTA/body are visible in the creative and editor.
 This is authored local response logic, not an LLM. Generation provenance records
 `authored_demo_response`, its version, modelnull and externalQueryfalse.
 
+The first step is now five short panels rather than one large form. Purpose,
+business and sector each narrow family→child; final actions use purpose and an
+explicit sales/response destination. `brief-flow.js` is an owned versioned UX
+policy; original source question visibility is not option compatibility.14/11/18
+canonical categories and16actions remain reachable. Changing parent choices clears
+incompatible children and recursively removes hidden branch notes from payload;
+separate risk declarations persist. Initial taxonomy is blank. See
+[brief contract](../../docs/product/progressive-brief.md).
+
 Four-step single-workspace flow: structured communication job + business model +
 desired action + free text + audience/sector → channel/material plan → shared
 creative concepts and placement adaptations → review. Paid, organic-only and
