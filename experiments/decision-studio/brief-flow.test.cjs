@@ -14,6 +14,40 @@ for(const [kind,q] of Object.entries(ids)){
 assert.deepEqual(F.choices('communication','missing',D),[]);
 assert.deepEqual(F.families('unknown'),[]);
 assert.equal(F.familyOf('business','unknown'),null);
+assert.equal(F.version,'yaparo-brief-flow-v2');
+const businesses=job=>F.businesses(job,D).map(o=>o.value);
+assert.equal(businesses('product_service_intro').length,9);
+assert.ok(!businesses('product_service_intro').includes('nonprofit_fundraising'));
+assert.ok(!businesses('sale_promotion').includes('employer_recruitment'));
+assert.equal(businesses('recruitment').length,6);
+assert.ok(businesses('recruitment').includes('employer_recruitment'));
+assert.equal(businesses('fundraising').length,5);
+assert.ok(businesses('fundraising').includes('nonprofit_fundraising'));
+assert.equal(businesses('event').length,11,'an event does not force event-only business model');
+assert.ok(businesses('event').includes('local_retail'));
+assert.ok(businesses('event').includes('b2b_leadgen'));
+assert.deepEqual(F.businesses('unknown',D),[]);
+assert.deepEqual(F.businesses('custom:business',D),[]);
+assert.deepEqual(F.sectors('unknown','local_retail',D),[]);
+assert.deepEqual(F.sectors('product_service_intro','custom:business',D),[]);
+const retailSectors=F.sectors('product_service_intro','local_retail',D).map(o=>o.value);
+assert.equal(retailSectors.length,6);
+assert.ok(!retailSectors.includes('public_political')&&!retailSectors.includes('recruitment'));
+assert.ok(retailSectors.includes('other'));
+const serviceSectors=F.sectors('product_service_intro','local_service',D).map(o=>o.value);
+assert.ok(serviceSectors.includes('local_home_services')&&!serviceSectors.includes('industrial_b2b'));
+const availableBusinesses=new Set(),availableSectors=new Set();
+for(const job of D.options.filter(o=>o.questionId==='S1_Q01')){
+  for(const business of F.businesses(job.value,D)){
+    availableBusinesses.add(business.value);
+    const offered=F.sectors(job.value,business.value,D);
+    assert.ok(offered.length>0&&offered.length<18,`${business.value}: sector shortlist is narrowed`);
+    assert.equal(new Set(offered.map(o=>o.value)).size,offered.length);
+    offered.forEach(o=>availableSectors.add(o.value));
+  }
+}
+assert.deepEqual([...availableBusinesses].sort(),D.options.filter(o=>o.questionId==='S3_Q02').map(o=>o.value).sort(),'all business values still have a path');
+assert.deepEqual([...availableSectors].sort(),D.options.filter(o=>o.questionId==='S3_Q03').map(o=>o.value).sort(),'all sector values still have a valid path');
 const values=(job,business,destination)=>F.actions(job,business,D,destination).map(o=>o.value);
 const retail=values('product_service_intro','local_retail');
 assert.ok(retail.includes('visit_store'));

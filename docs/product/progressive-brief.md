@@ -1,64 +1,60 @@
-# Progressive brief — local prototype
+# Single-screen contextual brief — local prototype
 
-Owner correction, 27 October 2026: the first screen still presented too many
-independent choices. Later choices must narrow visibly; category-incompatible
-options should not survive to the final action list.
+Owner correction, 27 October 2026: restore the original one-screen brief rather
+than a five-panel sub-journey. Keep contextual dropdown narrowing, and allow a
+manual Other answer wherever the predefined options do not fit.
 
-## Source distinction
+## Implemented
 
-The supplied Turkey decision report section4.1 asks for a broad communication
-job before conditional questions. Section4.4 calls for progressive disclosure,
-only the relevant branch, retained context, unknown answers and explicit conflict
-resolution. Recovered branch_rules contains question/workflow/channel targets;
-it does not define a complete communication-to-action option filter. The new
-option policy is owned, versioned `yaparo-brief-flow-v1`, not falsely attributed
-to the report or treated as a verified platform/legal rule. The external DOCX,
-workbook, package and normalized source observations are unchanged.
+One form contains communication job, business model, sector, relevant response
+destination, desired action, free text/audience/usage and optional branch notes.
+No family-selection screens, progress wizard, Back/Next or hidden question panels.
+Prepared examples are directly available again. Initial taxonomy remains blank.
 
-## Implemented UI
+Owned policy `yaparo-brief-flow-v2` narrows business choices by communication job,
+sector choices by business model and actions by purpose/explicit destination.
+These are versioned UX shortlists, not eligibility, law or current platform specs.
+All14canonical communication jobs/11business models/18sectors/16actions remain
+reachable on appropriate paths. Business and sector are separate dimensions;
+a shop's explicit own-website destination supports an online-purchase action.
+Unknown parent values are not given a fabricated compatible category. When the
+owner deliberately chooses Other, independent known business/sector options may
+still be offered for explicit selection; this is not inferred classification.
 
-Five short panels within the existing first journey step:
-1. Purpose family → communication job (5 families, at most4 child choices).
-2. Business family → business model (5 families, at most3 child choices).
-3. Sector family → sector (6 families, at most4 child choices).
-4. Relevant destination when applicable → desired action (at most5 actions).
-5. Free text, audience and usage, with only relevant optional source questions.
+## Manual Other
 
-Only the current panel is shown. A child is hidden until its parent family is
-chosen. Initial taxonomy is blank, never silently set to a retail business.
-Summary chips allow correction; Back and progress labels retain orientation.
-Demo starter profiles are inside a collapsed optional example drawer.
+Communication, business, sector, action and response destination have a manual
+Other path. A short text field appears only for that choice. Trimmed nonempty
+text is required, limited to200characters, treated as literal text and recorded
+in `brief.custom` under its field key. Existing conditional Other choices
+(promotion, announcement and event type) also expose an explanation, stored by
+source question ID and pruned when their branch disappears. Sector uses canonical `other`; other
+primary selectors use `__other__`. No custom string becomes a source enum or
+verified platform category. Returning to a normal choice removes its custom
+field/value from the current brief; hidden branch notes are also pruned.
 
-The canonical14communication jobs,11business models,18sectors and16actions remain
-reachable through explicit paths. Grouping does not claim an industry uniquely
-implies a business model. A company may organize an event, and a physical shop
-may sell online. Explicit source S1_B02 sales/response destination overrides a
-business-model shortlist for commercial jobs. No donation/job/application CTA is
-shown in a normal shop-to-store promotion path. Changing purpose, business or
-destination clears incompatible choices; no new child is silently selected.
+Custom descriptions remain unresolved. Organic-only work may create an explicitly
+authored draft; paid allocation uses missing-forecast mode and stays zero until
+classification is qualified. No automatic mapping, model call, spend, account
+access or publishing is created by typing Other. It is not silently called an
+approved category. The current prototype does not implement custom classification.
 
-## State and boundaries
+Risk declarations survive parent changes and starter/helper profile replacement.
+Changing a dropdown does not remove a declared risk or qualify publication.
+Existing source freshness, downstream invalidation and plan-first journey stay.
+No database change, deployment, upload or paid production.
 
-Recursive question-visibility pruning removes hidden branch answers from memory
-and the submitted brief. Latest primary answers override saved values; unknown
-question IDs are not accepted. A changed branch cannot later resurrect old permit
-or offer notes. Separate risk declarations persist; selecting a nicer category
-cannot clear an existing risk and qualify publication. All financial/policy/account
-and launch gates remain unchanged. Source complex-field controls remain bounded
-prototype notes, not document uploads, typed legal evidence or verified consent.
+## Source distinction and verification
 
-Each saved local brief includes the option policy version. Existing plan-first
-flow, organic/paid distinction and downstream stale/adaptation guards remain.
-No LLM request, API cost, DB change, account access, publishing or deployment.
+The supplied report section4.1/4.4 supports contextual questions and retaining
+intent. Recovered visibility rules do not define a complete option compatibility
+matrix. The new narrowing policy is owned, not falsely copied from those rules.
+External DOCX/XLSX/package and normalized research observations remain unchanged.
+Full79typed questions/94rules, evidence and conflict handling are still pending.
 
-## Verification
-
-Pure checks cover full canonical coverage, context shortlists, explicit destination
-override and recursive hidden-answer cleanup. Browser journeys cover initial
-visible load, parent changes, current-only payload, risk preservation, mobile
-width and all existing plan/content/source/helper routes. Test results are
-recorded in continuity STATE after execution; no source-reported test is assumed.
-
-Next: owner review of question wording, then extend typed conditional field and
-unknown-answer handling with evidence-backed conflict validation. This small UX
-slice does not claim all79source questions/94rules are fully implemented.
+Pure tests cover canonical reachability, current-context shortlists, explicit
+destination override and recursive pruning. Browser checks cover one-screen
+layout, narrowing, Other required/blank/length/literal handling, custom payload,
+return to canonical choices, conditional Other/pruning, example switching and
+history restoration, zero paid allocation and all existing journey/source/
+helper/mobile boundaries. Results are recorded in continuity after execution.

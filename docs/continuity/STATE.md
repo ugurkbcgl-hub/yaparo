@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 18:30 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-27 18:45 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -18,41 +18,41 @@ Download/export remains undecided/deferred. Preserve private data/ledger/TEST st
 C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
 Branch codex/unified-journey-prototype; PR369 OPEN for owner UX review.
-Plan-first baseline6bf2c85 CI40528740554 SUCCESS verified. Current brief UX
-changes require their own exact-head CI after push. Main base abc2093 / PR368.
+Baseline ded3256 CI40531732073 and40531732260 SUCCESS verified. The single-screen
+correction requires its own exact-head CI after push. Main base abc2093 / PR368.
 No production deployment or application database migration this turn.
 
-## Current milestone: progressive, category-narrowing brief
+## Current milestone: one-screen contextual brief + manual Other
 
-Owner reported first stage still overwhelming, with unrelated late options.
-Read report section4.1/4.4 and recovered rule structure. Source visibility rules
-are not full option compatibility; the new owned policy is yaparo-brief-flow-v1.
-See docs/product/progressive-brief.md. Source DOCX/XLSX/package/data unchanged.
+Owner rejected five-panel first-step wizard. Original single-screen layout is
+restored; no family UI, substeps or Back/Next. Visible prepared examples return.
+Owned policy yaparo-brief-flow-v2 narrows business choices by communication,
+sectors by business, actions by purpose/explicit destination. Canonical14/11/18/16
+coverage retained. Changed incompatible children and hidden notes are cleared.
+See docs/product/progressive-brief.md. External report/workbook/package unchanged.
 
-8014 first stage now has5short panels, one visible at a time: purpose family/job,
-business family/model, sector family/sector, applicable destination/action, then
-free text/audience/usage + relevant optional notes. Initial taxonomy blank;
-only one selector visible initially. Child lists reveal only after parent choice.
-14communication jobs/11business models/18sectors/16actions stay reachable. CTA
-shortlists have at most5items. Explicit S1_B02 destination lets a physical shop
-sell online; business and sector remain independent classifications.
+Manual Other supported for communication/business/sector/action/destination and
+existing source promotion/announcement/event type Other choices. Active fields
+require trimmed1–200characters, stored literally in brief.custom by key/sourceID;
+returning to a canonical choice or hiding the source branch removes its custom
+note. No silent category mapping. Custom unresolved entries force missing-forecast
+mode/zero paid allocation; organic authored drafts remain possible. Custom text
+is visible in final review, not only stored. Risks survive profile/parent changes.
 
-Changed parents clear incompatible selections, without silently choosing a child.
-Recursive source showWhen pruning removes hidden branch answers from memory and
-payload; risks persist even when a starter profile/helper replaces the example.
-Summary chips/Back/progress permit correction. Enter retains native button
-activation. Prepared scenario buttons are in a collapsed optional drawer.
-No account/API/model/paid service/DB/deploy/publish action added. 8002/8013 and
-protected TEST/ledger state preserved. Full79typed questions/94rules and conflict/
-unknown-answer evidence are not claimed complete.
+Reviewed/fixed profile/history restoration: stored destination wins over old DOM,
+and full known choices are primed before restoring values absent from current
+shortlist. Custom fields remain active across history restoration while brief
+step is hidden. Fixed restored malformed fundraising risk option HTML. No source
+policy/ad-account/privacy/spend gate opened. 8002/8013/private TEST/ledger intact.
 
-11browser journeys passed26.6s, covering prior plan/content/helper/source/mobile
-and new cascade/payload/risk paths. After review fixes,2focused cascade/risk/
-keyboard checks passed3.4s. Brief pure Node checks verify canonical coverage,
-context/destination override and recursive pruning. Existing production/engine/
-simulation Node checks, Ruff/format/syntax passed. Exact new CI pending after push.
-Evidence %TEMP%/yaparo-decision-vbwzkvwm (11journeys) and1t6czzkg (focusedchecks).
-brief-start-live-iab.png in first evidence directory is actual new initial IAB UI.
+13browser journeys passed25.7s: all previous plan/content/source/helper/mobile,
+single-screen filters, whitespace/required/bounds/literal/custom removal, zero
+paid spend, organic Other/review/history, source conditional Other/prune and
+profile switching. Brief pure checks plus original production/engine/simulation,
+Ruff/format/syntax/diff checks passed. New exact-head CI pending after push.
+Evidence %TEMP%/yaparo-decision-nwxvncpa. Actual IAB manual-Other proof is
+%TEMP%/yaparo-decision-fmmyrrhu/single-screen-other-live-iab.png. No hosted AI,
+account/API credential, paid service, upload, app DB/deploy or publishing action.
 
 ## Previous milestone: plan before production
 
@@ -161,7 +161,7 @@ ownership/replay/financial contracts remain authoritative for real integration.
 
 ## Next action
 
-Owner review of the progressive first stage: wording and uncertain cases. Then
-extend typed conditional fields/evidence-backed conflict handling within the
-accepted plan-first flow. Platform specs/material/cost qualification and live ad
-forecasts remain separate gated follow-ups; preserve protected TEST and launch gates.
+Owner review of the restored single-screen brief and manual Other experience.
+Then qualify explicit custom-classification/conflict handling without inventing
+canonical categories or spend eligibility. Platform specs/material/cost and real
+forecasts remain separately gated follow-ups; preserve protected TEST/launch gates.

@@ -29,9 +29,10 @@ Account ad forecasts remain access_required; ad output is still nonpublishable
 authored simulation. See [source contract](docs/product/source-freshness-layer.md).
 Only public FX cache persists outside OneDrive; no app DB/account/key/spend access.
 
-The first brief now uses five short panels and versioned family→child option
-filters; explicit destination narrows the final CTA. All canonical choices remain
-reachable. Hidden branch answers are pruned; risk declarations persist. See
+The first brief is a single screen again, with contextual business/sector/action
+shortlists and manual Other descriptions; no nested wizard. Explicit destination
+narrows the final CTA. Unclassified custom entries never qualify paid allocation. All canonical choices remain
+reachable; conditional Other options also accept manual explanations. Hidden branch answers are pruned; risk declarations persist. See
 [progressive brief](docs/product/progressive-brief.md). This is an owned UX policy,
 not a claim that source visibility rules supplied all option compatibility.
 

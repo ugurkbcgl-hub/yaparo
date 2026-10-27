@@ -1,7 +1,7 @@
 /* Owned, versioned brief UX policy. Source question visibility is not option filtering. */
 (function(root){
   'use strict';
-  const version='yaparo-brief-flow-v1';
+  const version='yaparo-brief-flow-v2';
   const groups={
     communication:[
       {id:'offer',label:'Ürün, hizmet veya satış',values:['product_service_intro','launch','sale_promotion','lead_request']},
@@ -28,6 +28,22 @@
   };
   const questions={communication:'S1_Q01',business:'S3_Q02',sector:'S3_Q03'};
   const offerJobs=new Set(['product_service_intro','launch','sale_promotion','lead_request']);
+  const allBusinesses=groups.business.flatMap(group=>group.values);
+  const recruitmentBusinesses=['employer_recruitment','b2b_leadgen','local_service','media_creator','local_retail','saas_subscription'];
+  const fundraisingBusinesses=['nonprofit_fundraising','event','media_creator','b2b_leadgen','local_retail'];
+  const sectorChoices={
+    local_retail:['fashion_beauty_lifestyle','food_hospitality','automotive','retail_ecommerce','health_medical','other'],
+    local_service:['professional_services','local_home_services','health_medical','education_training','automotive','real_estate','travel_tourism','other'],
+    ecommerce_dtc:['fashion_beauty_lifestyle','retail_ecommerce','food_hospitality','automotive','technology_saas','health_medical','other'],
+    marketplace_seller:['fashion_beauty_lifestyle','retail_ecommerce','food_hospitality','automotive','technology_saas','health_medical','other'],
+    b2b_leadgen:['professional_services','industrial_b2b','technology_saas','finance_insurance','real_estate','other'],
+    saas_subscription:['technology_saas','finance_insurance','education_training','professional_services','other'],
+    mobile_app:['technology_saas','entertainment_events','education_training','finance_insurance','health_medical','other'],
+    event:['entertainment_events','education_training','food_hospitality','travel_tourism','other'],
+    nonprofit_fundraising:['nonprofit_social_cause','education_training','health_medical','public_political','other'],
+    employer_recruitment:['recruitment','professional_services','industrial_b2b','technology_saas','other'],
+    media_creator:['entertainment_events','education_training','travel_tourism','fashion_beauty_lifestyle','food_hospitality','public_political','other']
+  };
   const offerActions={
     local_retail:['visit_store','message_whatsapp','call','visit_website','remember'],
     local_service:['book_appointment','call','message_whatsapp','visit_website','remember'],
@@ -65,6 +81,18 @@
   function familyOf(kind,value){return groups[kind]?.find(group=>group.values.includes(value))?.id||null;}
   function options(data,question,values){return (data?.options||[]).filter(option=>option.questionId===question&&values.includes(option.value));}
   function choices(kind,family,data){const values=groups[kind]?.find(group=>group.id===family)?.values||[];return options(data,questions[kind],values);}
+  function businesses(communication,data){
+    if(!familyOf('communication',communication))return [];
+    const values=offerJobs.has(communication)?allBusinesses.filter(value=>!['nonprofit_fundraising','employer_recruitment'].includes(value)):
+      communication==='recruitment'?recruitmentBusinesses:communication==='fundraising'?fundraisingBusinesses:allBusinesses;
+    return options(data,'S3_Q02',values);
+  }
+  function sectors(communication,business,data){
+    // Communication and business model are separate dimensions: a shop may host an event.
+    // These are editable UX shortlists, not category eligibility or legal approval.
+    if(!familyOf('communication',communication)||!familyOf('business',business))return [];
+    return options(data,'S3_Q03',sectorChoices[business]||[]);
+  }
   function actions(communication,business,data,destination){
     if(!familyOf('communication',communication)||!familyOf('business',business))return [];
     let values;
@@ -102,7 +130,7 @@
     }
     return result;
   }
-  const api={version,families,choices,familyOf,actions,pruneAnswers};
+  const api={version,families,choices,familyOf,businesses,sectors,actions,pruneAnswers};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.YaparoBriefFlow=api;
 })(typeof window!=='undefined'?window:globalThis);

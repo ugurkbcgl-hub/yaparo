@@ -71,69 +71,13 @@ class StudioCheck(unittest.TestCase):
         description=None,
         submit=True,
     ):
-        """Exercise visible narrowing controls; never patch application state."""
-        for _ in range(4):
-            if page.locator("#brief-back").is_visible():
-                page.locator("#brief-back").click()
-        groups = {
-            "communication": {
-                "offer": [
-                    "product_service_intro",
-                    "launch",
-                    "sale_promotion",
-                    "lead_request",
-                ],
-                "news": ["announcement", "event", "celebration"],
-                "knowledge": ["education", "membership"],
-                "people": ["recruitment", "fundraising"],
-                "public": ["reputation", "public_issue", "unsure"],
-            },
-            "business": {
-                "shop": ["local_retail", "ecommerce_dtc", "marketplace_seller"],
-                "service": ["local_service", "b2b_leadgen"],
-                "digital": ["saas_subscription", "mobile_app", "media_creator"],
-                "participation": ["event", "nonprofit_fundraising"],
-                "team": ["employer_recruitment"],
-            },
-            "sector": {
-                "products": [
-                    "fashion_beauty_lifestyle",
-                    "retail_ecommerce",
-                    "automotive",
-                ],
-                "experience": [
-                    "food_hospitality",
-                    "travel_tourism",
-                    "entertainment_events",
-                ],
-                "services": [
-                    "professional_services",
-                    "local_home_services",
-                    "real_estate",
-                ],
-                "tech": ["technology_saas", "industrial_b2b"],
-                "expert": ["education_training", "health_medical", "finance_insurance"],
-                "community": [
-                    "nonprofit_social_cause",
-                    "recruitment",
-                    "public_political",
-                    "other",
-                ],
-            },
-        }
-        for kind, value in [
-            ("communication", communication),
-            ("business", business),
-            ("sector", sector),
-        ]:
-            group = next(k for k, values in groups[kind].items() if value in values)
-            page.locator(f"#{kind}-family").select_option(group)
-            page.locator(f"#{kind}").select_option(value)
-            page.locator("#brief-next").click()
+        """Use direct single-screen fields, never patch application state."""
+        page.locator("#communication").select_option(communication)
+        page.locator("#business").select_option(business)
+        page.locator("#sector").select_option(sector)
         if page.locator("#q-S1_B02").is_visible():
             page.locator("#q-S1_B02").select_option(destination)
         page.locator("#action").select_option(action)
-        page.locator("#brief-next").click()
         page.locator("#journey-mode").select_option(mode)
         if description is not None:
             page.locator("#brief").fill(description)
@@ -294,7 +238,11 @@ class StudioCheck(unittest.TestCase):
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
         page.goto(self.origin)
-        page.locator(".brief-examples > summary").click()
+        page.get_by_role("button", name="◈ Butik koleksiyonu", exact=True).click()
+        self.assertEqual(page.locator("#q-S1_B02").input_value(), "physical_store")
+        page.get_by_role("button", name="▤ B2B yazılım", exact=True).click()
+        self.assertEqual(page.locator("#q-S1_B02").input_value(), "lead_form")
+        self.assertEqual(page.locator("#action").input_value(), "fill_form")
         page.get_by_role("button", name="☕ Kafe açılışı", exact=True).click()
         self.complete_brief(page, sector="food_hospitality")
         self.settle_plan(page)
@@ -539,36 +487,44 @@ class StudioCheck(unittest.TestCase):
         self.assertTrue(page.evaluate("YaparoStudio.getSnapshot().stale"))
         page.close()
 
-    def test_brief_cascade_visible_load_and_parent_changes(self):
+    def test_single_screen_narrowing_and_parent_change_pruning(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
         page.goto(self.origin)
-        self.assertLessEqual(page.locator("#brief-form select:visible").count(), 2)
-        self.assertFalse(page.locator("#brief").is_visible())
-        self.assertFalse(page.locator("#brief-submit").is_visible())
-        page.locator("#communication-family").select_option("people")
         self.assertEqual(
-            page.locator("#communication option").evaluate_all(
-                "ns=>ns.map(n=>n.value).filter(Boolean)"
-            ),
-            ["recruitment", "fundraising"],
+            page.locator(
+                "#brief-next, #brief-back, #communication-family, #business-family, #sector-family"
+            ).count(),
+            0,
         )
-        page.locator("#communication").select_option("fundraising")
-        page.locator("#communication-family").select_option("offer")
-        self.assertEqual(page.locator("#communication").input_value(), "")
-        self.assertFalse(
-            page.locator("#communication option[value=fundraising]").count()
+        self.assertTrue(page.locator("#brief").is_visible())
+        self.assertTrue(page.locator("#communication").is_visible())
+        self.assertTrue(page.locator("#scenario-examples").is_visible())
+        self.complete_brief(
+            page,
+            communication="fundraising",
+            business="nonprofit_fundraising",
+            sector="nonprofit_social_cause",
+            action="donate",
+            submit=False,
         )
-        page.screenshot(
-            path=str(self.evidence / "brief-start-desktop.png"), full_page=True
+        businesses = page.locator("#business option").evaluate_all(
+            "ns=>ns.map(n=>n.value).filter(Boolean)"
         )
-        page.locator("#communication").select_option("product_service_intro")
-        page.locator("#brief-next").click()
-        page.locator("#brief-back").focus()
-        page.locator("#brief-back").press("Enter")
-        self.assertTrue(page.locator("#communication-family").is_visible())
-        self.assertFalse(page.locator("#business-family").is_visible())
+        sectors = page.locator("#sector option").evaluate_all(
+            "ns=>ns.map(n=>n.value).filter(Boolean)"
+        )
+        self.assertNotIn("mobile_app", businesses)
+        self.assertNotIn("fashion_beauty_lifestyle", sectors)
+        page.locator("#q-S1_F01").select_option("association")
+        risk_details = page.locator("#brief-form .optional-details").filter(
+            has=page.locator("#risk")
+        )
+        if not page.locator("#risk").is_visible():
+            risk_details.locator("summary").click()
+        page.locator("#risk").select_option("health")
         self.complete_brief(page, submit=False)
-        page.locator("#brief-back").click()
+        self.assertEqual(page.locator("#q-S1_F01").count(), 0)
+        self.assertEqual(page.locator("#risk").input_value(), "health")
         actions = page.locator("#action option").evaluate_all(
             "ns=>ns.map(n=>n.value).filter(Boolean)"
         )
@@ -584,59 +540,134 @@ class StudioCheck(unittest.TestCase):
             page.locator("#action option").evaluate_all("ns=>ns.map(n=>n.value)"),
         )
         page.locator("#action").select_option("buy_online")
-        page.locator("#brief-next").click()
+        page.screenshot(
+            path=str(self.evidence / "brief-single-screen-desktop.png"), full_page=True
+        )
         page.locator("#brief-submit").click()
         brief = page.evaluate("YaparoStudio.getSnapshot().brief")
         self.assertEqual(brief["business"], "local_retail")
         self.assertEqual(brief["action"], "buy_online")
         self.assertEqual(brief["branch"]["S1_B02"], "own_website")
+        self.assertNotIn("S1_F01", brief["branch"])
+        self.assertEqual(brief["risk"], "health")
         page.close()
 
-    def test_brief_hidden_notes_pruned_and_risk_preserved(self):
+    def test_manual_sector_other_validation_literal_and_return_to_canonical(self):
         page = self.browser.new_page(viewport={"width": 390, "height": 844})
+        page.goto(self.origin)
+        self.complete_brief(page, submit=False)
+        page.locator("#sector").select_option("other")
+        manual = page.locator("#sector-other")
+        self.assertTrue(manual.is_visible())
+        self.assertTrue(manual.get_attribute("required") is not None)
+        self.assertEqual(manual.get_attribute("maxlength"), "200")
+        manual.fill("   ")
+        page.locator("#brief-submit").click()
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().brief"))
+        literal = '<img src="https://example.invalid/manual" onerror="alert(1)"> sentetik özel alan'
+        manual.fill(literal)
+        page.locator("#brief-submit").click()
+        self.settle_plan(page)
+        brief = page.evaluate("YaparoStudio.getSnapshot().brief")
+        self.assertEqual(brief["sector"], "other")
+        self.assertEqual(brief["custom"]["sector"], literal)
+        self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.allocated"), 0)
+        self.assertEqual(page.locator('img[src*="example.invalid"]').count(), 0)
+        page.locator('#step-nav [data-step="0"]').click()
+        page.locator("#sector").select_option("fashion_beauty_lifestyle")
+        self.assertFalse(manual.is_visible())
+        self.assertFalse(manual.get_attribute("required") is not None)
+        page.locator("#brief-submit").click()
+        self.assertNotIn(
+            "sector", page.evaluate("YaparoStudio.getSnapshot().brief.custom")
+        )
+        self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
+        page.close()
+
+    def test_manual_other_fields_stay_explicit_and_organic_unqualified(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
+        page.goto(self.origin)
+        for select, manual in [
+            ("communication", "communication"),
+            ("business", "business"),
+            ("action", "action"),
+            ("q-S1_B02", "destination"),
+        ]:
+            self.complete_brief(page, submit=False)
+            page.locator(f"#{select}").select_option("__other__")
+            field = page.locator(f"#{manual}-other")
+            self.assertTrue(field.is_visible(), manual)
+            self.assertTrue(field.get_attribute("required") is not None, manual)
+            self.assertEqual(field.get_attribute("maxlength"), "200")
+            field.fill("Sentetik özel " + manual)
+        # A manually described action is retained in an organic-only draft;
+        # it does not become a qualified paid objective or trigger provider access.
+        self.complete_brief(page, mode="organic", submit=False)
+        page.locator("#action").select_option("__other__")
+        page.locator("#action-other").fill("Sentetik özel bir katılım isteği")
+        page.locator("#brief-submit").click()
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan"))
+        brief = page.evaluate("YaparoStudio.getSnapshot().brief")
+        self.assertEqual(brief["action"], "__other__")
+        self.assertEqual(
+            brief["custom"], {"action": "Sentetik özel bir katılım isteği"}
+        )
+        self.open_creatives(page)
+        self.adapt_and_review(page)
+        self.assertIn(
+            "Sentetik özel bir katılım isteği", page.locator("#review").inner_text()
+        )
+        page.locator('#step-nav [data-step="2"]').click()
+        page.locator("#regenerate").click()
+        page.locator("#previous-trio").click()
+        self.assertEqual(
+            page.locator("#action-other").input_value(),
+            "Sentetik özel bir katılım isteği",
+        )
+        self.assertTrue(page.locator("#action-other").is_enabled())
+        self.assertFalse(
+            page.evaluate("YaparoStudio.getSnapshot().production.publishable")
+        )
+        self.assertEqual(page.locator('img[src*="example.invalid"]').count(), 0)
+        page.close()
+
+    def test_conditional_other_description_is_saved_and_pruned(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
         page.goto(self.origin)
         self.complete_brief(
             page,
-            communication="fundraising",
-            business="nonprofit_fundraising",
-            sector="nonprofit_social_cause",
-            action="donate",
+            communication="announcement",
+            action="understand",
+            mode="organic",
             submit=False,
         )
-        page.locator("#q-S1_F01").select_option("association")
-        page.locator("#brief-form .optional-details").filter(
-            has=page.locator("#risk")
-        ).locator("summary").click()
-        page.locator("#risk").select_option("health")
-        self.complete_brief(page, submit=False)
-        self.assertEqual(page.locator("#q-S1_F01").count(), 0)
-        self.assertEqual(page.locator("#risk").input_value(), "health")
-        page.locator("#brief-back").click()
-        page.locator("#brief-back").click()
-        page.locator("#sector-family").select_option("tech")
-        sectors = page.locator("#sector option").evaluate_all(
-            "ns=>ns.map(n=>n.value).filter(Boolean)"
+        page.locator("#branch-fields > details > summary").click()
+        page.locator("#q-S1_A01").select_option("other")
+        manual = page.locator("#q-S1_A01-other")
+        self.assertTrue(manual.is_visible())
+        manual.fill("   ")
+        page.locator("#brief-submit").click()
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().brief"))
+        manual.fill("Sentetik yeni çalışma saatleri duyurusu")
+        page.locator("#brief-submit").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().brief.custom.S1_A01"),
+            "Sentetik yeni çalışma saatleri duyurusu",
         )
-        self.assertEqual(set(sectors), {"technology_saas", "industrial_b2b"})
-        self.assertEqual(page.locator("#sector").input_value(), "")
-        page.locator("#sector").select_option("technology_saas")
-        page.locator("#brief-back").click()
-        page.locator("#business-family").select_option("digital")
-        self.assertEqual(page.locator("#business").input_value(), "")
-        self.assertNotIn(
-            "local_retail",
-            page.locator("#business option").evaluate_all("ns=>ns.map(n=>n.value)"),
+        self.open_creatives(page)
+        self.adapt_and_review(page)
+        self.assertIn(
+            "Sentetik yeni çalışma saatleri duyurusu",
+            page.locator("#review").inner_text(),
         )
-        self.assertEqual(page.locator("#action").input_value(), "")
-        self.complete_brief(page)
-        brief = page.evaluate("YaparoStudio.getSnapshot().brief")
-        self.assertNotIn("S1_F01", brief["branch"])
-        self.assertEqual(brief["risk"], "health")
-        self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
         page.locator('#step-nav [data-step="0"]').click()
-        page.locator(".brief-examples > summary").click()
-        page.get_by_role("button", name="☕ Kafe açılışı", exact=True).click()
-        self.assertEqual(page.locator("#risk").input_value(), "health")
+        self.complete_brief(page)
+        self.assertNotIn(
+            "S1_A01", page.evaluate("YaparoStudio.getSnapshot().brief.custom")
+        )
+        self.assertNotIn(
+            "S1_A01", page.evaluate("YaparoStudio.getSnapshot().brief.branch")
+        )
         page.close()
 
 
