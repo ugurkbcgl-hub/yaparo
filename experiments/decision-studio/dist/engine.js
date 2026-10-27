@@ -19,7 +19,7 @@
       ['health_medical','finance_insurance','public_political','real_estate','recruitment','nonprofit_social_cause'].includes(input.sector) ||
       ['sale_promotion','public_issue','recruitment','reputation'].includes(input.communication);
   }
-  function evaluate(input, data, simulation=null) {
+  function evaluate(input, data, simulation=null, liveFx=null) {
     if (!finite(input.budget,0,1000000) || !Number.isInteger(input.days) || !finite(input.days,1,365) ||
         !finite(input.value,0,100000000) || !finite(input.margin,0,100) || !finite(input.cpa,0,10000000) ||
         !Number.isInteger(input.capacity) || !finite(input.capacity,0,1000000) ||
@@ -34,13 +34,17 @@
       input.region.trim().toLocaleLowerCase('tr-TR') === 'istanbul, kadıköy' && input.days === 7 &&
       input.measurement === 'basic_utm' && input.start === '2026-10-27';
     const contextBound = bound || interactive;
+    const usableFx = interactive && liveFx?.snapshot?.quality==='official_public' && ['tcmb','ecb'].includes(liveFx.snapshot.source) &&
+      liveFx.snapshot.payload?.base==='USD' && liveFx.snapshot.payload?.quote==='TRY' &&
+      Number.isFinite(liveFx.rate) && liveFx.rate>0 && Date.parse(liveFx.snapshot.expires_at)>Date.now();
+    const exchangeRate = usableFx ? liveFx.rate : 49.7627;
     const profitCPA = Math.min(input.cpa, input.value * input.margin / 100);
     // Capacity and profitability are a SHARED portfolio cap, not counted once per channel.
     const businessCap = Math.min(total, Math.floor(input.capacity * input.days * profitCPA * 100));
     const rows = data.channels.map(channel => {
       const f = (interactive ? simulation.forecasts : data.forecasts).find(x => x.channelId === channel.id);
       const owned = channel.tier === 'non_paid_recommendation';
-      const fx = channel.currency === 'USD' ? 49.7627 : 1;
+      const fx = channel.currency === 'USD' ? exchangeRate : 1;
       const platform = channel.id === 'spotify' ? null : Math.ceil(Math.max(channel.dailyMinimum * input.days,channel.lifetimeMinimum) * fx * 100);
       const reasons = [];
       if (owned) reasons.push('owned_action');
@@ -107,7 +111,8 @@
     }
     const allocated = rows.reduce((s,r)=>s+r.amount,0);
     return {version:data.version,createdAt:new Date().toISOString(),input:{...input},bound,interactive,blocked,total,businessCap,rows,
-      allocated,unallocated:total-allocated,externalQuery:false,model:null,quality:interactive?'authored_simulation_NOT_market_data':'demo_illustrative',simulationVersion:interactive?simulation.version:null,publishable:false};
+      allocated,unallocated:total-allocated,externalQuery:false,model:null,quality:interactive?'authored_simulation_NOT_market_data':'demo_illustrative',simulationVersion:interactive?simulation.version:null,
+      fx:{rate:exchangeRate,source:usableFx?liveFx.snapshot.source:'research_example',source_as_of:usableFx?liveFx.snapshot.source_as_of:'2026-10-26',snapshot_id:usableFx?liveFx.snapshot.id:null,expires_at:usableFx?liveFx.snapshot.expires_at:null,indicative_only:true},publishable:false};
   }
   function manual(plan,id,amount) {
     const row = plan.rows.find(r=>r.channel.id===id);

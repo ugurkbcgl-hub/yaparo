@@ -4,11 +4,13 @@ import importlib.util
 import tempfile
 import threading
 import unittest
+from datetime import datetime, timezone
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from playwright.sync_api import sync_playwright
+from sources import SourceService, digest
 
 ROOT = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("studio_server", ROOT / "serve.py")
@@ -17,6 +19,21 @@ spec.loader.exec_module(server_module)
 
 
 class StudioCheck(unittest.TestCase):
+    def setUp(self):
+        cache = Path(tempfile.mkdtemp(prefix="yaparo-source-test-"))
+        today = datetime.now(timezone.utc).date()
+        tcmb = f'<Tarih_Date Tarih="{today.strftime("%d.%m.%Y")}"><Currency CurrencyCode="USD"><Unit>1</Unit><ForexSelling>50.0000</ForexSelling></Currency></Tarih_Date>'.encode()
+        ecb = f'<Envelope xmlns="http://www.ecb.int/vocabulary/2002-08-01/eurofxref"><Cube><Cube time="{today.isoformat()}"><Cube currency="USD" rate="2"/><Cube currency="TRY" rate="100"/></Cube></Cube></Envelope>'.encode()
+        self.ecb_body = ecb
+        self.server.source_services = {
+            "tcmb": SourceService(
+                cache_path=cache / "tcmb.json", transport=lambda: tcmb, provider="tcmb"
+            ),
+            "ecb": SourceService(
+                cache_path=cache / "ecb.json", transport=lambda: ecb, provider="ecb"
+            ),
+        }
+
     @classmethod
     def setUpClass(cls):
         cls.server = server_module.make_server()
@@ -226,6 +243,59 @@ class StudioCheck(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(outbound, [])
         self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.model"), None)
+        page.close()
+
+    def test_source_refresh_provenance_and_live_fx_recompute(self):
+        page = self.browser.new_page(viewport={"width": 1440, "height": 1100})
+        self.start_plan(page)
+        page.get_by_text(
+            "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
+        ).wait_for()
+        page.locator("#recommend").click()
+        self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.fx.rate"), 50)
+        self.server.source_services["ecb"].transport = lambda: self.ecb_body.replace(
+            b'rate="100"', b'rate="104"'
+        )
+        self.server.source_services["ecb"].last_attempt = None
+        page.locator("#source-refresh").click()
+        page.get_by_text(
+            "Son kayıt: 1 USD = 52,0000 TRY · ECB çapraz referans", exact=True
+        ).wait_for()
+        self.assertIn("52,0000", page.locator("#source-panel").inner_text())
+        self.assertTrue(page.evaluate("YaparoStudio.getSnapshot().stale"))
+        page.locator("#recommend").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().plan.fx.source"), "ecb"
+        )
+        self.assertEqual(page.evaluate("YaparoStudio.getSnapshot().plan.fx.rate"), 52)
+        self.assertFalse(page.evaluate("YaparoStudio.getSnapshot().plan.publishable"))
+        page.locator("#budget").fill("6000")
+        page.locator("#recommend").click()
+        # Public currency quotes are safely reusable; account forecasts cannot be.
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().plan.fx.source"), "ecb"
+        )
+        expected_context = digest(page.evaluate("sourceContext()"))
+        page.locator(
+            f'#source-panel[data-context-hash="{expected_context}"]'
+        ).wait_for()
+        page.locator("#recommend").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().plan.fx.source"), "ecb"
+        )
+        page.locator("#fx-provider").select_option("tcmb")
+        page.get_by_text(
+            "TCMB gösterge satış USD/TRY · Güncel kayıt", exact=True
+        ).wait_for()
+        page.locator("#recommend").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().plan.fx.source"), "tcmb"
+        )
+        page.screenshot(
+            path=str(self.evidence / "source-layer-desktop.png"), full_page=True
+        )
+        page.get_by_role("button", name="Planın tamamını gör").click()
+        self.assertIn("TCMB gösterge satış", page.locator("#review").inner_text())
         page.close()
 
 

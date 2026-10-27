@@ -16,6 +16,13 @@ for(const r of big.rows.filter(r=>r.amount))assert(r.f.radiusSupported);
 const altered={...base,region:'Ankara'};assert.equal(E.evaluate(altered,D,S.forecast(base,D)).allocated,0);
 assert.equal(E.evaluate(base,D).allocated,0);
 assert.equal(JSON.stringify(D.forecasts),source);
+const fx={rate:60,snapshot:{source:'ecb',quality:'official_public',payload:{base:'USD',quote:'TRY'},source_as_of:'2026-10-26',id:'public-test',expires_at:new Date(Date.now()+3600000).toISOString()}};
+const withFx=E.evaluate(base,D,S.forecast(base,D),fx);
+assert.equal(withFx.fx.source,'ecb');assert.equal(withFx.fx.rate,60);
+assert.equal(withFx.rows.find(r=>r.channel.id==='tiktok').platform,20*base.days*60*100);
+assert.equal(withFx.publishable,false);
+const expiredFx={...fx,snapshot:{...fx.snapshot,expires_at:new Date(0).toISOString()}};
+assert.equal(E.evaluate(base,D,S.forecast(base,D),expiredFx).fx.source,'research_example');
 for(const [key,preset] of Object.entries(S.profiles)){
  const brief={description:preset.noun,sector:preset.sector,identity:'Sentetik Örnek',action:preset.action,audience:'Sentetik yetişkin kitle',communication:'product_service_intro',branch:{}};
  const cards=S.cards(brief,1);assert.equal(new Set(cards.map(c=>c.title)).size,3);assert.equal(new Set(cards.map(c=>c.angle)).size,3);

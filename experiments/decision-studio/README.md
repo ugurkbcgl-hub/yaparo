@@ -1,8 +1,8 @@
 # Yaparo research decision studio
 
 Local-only, synthetic UX successor to `../unified-journey`. Start `serve.py`
-(default loopback port8014). No install/build, database, credentials, external
-runtime asset, provider call, upload, persistence, payment or publishing. The
+(default loopback port8014). No install/build, app database, credentials, external
+runtime asset, AI/ad call, upload, campaign persistence, payment or publishing. Public FX source/cache is the exception below. The
 old8013 draft and existing8002 application are preserved.
 
 ## Implemented
@@ -41,17 +41,21 @@ are in `dist/data.js`:79questions/249options/94incompletebranchrows/20products/
 1460scores/8weights/16policyrows/20SC01fixtures/8scenarios/21sources.
 Source504formula values are original workbook cache, NOT recalculated. Comparison
 against the20 cached score results is a local adapter test, not an independent
-validation of the workbook or a reproduction of an absent reference engine.
+validation of the workbook. The initially absent reference engine was later
+recovered and tested separately; it is not wired into this prototype.
 
-ZIP/reference JS/schema/reason-code dictionary mentioned in pasted text were not
-supplied. All94branch rows lack source value/target question; do not execute them.
+The ZIP/reference JS/schema/reason-code dictionary were later supplied in the
+external yaparo_package. Its validator/hash checks passed; its channel-only
+fallback was flagged. Workbook94branch rows lack source value/target question;
+do not execute those incomplete rows. Package JSON rules have populated pairs,
+but are not imported yet. See the research-decision-studio note.
 All option Active cells blank: retain null. Use question `showWhen` for the
 implemented conditional fields. Some narrative source IDs conflict with the
 manifest; source manifest identities are retained, not independently verified.
 
 ## Financial and data boundaries
 
-`engine.js` is a new owned, deterministic prototype adapter, not the missing
+`engine.js` is a new owned, deterministic prototype adapter, not the recovered
 reference JS engine. SC01 reproduces Meta1800TRY + Google1200TRY at3000TRY/7days,
 and all20 weighted scores. First apply conservative policy/account/asset/objective/
 forecast gates, then threshold60, useful minima, portfolio roles and score² water
@@ -78,18 +82,30 @@ demo version; timestamp means local creation, not platform freshness. Fabricated
 CPC/CPM/CPA/reach values and assumption-ready accounts are explicitly labelled.
 Radius simulation admits only catalog rows mentioning radius; this is a demo
 classification, not qualification of actual platform enforcement. Missing mode
-still refuses allocation. Provider minimums use the OLD research example FX,
-not current pricing. All outputs remain nonpublishable. No runtime key loaded.
+still refuses allocation. Historical mode keeps OLD example FX; interactive
+mode may use a fresh selected public FX record. No current ad price is implied.
+All outputs remain nonpublishable. No runtime key loaded.
 
 Helper recognizes prepared intents (budget/days/radius/city, simplify,
 alternative/new trio, explain, short brief). A preview Apply button updates
 allowlisted fields; no arbitrary code or unrestricted agent action. Review of a
 changed brief requires new creative confirmation. Unsupported messages receive
 stage-specific guidance, not invented successful execution. Context/history
-remain in tab memory; costs0 and no external requests.
+remain in tab memory; AI/media costs0 and no advertising requests.
 Prepared Apply actions pin the brief, selected creative revisions, plan fields
 and allocation revision; changed conditions refuse an old action rather than
 overwriting newer choices. Unknown technical minimums also remain excluded.
+
+## Public sources and freshness
+
+See [source contract](../../docs/product/source-freshness-layer.md). Fixed TCMB/
+ECB public XML adapters, explicit issuer choice, separate source/fetch/expiry dates,
+1hour cache,4day max observation age,60second cooldown, context/quality guards.
+TCMB timed out here; actual ECB fetch/readback passed. Public FX alone persists
+outside Git/OneDrive. No advertiser source is connected; the UI says access_required.
+Same-origin status/refresh endpoints, CSP connect-src self, no arbitrary URL or
+credential. Verified TLS retained. Changed/expired quotes invalidate a plan;
+recompute pins source provenance while ad estimates remain labelled simulation.
 
 ## Not yet implemented
 
@@ -97,7 +113,7 @@ overwriting newer choices. Unknown technical minimums also remain excluded.
   verification, claim/consent checks and semantic free-text conflict resolution.
   Conditional complex fields currently collect notes only; never approve policy.
 - Seven other scenario forecasts: descriptions only, no fabricated observations.
-- Actual provider forecast adapters, cache TTL/context signatures, current FX,
+- Actual account forecast adapters and their provider-specific TTL/context policy,
   account minimums, geo/format qualification, calibration and operational API.
 - Actual creative/AI/chat generation, asset upload, backend ownership/persistence.
 - Previous8013 Turkey polygon/radius map is preserved there; this new design
@@ -110,6 +126,8 @@ overwriting newer choices. Unknown technical minimums also remain excluded.
 
 `node experiments/decision-studio/simulation.test.cjs`
 
+`python experiments/decision-studio/test_sources.py`
+
 `python experiments/decision-studio/check.py` (existing development Playwright)
 
 Engine: exact sample and20cachedscores, zero/missing/stale/policy cases,
@@ -118,5 +136,6 @@ stale refusal, retained budget, conditional/policy/no-forecast, mobile/helper,
 literal text, no outbound traffic/storage and HTTP Host/path boundaries.
 Interactive checks add context binding, radii, readiness/policy refusal, source
 immutability, distinct authored profiles, command bounds and apply-before-mutate
-browser checks, retained selection/history and final review. Four browser tests
-pass. Screenshots go to a private temporary evidence folder; not committed.
+browser checks, retained selection/history and final review. Five browser tests
+and8offline source tests pass. Browser sources are mocked; actual ECB evidence
+is separate. Screenshots go to a private temporary evidence folder; not committed.

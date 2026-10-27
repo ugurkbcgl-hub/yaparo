@@ -19,6 +19,12 @@ with Apply and fresh synthetic budget scenarios. Historical source reproduction
 and missing-data refusal remain separate modes. Authored observations are NOT
 platform forecasts; actual LLM/providers remain unconnected in this prototype.
 
+Source/freshness slice implemented: TCMB/ECB public FX, dates/expiry/cache,
+context/quality checks, source picker and refresh UI. ECB live readback verified;
+TCMB unavailable locally. Ad forecast connectors remain access_required. Next:
+qualify the first read-only account forecast adapter with access proof, preserving
+protected TEST state. See [source contract](docs/product/source-freshness-layer.md).
+
 ## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more

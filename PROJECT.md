@@ -21,6 +21,13 @@ nonpublishable; original source observations are unchanged.
 Owner UX review precedes Django/provider integration. Previous8013 and8002 remain
 intact; no stack, database, cost, publishing or export decision changed.
 
+Owner authorized the source/freshness slice.8014 now has public TCMB/ECB FX
+adapters, explicit issuer choice, cache/expiry/context checks, refresh/status UI
+and pinned FX provenance. Actual ECB fetch/readback passed; TCMB timed out.
+Account ad forecasts remain access_required; ad output is still nonpublishable
+authored simulation. See [source contract](docs/product/source-freshness-layer.md).
+Only public FX cache persists outside OneDrive; no app DB/account/key/spend access.
+
 ## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more

@@ -85,8 +85,10 @@ Official references checked:
   targeting/campaign/bid/period-specific estimates; API products/access approval
   must be checked independently. Do not promise every channel is publicly queryable.
 
-This is a design proposal, not a live integration or new advertiser-access
-authorization. Current8014 remains explicitly authored simulation.
+The next owner request authorized implementation of this layer. Public FX is now
+connected; account forecasts/advertiser access are not. See the implemented
+[source/freshness contract](source-freshness-layer.md). Current8014 advertising
+outputs remain explicitly authored simulation.
 
 ### Delivery sequence
 
