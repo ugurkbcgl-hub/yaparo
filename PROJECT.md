@@ -1,6 +1,21 @@
 # Yaparo project brief
 
-## Unified journey prototype — 27 October 2026
+## Research decision studio — 27 October 2026
+
+The owner requested rebuilding the prototype and design from the supplied Turkey
+decision report/workbook. The preferred local draft is now
+`experiments/decision-studio` on8014: structured progressive brief → three
+metadata-bearing fixed creative routes/editor → explainable product-level channel
+decision → review.20products,8expert dimensions, meaningful test minima and capped
+integer allocation leave excess budget unallocated. AI is not the allocation
+authority. Source observations are SC01 illustrative only, never live forecasts;
+different context/missing data refuses allocation. Source defects and incomplete
+form/policy integration are explicit. See
+[research scope and integration order](docs/product/research-decision-studio.md).
+Owner UX review precedes Django/provider integration. Previous8013 and8002 remain
+intact; no stack, database, cost, publishing or export decision changed.
+
+## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more
 integration: request → three distinct concepts → campaign plan → final review,

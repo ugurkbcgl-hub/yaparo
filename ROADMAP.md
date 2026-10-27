@@ -1,6 +1,19 @@
 # Yaparo roadmap
 
-## Unified journey prototype — 27 October 2026
+## Research decision studio — 27 October 2026
+
+Current owner priority: rebuild the draft from the supplied Turkey research and
+review a new visual system. Implemented isolated8014 draft:
+structured/conditional brief → three fixed creative routes + editing →20product
+decision cards → review; research score/minimum/cap allocation with an explicit
+unallocated balance. No real AI/forecast/account qualification. SC01 reproduction
+and context/policy/unknown-data refusal are checked locally. Next: owner review,
+then complete typed forms/policy evidence and map accepted contracts to Django.
+See [research plan](docs/product/research-decision-studio.md) and prototype README
+for missing ZIP, incomplete source branch rows and retained launch gates. Keep
+old8013/8002 and protected account/ledger/history intact; no new paid service.
+
+## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more
 integration: request → three distinct concepts → campaign plan → final review,

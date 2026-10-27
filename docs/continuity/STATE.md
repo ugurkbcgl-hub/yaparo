@@ -1,223 +1,86 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 09:43 Europe/Istanbul (+03:00). Recheck mutable facts.
+Verified: 2026-10-27 13:18 Europe/Istanbul (+03:00). Recheck Git/PR/CI before acting.
 
-## Objective and preferences
+## Objective and standing preferences
 
-Owned-core/open-source plan (ADR0040, Y01–Y32). Current local synthetic journey:
-brand/material/editor → reviewed real AI → saved creative/campaign planning.
-Usage monitoring is disabled; never query usage or restart monitors. Reviewed
-green PRs may merge under standing authorization; never push main directly.
-Existing approved OpenRouter evaluation pool USD16; owner handles balance checks.
-No new service/recharge, customer data, real account, media spend or publishing.
-Owner explicitly DEFERRED download/export decisions: no package work is next,
-old PNG/ZIP prototypes are not accepted product scope. Prioritize in-site use.
+Owned-core/open-source plan ADR0040/Y01–Y32. Owner now requested rebuilding the
+local UX from supplied Turkey decision research and a fresh visual design.
+Prioritize local synthetic review before Django/provider integration. No usage
+checks or monitors. Reviewed green PRs may merge; never push main directly.
+OpenRouter existing evaluation pool USD16; owner handles balance checks. No new
+paid service, real customer data, advertiser connection, spend or publishing.
+Download/export remains undecided and deferred. Private data/history/ledger and
+protected Google TEST candidate must not be reset or retried implicitly.
 
-## Repository and current milestone
+## Repo and verified Git status
 
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
-Private Python: %USERPROFILE%\.yaparo\.venv; secrets remain outside OneDrive.
-Base mainabc2093 / PR368 merged; required CI40412311595 passed1166 Django
-(4 skips)/45 browser checks; main CI40413608566 passed.
-Current branch codex/unified-journey-prototype; PR369 open; prior implementationa0c647e.
-Prior head576ba19 CI40459582124 FAILED existing package browser rejection test.
-Failure was not reproduced; focused test passed twice under isolated SQLite.
-Test-only witness now checks exact intercepted URL/body hash and named subcases;
-rejection/no-download assertions preserved. Root cause unproven. Latest-head CI
-still required; never claim green/merged before checking.
-Owner UX review before integration; do not claim merged.
-Owner explicitly requested a simpler unified-flow draft before integration.
-Isolated experiments/unified-journey serves allowlisted static prototype on8013:
-request → three distinct examples → same-flow edit → plan → summary, optional
-identity/style, desktop helper/mobile toggle. Fixed local cards/helper only;
-no actual AI, channel efficacy, upload, DB, persistence, export, spend or publishing.
-Open-tab memory only; refresh loses input as visibly disclosed. Existing8002 and
-private data/ledgers untouched. Draft contract: docs/product/unified-journey-draft.md.
-Review fixes preserve request context with previous trio and edited-title undo;
-image picker keyboard-accessible. Current Turkey/catalog update: radius1..800km
-geodesic circle intersected with pinned NaturalEarth Turkey multipolygon, offshore/
-foreign parts removed and outside-land centers rejected; approximate vector only,
-not street map or operational serving proof. MIT polygon-clipping0.15.7 vendored,
-lock/licenses/hashes retained; npm audit no reported vulnerabilities.
-14 researched digital-channel families; all manually selectable as hypothetical
-user scenarios. Unknown geo selections have amber book icon and persisted
-geoEligible=false/hypotheticalOnly/manualUnverifiedScenario qualifiers; not real
-account, geo, format or publishing proof. Initial/recommended selections only
-use documented geo candidates. Only checked channels occupy compact29px upper
-percentage rows; unchecked nodes move to bar-free grouped pool below. Stable
-controls, restored keyboard focus, exact10000bp/kuruş, direct percentages.
-Wide inline view preserves campaign fields and reopens invalid hidden fields.
-AI suggestion button is explicitly LOCAL SIMULATION, not real AI/platform query.
-Every press reads current DOM context, new revision/id/time, resets manual mix,
-explains fixed geo/goal/budget rule; metadata provider/model null externalQueryfalse.
-Manual edits mark suggestion stale. Actual fresh-query gateway/cost/late-response
-validation requirements remain pending and recorded in channel catalog.
-8 focused prototype checks passed (all-channel select/move, compactness, repeated
-fresh conditions/reset, unverified qualifiers, wide view/invalid form recovery,
-no outbound calls plus prior math/clipping/mobile/source checks). Source review
-no blocker. Private evidence %TEMP%\yaparo-journey-3neeoc_8 (compact-selection/mobile).
-Actual IAB confirmed Meta manually moves to upper pool (3selected/11remaining),
-recommendation#1 resets to documented2 and shows reasons, subsequent manual
-selection marks it stale. Wide view visible; selection-iab.png/suggestion-iab.png
-in the same evidence root. Existing8002/privateDB/AI ledger untouched,
-no provider key loaded, no API/GPS/spend/publish. Docs: unified-journey-draft.md,
-turkey-channel-catalog-draft.md. Latest CI pending; PR369 remains open.
+Feature branch: codex/unified-journey-prototype; PR369 remains the review record.
+Previous pushed head a6e4fb7 had required CI40462804545 SUCCESS. This does not
+verify the new research changes. New head/CI must be checked after push.
+Main base abc2093 / PR368. No production deployment or database change this turn.
 
-Current ADR0071: separate default-off LOCAL_BRAND_CAMPAIGN_SETTINGS_ENABLED adds
-owned versioned goal/audience/region/TRY budget/start/end planning. Protected
-CampaignPlanRevision carries campaign/brand/workspace/actor context, closed JSON,
-digest and request UUID. Campaign SELF→brand/workspace locks, expected-version
-stale refusal, exact historical replay without rollback/expiry. Minor-unit integer
-budget,1..365 inclusive days; fresh writes check Istanbul today after locks.
-No legacy operational objective/city/budget/flight changes, ad reselection, provider,
-scheduler or spending action. Bound list/detail/journey use current plan overview;
-corrupt plan refuses instead of showing legacy example data. No new downloads.
-Nine backend tests7 pass/2 PG skips, one browser journey passed: Turkish comma
-budget, save/reopen/list, stale input preservation, long-text mobile. Combined20
-settings/brand-campaign/backend/browser checks14 pass/6 PG skips;50 existing
-campaign/journey checks passed. Lint/format/drift and independent review passed.
-Actual normal IAB saved campaign3 plan1:traffic, synthetic audience, İstanbul,
-250050 kuruş,1–7 November2026 (7 inclusive days). Form2500,50 and list/overview
-2.500,50 TRY agree. Two authenticated save replays added no row.40 previous
-application tables including legacy fields/ad choice/hold are unchanged; ledger
-unchanged/new cost0. Private brand-settings-live-evidence.json,
-brand-settings-iab.png, brand-settings-{1440,390}.png, brand-settings-list.png.
+## Current milestone: research decision studio
 
-Completed ADR0070: nullable PROTECT campaign.brand, no legacy backfill. Default-off
-LOCAL_BRAND_CAMPAIGN_ENABLED lets owner create a NEW synthetic campaign from an
-owned saved BrandAdDraft, immutable CampaignBrandAdChoice, replay-safe start and
-revision/version-bound explicit reselection. Existing-campaign locks are campaign
-SELF→brand/workspace→source→attempt→ad. Creation replay never locks an existing
-campaign under brand lock. Old choices stay separate; old selection paths admit
-only unbound campaigns. Historical selected content survives later draft edits;
-reselection invalidates old selection URLs. Private CSRF/body/method guards.
-New choice protects its parent campaign/source revision: deletion409 retains
-create nonce; old unbound deletion remains available. Campaign start waits for checked image and fields matching saved content, using
-can_use_saved independently of export. New campaign preview is readonly with NO
-visible download/package action. Existing prototype exports are undecided.
-New campaign's Ankara/5000 TRY are fixed EXAMPLE planning values, not targeting or
-spend consent; empty destination/no flight. No provider, publish, media or AI cost.
-Final10 focused tests6 pass/4 PG-only skips; prior39 expanded new/legacy/backend/
-browser checks29 pass/10 PG-only skips. Four new PG races passed PR367 CI. Ruff/drift
-passed; independent final source re-review no blocker after dirty-editor fix.
-Actual normal IAB created campaign3/choice1 from brand1 ad
-8e17aa42-009a-440a-a9e5-e87f755c9967 revision2 and opened selected preview1.
-Two actual authenticated create POST replays added no plan.39 prior application
-tables' old rows/column values preserved; old campaigns1/2 remain brandNULL.
-Ledger unchanged/new cost0. Private brand-campaign-live-evidence.json,
-brand-campaign-iab.png, brand-campaign-{1440,390}.png; mobile no overflow.
+New experiments/decision-studio on127.0.0.1:8014, allowlisted loopback static
+server, no external assets/network/storage/API/provider/DB access. Old8013 draft
+and private8002 app preserved. New light ink/cobalt/mint design, step rail,
+context helper; desktop conditions/results side by side, mobile stack.
+Structured brief separates communication job/business/action/free text/audience/
+sector; optional identity/message and source showWhen conditional notes. Three
+fixed example routes retain angle/hook/message/CTA/tone/static format/revisions;
+position/text editor, similar/undo/previous trio. Not real AI creative/chat.
 
-Completed ADR0069: separate default-off LOCAL_BRAND_AD_ENABLED owns explicit saved
-text/image selection→BrandAdDraft→edit/save/reopen→saved PNG. Same brand/identity/
-source revision required; protected attempts/identity, full pinned provenance,
-brand→document→attempt→draft locks, unique create replay, CAS/history and private
-CSRF routes. Separate brand-ad.js wraps actual name, palette text/accent, fixed
-768×1376 overlay, measured no-truncation fit and verified private PNG. Logo binary
-not applied; no ZIP/general layers/campaign selection. No new provider or cost.
-10 new focused tests8 pass/2 PG skips, including second brand, long-name/mobile,
-valid different PNG hash refusal, stale/replay and private guards. Independent
-source review no blocker. Combined41 new/legacy/backend/browser checks passed (36 pass/5 PG skips);
-Ruff/format/drift passed; PR366 required PostgreSQL CI subsequently passed.
-Actual normal IAB created brand1 draft8e17aa42-009a-440a-a9e5-e87f755c9967 from
-request3/key slogan + request4 image, identity2, then saved CTA “Koleksiyonu tanı”
-as revision2. Normal independent Chromium login downloaded/verified768×1376 PNG;
-lower source pixels exact, desktop/mobile passed. IAB download clicked but path
-not observed. Private brand-ad-live-evidence.json, brand-ad-real-v2.png,
-brand-ad-iab.png, brand-ad-{1440,390}.png.37 preexisting non-auth/non-framework
-tables and local ledger unchanged after composition; new draft/history1/2 only.
+Source report DOCX and workbook XLSX in owner's Yaparo Araştırma folder were read
+without editing. Normalized dist/data.js contains79questions/249options/
+94incompletebranchrows/20products/1460scores/8weights/16policyrows/20SC01fixtures/
+8scenarios/21sources, source hashes and limitations. Cited ZIP/reference engine
+was absent. All94branch rows missing source/target; use questions.showWhen.
+Active flags all blank. Some narrative source IDs conflict with manifest.
+504formula caches read, not recalculated; claimed27checks not verified.
+No independent legal/platform validation performed or claimed.
 
-ADR0068 adds default-off LOCAL_BRAND_AI_ENABLED plus exact reviewed synthetic
-request UUID/fingerprint admission, independent of ADR0067's unauthorized envelope.
-workspaces0011 BrandGenerationAttempt commits one intent before budget/provider;
-conditional transitions, capture-before-settlement, bound readback and no retry.
-New per-brand copy adapter1024 tokens preserves old512 trials. Image adapter now
-validates extension against bytes and supplies detected MIME to normalization.
-No source pixels/logo binary supplied. Private CSRF POST/result/image reads.
+Owned deterministic engine reproduces SC01 Meta1800/Google1200TRY and all20cached
+expert scores. Gates before score/minimum/cap, integer water filling, shared
+capacity/profit cap counted once, unallocated balance retained. Technical vs
+useful minimum vs cap visible. Paid/partner/owned separated; owned gets no spend.
+Manual TL/range with percentage display stays within caps; recompute resets it.
+Input changes mark decision stale and require recompute before final review.
+Forecast fixtures bind only exact dated2026-10-27/7days/Kadıköy/local retail/
+nearby/style/static/basicUTM/store-visits context. Different context or missing
+forecast yields no allocation; no invented equal mix. Budget10000TRY leaves6800.
+All results externalQueryfalse/modelnull/publishablefalse. Actual gateways/cache/
+currentFX/semantic legal evidence/full79typed questions still pending. Previous
+Turkey clipped-polygon map not yet migrated; radius input refuses allocation.
+See docs/product/research-decision-studio.md and experiment README for full scope.
 
-Actual normal website generation against brand1 Duru identity2, bound source
-4b2de5c5-17bd-4835-a928-25f7a0588efc revision1:
-- request3 dd955529-bdd0-43d5-bc32-05f3eac71ca9:3 Turkish variants, GPT-6 Luna/Azure,
-  513 input/1010 output, USD0.00055630, completed/settled.
-- request4 78885b7c-0412-4ce9-b8c6-debc5a5cd61d:768×1376 JPEG128201 bytes,
-  normalized PNG854996 bytes, requested Gemini3.1 Flash Lite Image/Google Vertex,
-  USD0.03364200, completed/settled. Blue/terracotta cups, no text/logo, natural light.
-- successful total USD0.03419830. Local cumulative settled spent USD0.22943485;
-  holds USD0.10170650 including historical0.00078075. NOT account balance.
-- initial request1 text HTTP200 truncated at512 tokens; request2 image HTTP200/
-  complete rejected by initial extension/MIME bug. Both preserved unverified/held,
-  no output/precise receipt; visible rounded provider charges0.000305/0.0336.
-  Never delete/reset/retry or release holds ad hoc. Safe stage/category diagnostics
-  now added. Exact historical billing reconciliation remains separate work.
+## Checks actually run
 
-Checks:19 focused tests17 pass/2 PG skips before final two new guard cases;
-subsequent12 generation checks11 pass/1 PG skip, including JPEG/mismatch and HTTP
-method/CSRF/intake/fingerprint. Browser mock journey/reload/repeatedPOST/mobile
-passed; actual user browser generation and key-free restart/readback passed.
-Both focused browser checks (copy/replay and decoded responsive image) passed.
-Actual normal HTTP login + two repeated generate POSTs per completed request
-returned saved results; attempt count and local ledger unchanged (key-free runtime).
-Ruff/format/drift passed; PR365 full required PostgreSQL CI subsequently passed.
-Independent source re-review found no blocker. This is smoke, not quality benchmark.
+Node engine check: exact sample/all20scores, policy/unknown/stale/manual/cap cases,
+88budget boundaries and dataset counts passed. Three isolated browser tests
+passed: full edit/select/recompute/review, conditional policy/missing forecast,
+mobile/helper/literal text/no outbound or storage and Host/path guards.
+Ruff check/format passed. Private screenshots:
+%TEMP%\yaparo-decision-dduretz4 (desktop/mobile/creative/start). Final heading/
+desktop-helper positioning refinements were included in the last passing run.
+New CI step runs these checks without provider access. Current new CI unverified.
+Existing8002/DB/AI ledger untouched; cost0, no provider credentials loaded.
 
-## Same private preview — preserve it
+## Protected prior work
 
-%TEMP%\yaparo-public-preview-q2ql3pkq / preview.sqlite3 / loopback8002.
-Schema workspaces0012 / campaigns0013. Forward campaigns0013 backup:
-preview-before-brand-settings-20261026T221231Z.sqlite3; all prior rows preserved,
-new plan table initially empty; only migration/type/permissions at upgrade.
-Previous forward campaigns0012 backup:
-preview-before-brand-campaign-protect-20261026T214643Z.sqlite3; all current tables/
-rows intact, only migration recorder1 added. Never rerun completed upgrades.
-Previous forward campaigns0011 backup:
-preview-before-brand-campaign-20261026T180122Z.sqlite3; previous rows/columns
-preserved, old campaigns' new brand FKs allNULL at upgrade, new choice table empty.
-Standard migration+1 type+4 permissions only; never rerun this completed upgrade.
-Previous forward workspaces0012 backup:
-preview-before-brand-ad-20261026T171740Z.sqlite3; old rows preserved, only two new
-empty tables/standard migration+2 content types+8 permissions at upgrade.
-Previous forward0011 backup:
-preview-before-brand-ai-20261026T163458Z.sqlite3. All old rows across36 prior
-non-auth/non-framework tables preserved; four requests/four attempts now exist.
-Old fixed trials/drafts/source/history/campaign choices remain independent.
-Current known serve_design_preview.py enables brand-ad/campaign/settings flags locally,
-restarted WITHOUT provider key or
-hard-cap assertion. Exact private brand-ai-approved.json permits only requests1–4;
-no new request automatically gets paid permission. Normal repo flags stay off.
-Verify exact listener command before restarting. Never recreate/replace DB or
-reset intent/history. Private evidence brand-ai-live-evidence.json,
-brand-ai-image-iab.png, brand-bound-real-image.png. Saved results survive restart.
-Normal IAB test login renewed with existing protected credential, no rotation:
-%USERPROFILE%\.yaparo\preview-test-login.dpapi, prepare_preview_login.py READ mode.
-Never print helper output or use default mode just to log in. Provider key remains
-in existing Windows protected store; never print or copy into repo/docs/chat.
-
-Established previous milestones: ADR0060/61 fixed Duru text/image trials;
-ADR0062 editable independent draft; ADR0063 square/portrait; ADR0064 saved ZIP;
-ADR0065 pinned campaign choice; ADR0066 campaign ZIP; ADR0067 immutable owned
-brand brief/source context. None is retroactively rebound to new requests.
-General upload/rights/scan/isolation/font/production editor gates remain open.
-
-## Preserved integration and release gates
-
-Rename: docs/continuity/RENAMING.md. Keep stable Python/migration labels, UUIDs,
-DB/DPAPI/OAuth IDs; no global replacement or identity/credential reset.
-Actual scoped Google candidate remains quarantined; token/account proof is not
-established here. Origin session/process secret was lost. Private root:
-%TEMP%\gwt-scoped-preparation-_jafwrsl / synthetic.sqlite3. Completed PREPARE and
-forward0007 APPLY MUST NOT rerun. No new permit/retry/reset/activation/refresh.
-See recovered-inspection-exercise-preparation.md / windows-inspection-fixture.md
-under docs/product. Fabricated fixture proof is not actual candidate evidence.
-Historical Google PAUSED TEST evidence is not live delivery/performance proof.
-Fresh staging E2E, configured DB/files restore, code/schema rollback, privacy/
-domain, upload isolation, tenant token controls, real platform metrics/permissions,
-payments and financial consent remain release gates. No production-ready claim.
-Old usage/time monitors remain disabled. A15-minute heartbeat's actual execution
-was not verified by this product task; scheduling is not proof of work.
+Local Python: %USERPROFILE%\.yaparo\.venv. Secrets outside OneDrive.
+Private preview: %TEMP%\yaparo-public-preview-q2ql3pkq/preview.sqlite3; keep old
+campaigns/brand choices/plans/holds and immutable AI sources. Normal login READ
+helper %USERPROFILE%\.yaparo\prepare_preview_login.py read; never print password.
+Google candidate remains quarantined in %TEMP%\gwt-scoped-preparation-_jafwrsl;
+do not repeat PREPARE/APPLY/reset/refresh. ADR0068 holds remain unresolved.
+Saved brand/content/campaign slices and tests are documented in ADR0067–0071.
+Research draft does not replace those ownership/replay/financial contracts.
 
 ## Next action
 
-Review the unified journey prototype with the owner before product integration.
-Then map the accepted UX to existing owned creative/editor/campaign contracts.
-Do not wire paid AI or replace current flows yet. Download/export stays undecided;
-real accounts, customer files, payment and publishing gates remain closed.
+Owner review new8014 UX; then complete typed form/policy prerequisites and map the
+accepted intent/creative/decision contracts to Django. Check PR369 exact-head CI
+before claiming green or merging; prototype approval is not production approval.
