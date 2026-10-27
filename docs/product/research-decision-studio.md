@@ -47,6 +47,49 @@ assumptions. No live platform query, account qualification or forecast was made.
 
 ## Integration sequence after owner UX review
 
+### New package evidence and refresh proposal — 27 October 2026
+
+The owner subsequently supplied the extracted `yaparo_package` folder under
+their OneDrive/Belgeler research directory. The previously absent reference JS,
+request schema, reason-code dictionary and JSON tables are now available.
+Read-only inspection found all94branch target/value pairs populated in JSON,
+unlike the workbook extraction. Some targets are channel/objective/workflow
+actions, not question IDs; a typed interpreter must distinguish these targets.
+The package validator passed dataset integrity and sample allocation regression;
+all34manifest-listed file hashes matched. This does not revalidate all27checks
+claimed by the supplied report, current market facts or legal suitability.
+
+A focused reference probe changed only sample scenario_id to UNSEEN_CONTEXT:
+the reference still allocated3000TRY to Meta/Google via its channel-only forecast
+fallback. Therefore use the package as reviewed source/reference evidence, not
+a replacement for our strict context/missing-data guards. Source files unchanged;
+not imported or executed in a product route, no account/provider access.
+
+Proposed live-data layer: source adapters → normalized context-bound snapshots →
+type/source/freshness checks → tenant-scoped cache → owned decision engine.
+Record source_as_of, fetched_at, expiry, currency, provider/account identity,
+geo/keyword/audience/objective/creative/date/budget context, quality and raw-source
+digest. Fetch time must not disguise an old source observation as fresh.
+Reuse fresh matching snapshots, refresh on relevant input changes or explicit
+refresh, and revalidate critical readiness/spend constraints before publishing.
+Unavailable/expired real data must not silently become a demo forecast.
+
+Official references checked:
+- [Google keyword planning](https://developers.google.com/google-ads/api/docs/keyword-planning/overview):
+  forecasts and history, stricter rate limits, explicit caching recommendation;
+  historical metrics refresh monthly. Avoid per-keystroke queries.
+- [TCMB indicative rates](https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Temel+Faaliyetler/Doviz+Efektif/Doviz+ve+Efektif+Piyasalari/Gosterge+Niteligindeki+Kurlar):
+  business-day publication15:30; preserve rate date on holidays/weekends.
+- [LinkedIn forecasts](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/advertising-targeting/ad-supply-forecasts)
+  and [access](https://learn.microsoft.com/en-us/linkedin/marketing/increasing-access):
+  targeting/campaign/bid/period-specific estimates; API products/access approval
+  must be checked independently. Do not promise every channel is publicly queryable.
+
+This is a design proposal, not a live integration or new advertiser-access
+authorization. Current8014 remains explicitly authored simulation.
+
+### Delivery sequence
+
 1. Review the new8014 flow; settle brief depth, creative selection and decision
    card density. Keep8013/8002 intact until accepted.
 2. Complete typed form schema/conditional validation and explicit unmet policy

@@ -18,9 +18,9 @@ protected Google TEST candidate must not be reset or retried implicitly.
 Checkout: C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote: https://github.com/ugurkbcgl-hub/yaparo
 Feature branch: codex/unified-journey-prototype; PR369 remains the review record.
-Research head41aa9d7 had required CI40487502326 SUCCESS, verified this turn.
-That success does not verify the current authored-dynamic-demo changes; check
-their new exact head/CI after push. PR369 remains open for owner UX review.
+Authored-demo head20ccce3 required CI40493144969 SUCCESS was verified.
+PR369 remains open for owner UX review. Later documentation-only evidence
+updates require checking their exact head/CI before claiming green or merging.
 Main base abc2093 / PR368. No production deployment or database change this turn.
 
 ## Current milestone: research decision studio
@@ -52,6 +52,20 @@ was absent. All94branch rows missing source/target; use questions.showWhen.
 Active flags all blank. Some narrative source IDs conflict with manifest.
 504formula caches read, not recalculated; claimed27checks not verified.
 No independent legal/platform validation performed or claimed.
+
+NEW PACKAGE FOUND: owner supplied OneDrive/Belgeler/
+Yaparo_TR_Karar_Motoru_Dataset/yaparo_package. Read-only review and supplied
+validator passed dataset/reference regression; all34manifest file hashes matched.
+JSON branch rules have94populated target/value pairs, unlike Excel; targets also
+include typed channel/workflow/objective actions. Reference JS/schema/reason codes
+now available. Focused UNSEEN_CONTEXT probe still allocated3000TRY via channel-only
+forecast fallback: retain our stricter context/missing-data guard. Package not
+imported into product; no source file, runtime, account or provider changed.
+Source-refresh proposal with official Google/TCMB/LinkedIn evidence is in
+docs/product/research-decision-studio.md. Current8014 remains authored simulation;
+live forecasts are NOT connected. Reuse dated/context-bound cached observations,
+refresh relevant changes, record source_as_of separately from fetch time, and
+never substitute synthetic values silently when a real source is unavailable.
 
 Owned deterministic engine reproduces SC01 Meta1800/Google1200TRY and all20cached
 expert scores. Gates before score/minimum/cap, integer water filling, shared
