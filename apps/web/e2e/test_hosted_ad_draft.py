@@ -377,23 +377,41 @@ class HostedAdBrowserTests(SavedTrialsFixture, LiveServerTestCase):
                 )
                 downloads = []
                 page.on("download", lambda event: downloads.append(event))
-                pattern = "**/revisions/1/package.json"
-                for body in (
-                    "{",
-                    "a" * 131073,
-                    json.dumps({**snapshot, "revision": 2}),
+                pattern = self.live_server_url + reverse(
+                    "brands:hosted_ad_package", args=[draft.pk, 1]
+                )
+                expect(page.locator("#ad-package")).to_be_enabled()
+                for label, body in (
+                    ("malformed", "{"),
+                    ("oversized", "a" * 131073),
+                    ("stale revision", json.dumps({**snapshot, "revision": 2})),
                 ):
-                    page.route(
-                        pattern,
-                        lambda route, request, b=body: route.fulfill(
-                            status=200, content_type="application/json", body=b
-                        ),
-                    )
-                    page.locator("#ad-package").click()
-                    expect(page.locator("#package-status")).to_contain_text(
-                        "Paket doğrulanamadı"
-                    )
-                    self.assertEqual(downloads, [])
+                    intercepted = []
+
+                    def corrupt_snapshot(route, request, payload=body):
+                        intercepted.append(request.url)
+                        route.fulfill(
+                            status=200,
+                            content_type="application/json",
+                            body=payload,
+                        )
+
+                    page.route(pattern, corrupt_snapshot)
+                    with self.subTest(snapshot=label):
+                        # Witness this exact response before checking its rejection:
+                        # a ready-button click alone does not prove interception.
+                        with page.expect_response(pattern) as response_event:
+                            page.locator("#ad-package").click()
+                        response = response_event.value
+                        self.assertEqual(intercepted, [pattern])
+                        self.assertEqual(
+                            sha256(response.body()).hexdigest(),
+                            sha256(body.encode("utf-8")).hexdigest(),
+                        )
+                        expect(page.locator("#package-status")).to_contain_text(
+                            "Paket doğrulanamadı"
+                        )
+                        self.assertEqual(downloads, [])
                     page.unroute(pattern)
                     page.reload()
                     expect(page.locator("#ad-package")).to_be_enabled()
