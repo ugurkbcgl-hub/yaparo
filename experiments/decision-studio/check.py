@@ -821,11 +821,33 @@ class StudioCheck(unittest.TestCase):
         page.locator("#q-S1_F04-kind").select_option("money")
         page.locator("#q-S1_F04-channel").select_option("official_account")
         page.locator("#q-S1_F04-target").fill("1000")
+        page.locator("#q-S1_F04-channel").select_option("official_site")
+        page.locator("#brief-submit").click()
+        self.assertTrue(page.locator("#step-0").is_visible())
+        page.locator("#q-S1_F04-url").fill("https://ornek.example/bagis")
+        page.locator("#brief-submit").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().brief.destination.values.url"),
+            "https://ornek.example/bagis",
+        )
+        page.locator('#step-nav [data-step="0"]').click()
+        page.locator('[data-action="visit_website"]').click()
+        page.locator("#q-S1_B02").select_option("own_website")
+        self.fill_destination(page)
+        self.assertFalse(page.locator("#q-S1_F04-url").is_visible())
+        page.locator("#brief-submit").click()
+        self.assertNotIn(
+            "url", page.evaluate("YaparoStudio.getSnapshot().brief.branch.S1_F04")
+        )
+        page.locator('#step-nav [data-step="0"]').click()
+        page.locator('[data-action="donate"]').click()
+        self.assertEqual(page.locator("#q-S1_F04-url").input_value(), "")
         # Changing to volunteer support removes a now-irrelevant monetary target/channel.
         page.locator("#q-S1_F04-kind").select_option("volunteer")
         self.assertTrue(page.locator("#q-S1_F04-target").is_disabled())
         self.assertFalse(page.locator("#q-S1_F04-target").is_visible())
         self.assertEqual(page.locator("#q-S1_F04-channel").input_value(), "")
+        self.assertFalse(page.locator("#q-S1_F04-url").is_visible())
         page.locator("#q-S1_F04-channel").select_option("in_person")
         page.locator("#brief-submit").click()
         self.assertEqual(

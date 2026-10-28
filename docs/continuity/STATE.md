@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 10:37 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 10:42 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -56,10 +56,15 @@ Direct event registrations/applications/social routes now collect destinations;
 owned none/social_profile stay separate from source enums. brief.destination uses
 version yaparo-destination-v1/type/values. No URL fetch, location query, geocoding
 or transmission; targeting region stays separate from visit address.
+Fundraising web/platform delivery also asks for a validated donation-page URL;
+generic website delivery reuses its own field, hiding/pruning the duplicate.
+Structured rerenders now project only enabled values to avoid retaining hidden
+finance URLs. Switching back asks for a fresh link. No bank account intake added.
 
-Current local17browser journeys passed24.566s (%TEMP%/yaparo-decision-aghfxfy7),
+Current local17browser journeys passed25.764s (%TEMP%/yaparo-decision-bd6x5i2u),
 including required/bad URL, literal review, history, map-only location, type-change
-pruning, event form destination and phone validation. Pure destination/schema/
+pruning, event form destination, phone validation and donation-link reuse/pruning.
+Pure destination/schema/
 source-immutability tests and syntax/configured Ruff passed. Independent source
 review found no blocker in integration. Actual IAB website desktop/mobile390px
 and location mobile reviewed with no horizontal overflow375/390; viewport reset.

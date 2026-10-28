@@ -71,6 +71,12 @@ plan/content; literal details appear in the final review. Prepared synthetic
 profiles use reserved .example URLs or explicitly synthetic address/phone data.
 Manual Other still requires its existing explanation and remains unqualified.
 
+Fundraising site/platform delivery also asks for its donation-page URL. When a
+generic website destination is already active, that field supplies the link and
+the duplicate finance URL is hidden/pruned. Returning to donation-only delivery
+asks for a fresh link rather than reviving a now-hidden value. A declared bank
+channel still does not collect/verify a bank account in this prototype.
+
 ## State and manual details
 
 Purpose/response edits invalidate the existing plan/content. Branch answers and
