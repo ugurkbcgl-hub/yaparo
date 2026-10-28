@@ -2,6 +2,7 @@
   "version": "yaparo-first-stage-design-1",
   "status": "owned_product_design_not_platform_evidence",
   "date": "2026-10-28",
+  "runtime": {"module":"experiments/decision-studio/dist/first-stage-bank.js","version":"yaparo-first-stage-runtime-1","compatible_pairs":46,"scope":"local_synthetic_first_stage_only","platform_or_publish_qualification":false},
   "question": "Bu çalışmayla ne yapmak istiyorsun?",
   "second_question": "Gören kişi ne yapsın?",
   "banks": [

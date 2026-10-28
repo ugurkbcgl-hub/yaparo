@@ -105,7 +105,7 @@ class StudioCheck(unittest.TestCase):
                 page.locator(selector).fill(value)
 
     def start_plan(self, page):
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(page)
         self.settle_plan(page)
 
@@ -194,7 +194,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_unknown_context_policy_and_conditional_questions(self):
         page = self.browser.new_page()
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(
             page,
             communication="fundraising",
@@ -229,7 +229,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_mobile_literal_text_and_boundaries(self):
         page = self.browser.new_page(viewport={"width": 390, "height": 844})
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(
             page,
             description='<img src="https://example.invalid/x" onerror="alert(1)"> sentetik tasarım',
@@ -257,7 +257,7 @@ class StudioCheck(unittest.TestCase):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
         errors = []
         page.on("pageerror", lambda e: errors.append(str(e)))
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         page.get_by_role("button", name="◈ Butik koleksiyonu", exact=True).click()
         self.assertEqual(page.locator("#q-S1_B02").input_value(), "physical_store")
         page.get_by_role("button", name="▤ B2B yazılım", exact=True).click()
@@ -373,7 +373,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_organic_only_bypasses_media_and_mixed_requirements(self):
         page = self.browser.new_page()
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(page, mode="organic")
         self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan"))
         self.assertTrue(page.locator("#budget").is_disabled())
@@ -387,7 +387,7 @@ class StudioCheck(unittest.TestCase):
             ),
             ["organic"],
         )
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(page, mode="both")
         self.settle_plan(page)
         self.open_creatives(page)
@@ -454,7 +454,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_organic_video_pending_and_stale_assistant(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(page, mode="organic")
         page.locator('[name="organic-platform"][value="instagram"]').uncheck()
         page.locator('[name="organic-platform"][value="tiktok"]').check()
@@ -482,7 +482,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_helper_cannot_skip_unconfirmed_brief(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         page.locator("#chat-input").fill("Bütçe 6000")
         page.get_by_role("button", name="Mesajı gönder").click()
         page.locator("#chat-log").get_by_role(
@@ -509,7 +509,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_single_screen_narrowing_and_parent_change_pruning(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.assertEqual(
             page.locator(
                 "#brief-next, #brief-back, #communication-family, #business-family, #sector-family"
@@ -576,7 +576,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_manual_sector_other_validation_literal_and_return_to_canonical(self):
         page = self.browser.new_page(viewport={"width": 390, "height": 844})
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(page, submit=False)
         page.locator("#sector").select_option("other")
         manual = page.locator("#sector-other")
@@ -610,7 +610,7 @@ class StudioCheck(unittest.TestCase):
         page = self.browser.new_page()
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         first_purpose = page.locator("#purpose-choices button").first
         first_purpose.focus()
         first_purpose.press("ArrowRight")
@@ -650,7 +650,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_manual_other_fields_stay_explicit_and_organic_unqualified(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         for select, manual in [
             ("business", "business"),
             ("q-S1_B02", "destination"),
@@ -702,7 +702,7 @@ class StudioCheck(unittest.TestCase):
                 else None
             ),
         )
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(
             page,
             communication="sale_promotion",
@@ -749,7 +749,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_event_registration_collects_destination_and_phone(self):
         page = self.browser.new_page()
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(
             page,
             communication="event",
@@ -794,7 +794,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_structured_dates_and_non_cash_fundraising(self):
         page = self.browser.new_page()
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(
             page,
             communication="sale_promotion",
@@ -866,7 +866,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_conditional_other_description_is_saved_and_pruned(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(
             page,
             communication="announcement",
@@ -905,7 +905,7 @@ class StudioCheck(unittest.TestCase):
 
     def test_context_banks_remove_commerce_from_donation(self):
         page = self.browser.new_page(viewport={"width": 1100, "height": 850})
-        page.goto(self.origin)
+        page.goto(self.origin + "/legacy.html")
         self.complete_brief(
             page,
             communication="fundraising",

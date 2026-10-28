@@ -89,6 +89,9 @@ jobs:
         run: |
           node experiments/decision-studio/engine.test.cjs
           node experiments/decision-studio/brief-flow.test.cjs
+          node experiments/decision-studio/first-stage-bank.test.cjs
+          node --check experiments/decision-studio/dist/first-stage-ui.js
+          node --check experiments/decision-studio/dist/first-stage-bridge.js
           node experiments/decision-studio/v2-flow.test.cjs
           node --check experiments/decision-studio/dist/v2-app.js
           node experiments/decision-studio/production.test.cjs
@@ -98,6 +101,7 @@ jobs:
           python -m ruff format --check --config apps/web/pyproject.toml experiments/decision-studio
           python -m ruff check --config apps/web/pyproject.toml experiments/decision-studio
           python experiments/decision-studio/check.py
+          python experiments/decision-studio/first_stage_check.py
 
       - name: Compare pinned typed output without model access
         working-directory: .

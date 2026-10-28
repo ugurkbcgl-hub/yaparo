@@ -1,5 +1,47 @@
 # Intent and expected response — local brief prototype
 
+## Current owned first stage
+
+The owner authorized implementation of the whole first-stage bank. The default
+8014 home page now mounts `first-stage-bank.js`, `first-stage-ui.js` and
+`first-stage-bridge.js`:9 intents and46 compatible intent/outcome routes from
+[the accepted design](first-stage-question-bank.json). Each route has its own
+active questions AND answer sets. Source data.js and imported V2 catalogs are
+unchanged. `/legacy.html` preserves the old authored workflow for regression
+checks; `/v2.html` remains a separate source-catalog inspection preview.
+
+The first pair collapses to an editable summary. Relevant typed fields appear on
+the same screen; optional evidence/notes are disclosed separately. Required fields
+and conditional manual answers validate before proceeding. Date/calendar/range,
+time, money/currency, numeric bounds, phone/email, safe URL and address-or-map
+constraints are enforced by the owned model. Unrecognized pairs, enums, controls
+and snapshot versions fail closed. Fields hidden by a parent change are pruned;
+an explicit risk declaration survives pair changes until the user changes it.
+
+All9 banks now have their separate fields, including event date/location/mode,
+job role/work type/location/skills, fundraising organizer/purpose/permit declaration,
+cash target/currency, material list/delivery and volunteer task/time/application.
+Information-only fundraising never asks for payment details; volunteer/material
+paths cannot retain cash targets. Research question/option labels stay versioned
+in the design JSON; pure tests verify all9 intents and every designed outcome.
+
+Answers remain in tab memory, in versioned `brief.firstStage`, and appear as literal
+question/answer pairs in review. Examples/helpers/history use the owned snapshot;
+changing an answer invalidates the old plan/production binding. No bank/identity
+uploads, private-account access, AI, spend or publishing action is introduced.
+
+The bridge never infers source business/sector from these answers. Explicit
+classification, when needed for the paid authored simulation, is collected in
+step2. No known mapping or no explicit classification means no allocation. Email
+and social messaging are never relabeled as WhatsApp; purchase is not relabeled
+as a store visit. Newly introduced outcomes with no old plan/content mapping are
+accepted by stage1 and explicitly held later, instead of generating a fallback
+CTA. Content-only and undecided usage are collected correctly but their later
+format/decision routes remain separate work. This is completion of stage1, not
+completion of platform/production/launch integrations.
+
+## Previous context prototype retained for regression
+
 Owner direction, 28 October 2026: begin with what the person wants to do and what
 the viewer should do. Keep the interaction on one screen. Reveal the relevant
 context form after the pair is selected; avoid a second wizard inside the brief.

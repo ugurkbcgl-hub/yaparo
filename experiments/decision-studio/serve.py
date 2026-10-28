@@ -10,6 +10,14 @@ from sources import SourceService
 
 ROOT = Path(__file__).resolve().parent / "dist"
 ASSETS = {
+    "/legacy.html": ("index.html", "text/html; charset=utf-8"),
+    "/first-stage-bank.js": ("first-stage-bank.js", "text/javascript; charset=utf-8"),
+    "/first-stage-ui.js": ("first-stage-ui.js", "text/javascript; charset=utf-8"),
+    "/first-stage-bridge.js": (
+        "first-stage-bridge.js",
+        "text/javascript; charset=utf-8",
+    ),
+    "/first-stage.css": ("first-stage.css", "text/css; charset=utf-8"),
     "/v2.html": ("v2.html", "text/html; charset=utf-8"),
     "/v2.css": ("v2.css", "text/css; charset=utf-8"),
     "/v2-data.js": ("v2-data.js", "text/javascript; charset=utf-8"),

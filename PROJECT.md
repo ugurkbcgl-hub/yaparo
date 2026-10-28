@@ -7,8 +7,11 @@ form). Each purpose/outcome pair must select relevant questions AND answer sets;
 fundraising must not inherit commercial product/B2B questions. The owned design
 in [first-stage-question-bank.json](docs/product/first-stage-question-bank.json)
 specifies9 purpose banks and outcome extensions, with official research sources.
-Current8014 applies contextual shortlists/branch pruning; the full new typed bank
-is still a design target. Implement it before resuming unrelated geo/plan expansion.
+Current8014 implements all9 owned first-stage banks and46 compatible routes with
+typed conditional fields, validation/pruning, literal review and history. The old
+context prototype is retained at /legacy.html for regression. Explicit paid-plan
+classification stays in step2, with no inferred eligibility. Unmapped later-stage
+outcomes and content-only production remain held; this is not platform readiness.
 See [current implementation boundary](docs/product/progressive-brief.md).
 
 ## V2 catalog direction — 28 October 2026

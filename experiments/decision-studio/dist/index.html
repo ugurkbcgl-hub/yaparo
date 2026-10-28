@@ -4,8 +4,8 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="Yaparo reklam stüdyosu — araştırmaya dayalı yerel deneyim taslağı.">
   <title>Yaparo · Reklam stüdyosu</title>
-  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="refinements.css">
-  <script src="data.js" defer></script><script src="simulation.js" defer></script><script src="engine.js" defer></script><script src="sources.js" defer></script><script src="production.js" defer></script><script src="brief-flow.js" defer></script><script src="app.js" defer></script>
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="refinements.css"><link rel="stylesheet" href="first-stage.css">
+  <script src="data.js" defer></script><script src="simulation.js" defer></script><script src="engine.js" defer></script><script src="sources.js" defer></script><script src="production.js" defer></script><script src="brief-flow.js" defer></script><script src="first-stage-bank.js" defer></script><script src="first-stage-ui.js" defer></script><script src="app.js" defer></script><script src="first-stage-bridge.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Çalışmaya geç</a>
@@ -31,6 +31,7 @@
           <section id="step-0" class="step">
             <div class="eyebrow">ÖNCE SENİ ANLAYALIM</div><h1>Ne için sesini<br>duyurmak istiyorsun?</h1><p class="lead">Uzun bir brief hazırlamana gerek yok. Birkaç seçim ve kendi cümlelerinle başlayalım.</p>
             <div id="scenario-examples" class="scenario-examples" aria-label="Örnek senaryolar"></div>
+            <section id="first-stage-root" hidden aria-label="Amacına özel ilk aşama"></section>
             <form id="brief-form" class="brief-form"><label for="journey-mode">Bu çalışma nerede kullanılacak?</label><select id="journey-mode"><option value="paid">Ücretli reklam kampanyası</option><option value="organic">Yalnız organik içerik / paylaşım</option><option value="both">Reklam + organik paylaşım</option></select>
               <div class="question-block start-question"><div class="field-heading"><span class="field-index">1</span><span>Bu çalışma için ne yapmak istiyorsun?</span></div><p class="hint">Önce niyeti seç. Sonra yalnız buna uygun kısa detayları soracağız.</p><div id="purpose-choices" class="choice-grid" role="radiogroup" aria-label="Çalışmanın amacı"></div></div>
               <div id="action-choice-block" class="question-block start-question" hidden><div class="field-heading"><span class="field-index">2</span><span>Gören kişi ne yapsın?</span></div><p class="hint">Bu seçim, sonraki kısa formu ve önerilecek yolu belirler.</p><div id="action-choices" class="choice-grid choice-grid-actions" role="radiogroup" aria-label="Beklenen etkileşim"></div></div>

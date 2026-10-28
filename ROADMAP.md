@@ -2,12 +2,13 @@
 
 ## First stage correction — 28 October 2026
 
-Priority supersedes the next geo/stage2 slice: implement the9 dedicated first-stage
-question banks and outcome additions in
-[the owned design](docs/product/first-stage-question-bank.json), then exercise each
-compatible pair. Research and Word review document are complete; current8014
-context/options/hidden-branch correction is implemented. Separate typed questions
-for event date/location, job details and fundraising purpose remain to be built.
+Implemented local priority: the9 dedicated first-stage question banks and outcome additions in
+[the owned design](docs/product/first-stage-question-bank.json), with all46 compatible
+pairs exercised. Research and Word review document remain the design record;
+current8014 has the owned renderer, required/format validation, hidden-answer
+pruning and separate typed event date/location, job details and fundraising fields.
+Next: map the newly captured outcomes into the later planning/content contract
+explicitly, preserving first-stage details and refusing unsupported mappings.
 Keep the first-stage two-choice screen and local synthetic scope.
 
 ## V2 follow-up — 28 October 2026

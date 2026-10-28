@@ -7,6 +7,27 @@ old8013 draft and existing8002 application are preserved.
 
 ## Implemented
 
+Default8014 first stage now uses the complete owned9-bank/46-route question model,
+typed renderer and bridge: `first-stage-bank.js`, `first-stage-ui.js` and
+`first-stage-bridge.js`. The two choices select relevant questions AND options;
+cash/material/volunteer, event date/location, job details, safe endpoints, required
+and conditional manual fields are validated/pruned. Answers remain in versioned
+`brief.firstStage` and literal review/history. Unknown pairs or restore versions
+fail closed. See [current contract](../../docs/product/progressive-brief.md).
+
+No source business/sector is guessed. Paid authored planning asks explicit
+classification in step2. Unmapped outcomes, including email/social messaging,
+stay held rather than becoming WhatsApp/store-visit/fallback actions. Content-only
+and undecided usage are valid brief selections; their later format/mapping routes
+are separate work. No new provider, upload, persistence or publishing is enabled.
+Old compact-context workflow remains at `/legacy.html` for regression checks;
+`/v2.html` separately inspects the imported V2 catalogs. The historical context
+behavior described below belongs to that legacy workflow.
+
+Checks added: `node first-stage-bank.test.cjs` (all46 typed routes) and
+`python first_stage_check.py` (default-home UI plus existing plan integration).
+`check.py` retains the19 old journeys against `/legacy.html` plus the V2 preview.
+
 Default authored interactive demo: five quick-start profiles (cafe, boutique,
 B2B software, local service and workshop), context-bound copy/CTA/illustration,
 new trio/similar/undo/history, and a helper that proposes bounded changes with
