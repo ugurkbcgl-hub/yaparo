@@ -675,6 +675,56 @@ class StudioCheck(unittest.TestCase):
         self.assertEqual(page.locator('img[src*="example.invalid"]').count(), 0)
         page.close()
 
+    def test_structured_dates_and_non_cash_fundraising(self):
+        page = self.browser.new_page()
+        page.goto(self.origin)
+        self.complete_brief(
+            page,
+            communication="sale_promotion",
+            action="buy_online",
+            destination="own_website",
+            mode="organic",
+            submit=False,
+        )
+        page.locator("#q-S1_P03-start").fill("2026-11-01")
+        page.locator("#q-S1_P03-end").fill("2026-10-31")
+        page.locator("#brief-submit").click()
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().brief"))
+        page.locator("#q-S1_P03-end").fill("2026-11-07")
+        page.locator("#brief-submit").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().brief.branch.S1_P03"),
+            {"start": "2026-11-01", "end": "2026-11-07"},
+        )
+        page.locator('#step-nav [data-step="0"]').click()
+        self.complete_brief(
+            page,
+            communication="fundraising",
+            business="nonprofit_fundraising",
+            sector="nonprofit_social_cause",
+            action="donate",
+            mode="organic",
+            submit=False,
+        )
+        page.locator("#q-S1_F04-kind").select_option("money")
+        page.locator("#q-S1_F04-channel").select_option("official_account")
+        page.locator("#q-S1_F04-target").fill("1000")
+        # Changing to volunteer support removes a now-irrelevant monetary target/channel.
+        page.locator("#q-S1_F04-kind").select_option("volunteer")
+        self.assertTrue(page.locator("#q-S1_F04-target").is_disabled())
+        self.assertFalse(page.locator("#q-S1_F04-target").is_visible())
+        self.assertEqual(page.locator("#q-S1_F04-channel").input_value(), "")
+        page.locator("#q-S1_F04-channel").select_option("in_person")
+        page.locator("#brief-submit").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().brief.branch.S1_F04"),
+            {"kind": "volunteer", "channel": "in_person"},
+        )
+        self.assertNotIn(
+            "S1_P03", page.evaluate("YaparoStudio.getSnapshot().brief.branch")
+        )
+        page.close()
+
     def test_conditional_other_description_is_saved_and_pruned(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
         page.goto(self.origin)

@@ -29,7 +29,22 @@ Fundraising reveals organiser, permit, validity/finance and consent notes. Permi
 consent and statement-approval selectors record a declaration or preparation state,
 never verified evidence. They do not admit a paid campaign. Document upload and
 actual bank-detail verification remain outside this local synthetic prototype.
-Typed permit/finance/date controls and full pair-specific form refinement remain open.
+Sales now leads with four relevant question groups; fundraising with three. Other
+questions remain in a collapsed extra-details section, with no loss of saved notes.
+Business labels use plain descriptions rather than internal business terminology.
+
+Campaign periods use separate native start/end date fields, refusing an end before
+the start. Price notes use separate prior/current numeric amounts. Fundraising
+finance records support kind, declared delivery channel and optional monetary
+target. Material/volunteer support clears an incompatible payment channel and
+monetary target. This projection does not validate a bank account, permit or
+payment entitlement; all current release/admission gates remain.
+
+Structured draft answers are objects under their source question ID: date ranges
+use start/end, prices regular/offer, fundraising kind/channel/target. Values stay
+literal strings entered by the user; they are not transferred to spend/cap models.
+They survive form rerenders/history and are pruned with their source branch.
+Full permit/evidence controls and the remaining typed forms remain open.
 
 ## State and manual details
 

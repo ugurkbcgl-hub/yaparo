@@ -25,6 +25,13 @@ at zero; organic authored drafts remain possible. Risk and hidden-branch pruning
 are retained. `brief-flow.js` is owned policyv3, not source/legal eligibility.
 See [brief contract](../../docs/product/progressive-brief.md).
 
+Sales/fundraising context forms now show four/three primary question groups and
+collapse additional notes. Native date ranges, numeric price pairs and a structured
+support-kind/channel/target projection replace composite text prompts. Non-cash
+support clears irrelevant money fields. These are draft details, not verified
+evidence or operational budget inputs. Actual IAB desktop/mobile visual review
+was completed on28October; narrow structured controls use one column.
+
 Four-step single-workspace flow: structured communication job + business model +
 desired action + free text + audience/sector → channel/material plan → shared
 creative concepts and placement adaptations → review. Paid, organic-only and

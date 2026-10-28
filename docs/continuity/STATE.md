@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 09:55 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 10:18 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -19,9 +19,8 @@ remains undecided/deferred. Preserve private ledger/TEST/account history.
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
 Branch codex/unified-journey-prototype; PR369 OPEN.
-Functional revision1499677 pushed. Its studio step in CI40646592142 SUCCESS:
-14browser journeys/8source tests and pure contracts passed; full CI still running
-at this snapshot. This documentation update follows that code revision. Prior
+Predecessorf19e0c9 full CI40646877347 SUCCESS verified, including14browser journeys.
+Current compact-form follow-up below requires its own CI after push. Prior
 baseline01a77b4 CI40534250684 SUCCESS. No deployment or DB migration.
 
 ## Current change: intent + response before context
@@ -40,19 +39,28 @@ Manual Other remains in business/sector/destination and relevant branch detail
 fields, trimmed1–200characters and literal brief.custom notes. Hidden notes are
 pruned; risk survives purpose/profile changes. Unresolved custom entries keep
 paid allocation zero. Permit/consent/statement status controls record declarations
-or preparation, never verification. Typed date/finance/permit forms and detailed
-pair-specific refinement remain open. See docs/product/progressive-brief.md.
+or preparation, never verification. Sales/fundraising now expose four/three primary
+question groups, with extra notes collapsed. Date ranges, prior/current prices
+and support kind/channel/target use structured draft answers. End-before-start
+is refused; material/volunteer support clears incompatible payment/amount and
+hides its monetary target. These values do not feed operational budget/eligibility.
+Permit/evidence and remaining typed forms remain open. Business labels simplified.
+See docs/product/progressive-brief.md.
 
-Local verification: JavaScript syntax, engine/brief/production/simulation contracts,
-Ruff with apps/web/pyproject.toml config, format and diff checks passed. CI studio
-step passed14browser journeys/8source tests, including card entry, keyboard focus,
-detail preservation, subtype branches, prior-plan invalidation, manual notes and
-history. Independent source review found state/validation/restore issues and focus
-loss; corrected. Initial CI40646358215 passed13/14browser journeys but found the
-internal select's CSS-only hiding; native hidden corrected it in1499677. Local
-HTTP200 verifies updated8014 files; server session2860 is running at this snapshot.
-Local visual review remains unverified: IAB reported local browser use disabled
-in Work settings. Earlier local browser test attempt timed out and was stopped.
+Local15browser journeys passed22.945s (%TEMP%/yaparo-decision-6nop5vr6); focused
+structured-date/noncash test reran successfully after hiding irrelevant target
+(1.552s, %TEMP%/yaparo-decision-qvjwjtjj). Includes original plan/creative/source/
+helper/mobile, intent/keyboard/history and new typed-answer/date/pruning behavior.
+Configured Ruff/format and JavaScript syntax checks passed. Independent source
+review found no blocking regression in structured answer/state/layout handling.
+
+Actual IAB visual checks now completed at desktop1265px and mobile390px. Initial
+sales form exposed8details; primary groups corrected that. Mobile support selects
+were cramped; one-column controls corrected it. Verified dates readable and no
+horizontal overflow (document375px/viewport390px). Viewport reset afterwards.
+Evidence %TEMP%/yaparo-visual-20261028: fundraising-desktop.png,
+fundraising-mobile.png, sales-mobile.png. Local browser access works this turn;
+the old disabled-browser note is obsolete. HTTP8014 server remains local.
 No provider,
 account, secret, upload, paid service, migration, deployment or publish action.
 
@@ -85,6 +93,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Visually review the paired-intent entry and relevant forms on8014, then refine
-the remaining typed context fields. Verify the latest PR369 CI before merging. Keep real
+Extend compact typed context fields to event details after the current PR369 CI
+is verified. Keep real
 AI/account/forecast/spend/launch gates closed.

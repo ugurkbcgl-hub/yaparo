@@ -36,8 +36,14 @@ Brief UX now starts with two choices: intent and expected viewer response. Their
 combination reveals the short context form; usage/business/sector/destination follow.
 Detail subtypes preserve education, launch, celebration and public-issue semantics.
 Manual Other belongs to detail forms, with unresolved classifications unable to
-qualify paid allocation. Next: validate the revised paired-intent flow visually,
-then refine typed context forms. See [progressive brief](docs/product/progressive-brief.md).
+qualify paid allocation. Paired-intent visual review completed; continue typed
+context forms. See [progressive brief](docs/product/progressive-brief.md).
+
+Sales/fundraising follow-up: compact primary groups, collapsed extras, native
+date/price fields and support-kind/channel/target draft values implemented.
+Actual IAB desktop/mobile review completed; mobile selectors moved to one column.
+Next: extend the same compact typed-form approach to event details, preserving
+current source/plan/publishing gates.
 
 ## Previous unified journey draft — superseded, retained locally
 

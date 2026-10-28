@@ -39,6 +39,13 @@ entries never qualify paid allocation. Hidden branch answers are pruned; risk de
 [progressive brief](docs/product/progressive-brief.md). This is an owned UX policy,
 not a claim that source visibility rules supplied all option compatibility.
 
+Sales/fundraising detail forms now expose four/three primary question groups,
+with additional notes collapsed. Native date ranges, numeric price pairs and
+support-kind/channel/target choices retain structured draft answers; non-cash
+support removes irrelevant money fields. Desktop and390px IAB visual review found
+and corrected cramped mobile selectors. These notes do not qualify account,
+evidence, publishing or spend readiness.
+
 ## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more
