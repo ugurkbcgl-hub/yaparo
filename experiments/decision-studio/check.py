@@ -911,6 +911,11 @@ class StudioCheck(unittest.TestCase):
         self.assertTrue(page.locator("#v2-offer_type").is_visible())
         self.assertFalse(page.locator("#v2-job_title").count())
         page.locator("#v2-checkout_location").select_option("website")
+        page.locator("#v2-checkout_location").focus()
+        page.locator("#v2-checkout_location").select_option("marketplace")
+        self.assertEqual(
+            page.evaluate("document.activeElement.id"), "v2-checkout_location"
+        )
         page.locator("#v2-purchase_url").fill("javascript:alert(1)")
         page.locator('#brief button[type="submit"]').click()
         self.assertIn("biçimini kontrol", page.locator("#result").inner_text())

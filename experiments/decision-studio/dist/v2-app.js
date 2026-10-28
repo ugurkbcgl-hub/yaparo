@@ -66,10 +66,12 @@
     return wrap;
   }
   function renderFields() {
+    const focused = document.activeElement?.id;
+    const extrasOpen = $('fields').querySelector(':scope > details')?.open || false;
     const current = state(); answers = current.answers;
     $('fields').replaceChildren();
     const stage = current.questions.filter(q => q.stage === 1);
-    const optional = el('details'); optional.append(el('summary', 'Ek ayrıntılar (isteğe bağlı)'));
+    const optional = el('details'); optional.open = extrasOpen; optional.append(el('summary', 'Ek ayrıntılar (isteğe bağlı)'));
     for (const module of catalog.modules) {
       const questions = stage.filter(q => q.module_id === module.module_id);
       for (const extra of [false, true]) {
@@ -80,6 +82,7 @@
       }
     }
     if (optional.children.length > 1) $('fields').append(optional);
+    if (focused?.startsWith('v2-')) document.getElementById(focused)?.focus({preventScroll: true});
     $('route-note').textContent = flow.assess(catalog, current).needsClarification
       ? 'Bu iki seçim için hedefi netleştirmemiz gerekiyor. Ayrıntılarını yazabilirsin; henüz bütçe veya kanal dağılımına geçilmeyecek.'
       : 'Yıldızlı bilgiler başlangıç için gerekli. Bağlantı ve özel alanlar tamamlanmadan uygulamaya geçilmez.';

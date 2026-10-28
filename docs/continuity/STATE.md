@@ -19,6 +19,8 @@ Remote https://github.com/ugurkbcgl-hub/yaparo
 Branch codex/unified-journey-prototype; PR369 OPEN.
 Predecessor acc373f full CI40651888006 SUCCESS verified live this turn.
 Current V2 package needs its own CI after push; no deployment or DB migration.
+First V2 commit07fc451 has CI40682615864 in progress at14:53; focused keyboard
+follow-up retains select focus and optional-section state during conditional render.
 
 ## Current milestone: V2 catalog and form preview
 
@@ -58,6 +60,8 @@ V2 app syntax passed. Independent review found numeric schema-key mismatch; fixe
 to minimum/maximum/exclusiveMinimum with regressions, then no blocker reported.
 Importer source-hash/reproduction and negative checks passed; source unchanged.
 These local results do not claim full remote application CI for V2.
+Focus-retention browser regression passed1.524s; evidence
+%TEMP%/yaparo-decision-hdlk2ceh. Ruff format/diff checks also passed.
 
 ## Preserved capabilities and protected work
 
