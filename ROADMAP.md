@@ -1,5 +1,13 @@
 # Yaparo roadmap
 
+## Owned examples — 29 October 2026
+
+Updated all five starting examples to the owned question banks and compact plan.
+Relevant sample fields are synthetic; usage remains an explicit user choice.
+Cross-example switching clears prior plan/content/context without dropping risk.
+Helper free text does not inherit sample facts. Durable-plan contract work below
+remains pending; no launch gates change.
+
 ## Compact plan and review — 29 October 2026
 
 Implemented accepted local UX: concise first-stage summary; no invented budget,

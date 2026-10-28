@@ -51,7 +51,18 @@ Checks added: `node outcome-contract.test.cjs` (46 routes/138 bound concepts),
 `python first_stage_check.py` (default-home UI plus existing plan integration).
 `check.py` retains the19 old journeys against `/legacy.html` plus the V2 preview.
 
-Default authored interactive demo: five quick-start profiles (cafe, boutique,
+Default-home quick starts use the separate `YaparoOwnedExamples` interface bundled
+in the already served simulation.js: five typed synthetic briefs (cafe/boutique
+promotion and visits, software form, local service call, workshop registration).
+Required sample fields except delivery_mode are populated; usage and media plan
+remain explicit. URLs use ornek.example. Another example clears local bounds,
+classification/cards/adaptations; declared risk stays. Helper free text imports
+only its own subject, never sample facts. `node owned-examples.test.cjs` and three
+additional first-stage browser journeys cover the five routes, plan reset, risk
+retention and helper isolation. Main first-stage suite now has14 tests. No new
+runtime asset route, source readiness or actual permission is introduced.
+
+The legacy authored demo retains five quick-start profiles (cafe, boutique,
 B2B software, local service and workshop), context-bound copy/CTA/illustration,
 new trio/similar/undo/history, and a helper that proposes bounded changes with
 an explicit Apply button. Text/CTA/body are visible in the creative and editor.

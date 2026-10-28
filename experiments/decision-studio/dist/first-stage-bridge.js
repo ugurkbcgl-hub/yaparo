@@ -6,7 +6,7 @@
   const M = window.YaparoFirstStage, studio = window.YaparoStudio;
   const D = window.YaparoResearch, B = window.YaparoBriefFlow;
   const intentMap = {promote:'product_service_intro',sell:'sale_promotion',event:'event',lead:'lead_request',hire:'recruitment',fundraise:'fundraising',announce:'announcement',community:'membership',reputation:'reputation'};
-  let ui, previousPair = '', pendingMode = '';
+  let ui, previousPair = '', pendingMode = '', examplePair = '', exampleNotice;
   const read = () => ui?.getSnapshot() || {version:'yaparo-first-stage-v1',intent:'',outcome:'',answers:{}};
   function node(tag, text) {const n = document.createElement(tag); if (text !== undefined) n.textContent = text; return n;}
   function options(select, rows, value = '') {
@@ -111,21 +111,36 @@
   }
   function changed(snapshot) {
     const pair = `${snapshot.intent}/${snapshot.outcome}`;
+    if(examplePair&&pair!==examplePair){exampleNotice.hidden=true;examplePair='';document.querySelectorAll('[data-scenario]').forEach(button=>button.setAttribute('aria-pressed','false'));}
     if (pair !== previousPair) {$('business').value = ''; $('sector').value = ''; pendingMode = ''; previousPair = pair;}
     syncSource(); classification(); studio.invalidateFirstStage();
   }
   function restore(b) {
+    if(exampleNotice)exampleNotice.hidden=true;examplePair='';document.querySelectorAll('[data-scenario]').forEach(button=>button.setAttribute('aria-pressed','false'));
     ui.restore(b.firstStage); previousPair = `${b.firstStage.intent}/${b.firstStage.outcome}`;
     syncSource(); classification();
     $('business').value = b.planContext?.business || ''; classification(); $('sector').value = b.planContext?.sector || '';
     configure();
   }
   function loadExample(profile, description) {
-    const intent = profile.communication === 'event' ? 'event' : profile.business === 'b2b_leadgen' || profile.theme === 'home' ? 'lead' : 'promote';
-    const outcome = intent === 'event' ? 'register' : intent === 'lead' ? (profile.theme === 'home' ? 'call' : 'lead_form') : 'visit';
-    const answers = {};
-    for (const f of M.fields(intent,outcome,answers)) if (f.role === 'subject' && ['text','textarea'].includes(f.type)) answers[f.id] = description || `Sentetik örnek: ${profile.name}`;
-    ui.restore({version:'yaparo-first-stage-v1',intent,outcome,answers}); changed(read()); $('step-0').hidden = false;
+    const key=Object.keys(window.YaparoSimulation.profiles).find(k=>window.YaparoSimulation.profiles[k]===profile);
+    const preset=window.YaparoOwnedExamples.get(key),risk=read().answers.risk;
+    let snapshot;
+    if(preset&&!description)snapshot=preset.snapshot;
+    else{
+      const intent=preset?.snapshot.intent||'promote',outcome=preset?.snapshot.outcome||'understand',answers={};
+      const subject=M.fields(intent,outcome,answers).find(f=>f.role==='subject'&&['text','textarea'].includes(f.type));
+      if(subject&&description)answers[subject.id]=description;
+      snapshot={version:'yaparo-first-stage-v1',intent,outcome,answers};
+    }
+    if(risk)snapshot.answers.risk=risk;
+    studio.resetExample();$('business').value='';$('sector').value='';pendingMode='';previousPair='';
+    ui.restore(snapshot);changed(read());examplePair=`${snapshot.intent}/${snapshot.outcome}`;
+    exampleNotice.textContent=description?'Notun ilgili forma yerleştirildi. Hazır örneğin adresi, bağlantısı ve diğer bilgileri eklenmedi.':`${preset?.label||'Başlangıç'} örneği yüklendi. Bilgiler tamamen kurgusaldır; düzenleyebilir ve kullanım yolunu kendin seçebilirsin.`;
+    if(risk&&risk!=='normal')exampleNotice.textContent+=' Önceki özel koşul beyanın korundu.';
+    exampleNotice.hidden=false;
+    document.querySelectorAll('[data-scenario]').forEach(button=>button.setAttribute('aria-pressed',String(!description&&button.dataset.scenario===key)));
+    studio.go(0);
   }
   studio.attachFirstStage({snapshot:read,brief,label(id) {
     if (id === 'communication') return M.intents().find(i => i.id === read().intent)?.label || '';
@@ -135,6 +150,7 @@
   const legacy = $('brief-form'); legacy.hidden = true;
   for (const control of legacy.querySelectorAll('input,select,textarea,button')) control.disabled = true;
   const mount = $('first-stage-root'); mount.hidden = false;
+  exampleNotice=node('p');exampleNotice.id='owned-example-status';exampleNotice.className='inline-notice';exampleNotice.setAttribute('role','status');exampleNotice.hidden=true;mount.before(exampleNotice);
   ui = window.YaparoFirstStageUI.mount(mount,{onChange:changed,onSubmit:() => {syncSource(); if (studio.acceptFirstStage()) configure();}});
   modeSelect.addEventListener('change',() => {
     if (!modeSelect.value) return; pendingMode = modeSelect.value;
