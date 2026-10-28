@@ -42,21 +42,21 @@
   for(const [id,label,min,max] of [['plan-latitude','Enlem',35,43],['plan-longitude','Boylam',25,45]]){const box=node('div'),l=node('label',label),input=node('input');input.id=id;input.type='number';input.step='0.00001';input.min=min;input.max=max;l.htmlFor=id;box.append(l,input);coords.append(box);}
   const precise=node('details');precise.id='plan-coordinate-details';precise.append(node('summary','Hassas konum için koordinat gir'),coords);radiusSection.append(precise,node('p','Harita seçimi yaklaşık konumdur; hassas merkez için koordinat girebilirsin. Daire Türkiye kara sınırıyla kesilir; gerçek platform hedeflemesi doğrulanmış sayılmaz.','plan-muted'));bounds.append(radiusSection);
   const geoView=window.YaparoPlanGeo.mount(mapRoot,{onSelect:({lat,lon})=>{$('plan-latitude').value=lat;$('plan-longitude').value=lon;updateMap();studio.planChanged();updateFooter();}});
-  const advanced=node('details',undefined,'plan-card plan-advanced');advanced.id='plan-advanced';advanced.append(node('summary','Öneri için ek bilgiler'));controls.append(advanced);
-  advanced.append($('owned-plan-context'));
-  const refineAudience=node('div');refineAudience.id='plan-audience-refinement';refineAudience.append(node('h3','Kitleyi daha ayrıntılı seç'),audienceBox);advanced.append(refineAudience);
-  advanced.append(moveField('measurement','Ölçüm hazırlığı',node('div')));
-  const economics=$('plan-controls').querySelector('.economics');economics.querySelector('summary').textContent='İş ekonomisi · isteğe bağlı';
+  const retired=node('div');retired.hidden=true;retired.id='plan-retired-controls';controls.append(retired);
+  retired.append($('owned-plan-context'),audienceBox);
+  retired.append(moveField('measurement','Ölçüm hazırlığı',node('div')));
+  const economics=$('plan-controls').querySelector('.economics');economics.id='plan-economics';economics.classList.add('plan-card');
+  const economicFields=node('div',undefined,'field-pair four-fields');
+  for(const [id,label]of [['order-value','Ortalama sipariş değeri (TL)'],['margin','Katkı marjı (%)'],['cpa','Kabul edilebilir edinme maliyeti (TL)'],['capacity','Günlük kapasite']])moveField(id,label,economicFields);
+  const oldEcon=economics.querySelector('.details-inner');for(const child of [...oldEcon.children])retired.append(child);
   const economicsChoice=node('label',undefined,'check-label'),economicsCheck=node('input');economicsCheck.id='plan-economics-enabled';economicsCheck.type='checkbox';economicsChoice.append(economicsCheck,document.createTextNode('Kapasite ve kârlılık sınırı eklemek istiyorum'));
-  economics.querySelector('.details-inner').prepend(economicsChoice);advanced.append(economics);
-  const simulation=node('details');simulation.id='plan-simulation';simulation.append(node('summary','Demo varsayımları ve kaynak bilgisi'),node('p','Kanal hesabı, maliyetler ve erişim sayıları hazırlanmış örneklerdir. Gerçek hesap bağlantısı veya sonuç garantisi yok.','plan-muted'));
-  simulation.append(moveField('fixture','Örnek veri',node('div')),moveField('demo-readiness','Örnek hesap hazırlığı',node('div')));
-  if($('source-panel'))simulation.append($('source-panel'));
-  advanced.append(simulation);
-  // Keep source controls for compatibility, but only expose relevant fields above.
+  const econInner=node('div',undefined,'details-inner');econInner.append(economicsChoice,economicFields);economics.replaceChildren(node('summary','Planı ayrıntılandır · isteğe bağlı'),econInner);
+  const basis=node('section');basis.id='plan-analysis-basis';
+  const dataDetails=node('details',undefined,'plan-card plan-data-details');dataDetails.id='plan-data-details';dataDetails.append(node('summary','Önerinin dayanakları ve hazırlık durumu'),basis,node('p','Bu yerel örnekte hesap, maliyet ve erişim verileri doğrulanmış değildir. Gerçek AI / reklam platformu sorgusu veya sonuç garantisi yok.','plan-muted'));
+  if($('source-panel'))dataDetails.append($('source-panel'));results.append(dataDetails);
   const sourceControls=node('div');sourceControls.hidden=true;sourceControls.id='plan-source-controls';
-  for(const child of [...controls.children])if(child!==bounds&&child!==advanced)sourceControls.append(child);
-  controls.replaceChildren(bounds,advanced,sourceControls);
+  for(const child of [...controls.children])if(child!==bounds&&child!==economics)sourceControls.append(child);
+  controls.replaceChildren(bounds,economics,sourceControls);
   $('goal').disabled=true;
   $('duration').required=false;
   const productionDetails=node('details',undefined,'plan-card plan-production-details');productionDetails.append(node('summary','İçerik ve yayın hazırlığı'));
@@ -74,7 +74,7 @@
     const isPaid=paid(),mode=usage(),commerce=['promote','sell','lead'].includes(brief()?.intent);
     heading.textContent=isPaid?'Bütçen, bölgen, doğru kanallar.':mode==='content_only'?'İçeriğinin biçimini seç.':'Nerede paylaşmak istiyorsun?';
     lead.textContent=isPaid?'İsteğini biliyoruz. Planın sınırlarını belirle; payları birlikte netleştirelim.':'İsteğin korundu. Yalnız bu kullanım için gerekli seçimlerle devam et.';
-    controls.hidden=!isPaid;results.hidden=!isPaid;bounds.hidden=!isPaid;advanced.hidden=!isPaid;
+    controls.hidden=!isPaid;results.hidden=!isPaid;bounds.hidden=!isPaid;dataDetails.hidden=!isPaid;
     for(const c of controls.querySelectorAll('input,select,textarea'))c.disabled=!isPaid;
     $('goal').disabled=true;
     for(const id of ['region','radius','budget','start'])$(id).required=isPaid;
@@ -86,11 +86,10 @@
     for(const id of ['plan-latitude','plan-longitude'])$(id).required=false;
     economics.hidden=!isPaid||!commerce;
     for(const id of ['order-value','margin','cpa','capacity']){$(id).disabled=!isPaid||!commerce||!economicsCheck.checked;$(id).required=isPaid&&commerce&&economicsCheck.checked;}
-    $('fixture').disabled=!isPaid;$('demo-readiness').disabled=!isPaid;
+    for(const control of sourceControls.querySelectorAll('input,select,textarea')){control.disabled=true;control.required=false;}
     const audience=roleAudience();audienceLine.textContent=audience?`Kitle: ${audience}`:'';audienceLine.hidden=!audience;
-    $('audience').required=isPaid&&!audience;
-    if(!audience)fields.insertBefore(audienceBox,budgetBox);else refineAudience.append(audienceBox);
-    const c=window.YaparoOutcomeContract.resolve(brief());$('owned-plan-context').hidden=!isPaid||!c.legacyProjection;
+    $('audience').required=false;$('audience').disabled=true;
+    $('owned-plan-context').hidden=true;
     productionDetails.hidden=mode==='unsure';
     $('organic-controls').hidden=!['organic','hybrid'].includes(mode);
     $('owned-content-formats').hidden=mode!=='content_only';
@@ -114,10 +113,12 @@
     if($('geo-mode').value==='radius'){const map=updateMap();if(!map?.valid)return 'Türkiye içinde bir konum ve 1–800 km arasında bir mesafe seç.';}
     if(!$('budget').value||!$('budget').checkValidity())return 'Toplam reklam bütçeni belirt.';
     syncDates();if(!$('start').value||!end.value||!end.checkValidity()||!$('duration').value)return 'Geçerli bir yayın başlangıcı ve bitişi seç (en fazla 365 gün).';
-    if(!roleAudience()&&!$('audience').value)return 'Ulaşmak istediğin kitleyi seç.';
     return '';
   }
-  function inputPatch(){const isEconomics=paid()&&!economics.hidden&&economicsCheck.checked;return {economicsMode:isEconomics?'provided':'not_provided',...(isEconomics?{}:{value:0,margin:0,cpa:0,capacity:0}),audience:$('audience').value||'owned_declared',...(paid()&&$('geo-mode').value==='radius'?{region:'Haritada seçilen konum',geoCenter:{lat:Number($('plan-latitude').value),lon:Number($('plan-longitude').value),boundary:window.YaparoPlanGeo.version||'pinned-turkey',verified:false}}:{})};}
+  function inputPatch(){const isEconomics=paid()&&!economics.hidden&&economicsCheck.checked,a=window.YaparoOutcomeContract.analyze(brief());return {firstStage:brief(),ownedAudience:a.ownedAudience,
+    goal:a.goal||'unsupported',communication:a.communication||'not_provided',action:a.action||'unsupported',risk:a.risk||'not_declared',business:'owned_unspecified',sector:'owned_unspecified',audience:a.ownedAudience||'owned_unspecified',
+    fixture:'interactive',readiness:'core',measurement:'none',tracking:false,catalog:false,economicsMode:isEconomics?'provided':'not_provided',...(isEconomics?{}:{value:0,margin:0,cpa:0,capacity:0}),
+    ...(paid()&&$('geo-mode').value==='radius'?{region:'Haritada seçilen konum',geoCenter:{lat:Number($('plan-latitude').value),lon:Number($('plan-longitude').value),boundary:window.YaparoPlanGeo.version,verified:false}}:{})};}
   function share(plan,row,value){try{const result=studio.changeShare(row.channel.id,Number(value));$('decision-status').textContent=result.limited?'Pay, kanalın test minimumu veya bütçe sınırında tutuldu. Diğer paylar dengelendi.':'Paylar güncellendi. Diğer seçili kanallar orantılı dengelendi; yeniden öneri elle yaptığın değişikliği sıfırlar.';updateFooter();}catch(error){$('decision-status').textContent=error.message;renderPlan(plan);}}
   function renderPlan(plan){
     lastPlan=plan;const stats=$('plan-summary');stats.replaceChildren();for(const [label,amount] of [['Toplam',plan.total],['Kanallara ayrılan',plan.allocated],['Ayrılmayan',plan.unallocated]]){const box=node('div',undefined,'summary-stat');box.append(node('span',label),node('strong',money(amount)));stats.append(box);}
@@ -148,7 +149,10 @@
     }
     if(!plan.allocated)upper.append(node('p',plan.blocked?'Gerekli belge / politika değerlendirmesi tamamlanmadı; bütçe dağıtılmadı.':'Bu koşullarda pay ayırabileceğimiz kanal yok. Diğer kanallardaki gerekçeleri inceleyebilirsin.','empty-state'));
     const reserve=node('p',`Ayrılmayan pay: %${(plan.total?plan.unallocated/plan.total*100:0).toLocaleString('tr-TR',{maximumFractionDigits:2})} · ${money(plan.unallocated)}. Bütçenin tamamını dağıtmak zorunda değilsin. Yüzdeler yuvarlanır.`,'plan-reserve');upper.append(reserve);
-    $('why-plan').replaceChildren(node('strong','Bu dağılım neden böyle?'),node('p',plan.blocked?'Belge ve politika koşulları bütçe önerisinden önce gelir.':`${window.YaparoOutcomeContract.resolve(brief()).outcomeLabel} hedefini, bölgeyi, süreyi ve örnek kanal koşullarını birlikte değerlendirdik. Yalnız test minimumu ve tavanı karşılayan kanallara pay ayrıldı.`),node('small',`Hazırlanmış yerel demo · gerçek AI / platform tahmini değil.${plan.economicsProvided?' Kullanıcının girdiği ekonomi sınırı uygulandı.':' Kapasite ve kârlılık verisi girilmedi; işletme getirisi değerlendirilmedi.'}`));updateFooter();
+    const analysis=plan.analysis;basis.replaceChildren(node('h3','İlk aşamada paylaştıkların'));
+    const facts=node('dl');for(const row of analysis?.known||[])facts.append(node('dt',row.label),node('dd',row.value));basis.append(facts,node('h3','Henüz doğrulanmayanlar'));
+    for(const row of analysis?.unknown||[])basis.append(node('p',row.label,'plan-muted'));
+    $('why-plan').replaceChildren(node('strong','Bu dağılım neden böyle?'),node('p',plan.blocked?'Gerekli belge ve politika koşulları tamamlanmadı; bütçe dağıtılmadı.':analysis?.reason||'İlk aşama bilgileri ve plan sınırları birlikte değerlendirildi.'),node('p',`Bölge: ${plan.input.geo==='nationwide'?'Türkiye geneli':plan.input.region} · ${plan.input.days} gün · toplam ${money(plan.total)}. Yalnız test minimumu ve tavanı karşılayan örnek kanallara pay ayrılabilir.`),node('small',`Hazırlanmış yerel demo · gerçek AI / platform tahmini değil. Sınıflandırılmayan alanlar puana katılmadı; örnek puan başarı olasılığı değildir.${plan.economicsProvided?' Girdiğin ekonomi sınırı uygulandı.':' Kapasite ve kârlılık verisi girilmedi.'}`));updateFooter();
   }
   function renderReview({root,brief:b,creative,plan,production,adaptations,artwork}){
     const panel=node('section',undefined,'plan-card review-compact'),dl=node('dl');panel.append(node('h2','Çalışmanın kısa özeti'));
@@ -161,6 +165,6 @@
   for(const id of ['start','plan-end'])$(id).addEventListener('input',syncDates);
   form.addEventListener('input',()=>{syncDates();updateMap();updateFooter();});
   form.addEventListener('change',()=>{syncDates();updateMap();updateFooter();});
-  studio.attachPlanUI({resetForExample(){lastBrief='';lastPair='';lastAudience='';lastPlan=null;for(const id of ['budget','region','radius','plan-latitude','plan-longitude','start','plan-end','duration','audience','order-value','margin','cpa','capacity'])$(id).value='';$('geo-mode').value='';$('measurement').value='none';economicsCheck.checked=false;end.setCustomValidity('');geoView.update(null);},prefill,configure,issue,sourceReady:()=>paid()&&!issue()&&!!$('business').value&&!!$('sector').value&&!!window.YaparoOutcomeContract.resolve(brief()).legacyProjection,revealIssue(){if(paid()&&window.YaparoOutcomeContract.resolve(brief()).legacyProjection)advanced.open=true;},inputPatch,renderPlan,renderReview,onStep(step){banner.textContent=step===1?'Yerel demo · gerçek AI, reklam tahmini veya yayın yapılmaz. Yalnız sentetik örnek kullan; yenileme çalışmayı sıfırlar.':originalBanner;if(step===1){configure();if(lastPlan)renderPlan(lastPlan);}}});
+  studio.attachPlanUI({resetForExample(){lastBrief='';lastPair='';lastAudience='';lastPlan=null;for(const id of ['budget','region','radius','plan-latitude','plan-longitude','start','plan-end','duration','audience','order-value','margin','cpa','capacity'])$(id).value='';$('geo-mode').value='';$('measurement').value='none';economicsCheck.checked=false;end.setCustomValidity('');geoView.update(null);},prefill,configure,issue,sourceReady:()=>paid()&&!issue()&&!!window.YaparoOutcomeContract.analyze(brief()).legacyProjection,inputPatch,renderPlan,renderReview,onStep(step){banner.textContent=step===1?'Yerel demo · gerçek AI, reklam tahmini veya yayın yapılmaz. Yalnız sentetik örnek kullan; yenileme çalışmayı sıfırlar.':originalBanner;if(step===1){configure();if(lastPlan)renderPlan(lastPlan);}}});
   configure();
 })();

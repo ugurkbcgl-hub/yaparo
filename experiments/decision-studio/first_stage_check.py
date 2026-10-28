@@ -198,8 +198,6 @@ class FirstStageCheck(unittest.TestCase):
         self.field("delivery_mode").select_option("paid")
         self.submit()
         self.plan_basics()
-        self.page.locator("#business").select_option("local_retail")
-        self.page.locator("#sector").select_option("food_hospitality")
         self.page.get_by_text(
             "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
         ).wait_for(state="attached")
@@ -250,14 +248,94 @@ class FirstStageCheck(unittest.TestCase):
             "eklenmedi", self.page.locator("#owned-example-status").inner_text()
         )
 
+    def test_recommendation_uses_brief_without_repeated_classification(self):
+        self.page.locator('[data-scenario="cafe"]').click()
+        self.field("delivery_mode").select_option("paid")
+        self.submit()
+        self.assertEqual(self.page.locator("#plan-advanced").count(), 0)
+        self.assertEqual(
+            self.page.get_by_text("Öneri için ek bilgiler", exact=True).count(), 0
+        )
+        for field in [
+            "business",
+            "sector",
+            "audience",
+            "measurement",
+            "fixture",
+            "demo-readiness",
+        ]:
+            self.assertTrue(self.page.locator(f"#{field}").is_hidden())
+            self.assertTrue(self.page.locator(f"#{field}").is_disabled())
+        self.plan_basics()
+        self.page.get_by_text(
+            "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
+        ).wait_for(state="attached")
+        self.page.locator("#recommend").click()
+        plan = self.snapshot()["plan"]
+        self.assertGreater(plan["allocated"], 0)
+        self.assertEqual(
+            plan["analysis"]["subject"],
+            self.snapshot()["firstStage"]["answers"]["promote_name"],
+        )
+        self.assertIn(
+            "Sentetik Örnek Kafe", self.page.locator("#why-plan").inner_text()
+        )
+        self.assertIn("Bireyler", self.page.locator("#why-plan").inner_text())
+        self.assertEqual(plan["analysis"]["sourceSector"], None)
+        self.assertEqual(plan["analysis"]["risk"], None)
+        self.assertEqual(self.snapshot()["brief"]["risk"], "not_declared")
+        self.assertEqual(plan["qualification"]["publishReady"], False)
+        self.page.locator("#business").evaluate("el=>el.value='b2b_leadgen'")
+        self.page.locator("#sector").evaluate("el=>el.value='food_hospitality'")
+        self.page.locator("#recommend").click()
+        self.assertEqual(
+            [r["amount"] for r in self.snapshot()["plan"]["rows"]],
+            [r["amount"] for r in plan["rows"]],
+        )
+        self.assertEqual(
+            self.snapshot()["plan"]["input"]["business"], "owned_unspecified"
+        )
+        self.page.locator("#plan-data-details > summary").click()
+        self.assertIn(
+            "Henüz doğrulanmayanlar",
+            self.page.locator("#plan-data-details").inner_text(),
+        )
+        self.assertEqual(self.page.locator("#plan-data-details select").count(), 0)
+
+    def test_recommendation_rebinds_changed_outcome_and_preserves_risk_gate(self):
+        self.page.locator('[data-scenario="cafe"]').click()
+        self.field("delivery_mode").select_option("paid")
+        self.submit()
+        self.plan_basics()
+        self.page.locator("#recommend").click()
+        previous = self.snapshot()["plan"]["analysis"]["signature"]
+        self.page.locator('#step-nav [data-step="0"]').click()
+        self.select_pair("promote", "traffic")
+        self.fill_remaining(mode="paid")
+        self.field("action_url").fill("https://ornek.example/ziyaret")
+        self.submit()
+        self.page.locator("#recommend").click()
+        current = self.snapshot()["plan"]
+        self.assertEqual(current["input"]["goal"], "traffic")
+        self.assertEqual(current["analysis"]["outcome"], "traffic")
+        self.assertNotEqual(current["analysis"]["signature"], previous)
+        self.assertIsNone(self.snapshot()["contentBinding"])
+        self.page.locator('#step-nav [data-step="0"]').click()
+        self.field("risk").evaluate(
+            "el=>{const d=el.closest('details');if(d)d.open=true;}"
+        )
+        self.field("risk").select_option("health")
+        self.submit()
+        self.page.locator("#recommend").click()
+        self.assertEqual(self.snapshot()["plan"]["allocated"], 0)
+        self.assertIn("health", self.snapshot()["plan"]["analysis"]["risks"])
+        self.assertTrue(self.snapshot()["plan"]["blocked"])
+
     def plan_basics(self):
         self.page.locator("#geo-mode").select_option("country")
         self.page.locator("#budget").fill("3000")
         self.page.locator("#start").fill("2026-11-01")
         self.page.locator("#plan-end").fill("2026-11-07")
-        if not self.page.locator("#plan-advanced").get_attribute("open") == "":
-            self.page.locator("#plan-advanced > summary").click()
-        self.page.locator("#audience").select_option("local_nearby")
 
     def test_every_pair_has_own_form_and_no_cross_bank_fields(self):
         intents = self.page.evaluate("YaparoFirstStage.intents()")
@@ -438,7 +516,7 @@ class FirstStageCheck(unittest.TestCase):
         self.select_pair("event", "register")
         self.assertNotIn("promote_name", self.snapshot()["firstStage"]["answers"])
 
-    def test_paid_manual_context_mapping_and_later_edit_invalidation(self):
+    def test_paid_brief_analysis_and_later_edit_invalidation(self):
         self.select_pair("promote", "visit")
         self.fill_remaining(mode="paid")
         self.submit()
@@ -446,8 +524,6 @@ class FirstStageCheck(unittest.TestCase):
         self.assertIsNone(self.snapshot()["plan"])
         self.assertEqual(self.page.locator("#business").input_value(), "")
         self.plan_basics()
-        self.page.locator("#business").select_option("local_retail")
-        self.page.locator("#sector").select_option("fashion_beauty_lifestyle")
         self.page.get_by_text(
             "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
         ).wait_for(state="attached")

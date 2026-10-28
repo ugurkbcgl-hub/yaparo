@@ -44,7 +44,7 @@
   function illustration(theme){return `<svg viewBox="0 0 400 400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">${shapes[theme]||shapes.product}</svg>`;}
   function forecast(input,data){
     const days=input.days/7, local=input.geo==='radius_local'?Math.min(5,Math.max(.12,input.radius/10)):input.geo==='nationwide'?7:1;
-    const b2b=['b2b_leadgen','saas_subscription'].includes(input.business), pricey=b2b?2.5:input.sector==='food_hospitality'?.7:1;
+    const b2b=input.ownedAudience==='business'||['b2b_leadgen','saas_subscription'].includes(input.business), pricey=b2b?2.5:input.sector==='food_hospitality'?.7:1;
     const forecasts=data.channels.map((c,index)=>{const owned=c.tier==='non_paid_recommendation',managed=/managed|partner|creator/.test(c.purchase),search=c.type==='paid_search'||c.type==='paid_search_commerce';
       let accountReady=input.readiness!=='none' && (!managed || input.readiness==='all');
       let assetReady=!c.assets.some(a=>/^(vertical_video|horizontal_or_vertical_video|vertical_video_or_ar|audio_or_video)$/.test(a))||input.video;

@@ -91,6 +91,8 @@ jobs:
           node experiments/decision-studio/brief-flow.test.cjs
           node experiments/decision-studio/first-stage-bank.test.cjs
           node experiments/decision-studio/outcome-contract.test.cjs
+          node experiments/decision-studio/brief-analysis.test.cjs
+          node experiments/decision-studio/owned-recommendation.test.cjs
           node experiments/decision-studio/owned-examples.test.cjs
           node experiments/decision-studio/plan-summary.test.cjs
           node experiments/decision-studio/plan-geo.test.cjs
