@@ -1,60 +1,53 @@
-# Single-screen contextual brief — local prototype
+# Intent and expected response — local brief prototype
 
-Owner correction, 27 October 2026: restore the original one-screen brief rather
-than a five-panel sub-journey. Keep contextual dropdown narrowing, and allow a
-manual Other answer wherever the predefined options do not fit.
+Owner direction, 28 October 2026: begin with what the person wants to do and what
+the viewer should do. Keep the interaction on one screen. Reveal the relevant
+context form after the pair is selected; avoid a second wizard inside the brief.
 
-## Implemented
+## Entry and context
 
-One form contains communication job, business model, sector, relevant response
-destination, desired action, free text/audience/usage and optional branch notes.
-No family-selection screens, progress wizard, Back/Next or hidden question panels.
-Prepared examples are directly available again. Initial taxonomy remains blank.
+Nine purpose cards cover introduction, sales, events, requests/appointments,
+recruitment, fundraising, announcements, community/education and public messages.
+The second choice contains only responses relevant to that purpose. Neither entry
+choice offers Other or unsure. Launch, celebration, education and public-issue
+subtypes are explicitly editable inside their context form; they are not silently
+classified as membership or reputation. Changing subtype clears an incompatible
+response and asks for a new one.
 
-Owned policy `yaparo-brief-flow-v2` narrows business choices by communication job,
-sector choices by business model and actions by purpose/explicit destination.
-These are versioned UX shortlists, not eligibility, law or current platform specs.
-All14canonical communication jobs/11business models/18sectors/16actions remain
-reachable on appropriate paths. Business and sector are separate dimensions;
-a shop's explicit own-website destination supports an online-purchase action.
-Unknown parent values are not given a fabricated compatible category. When the
-owner deliberately chooses Other, independent known business/sector options may
-still be offered for explicit selection; this is not inferred classification.
+Usage (paid/organic/both), business model, sector and response destination are
+collected after the pair. Business/sector shortlists remain contextual. Destination
+options follow the chosen response; changing business or destination must not
+silently replace that response. Custom business, sector and destination descriptions
+are supported in the detail form. Free description/audience/message are optional;
+empty text is not treated as a known business fact. Starter profiles remain available.
 
-## Manual Other
+Owned UX policy `yaparo-brief-flow-v3` is separate from source showWhen rules.
+Source taxonomy and research files remain unchanged. Source `unsure` is deliberately
+not exposed at entry. All other communication kinds retain explicit paths.
 
-Communication, business, sector, action and response destination have a manual
-Other path. A short text field appears only for that choice. Trimmed nonempty
-text is required, limited to200characters, treated as literal text and recorded
-in `brief.custom` under its field key. Existing conditional Other choices
-(promotion, announcement and event type) also expose an explanation, stored by
-source question ID and pruned when their branch disappears. Sector uses canonical `other`; other
-primary selectors use `__other__`. No custom string becomes a source enum or
-verified platform category. Returning to a normal choice removes its custom
-field/value from the current brief; hidden branch notes are also pruned.
+Fundraising reveals organiser, permit, validity/finance and consent notes. Permit,
+consent and statement-approval selectors record a declaration or preparation state,
+never verified evidence. They do not admit a paid campaign. Document upload and
+actual bank-detail verification remain outside this local synthetic prototype.
+Typed permit/finance/date controls and full pair-specific form refinement remain open.
 
-Custom descriptions remain unresolved. Organic-only work may create an explicitly
-authored draft; paid allocation uses missing-forecast mode and stays zero until
-classification is qualified. No automatic mapping, model call, spend, account
-access or publishing is created by typing Other. It is not silently called an
-approved category. The current prototype does not implement custom classification.
+## State and manual details
 
-Risk declarations survive parent changes and starter/helper profile replacement.
-Changing a dropdown does not remove a declared risk or qualify publication.
-Existing source freshness, downstream invalidation and plan-first journey stay.
-No database change, deployment, upload or paid production.
+Purpose/response edits invalidate the existing plan/content. Branch answers and
+conditional Other explanations are pruned when their purpose disappears. Risk
+declarations survive purpose/profile changes. History restoration rerenders the
+two entry selections and the context form from the saved brief.
 
-## Source distinction and verification
+Manual Other requires trimmed nonempty text up to 200 characters. Values are
+literal notes in `brief.custom`, not automatic category mappings. Returning to a
+canonical choice removes the note. Unresolved custom entries keep paid allocation
+at zero; organic authored drafts remain possible. No real AI, upload, account,
+spend or publishing access is introduced.
 
-The supplied report section4.1/4.4 supports contextual questions and retaining
-intent. Recovered visibility rules do not define a complete option compatibility
-matrix. The new narrowing policy is owned, not falsely copied from those rules.
-External DOCX/XLSX/package and normalized research observations remain unchanged.
-Full79typed questions/94rules, evidence and conflict handling are still pending.
+## Verification scope
 
-Pure tests cover canonical reachability, current-context shortlists, explicit
-destination override and recursive pruning. Browser checks cover one-screen
-layout, narrowing, Other required/blank/length/literal handling, custom payload,
-return to canonical choices, conditional Other/pruning, example switching and
-history restoration, zero paid allocation and all existing journey/source/
-helper/mobile boundaries. Results are recorded in continuity after execution.
+Pure checks cover response relevance, narrowed destinations, source kinds,
+business/sector shortlists and hidden-answer pruning. Existing browser journeys
+are updated to select the entry cards before filling the context form and check
+state preservation, custom notes, plan invalidation and history. Actual execution
+results belong in STATE.md; passing old tests is not evidence for this revision.

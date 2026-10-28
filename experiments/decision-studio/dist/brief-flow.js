@@ -1,7 +1,7 @@
 /* Owned, versioned brief UX policy. Source question visibility is not option filtering. */
 (function(root){
   'use strict';
-  const version='yaparo-brief-flow-v2';
+  const version='yaparo-brief-flow-v3';
   const groups={
     communication:[
       {id:'offer',label:'Ürün, hizmet veya satış',values:['product_service_intro','launch','sale_promotion','lead_request']},
@@ -130,7 +130,29 @@
     }
     return result;
   }
-  const api={version,families,choices,familyOf,businesses,sectors,actions,pruneAnswers};
+  // Intent is chosen before business/destination. Later detail edits must never
+  // silently change what the viewer is being asked to do.
+  const intentMap={
+    product_service_intro:['remember','understand','visit_store','visit_website','fill_form','call','message_whatsapp','download_app'],
+    launch:['remember','understand','visit_store','visit_website','follow_engage','download_app'],
+    sale_promotion:['buy_online','buy_marketplace','visit_store','message_whatsapp','visit_website','remember','understand'],
+    lead_request:['book_appointment','fill_form','message_whatsapp','call','visit_website'],
+    event:['register_event','visit_website','message_whatsapp','understand','visit_store'],
+    recruitment:['apply_job','fill_form','visit_website'],
+    fundraising:['donate','understand','visit_website'],
+    announcement:['understand','remember','visit_website','follow_engage'],
+    education:['understand','visit_website','follow_engage','register_event'],
+    membership:['join_membership','understand','visit_website','follow_engage'],
+    reputation:['understand','remember','follow_engage','visit_website'],
+    public_issue:['understand','remember','follow_engage','visit_website'],
+    celebration:['remember','follow_engage','understand']
+  };
+  function intentActions(communication){return [...(intentMap[communication]||[])];}
+  function destinations(action,data){
+    const fixed={visit_store:['physical_store'],buy_online:['own_website'],buy_marketplace:['marketplace'],message_whatsapp:['whatsapp_phone'],call:['whatsapp_phone'],fill_form:['lead_form','own_website'],book_appointment:['lead_form','own_website','whatsapp_phone'],download_app:['app']};
+    return (data?.options||[]).filter(o=>o.questionId==='S1_B02'&&(!fixed[action]||fixed[action].includes(o.value)));
+  }
+  const api={version,families,choices,familyOf,businesses,sectors,actions,pruneAnswers,intentActions,destinations};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.YaparoBriefFlow=api;
 })(typeof window!=='undefined'?window:globalThis);

@@ -3,6 +3,21 @@ const assert=require('node:assert/strict');
 const F=require('./dist/brief-flow.js');
 global.window={};require('./dist/data.js');
 const D=window.YaparoResearch;
+// The initial response remains authoritative as later business details change.
+assert.deepEqual(F.intentActions('fundraising'),['donate','understand','visit_website']);
+assert.ok(!F.intentActions('fundraising').includes('buy_online'));
+assert.ok(F.intentActions('sale_promotion').includes('remember'));
+assert.ok(F.intentActions('product_service_intro').includes('visit_store'));
+assert.ok(F.intentActions('product_service_intro').includes('fill_form'));
+assert.deepEqual(F.intentActions('unsure'),[]);
+assert.deepEqual(F.intentActions('__other__'),[]);
+assert.deepEqual(F.destinations('buy_online',D).map(o=>o.value),['own_website']);
+assert.deepEqual(F.destinations('visit_store',D).map(o=>o.value),['physical_store']);
+assert.ok(!F.destinations('call',D).some(o=>o.value==='marketplace'));
+for(const comm of D.options.filter(o=>o.questionId==='S1_Q01'&&o.value!=='unsure')){
+  assert.ok(F.intentActions(comm.value).length);
+  for(const value of F.intentActions(comm.value))assert.ok(D.options.some(o=>o.questionId==='S1_Q04'&&o.value===value));
+}
 const ids={communication:'S1_Q01',business:'S3_Q02',sector:'S3_Q03'};
 for(const [kind,q] of Object.entries(ids)){
   const all=D.options.filter(o=>o.questionId===q).map(o=>o.value).sort();
@@ -14,7 +29,7 @@ for(const [kind,q] of Object.entries(ids)){
 assert.deepEqual(F.choices('communication','missing',D),[]);
 assert.deepEqual(F.families('unknown'),[]);
 assert.equal(F.familyOf('business','unknown'),null);
-assert.equal(F.version,'yaparo-brief-flow-v2');
+assert.equal(F.version,'yaparo-brief-flow-v3');
 const businesses=job=>F.businesses(job,D).map(o=>o.value);
 assert.equal(businesses('product_service_intro').length,9);
 assert.ok(!businesses('product_service_intro').includes('nonprofit_fundraising'));

@@ -71,13 +71,23 @@ class StudioCheck(unittest.TestCase):
         description=None,
         submit=True,
     ):
-        """Use direct single-screen fields, never patch application state."""
-        page.locator("#communication").select_option(communication)
+        """Choose intent/response first, then fill the revealed context form."""
+        family = {
+            "launch": "product_service_intro",
+            "education": "membership",
+            "celebration": "announcement",
+            "public_issue": "reputation",
+        }.get(communication, communication)
+        page.locator(f'[data-purpose="{family}"]').click()
+        # The subtype control is contextual; choose a valid initial response to reveal it.
+        if family != communication:
+            page.locator("#action-choices button").first.click()
+            page.locator("#work-kind").select_option(communication)
+        page.locator(f'[data-action="{action}"]').click()
         page.locator("#business").select_option(business)
         page.locator("#sector").select_option(sector)
         if page.locator("#q-S1_B02").is_visible():
             page.locator("#q-S1_B02").select_option(destination)
-        page.locator("#action").select_option(action)
         page.locator("#journey-mode").select_option(mode)
         if description is not None:
             page.locator("#brief").fill(description)
@@ -496,8 +506,12 @@ class StudioCheck(unittest.TestCase):
             ).count(),
             0,
         )
-        self.assertTrue(page.locator("#brief").is_visible())
-        self.assertTrue(page.locator("#communication").is_visible())
+        self.assertFalse(page.locator("#brief").is_visible())
+        self.assertFalse(page.locator("#communication").is_visible())
+        self.assertFalse(page.locator("#journey-mode").is_visible())
+        self.assertTrue(page.locator("#brief-submit").is_disabled())
+        self.assertNotIn("Diğer", page.locator("#purpose-choices").inner_text())
+        self.assertNotIn("Emin değilim", page.locator("#purpose-choices").inner_text())
         self.assertTrue(page.locator("#scenario-examples").is_visible())
         self.complete_brief(
             page,
@@ -531,22 +545,19 @@ class StudioCheck(unittest.TestCase):
         self.assertIn("visit_store", actions)
         self.assertNotIn("donate", actions)
         self.assertNotIn("apply_job", actions)
-        self.assertNotIn("download_app", actions)
+        self.assertIn("download_app", actions)
         self.assertLess(len(actions), 16)
+        page.locator('[data-action="visit_website"]').click()
         page.locator("#q-S1_B02").select_option("own_website")
-        self.assertEqual(page.locator("#action").input_value(), "")
-        self.assertIn(
-            "buy_online",
-            page.locator("#action option").evaluate_all("ns=>ns.map(n=>n.value)"),
-        )
-        page.locator("#action").select_option("buy_online")
+        self.assertEqual(page.locator("#action").input_value(), "visit_website")
+        self.assertTrue(page.locator("#context-form").is_visible())
         page.screenshot(
             path=str(self.evidence / "brief-single-screen-desktop.png"), full_page=True
         )
         page.locator("#brief-submit").click()
         brief = page.evaluate("YaparoStudio.getSnapshot().brief")
         self.assertEqual(brief["business"], "local_retail")
-        self.assertEqual(brief["action"], "buy_online")
+        self.assertEqual(brief["action"], "visit_website")
         self.assertEqual(brief["branch"]["S1_B02"], "own_website")
         self.assertNotIn("S1_F01", brief["branch"])
         self.assertEqual(brief["risk"], "health")
@@ -584,13 +595,36 @@ class StudioCheck(unittest.TestCase):
         self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
         page.close()
 
+    def test_paired_intent_subtypes_and_plan_invalidation(self):
+        page = self.browser.new_page()
+        errors = []
+        page.on("pageerror", lambda error: errors.append(str(error)))
+        page.goto(self.origin)
+        self.complete_brief(page, mode="organic")
+        self.open_creatives(page)
+        page.locator('#step-nav [data-step="0"]').click()
+        page.locator('[data-action="understand"]').click()
+        self.assertTrue(page.locator('#step-nav [data-step="2"]').is_disabled())
+        page.locator("#business").select_option("local_service")
+        self.assertTrue(page.locator("#context-form").is_visible())
+        self.assertEqual(page.locator("#action").input_value(), "understand")
+        self.complete_brief(
+            page, communication="education", action="understand", submit=False
+        )
+        self.assertEqual(page.locator("#communication").input_value(), "education")
+        self.assertEqual(page.locator("#q-S1_ED01").count(), 1)
+        self.assertEqual(page.locator("#q-S1_M01").count(), 0)
+        page.locator("#work-kind").select_option("membership")
+        self.assertEqual(page.locator("#q-S1_ED01").count(), 0)
+        self.assertEqual(page.locator("#q-S1_M01").count(), 1)
+        self.assertEqual(errors, [])
+        page.close()
+
     def test_manual_other_fields_stay_explicit_and_organic_unqualified(self):
         page = self.browser.new_page(viewport={"width": 1440, "height": 1000})
         page.goto(self.origin)
         for select, manual in [
-            ("communication", "communication"),
             ("business", "business"),
-            ("action", "action"),
             ("q-S1_B02", "destination"),
         ]:
             self.complete_brief(page, submit=False)
@@ -600,31 +634,29 @@ class StudioCheck(unittest.TestCase):
             self.assertTrue(field.get_attribute("required") is not None, manual)
             self.assertEqual(field.get_attribute("maxlength"), "200")
             field.fill("Sentetik özel " + manual)
-        # A manually described action is retained in an organic-only draft;
+        # A manually described sector is retained in an organic-only draft;
         # it does not become a qualified paid objective or trigger provider access.
         self.complete_brief(page, mode="organic", submit=False)
-        page.locator("#action").select_option("__other__")
-        page.locator("#action-other").fill("Sentetik özel bir katılım isteği")
+        page.locator("#sector").select_option("other")
+        page.locator("#sector-other").fill("Sentetik özel bir çalışma alanı")
         page.locator("#brief-submit").click()
         self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().plan"))
         brief = page.evaluate("YaparoStudio.getSnapshot().brief")
-        self.assertEqual(brief["action"], "__other__")
-        self.assertEqual(
-            brief["custom"], {"action": "Sentetik özel bir katılım isteği"}
-        )
+        self.assertEqual(brief["action"], "visit_store")
+        self.assertEqual(brief["custom"], {"sector": "Sentetik özel bir çalışma alanı"})
         self.open_creatives(page)
         self.adapt_and_review(page)
         self.assertIn(
-            "Sentetik özel bir katılım isteği", page.locator("#review").inner_text()
+            "Sentetik özel bir çalışma alanı", page.locator("#review").inner_text()
         )
         page.locator('#step-nav [data-step="2"]').click()
         page.locator("#regenerate").click()
         page.locator("#previous-trio").click()
         self.assertEqual(
-            page.locator("#action-other").input_value(),
-            "Sentetik özel bir katılım isteği",
+            page.locator("#sector-other").input_value(),
+            "Sentetik özel bir çalışma alanı",
         )
-        self.assertTrue(page.locator("#action-other").is_enabled())
+        self.assertTrue(page.locator("#sector-other").is_enabled())
         self.assertFalse(
             page.evaluate("YaparoStudio.getSnapshot().production.publishable")
         )

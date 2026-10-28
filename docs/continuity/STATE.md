@@ -1,167 +1,84 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-27 18:45 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 09:49 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
-Owned-core/open-source plan ADR0040/Y01–Y32. Current8014 UX (ADR0072): brief → channel/material plan →3shared creative
-ideas/editing + placement-specific demo adaptations → review. Paid/organic/both
-routes explicit. Organic skips media budget; no finished content before planning.
-User authorized source connection/freshness layer after the authored dynamic demo.
-Local synthetic only; no real customer/account/spend/publishing readiness implied.
-No usage checks/monitors. Reviewed green PRs may merge, never direct main push.
-Existing OpenRouter pool USD16; owner handles balance. No new paid service/recharge.
-Download/export remains undecided/deferred. Preserve private data/ledger/TEST state.
+Owned-core/open-source plan ADR0040/Y01–Y32. Preferred local prototype8014 follows
+ADR0072: brief → channel/material plan →3shared concepts/editing → placement
+adaptations → review. User now wants two entry decisions (intent + expected viewer
+response), then the relevant short form on the same screen. No nested wizard.
+Local synthetic development only. Real customer/account/spend/publishing and
+production deployment retain release gates. Usage monitoring is disabled. Reviewed
+green PRs may merge under standing authority; never push directly to main.
+Owner manages OpenRouter balance; no new paid service/recharge. Download/export
+remains undecided/deferred. Preserve private ledger/TEST/account history.
 
 ## Repository
 
-C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
+Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/unified-journey-prototype; PR369 OPEN for owner UX review.
-Baseline ded3256 CI40531732073 and40531732260 SUCCESS verified. The single-screen
-correction requires its own exact-head CI after push. Main base abc2093 / PR368.
-No production deployment or application database migration this turn.
+Branch codex/unified-journey-prototype; PR369 OPEN.
+Last verified committed baseline01a77b4, CI40534250684 SUCCESS. The current paired
+entry revision requires its own CI after push. No deployment or DB migration.
 
-## Current milestone: one-screen contextual brief + manual Other
+## Current change: intent + response before context
 
-Owner rejected five-panel first-step wizard. Original single-screen layout is
-restored; no family UI, substeps or Back/Next. Visible prepared examples return.
-Owned policy yaparo-brief-flow-v2 narrows business choices by communication,
-sectors by business, actions by purpose/explicit destination. Canonical14/11/18/16
-coverage retained. Changed incompatible children and hidden notes are cleared.
-See docs/product/progressive-brief.md. External report/workbook/package unchanged.
+Nine initial purpose cards; relevant viewer-response choices follow. Both entry
+questions omit Other/unsure. Context form appears after the pair, with usage,
+business/sector, response destination and conditional source notes. Launch,
+celebration, education and public-issue subtypes remain explicitly selectable.
+Source taxonomy/data unchanged. Owned brief policyv3 separates initial response
+from business/destination; latter edits do not erase it. Destinations narrow to
+the chosen response. Purpose/response changes invalidate the prior plan/content.
+Saved history/examples rerender both choices and context. Notes remain optional;
+no synthetic brand/audience/description is silently prefilled in a fresh session.
 
-Manual Other supported for communication/business/sector/action/destination and
-existing source promotion/announcement/event type Other choices. Active fields
-require trimmed1–200characters, stored literally in brief.custom by key/sourceID;
-returning to a canonical choice or hiding the source branch removes its custom
-note. No silent category mapping. Custom unresolved entries force missing-forecast
-mode/zero paid allocation; organic authored drafts remain possible. Custom text
-is visible in final review, not only stored. Risks survive profile/parent changes.
+Manual Other remains in business/sector/destination and relevant branch detail
+fields, trimmed1–200characters and literal brief.custom notes. Hidden notes are
+pruned; risk survives purpose/profile changes. Unresolved custom entries keep
+paid allocation zero. Permit/consent/statement status controls record declarations
+or preparation, never verification. Typed date/finance/permit forms and detailed
+pair-specific refinement remain open. See docs/product/progressive-brief.md.
 
-Reviewed/fixed profile/history restoration: stored destination wins over old DOM,
-and full known choices are primed before restoring values absent from current
-shortlist. Custom fields remain active across history restoration while brief
-step is hidden. Fixed restored malformed fundraising risk option HTML. No source
-policy/ad-account/privacy/spend gate opened. 8002/8013/private TEST/ledger intact.
+Local verification: JavaScript syntax, engine/brief/production/simulation contracts,
+Ruff with apps/web/pyproject.toml config, format and diff checks passed. Browser
+journeys updated for card entry, detail preservation, subtype branches, prior-plan
+invalidation, manual notes and history; new execution/CI not yet verified here.
+Previous local browser test attempt timed out and was stopped; IAB reported local
+browser use disabled in Work settings. Do not report visual verification or14
+updated browser journeys as passed until actual results are checked. No provider,
+account, secret, upload, paid service, migration, deployment or publish action.
 
-13browser journeys passed25.7s: all previous plan/content/source/helper/mobile,
-single-screen filters, whitespace/required/bounds/literal/custom removal, zero
-paid spend, organic Other/review/history, source conditional Other/prune and
-profile switching. Brief pure checks plus original production/engine/simulation,
-Ruff/format/syntax/diff checks passed. New exact-head CI pending after push.
-Evidence %TEMP%/yaparo-decision-nwxvncpa. Actual IAB manual-Other proof is
-%TEMP%/yaparo-decision-fmmyrrhu/single-screen-other-live-iab.png. No hosted AI,
-account/API credential, paid service, upload, app DB/deploy or publishing action.
+## Preserved previous capabilities
 
-## Previous milestone: plan before production
+Plan-first paid/organic/both routes,20product minimum/cap allocation and retained
+budget; shared ideas/editor with explicit text/image placement demo adaptations.
+Search receives text. Video render/upload and actual production costs remain open.
+All generated content/ad assumptions in8014 remain authored simulation.
 
-Owner supplied request replaces content-first flow; see ADR0072. The local8014
-journey now collects paid/organic/both intent, plans channels/material needs first,
-shows3shared concepts, then explicitly creates only selected placement demo
-adaptations. production.js has closed prototype recipes for20products and5organic
-destinations. Search gets text, not an image. Unknown recipes/tasks/video stay
-pending. No current placement-spec, optimized variant-count or price claim.
+Public FX freshness/cache via TCMB/ECB, explicit issuer, expiry/context/quality
+checks and pinned provenance remain. Prior actual ECB fetch/readback succeeded;
+TCMB timed out. This is historical evidence, not a fresh quote. Private ad forecast
+connectors remain access_required. Only public cache outside OneDrive persists.
+Sources: docs/product/source-freshness-layer.md and prototype README.
 
-Video preference + available-material declaration feed paid engine feasibility;
-missing video excludes video-requiring paid products. Available video does not
-imply a renderer/rights/scan/production readiness. Organic-only needs no paid
-budget/forecast. Combined route includes organic destinations and paid rows.
-Empty paid plan cannot enter creation. Pending-only organic video shows0outputs.
-Shared core edits invalidate adaptations without rerunning media allocation.
-Input/source/material/allocation changes clear preview DOM and production binding;
-re-confirm production after recomputing. Assistant proposals pin organic/material
-context. Fixed manual control DOM-event bubbling that falsely staled allocation.
-No hosted AI/cost reservation, upload, DB migration, account or publish action.
-
-9focused browser journeys passed12.8s: paid order/edit/history/reasons, organic
-and combined, video-only pending/stale assistant, Search-only text, material
-replan, source refresh, mobile/literal text and HTTP boundaries. Production Node
-contract plus existing engine/simulation/source8tests and Ruff/syntax passed.
-Evidence %TEMP%/yaparo-decision-1rekdplw. plan-first-live-iab.png is actual
-IAB readback: distinct Search text and Feed image previews. During the open-page
-check the real FX record expired/refreshed; stale adaptation was cleared and
-explicit replan/reconfirmation worked. No new ad/AI query. Previous8002/8013/private state preserved.
-
-## Public source + freshness layer preserved
-
-experiments/decision-studio still serves127.0.0.1:8014. Existing8013/8002 preserved.
-New sources.py: normalized source record/lifecycle checks, fixed HTTPS public FX
-adapters for TCMB and ECB, provider-specific cache and date/value validation.
-TCMB timed out from this environment. Actual ECB fetch + IAB readback succeeded:
-source2026-10-26, EURUSD1.1188/EURTRY55.6746 => USDTRY49.76278155. Treat this as
-historical evidence, not a current constant. Native Windows Schannel verifies TLS;
-no insecure option/proxy/credential use. Unix uses verified stdlib HTTPS.
-
-Closed same-origin JSON status/refresh endpoints; explicit issuer picker defaults
-ECB, no automatic issuer fallback. Show publication/fetch/expiry separately;
-querying an old publication does not make it new. TTL1h/max source age4calendar
-days/cooldown60s, per-issuer lock, atomic public cache outside Git/OneDrive:
-%LOCALAPPDATA%\Yaparo\source-cache. Full holiday calendar remains pending.
-Only public quote persists; no source XML, customer/brief/account secret stored.
-Page auto-load/expiry refresh, matching cache reuse and explicit Refresh supported.
-No background scheduler when closed; next request rechecks expiry.
-
-Record identity binds source/scope/context/date/quality/payload hash. Reject wrong
-account/context, synthetic quality masquerading as official, future/expired or
-corrupt data. Public USDTRY can be shared across plan contexts; private ad
-forecasts cannot. HTTP scope fixed local-synthetic; no caller tenant/account,
-arbitrary URL or source record admission. CSP permits same-origin fetch only;
-upstream fixed GET contains no campaign context. No advertising/AI API invoked.
-
-sources.js discards late mismatched replies. New/expired quote marks prior plan
-stale; explicit recompute records FX source/date/rate/id in plan and final review.
-Historical SC01 mode retains original example FX. Interactive mode can use real
-public FX, but ad CPC/CPM/CPA/reach/account assumptions remain authored simulation.
-All ad forecast registry entries show access_required/no snapshot; actual Google/
-Meta/etc connectors remain unconnected. publishablefalse. No model/key/media cost.
-Contract: docs/product/source-freshness-layer.md and experiment README.
-
-## Prior prototype/research preserved
-
-Five authored profiles (cafe/boutique/B2B/local service/workshop), contextual
-copy/CTA/illustration, alternatives/history/undo/editor. Helper previews bounded
-changes with Apply and refuses stale proposals. Not a real LLM. Initial brief
-changes require creative reconfirmation. Pure engine preserves gates/minimum/cap,
-integer allocation/unallocated budget and shared business cap. Source data unchanged.
-
-External research XLSX/DOCX remain in Yaparo Araştırma. Normalized data.js contains
-79questions/249options/20products/1460scores/8weights/16policyrows/20SC01fixtures.
-Owner later recovered OneDrive/Belgeler/Yaparo_TR_Karar_Motoru_Dataset/yaparo_package:
-validator/sample regression and34manifest hashes passed. JSON94branch pairs are
-populated unlike Excel, with typed question/channel/workflow targets. Reference
-UNSEEN_CONTEXT probe still allocated3000TRY via channel-only fallback; do not
-replace our strict guards. Package not imported. Full typed79form/policy evidence,
-previous clipped Turkey map migration, real AI/ad forecasts/backend integration,
-privacy/recovery/account/spend/launch gates remain open.
-
-## Verification actually run
-
-8offline source tests and9isolated browser journeys passed; unit/browser sources
-are injected fixtures and make no external calls. Includes ECB cross/issuer,
-source/fetch dates, expiry/cache/restart/failure/concurrency, context/quality,
-HTTP origin/closed schema/no arbitrary URL, refresh→stale→recompute→review/source
-switch. Node original20scores/SC01/88budget bounds and interactive/context/command/
-live-FX-minimum checks passed. Ruff/format/syntax passed. CI step includes source
-checks. No broad application test rerun claimed locally; exact new CI pending.
-Private test evidence %TEMP%\yaparo-decision-6zw9q7ny.
-Actual IAB source-live-iab.png there shows ECB source26October, fetched27October
-15:16:54/expiry16:16:54 and source-aware recomputation. Actual source selection
-is ECB; TCMB live success is NOT claimed. Old8002/privateDB/AI ledger untouched.
+External research DOCX/XLSX/package unchanged. Full79typed source questions,
+94rule integration, policy evidence, privacy/recovery and platform launch gates
+remain open. Prior8013 and Django8002 stay separate.
 
 ## Protected prior work
 
-Python %USERPROFILE%\.yaparo\.venv; secrets outside OneDrive.
-Private preview %TEMP%\yaparo-public-preview-q2ql3pkq/preview.sqlite3; preserve old
-campaigns/brand choices/plans/holds/AI sources. Login READ helper
+Python %USERPROFILE%\.yaparo\.venv; secrets/databases outside OneDrive.
+Private preview %TEMP%\yaparo-public-preview-q2ql3pkq/preview.sqlite3; preserve
+campaigns, brands, plans, holds and AI sources. Login READ helper
 %USERPROFILE%\.yaparo\prepare_preview_login.py read; never print its password.
-Google candidate quarantined %TEMP%\gwt-scoped-preparation-_jafwrsl; do not repeat
-PREPARE/APPLY/reset/refresh. ADR0068 unresolved holds preserved; ADR0067–0071
-ownership/replay/financial contracts remain authoritative for real integration.
+Google candidate quarantined %TEMP%\gwt-scoped-preparation-_jafwrsl; never repeat
+completed PREPARE/APPLY/reset/refresh or restore over consumed history. ADR0068
+unresolved holds and ADR0067–0071 ownership/replay/financial contracts retained.
 
 ## Next action
 
-Owner review of the restored single-screen brief and manual Other experience.
-Then qualify explicit custom-classification/conflict handling without inventing
-canonical categories or spend eligibility. Platform specs/material/cost and real
-forecasts remain separately gated follow-ups; preserve protected TEST/launch gates.
+Finish PR369 verification for the paired-intent entry, then visually review the
+relevant forms on8014 and refine the remaining typed context fields. Keep real
+AI/account/forecast/spend/launch gates closed.
