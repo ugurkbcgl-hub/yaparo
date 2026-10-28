@@ -25,3 +25,12 @@ assert.deepEqual([D.questions.length,D.options.length,D.channels.length,D.scoreR
 assert.equal(D.weights.reduce((s,r)=>s+r.weight,0),100);
 assert(D.branchRules.every(r=>!r.executable));assert.equal(p.externalQuery,false);assert.equal(p.publishable,false);
 console.log('Decision-engine checks passed: exact research example, all20 scores, caps, blocked/unknown/stale context, manual edits and88 budget boundaries.');
+
+// Unknown economics is explicit and cannot pretend to be a capacity/ROI assessment.
+const unknownEconomics=run({economicsMode:'not_provided',value:0,margin:0,cpa:0,capacity:0});
+assert.equal(unknownEconomics.businessCap,unknownEconomics.total);
+assert.equal(unknownEconomics.economicsProvided,false);
+assert(unknownEconomics.allocated>0);
+assert.equal(run({economicsMode:'provided',capacity:0}).allocated,0);
+assert.throws(()=>run({economicsMode:'ignore_limits'}));
+for(const patch of [{risk:'health'},{communication:'fundraising'},{fixture:'unknown'}])assert.equal(run({...patch,economicsMode:'not_provided'}).allocated,0);

@@ -1,6 +1,47 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 21:18 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified client date: 2026-10-29 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+
+## Current compact-plan package
+
+Owner accepted compact plan UX: concise request summary, only missing plan bounds,
+selected channel percentages, reserve/reason and expandable details. Implemented
+locally on codex/owned-review-summary, based on main949872f plus handoffad476fa.
+Feature PR and exact-head required CI are still pending; no merge claimed.
+
+plan-ui.js/CSS preserves firstStage, reuses declared audience and keeps compatible
+manual bounds on same-pair edits. No budget/center/economic facts are prefilled.
+Organic/content-only omit media budget. Additional source classification remains
+explicit; unknown taxonomy never becomes automatic eligibility. Concise review
+keeps full literal answers/readiness expandable. Old adaptations invalidate.
+
+plan-summary.js redistributes selected eligible percentages within test minima,
+channel/shared caps and exact kuruş totals. Reserve is not forced into spending.
+Drag previews peers live and commits on release; zero removes to collapsed catalog.
+Stale/invalid edits refuse. Optional commercial economics starts blank/disabled;
+not_provided means no capacity/profitability assessment, with total media budget
+as shared demo ceiling. Provided economics retains the existing stricter cap.
+
+plan-geo.js uses exact copied, hash-pinned offline Turkey land/clipping assets and
+licenses. Explicit center inside Turkey and radius1..800km; land-clipped preview.
+No GPS/geocoder/CDN. Map clicks approximate; precise coordinates under details.
+Not official border/platform capability evidence. No real AI/ad forecast/publishing.
+FX requests wait for complete owned paid context; exact center is projected into
+the existing closed source fingerprint, not sent to an ad platform.
+
+Pure engine/share/geo contracts, syntax and configured Ruff format/lint/diff checks
+passed. Six new browser journeys passed30.465s (yaparo-first-stage-ko6d9lbx);
+final actual mouse-drag regression passed8.153s (yaparo-first-stage-x5ybhlg5).
+First-stage11 passed18.568s (wqybynwu), legacy19 passed30.670s (jih90p4m) before
+the final narrow source guard; required CI will recheck exact final head.
+Desktop1440/mobile390 plan/map/review and actual viewport screenshots inspected.
+No horizontal overflow/CTA-helper overlap; sticky full-page capture artifacts
+checked against viewport evidence (kq0756zn/compact-plan-mobile-viewport.png).
+Independent review corrected same-pair bound resets and misleading cap-source text.
+
+Exact8014 process restarted; root and six new asset routes returnedHTTP200.
+Refresh resets existing temporary work by design. Application DB, credentials,
+Google candidate, old8013/Django8002, source data.js and V2 catalogs untouched.
 
 ## Objective and constraints
 
@@ -15,13 +56,16 @@ Download/export remains undecided.
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/first-stage-plan-outcomes, based on origin/main0930ca8.
-Prior PR369 merged20:52 Istanbul; required CI40735090819 SUCCESS reverified.
-Current outcome package is being prepared for its feature PR; no current CI or
-merge claimed yet. Earlier local handoff945a0e6 is included with this package.
+PR370 MERGED at2026-10-28 21:28 Europe/Istanbul; squash949872f on main.
+Reviewed headcd274ca; required CI40744077661 SUCCESS including all11 new-home
+browser journeys, legacy19, full PostgreSQL suite and application browser E2E.
+Exact-head guarded squash merge used; no checks bypassed. Prior PR369 remains merged.
+Local checkout is now codex/owned-review-summary, based on origin/main949872f,
+with upstream unset. Only this verified handoff is committed locally; include it
+with the next meaningful package, not as a standalone documentation PR.
 No deployment, DB migration, credential or real account action.
 
-## Completed outcome package
+## Preserved outcome package (PR370)
 
 outcome-contract.js resolves every accepted pair into exact CTA, KPI label and
 typed destination, full canonical immutable snapshot binding and3 distinct authored
@@ -41,12 +85,14 @@ choice. Missing custom/new endpoints and measurement/permit/account requirements
 remain visibly unverified; publication stays closed. Unsupported paid mappings
 remain held. Default8014 changed; legacy.html and V2 catalogs unchanged.
 
-## Verification actually run
+## Prior PR370 verification
 
 Pure outcome contract passed46 paths/138 bound authored concepts; malformed/unknown
 snapshots fail closed, exact endpoint distinctions/signature invalidation/source
 bytes checked. First-stage9/46 and production contract tests passed. JS syntax,
-configured Ruff and git diff --check passed.
+configured Ruff format/lint and git diff --check passed. Initial CI40743758048
+stopped only at formatter check for the new test file. Formatting corrected in
+cd274ca; the fresh full required run40744077661 passed before merge.
 
 Default full-app10 browser tests passed18.931s after the single-source paid mapping
 fix (%TEMP%/yaparo-first-stage-h37sa11v). Additional community paid-registration
@@ -81,6 +127,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Simplify the plan/content/review presentation for the owned routes: show concise
-outcome/destination/requirements summaries and expand full answers on demand,
-then review desktop/mobile without changing accepted fields or launch gates.
+Review compact plan UX with the owner, then define the versioned durable campaign-
+draft contract for accepted bounds, allocations and source readiness before app
+integration. Keep all real-data/account/spend/AI-production/publishing gates closed.

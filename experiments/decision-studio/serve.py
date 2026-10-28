@@ -10,6 +10,15 @@ from sources import SourceService
 
 ROOT = Path(__file__).resolve().parent / "dist"
 ASSETS = {
+    "/plan-summary.js": ("plan-summary.js", "text/javascript; charset=utf-8"),
+    "/plan-ui.js": ("plan-ui.js", "text/javascript; charset=utf-8"),
+    "/plan-ui.css": ("plan-ui.css", "text/css; charset=utf-8"),
+    "/plan-geo.js": ("plan-geo.js", "text/javascript; charset=utf-8"),
+    "/turkey-boundary.js": ("turkey-boundary.js", "text/javascript; charset=utf-8"),
+    "/vendor/polygon-clipping-0.15.7.js": (
+        "vendor/polygon-clipping-0.15.7.js",
+        "text/javascript; charset=utf-8",
+    ),
     "/outcome-contract.js": ("outcome-contract.js", "text/javascript; charset=utf-8"),
     "/legacy.html": ("index.html", "text/html; charset=utf-8"),
     "/first-stage-bank.js": ("first-stage-bank.js", "text/javascript; charset=utf-8"),

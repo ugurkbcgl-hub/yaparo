@@ -1,5 +1,25 @@
 # Yaparo project brief
 
+## Compact planning prototype — 29 October 2026
+
+Owner accepted a single compact planning screen: request summary → only missing
+region/audience, dates and total media budget → selected channels with editable
+percentages and a reason. Default8014 now uses that view. No budget, geographic
+center or economic facts are prefilled. First-stage audience is summarized;
+explicit source classification/refinement remains under additional information
+where needed, without inferred eligibility. Compatible manual plan bounds survive
+same-pair brief edits; changes invalidate old allocation/adaptations.
+
+Percentage edits rebalance only selected eligible channels within test minima,
+channel/shared caps and exact kuruş totals. Unallocated budget is explicit; no
+forced full spend. Radius1..800km uses copied pinned offline Turkey land geometry;
+map clicks are approximate and precise coordinates are available on demand.
+This is a geographic preview, not verified platform targeting. Economics is an
+optional declaration on commercial paths; absent data means no profitability or
+capacity claim, with total media budget still the shared demo ceiling. Existing
+policy/account/forecast/production gates remain. Real AI, ad forecasts and publishing
+are not enabled. Review shows a concise summary with full answers expandable.
+
 ## First stage question banks — 28 October 2026
 
 Owner confirmed scope: the whole first stage (two choices and each route's short

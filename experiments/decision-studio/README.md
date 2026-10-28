@@ -5,6 +5,26 @@ Local-only, synthetic UX successor to `../unified-journey`. Start `serve.py`
 runtime asset, AI/ad call, upload, campaign persistence, payment or publishing. Public FX source/cache is the exception below. The
 old8013 draft and existing8002 application are preserved.
 
+## Compact owned plan
+
+`plan-ui.js`/CSS presents a concise request summary, only missing plan bounds,
+optional advanced context and compact percentages. `plan-summary.js` previews and
+redistributes selected-only percentages with exact kuruş totals, minimum/shared/
+channel caps and unallocated reserve. No customer budget/location/economic facts
+are prefilled. Missing economics is explicit and does not claim a capacity/ROI cap;
+provided economics keeps the stricter existing cap. No paid execution is enabled.
+
+`plan-geo.js` previews an explicit Turkey center/radius1..800km clipped to pinned
+land geometry. No geocoder/GPS/CDN. Exact copied assets are pinned in its pure test;
+licenses/provenance: [third-party](third-party/README.md). Map clicks are approximate;
+precise numeric coordinates are optional. Real platform targeting remains unverified.
+Full answers and readiness are disclosed, rather than repeated in the main view.
+
+Checks: `node plan-summary.test.cjs`, `node plan-geo.test.cjs`,
+`python plan_check.py` (6 focused browser journeys plus desktop/mobile evidence).
+The full first-stage11 and legacy19 suites remain separate. Local test servers
+use fake public FX transport and do not access application databases or providers.
+
 ## Implemented
 
 Default8014 first stage now uses the complete owned9-bank/46-route question model,

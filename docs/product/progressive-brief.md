@@ -1,5 +1,39 @@
 # Intent and expected response — local brief prototype
 
+## Accepted compact plan and review
+
+Owner approved the compact planning draft. Default8014 shows a
+short request/audience summary and only missing geography, budget and publication
+bounds; full first-stage answers expand on demand. No Kadıköy/3000TL/7-day or
+economic facts are silently assigned. Existing sale date ranges can initialize
+compatible plan bounds; event dates are context, not silently treated as ad dates.
+Same-pair brief edits preserve manual plan bounds and invalidate prior content.
+
+Selected channels have checkboxes, numeric percentages and compact sliders. Drag
+previews other selected shares live; release commits exact kuruş amounts through
+the owned helper. Eligible-only selection, test minima and channel/shared caps are
+preserved. Zero removes a channel to the collapsed catalog; unavailable channels
+retain reasons. Unallocated budget remains explicit and is not forcibly spent.
+Old results are labeled stale and cannot update shares/continue until reevaluated.
+
+Commercial paths may optionally declare economics. No economics means an explicit
+not_provided mode with no capacity/profitability assessment; the shared demo ceiling
+is the total media budget. Provided economics retains the existing stricter shared
+cap. This changes authored planning only, not any financial/execution permission.
+Public FX requests wait for complete paid context; source fingerprints include
+explicit radius center through the closed synthetic context projection. FX is not
+an ad forecast and no platform endpoint is queried.
+
+A pinned offline Natural Earth land polygon and the previously reviewed clipping
+bundle preview1..800km around a user-selected Turkey center. No GPS/geocoder/CDN.
+Map selection is approximate; numeric coordinates are available under details.
+The boundary is approximate, not official/legal or platform capability evidence.
+The source and copied license/hash record is in decision-studio/third-party.
+
+Content-only/organic routes omit media-budget controls. Final review leads with
+outcome, destination, plan and measurement status; full answers/readiness expand.
+All AI, real-ad-forecast, persistence, paid generation and publishing gates remain.
+
 ## Current owned first stage
 
 The owner authorized implementation of the whole first-stage bank. The default

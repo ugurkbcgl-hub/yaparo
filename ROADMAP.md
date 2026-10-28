@@ -1,5 +1,18 @@
 # Yaparo roadmap
 
+## Compact plan and review — 29 October 2026
+
+Implemented accepted local UX: concise first-stage summary; no invented budget,
+region/center or economic inputs; relevant date/context carryover; optional advanced
+controls; live percentage preview and constrained selected-only redistribution;
+unallocated reserve; offline Turkey-clipped point/radius preview; sticky summary
+and concise final review. Organic/content-only bypass media-budget fields.
+All suggestions and metrics remain authored examples, not real AI or forecasts.
+
+Next: owner review of the compact plan UX, then define the versioned durable
+campaign-draft contract for accepted plan bounds, allocations and source readiness
+before connecting this isolated prototype to the application.
+
 ## First stage correction — 28 October 2026
 
 Implemented local priority: the9 dedicated first-stage question banks and outcome additions in
@@ -10,8 +23,8 @@ pruning and separate typed event date/location, job details and fundraising fiel
 Completed next slice: owned outcome/KPI/destination contracts for all46 routes,
 three authored local concepts with preserved editor/alternative/history bindings,
 organic continuation and channel-independent text/image format choice. Unsupported
-paid mappings remain held. Next: unify plan/content layout and simplify the review
-summary for these routes before mapping accepted UX into durable app contracts.
+paid mappings remain held. The compact plan/review slice above now presents those
+routes; durable application integration is separate work.
 Keep the first-stage two-choice screen and local synthetic scope.
 
 ## V2 follow-up — 28 October 2026
