@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="tr">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Yaparo · V2 akış önizlemesi</title><link rel="stylesheet" href="/v2.css"></head>
+<body><header><a href="/">yaparo</a><span>V2 · Yerel taslak</span></header>
+<main><nav aria-label="Aşamalar"><strong>1 İsteğini anlat</strong><span>2 Planını kur</span><span>3 İçeriğini seç</span><span>4 Gözden geçir</span></nav>
+<p class="eyebrow">Fikrinden doğru başlangıca</p><h1>Ne yapmak istiyorsun?</h1><p>Önce amacını, sonra insanların ne yapmasını istediğini seç. Sana uygun soruları birlikte açalım.</p>
+<section id="intent-section" aria-labelledby="intent-title"><h2 id="intent-title">Bu çalışma için amacın</h2><div id="intents" class="choices"></div></section>
+<section id="outcome-section" hidden aria-labelledby="outcome-title"><h2 id="outcome-title">Gören kişi ne yapsın?</h2><div id="outcomes" class="choices"></div><details id="more"><summary>Diğer sonuçları gör</summary><div id="other-outcomes" class="choices"></div></details></section>
+<button id="continue" hidden>Devam et</button>
+<section id="selection" hidden><p id="selection-text"></p><button id="change" type="button">İki seçimi değiştir</button></section>
+<section id="context" hidden aria-labelledby="context-title"><h2 id="context-title" tabindex="-1">Birkaç ayrıntıyla netleştirelim</h2><p id="route-note" role="status"></p><form id="brief" novalidate><div id="fields"></div><button type="submit">Bilgileri kontrol et</button></form><div id="result" role="status" aria-live="polite"></div></section>
+<aside>Bu önizleme yalnızca sentetik örneklerle denenir. Bilgiler bu sekmenin belleğinde kalır; sayfa yenilendiğinde silinir. Kaynak tablo ürün tasarımıdır; canlı kanal uygunluğu, erişim veya maliyet kanıtı değildir.</aside>
+</main><script src="/v2-data.js"></script><script src="/v2-flow.js"></script><script src="/v2-app.js"></script></body></html>

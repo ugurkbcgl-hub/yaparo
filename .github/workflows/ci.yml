@@ -83,6 +83,26 @@ jobs:
           python -m ruff check --config apps/web/pyproject.toml experiments/creative-editor/serve.py experiments/creative-editor/test_editor.py
           python experiments/creative-editor/test_editor.py
 
+      - name: Check research decision studio without provider access
+        working-directory: .
+        timeout-minutes: 2
+        run: |
+          node experiments/decision-studio/engine.test.cjs
+          node experiments/decision-studio/brief-flow.test.cjs
+          node experiments/decision-studio/first-stage-bank.test.cjs
+          node --check experiments/decision-studio/dist/first-stage-ui.js
+          node --check experiments/decision-studio/dist/first-stage-bridge.js
+          node experiments/decision-studio/v2-flow.test.cjs
+          node --check experiments/decision-studio/dist/v2-app.js
+          node experiments/decision-studio/production.test.cjs
+          node experiments/decision-studio/simulation.test.cjs
+          python experiments/decision-studio/test_sources.py
+          node --check experiments/decision-studio/dist/app.js
+          python -m ruff format --check --config apps/web/pyproject.toml experiments/decision-studio
+          python -m ruff check --config apps/web/pyproject.toml experiments/decision-studio
+          python experiments/decision-studio/check.py
+          python experiments/decision-studio/first_stage_check.py
+
       - name: Compare pinned typed output without model access
         working-directory: .
         timeout-minutes: 3

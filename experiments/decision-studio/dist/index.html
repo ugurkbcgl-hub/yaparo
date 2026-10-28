@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Yaparo reklam stüdyosu — araştırmaya dayalı yerel deneyim taslağı.">
+  <title>Yaparo · Reklam stüdyosu</title>
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="refinements.css"><link rel="stylesheet" href="first-stage.css">
+  <script src="data.js" defer></script><script src="simulation.js" defer></script><script src="engine.js" defer></script><script src="sources.js" defer></script><script src="production.js" defer></script><script src="brief-flow.js" defer></script><script src="first-stage-bank.js" defer></script><script src="first-stage-ui.js" defer></script><script src="app.js" defer></script><script src="first-stage-bridge.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Çalışmaya geç</a>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Çalışmanın adımları">
+      <a class="wordmark" href="/" aria-label="Yaparo ana sayfa">yaparo<span>✳</span></a>
+      <div class="workspace-label"><span class="workspace-dot"></span>REKLAM STÜDYOSU</div>
+      <div class="work-title">Bir fikirden<br>doğru etkiye.</div>
+      <p class="sidebar-intro">Önce nerede, neden olduğunu bil.<br>Sonra doğru içeriği oluştur.</p>
+      <nav id="step-nav" class="step-nav" aria-label="Kampanya aşamaları">
+        <button type="button" data-step="0" class="active" aria-current="step"><span class="step-number">01</span><span><strong>İsteğini netleştir</strong><small>Ne anlatmak istiyorsun?</small></span><span class="step-check">✓</span></button>
+        <button type="button" data-step="1" disabled><span class="step-number">02</span><span><strong>Planını kur</strong><small>Kanal ve üretim ihtiyaçları</small></span><span class="step-check">✓</span></button>
+        <button type="button" data-step="2" disabled><span class="step-number">03</span><span><strong>İçeriğini oluştur</strong><small>Fikirden kanala özel taslağa</small></span><span class="step-check">✓</span></button>
+        <button type="button" data-step="3" disabled><span class="step-number">04</span><span><strong>Kontrol et ve yayınla</strong><small>Kararların bir arada</small></span><span class="step-check">✓</span></button>
+      </nav>
+      <div class="sidebar-bottom"><span class="turkey-mark">TR</span><div><strong>Türkiye için tasarlandı</strong><small>Koşulları görünür kılan planlama.</small></div></div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar"><div class="breadcrumb">Çalışma alanın <span>/</span> <strong>Yeni reklam çalışması</strong></div><span class="prototype-badge"><span></span>Yerel prototip</span></header>
+      <div class="demo-banner"><span class="demo-icon" aria-hidden="true">◇</span><p><strong>Dinamik deneyim modu.</strong> İçerik ve reklam tahminleri simülasyondur; gerçek AI / reklam platformu sorgusu ve yayın yapılmaz. Kur paneli seçilen resmî kaynağa bağlanır. Yalnız sentetik örnek kullan; çalışman yenileyince sıfırlanır.</p></div>
+      <div class="content-shell">
+        <main id="main" tabindex="-1">
+          <section id="step-0" class="step">
+            <div class="eyebrow">ÖNCE SENİ ANLAYALIM</div><h1>Ne için sesini<br>duyurmak istiyorsun?</h1><p class="lead">Uzun bir brief hazırlamana gerek yok. Birkaç seçim ve kendi cümlelerinle başlayalım.</p>
+            <div id="scenario-examples" class="scenario-examples" aria-label="Örnek senaryolar"></div>
+            <section id="first-stage-root" hidden aria-label="Amacına özel ilk aşama"></section>
+            <form id="brief-form" class="brief-form"><label for="journey-mode">Bu çalışma nerede kullanılacak?</label><select id="journey-mode"><option value="paid">Ücretli reklam kampanyası</option><option value="organic">Yalnız organik içerik / paylaşım</option><option value="both">Reklam + organik paylaşım</option></select>
+              <div class="question-block start-question"><div class="field-heading"><span class="field-index">1</span><span>Bu çalışma için ne yapmak istiyorsun?</span></div><p class="hint">Önce niyeti seç. Sonra yalnız buna uygun kısa detayları soracağız.</p><div id="purpose-choices" class="choice-grid" role="radiogroup" aria-label="Çalışmanın amacı"></div></div>
+              <div id="action-choice-block" class="question-block start-question" hidden><div class="field-heading"><span class="field-index">2</span><span>Gören kişi ne yapsın?</span></div><p class="hint">Bu seçim, sonraki kısa formu ve önerilecek yolu belirler.</p><div id="action-choices" class="choice-grid choice-grid-actions" role="radiogroup" aria-label="Beklenen etkileşim"></div></div>
+              <div id="context-form" class="context-form" hidden><div class="context-heading"><span class="field-index">3</span><div><strong>Bu yol için birkaç net bilgi</strong><p>Seçeneklerden ilerle; yalnız gerekli yerde kendi cümleni ekle.</p></div></div><div class="field-pair"><div><label for="business">Bunu nasıl sunuyorsun?</label><select id="business"></select></div><div><label for="sector">Hangi alana daha yakın?</label><select id="sector"></select></div></div><div id="destination-field"><label for="q-S1_B02">İlgilenen kişiyi nereye yönlendirelim?</label><select id="q-S1_B02" data-question="S1_B02"></select></div><div id="branch-fields" class="branch-fields"></div><div class="question-block compact-note"><label for="brief">Eklemek istediğin kısa bir ayrıntı var mı?</label><textarea id="brief" rows="3" maxlength="1200" placeholder="İsteğe bağlı: teklif, tarih, bağış amacı veya özellikle vurgulanmasını istediğin şey."></textarea></div><div class="field-pair"><div><label for="audience-description">Kime ulaşmak istiyorsun?</label><input id="audience-description" maxlength="400" placeholder="İsteğe bağlı: ör. yakın çevredeki aileler"></div><div><label for="message">Tek ana mesajın</label><input id="message" maxlength="200" placeholder="İsteğe bağlı: ör. her bağış doğrudan eğitime dönüşür"></div></div></div>
+              <select id="communication" hidden></select><select id="action" hidden></select>
+              <p id="action-context" class="hint"></p><p id="brief-flow-status" role="status" class="status-line"></p>
+              <details class="optional-details"><summary><span>Kimlik ve özel koşullar</span><span class="optional-tag">İsteğe bağlı</span></summary><div class="details-inner field-pair"><div><label for="identity">İşletme / çalışma adı</label><input id="identity" maxlength="80" placeholder="Örneğin: Örnek Butik"></div><div><label for="risk">Ek inceleme gerektiren kategori</label><select id="risk"><option value="normal">Bildiğim özel koşul yok</option><option value="fundraising">Yardım toplama</option><option value="health">Sağlık</option><option value="finance">Finans</option><option value="political">Siyasi / kamuoyu</option><option value="children">Çocuklara yönelik</option><option value="alcohol_tobacco">Alkol / tütün</option><option value="gambling">Şans oyunu / kumar</option></select></div></div><p class="hint details-hint">Bu seçim belge doğrulamaz. Gerçek belge veya hesap bilgisi bu yerel taslakta istenmez.</p></details>
+              <div class="form-footer"><p class="quiet-note">Bildiğimiz bir bilgiyi tekrar sormayacağız.</p><button id="brief-submit" type="submit" class="primary">Planını kur <span aria-hidden="true">↗</span></button></div>
+            </form>
+            <div class="trust-strip"><span>◉ Sana özel yaklaşım</span><span>◉ Açıklanabilir kararlar</span><span>◉ Kontrol her zaman sende</span></div>
+          </section>
+          <section id="step-1" class="step" hidden>
+            <div class="section-heading"><div><div class="eyebrow">BÜTÇENİN ARKASINDA BİR NEDEN OLSUN.</div><h1>Doğru kanallar. Anlamlı bir bütçe.</h1></div><span class="research-label">Araştırma temelli<br><strong>karar taslağı</strong></span></div>
+            <p class="lead">Hedefini, koşullarını ve bütçeni birlikte değerlendirelim. Sırf harcanabiliyor diye bütçenin tamamını dağıtmayız.</p>
+            <form id="plan-form"><div id="organic-controls" class="planning-inputs" hidden><div><h2>Organik paylaşım alanların</h2><p>Medya bütçesi yok. İçeriğin yayınlanacağı alanları seç; ücretli reklam planı zorunlu değil.</p><div class="check-group"><label class="check-label"><input type="checkbox" name="organic-platform" value="instagram" checked>Instagram Feed</label><label class="check-label"><input type="checkbox" name="organic-platform" value="facebook">Facebook</label><label class="check-label"><input type="checkbox" name="organic-platform" value="linkedin">LinkedIn</label><label class="check-label"><input type="checkbox" name="organic-platform" value="tiktok">TikTok video</label><label class="check-label"><input type="checkbox" name="organic-platform" value="youtube">YouTube video</label></div></div></div>
+              <div class="planning-inputs">
+                <div><label for="goal">Birincil reklam hedefi</label><select id="goal"><option value="store_visits">İşletmeme ziyaret</option><option value="leads">İletişim / müşteri talebi</option><option value="sales">Satış</option><option value="awareness">Tanınırlık</option></select></div>
+                <div><label for="audience">Kime ulaşalım?</label><select id="audience"><option value="consumers">Bireysel müşteriler</option><option value="business">İşletmeler / profesyoneller</option></select></div>
+                <div><label for="geo-mode">Nerede?</label><select id="geo-mode"><option value="area">Bölge / şehir</option><option value="radius">Konumun çevresi</option><option value="country">Türkiye geneli</option></select></div>
+                <div><label for="region">Bölge / merkez</label><input id="region" value="İstanbul, Kadıköy" maxlength="100" required></div>
+                <div id="radius-field"><label for="radius">Yarıçap (km)</label><input id="radius" type="number" min="1" max="800" step="1" value="10"></div>
+                <div><label for="budget">Reklam bütçesi (TL)</label><input id="budget" type="number" min="0" max="1000000" step="1" value="3000" required></div>
+                <div><label for="duration">Süre (gün)</label><input id="duration" type="number" min="1" max="365" step="1" value="7" required></div>
+                <div><label for="start">Plan başlangıcı</label><input id="start" type="date" value="2026-10-27" required></div>
+              </div>
+              <p class="hint">Bölge adı şu an bir plan notu. Konum haritası ve gerçek hedefleme bağlı değil. Örnek tahmin başka bir bölgeye taşınmaz.</p>
+              <div class="field-pair"><div><label for="measurement">Ölçüm hazırlığı</label><select id="measurement"></select></div><div><label for="intent-summary">Önceki seçimlerin</label><p id="intent-summary"></p></div></div>
+              <details class="optional-details economics"><summary><span>İş ekonomisi, kapasite ve hazırlık</span><span class="optional-tag">Daha isabetli plan</span></summary><div class="details-inner"><div class="field-pair four-fields"><div><label for="order-value">Ortalama sipariş değeri (TL)</label><input id="order-value" type="number" min="0" max="10000000" value="500"></div><div><label for="margin">Katkı marjı (%)</label><input id="margin" type="number" min="0" max="100" value="40"></div><div><label for="cpa">Kabul edilebilir edinme maliyeti (TL)</label><input id="cpa" type="number" min="0" max="1000000" value="100"></div><div><label for="capacity">Günlük müşteri kapasitesi</label><input id="capacity" type="number" min="0" max="1000000" value="20"></div></div><div class="check-group"><label class="check-label"><input id="tracking" type="checkbox">Dönüşüm ölçümüm hazır</label><label class="check-label"><input id="video-allowed" type="checkbox">Bu çalışmada video kullanmak istiyorum</label><label class="check-label"><input id="video" type="checkbox">Kullanım hakkım olan videom var</label><label class="check-label"><input id="catalog" type="checkbox">Ürün kataloğum / feed’im var</label></div><label for="fixture">Tahmin verisiyle deneme</label><select id="fixture"><option value="demo">3.000 TL örneğine ait temsili veriler</option><option value="unknown">Doğrulanmış tahmin verisi yok</option></select></div></details>
+              <div class="decision-toolbar"><div><strong>Planını nedenleriyle gör.</strong><p>Temsili senaryo · gerçek erişim / satış tahmini değildir.</p></div><button id="recommend" type="button" class="primary">✧ Dağılımı yeniden öner</button></div>
+              <p id="decision-status" class="status-line" role="status" aria-live="polite">Koşullarını belirle, öneriyi oluştur.</p>
+              <div id="plan-summary" class="plan-summary"></div>
+              <div class="channel-section-heading"><h2>Planında yer alanlar</h2><span>Payları değiştirebilirsin</span></div>
+              <div id="recommended" class="recommended"></div>
+              <div id="why-plan" class="why-plan"></div>
+              <details class="other-channels-box"><summary>Diğer kanallar ve destekleyici aksiyonlar <span>Koşulları ve nedenleri gör</span></summary><div id="other-channels" class="other-channels"></div></details>
+              <div id="plan-production" class="production-requirements"></div><p id="plan-next-status" role="status" class="status-line"></p><div class="form-footer"><button type="button" data-step="0" class="secondary">← İsteğe dön</button><button type="submit" class="primary">Yaratıcı fikirleri keşfet <span aria-hidden="true">↗</span></button></div>
+            </form>
+          </section>
+          <section id="step-2" class="step" hidden>
+            <div class="eyebrow">AYNI İSTEK. ÜÇ FARKLI BAKIŞ.</div><h1>Hangisi senin<br>anlatmak istediğin?</h1><p class="lead">Önce ortak yaratıcı fikri seç. Sonra yalnız planındaki reklam alanları için ayrı metin ve görsel taslaklarını hazırla.</p>
+            <p class="inline-notice">Bunlar yaratıcı fikir kartları; her kanalda yayınlanabilecek hazır reklamlar değildir. Uyarlamalar da yerel demodur, canlı AI değildir.</p>
+            <p id="creative-context" class="creative-context"></p>
+            <div id="production-requirements" class="production-requirements"></div><div id="concepts" class="concept-grid"></div>
+            <div class="form-footer"><button type="button" id="regenerate" class="secondary">↻ Başka bir üçlü gör</button><button type="button" id="adapt-content" class="secondary" disabled>Kanala özel taslakları hazırla</button><button type="button" id="content-next" class="primary" disabled>Son kontrole geç <span aria-hidden="true">↗</span></button></div>
+            <div id="platform-previews" class="platform-previews" aria-live="polite"></div><p id="production-status" class="status-line" role="status"></p><button type="button" data-step="1" class="text-button">← Planı düzenle</button>
+          </section>
+          <section id="step-3" class="step" hidden><div class="eyebrow">BÜTÜN KARARLARIN BİR ARADA.</div><h1>Fikirden plana.<br>İşte senin çalışman.</h1><p class="lead">İçeriğin, seçtiğin kanallar ve bekleyen koşullar. Bir sonraki adım için açık bir görünüm.</p><div id="review" class="review"></div><div class="launch-notice"><strong>Bu çalışma henüz yayına hazır bir reklam değildir.</strong><p>Hesap, ölçüm, izin ve gerçek platform verileri doğrulanmadan harcama veya yayın başlamaz.</p></div><div class="form-footer"><button type="button" data-step="2" class="secondary">← İçeriği düzenle</button><button type="button" id="finish" class="primary">Taslak kontrolünü tamamla ✓</button></div><p id="finish-status" role="status" class="status-line"></p></section>
+        </main>
+        <aside id="helper-panel" class="helper" aria-labelledby="helper-title"><div class="helper-header"><span class="helper-emblem" aria-hidden="true">✳</span><div><h2 id="helper-title">Birlikte düşünelim.</h2><span>Yaparo yardımcı</span></div><span class="helper-state" title="Yerel örnek"></span></div><div class="helper-note">İçeriğin, hedefin ve kararların aynı bağlamda.</div><div id="chat-log" class="chat-log" role="log" aria-live="polite"><div class="assistant-message">Merhaba! Önce ne yapmak istediğini anlayalım. Önce yayın yerlerini ve ihtiyaçlarını planlar, sonra uygun içerikleri birlikte şekillendiririz.<small>Bu yardımcı sabit kurallı yerel örnektir.</small></div></div><div class="helper-bottom"><form id="chat-form"><label for="chat-input" class="sr-only">Yardımcıya mesajın</label><div class="chat-input"><input id="chat-input" maxlength="500" placeholder="Aklına takılanı sor…" required><button type="submit" aria-label="Mesajı gönder">↑</button></div></form><p>Gerçek AI bağlantısı yok · Bilgi gönderilmez</p></div></aside>
+      </div>
+    </div>
+  </div>
+  <button id="helper-toggle" type="button" aria-expanded="false" aria-controls="helper-panel">✳ Yardımcı</button>
+  <dialog id="editor" aria-labelledby="editor-title"><div class="dialog-heading"><div><div class="eyebrow">SENİN DOKUNUŞUN</div><h2 id="editor-title">İçeriğini şekillendir.</h2></div><button type="button" id="editor-cancel" class="icon-button" aria-label="Düzenlemeyi iptal et">✕</button></div><div class="editor-layout"><div id="editor-preview" class="editor-preview"></div><div><label for="edit-title">Başlık</label><textarea id="edit-title" rows="2" maxlength="80"></textarea><label for="edit-message">Ana mesaj</label><textarea id="edit-message" rows="3" maxlength="200"></textarea><label for="edit-cta">Aksiyon çağrısı</label><input id="edit-cta" maxlength="50"><label for="edit-x">Yatay konum</label><input id="edit-x" type="range" min="5" max="50" value="10"><label for="edit-y">Dikey konum</label><input id="edit-y" type="range" min="5" max="65" value="15"><button type="button" id="editor-save" class="primary full">Uygula ve geri dön</button></div></div></dialog>
+  <dialog id="guide" aria-labelledby="guide-title"><div class="dialog-heading"><div><div class="eyebrow">KANALIN KARAR KARTI</div><h2 id="guide-title"></h2></div><button type="button" id="guide-close" class="icon-button" aria-label="Kanal detayını kapat">✕</button></div><div id="guide-body"></div></dialog>
+</body>
+</html>

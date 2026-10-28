@@ -1,5 +1,100 @@
 # Yaparo roadmap
 
+## First stage correction — 28 October 2026
+
+Implemented local priority: the9 dedicated first-stage question banks and outcome additions in
+[the owned design](docs/product/first-stage-question-bank.json), with all46 compatible
+pairs exercised. Research and Word review document remain the design record;
+current8014 has the owned renderer, required/format validation, hidden-answer
+pruning and separate typed event date/location, job details and fundraising fields.
+Next: map the newly captured outcomes into the later planning/content contract
+explicitly, preserving first-stage details and refusing unsupported mappings.
+Keep the first-stage two-choice screen and local synthetic scope.
+
+## V2 follow-up — 28 October 2026
+
+First local slice: import seven V2 intent/outcome/form catalogs; owned conditional
+resolver; isolated two-question/module preview with missing-data refusal. Existing
+prototype preserved. Next: typed location/destination and stage2 collection;
+then source/freshness, read-only platform evidence, budget/production and finally
+publishing behind existing gates. Reference package test claims are unverified.
+See [V2 scope](docs/product/v2-flow-integration.md).
+
+## Research decision studio — 27 October 2026
+
+Current owner priority: rebuild the draft from the supplied Turkey research and
+review a new visual system. Implemented isolated8014 draft:
+structured/conditional brief →20product channel/material plan → three shared
+creative concepts + editing → placement adaptations → review; research score/minimum/cap allocation with an explicit
+unallocated balance. No real AI/forecast/account qualification. SC01 reproduction
+and context/policy/unknown-data refusal are checked locally. Next: owner review,
+then complete typed forms/policy evidence and map accepted contracts to Django.
+See [research plan](docs/product/research-decision-studio.md) and prototype README
+for missing ZIP, incomplete source branch rows and retained launch gates. Keep
+old8013/8002 and protected account/ledger/history intact; no new paid service.
+
+Owner's follow-up dynamic-demo request now works locally: five authored starter
+profiles, contextual3-way creative/CTA/illustration/edit/history, helper proposals
+with Apply and fresh synthetic budget scenarios. Historical source reproduction
+and missing-data refusal remain separate modes. Authored observations are NOT
+platform forecasts; actual LLM/providers remain unconnected in this prototype.
+
+Plan-first follow-up: paid / organic / combined routes, channel-bound production
+requirements, shared core revisions and explicit text/image demo adaptation.
+Search does not request an image. Video/material preference gates paid selection;
+video rendering, uploads, actual costs and current placement specs remain pending.
+See ADR0072. Next UX work: qualify detailed placement specs/material reuse and
+actual production estimates before enabling any charged generation.
+
+Source/freshness slice implemented: TCMB/ECB public FX, dates/expiry/cache,
+context/quality checks, source picker and refresh UI. ECB live readback verified;
+TCMB unavailable locally. Ad forecast connectors remain access_required. Separate integration follow-up:
+qualify the first read-only account forecast adapter with access proof, preserving
+protected TEST state. See [source contract](docs/product/source-freshness-layer.md).
+
+Brief UX now starts with two choices: intent and expected viewer response. Their
+combination reveals the short context form; usage/business/sector/destination follow.
+Detail subtypes preserve education, launch, celebration and public-issue semantics.
+Manual Other belongs to detail forms, with unresolved classifications unable to
+qualify paid allocation. Paired-intent visual review completed; continue typed
+context forms. See [progressive brief](docs/product/progressive-brief.md).
+
+Sales/fundraising follow-up: compact primary groups, collapsed extras, native
+date/price fields and support-kind/channel/target draft values implemented.
+Actual IAB desktop/mobile review completed; mobile selectors moved to one column.
+Next: extend the same compact typed-form approach to event details, preserving
+current source/plan/publishing gates.
+
+Destination follow-up implemented: conditional URL/phone/address/map details,
+required/format validation, current-type-only state/history and final review.
+Event/application/social responses now collect appropriate destinations too.
+Local17browser journeys and actual desktop/mobile review passed; current CI
+must be checked after push. No external URL fetch or map-provider connection.
+
+## Previous unified journey draft — superseded, retained locally
+
+The owner prioritized reviewing a simpler single-workspace journey BEFORE more
+integration: request → three distinct concepts → campaign plan → final review,
+with optional identity/style and a contextual helper. The local clickable draft
+is in `experiments/unified-journey`; see
+[interaction scope](docs/product/unified-journey-draft.md). It uses fixed examples,
+not real AI or channel recommendations. Existing editor/brand/campaign contracts
+remain intact. Next: owner UX review, then map the accepted flow to owned data.
+Geography now clips center/radius1..800km to pinned Turkey land polygons.
+Fourteen researched digital-channel families are shown, with unknown conditions
+explicit; users select documented geo candidates and set percentages with numeric fields
+and dynamic range bars (total100). Only checked channels occupy compact percentage rows; unchecked choices form a
+bar-free grouped pool. All14 may be manually selected as explicit hypothetical
+scenarios; unknown geo is flagged, never qualified for publishing. A repeatable
+LOCAL SIMULATION suggestion button re-reads current fields and resets shares with
+reasons; actual model/platform queries remain pending. A wide inline view and
+book guides keep the prototype compact.
+Dynamic numbers are only a clearly labelled hypothetical scenario with editable
+assumptions, not platform forecasts or unique reach. See the Turkey channel
+catalog draft; actual account, creative suitability and platform enforcement stay
+unqualified. No provider call, upload, persistence, spend, download or
+publishing is added.
+
 ## Owner priority correction — 26 October 2026
 
 Download/export is undecided and deferred. Existing prototype PNG/ZIP controls are

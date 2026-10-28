@@ -1,5 +1,105 @@
 # Yaparo project brief
 
+## First stage question banks — 28 October 2026
+
+Owner confirmed scope: the whole first stage (two choices and each route's short
+form). Each purpose/outcome pair must select relevant questions AND answer sets;
+fundraising must not inherit commercial product/B2B questions. The owned design
+in [first-stage-question-bank.json](docs/product/first-stage-question-bank.json)
+specifies9 purpose banks and outcome extensions, with official research sources.
+Current8014 implements all9 owned first-stage banks and46 compatible routes with
+typed conditional fields, validation/pruning, literal review and history. The old
+context prototype is retained at /legacy.html for regression. Explicit paid-plan
+classification stays in step2, with no inferred eligibility. Unmapped later-stage
+outcomes and content-only production remain held; this is not platform readiness.
+See [current implementation boundary](docs/product/progressive-brief.md).
+
+## V2 catalog direction — 28 October 2026
+
+The owner's V2 follow-up supersedes the earlier initial Other/unsure exclusion
+for the new isolated preview: two choices open composed context modules, with
+relevant outcomes first and remaining/unsure routes accessible. First slice imports
+the fingerprinted owner workbook and resolves forms at `/v2.html`; the existing
+8014 draft remains unchanged. Plan/account/production/publishing integration is
+not complete. See [V2 integration and boundaries](docs/product/v2-flow-integration.md).
+Türkiye-first, export undecided, synthetic local-only and release gates remain.
+
+## Research decision studio — 27 October 2026
+
+The owner requested rebuilding the prototype and design from the supplied Turkey
+decision report/workbook. The preferred local draft is now
+`experiments/decision-studio` on8014: structured progressive brief → explainable channel/material plan → three
+shared creative concepts/editor → placement-specific demo adaptations → review.
+Organic-only skips paid media planning; paid and combined routes remain distinct.
+See [plan-first decision](docs/adr/0072-plan-before-placement-production.md).20products,8expert dimensions, meaningful test minima and capped
+integer allocation leave excess budget unallocated. AI is not the allocation
+authority. Source observations are SC01 illustrative only, never live forecasts;
+different context/missing data refuses allocation. Source defects and incomplete
+form/policy integration are explicit. See
+[research scope and integration order](docs/product/research-decision-studio.md).
+The follow-up now adds a default dynamic authored-demo mode: contextual creative
+copy/CTA/illustrations and assistant proposals, plus new synthetic observations
+for current conditions. It is separate from source SC01 reproduction; no market
+forecast or live LLM is claimed. Helper changes require Apply. All scenario
+observations explicitly carry authored-simulation provenance and remain
+nonpublishable; original source observations are unchanged.
+Owner UX review precedes Django/provider integration. Previous8013 and8002 remain
+intact; no stack, database, cost, publishing or export decision changed.
+
+Owner authorized the source/freshness slice.8014 now has public TCMB/ECB FX
+adapters, explicit issuer choice, cache/expiry/context checks, refresh/status UI
+and pinned FX provenance. Actual ECB fetch/readback passed; TCMB timed out.
+Account ad forecasts remain access_required; ad output is still nonpublishable
+authored simulation. See [source contract](docs/product/source-freshness-layer.md).
+Only public FX cache persists outside OneDrive; no app DB/account/key/spend access.
+
+The first brief starts with intent and expected viewer response on the same screen;
+their combination reveals the context form. Usage, business/sector and destination
+come afterwards. The initial pair excludes Other/unsure; manual Other remains in
+detail forms. Explicit detail subtypes preserve education/membership, launch,
+celebration and public-issue distinctions. Viewer response remains stable when
+business details change; destinations narrow to that response. Unclassified custom
+entries never qualify paid allocation. Hidden branch answers are pruned; risk declarations persist. See
+[progressive brief](docs/product/progressive-brief.md). This is an owned UX policy,
+not a claim that source visibility rules supplied all option compatibility.
+
+Sales/fundraising detail forms now expose four/three primary question groups,
+with additional notes collapsed. Native date ranges, numeric price pairs and
+support-kind/channel/target choices retain structured draft answers; non-cash
+support removes irrelevant money fields. Desktop and390px IAB visual review found
+and corrected cramped mobile selectors. These notes do not qualify account,
+evidence, publishing or spend readiness.
+
+Destination selection now collects the corresponding URL, phone or address/map
+details, with format/required checks and a literal final-review summary. Direct
+event/application/social routes use the same owned destination projection even
+outside source S1_B02. Values stay in page memory; changing type clears old details.
+No URL fetch, geocoding, external transmission or publishing readiness is implied.
+
+## Previous unified journey draft — superseded, retained locally
+
+The owner prioritized reviewing a simpler single-workspace journey BEFORE more
+integration: request → three distinct concepts → campaign plan → final review,
+with optional identity/style and a contextual helper. The local clickable draft
+is in `experiments/unified-journey`; see
+[interaction scope](docs/product/unified-journey-draft.md). It uses fixed examples,
+not real AI or channel recommendations. Existing editor/brand/campaign contracts
+remain intact. Next: owner UX review, then map the accepted flow to owned data.
+Geography now clips center/radius1..800km to pinned Turkey land polygons.
+Fourteen researched digital-channel families are shown, with unknown conditions
+explicit; users select documented geo candidates and set percentages with numeric fields
+and dynamic range bars (total100). Only checked channels occupy compact percentage rows; unchecked choices form a
+bar-free grouped pool. All14 may be manually selected as explicit hypothetical
+scenarios; unknown geo is flagged, never qualified for publishing. A repeatable
+LOCAL SIMULATION suggestion button re-reads current fields and resets shares with
+reasons; actual model/platform queries remain pending. A wide inline view and
+book guides keep the prototype compact.
+Dynamic numbers are only a clearly labelled hypothetical scenario with editable
+assumptions, not platform forecasts or unique reach. See the Turkey channel
+catalog draft; actual account, creative suitability and platform enforcement stay
+unqualified. No provider call, upload, persistence, spend, download or
+publishing is added.
+
 ## Current owner priority — 26 October 2026
 
 Keep the core journey inside the website: brand→AI content→editing→campaign use.

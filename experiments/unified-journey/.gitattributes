@@ -1,0 +1,2 @@
+dist/vendor/*.js text eol=lf
+dist/turkey-boundary.js text eol=lf
