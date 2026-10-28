@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified client date: 2026-10-29 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 02:57 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -14,10 +14,15 @@ balance. Reviewed green PRs may merge; never direct main push. Export undecided.
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/brief-driven-recommendations, based on mainbf7146c plus handoffe692903.
-Current feature PR/required CI pending; no merge claimed. PR372 required
-CI40785311821 and post-merge main CI40786403411 SUCCESS were reverified.
-No app DB migration, private credential/account or deployment action.
+PR373 MERGED at2026-10-29 02:57 Europe/Istanbul, squashcba8fba on main.
+Reviewed headb3c6d69; required CI40789784874 SUCCESS including16 first-stage,
+compact-plan6 and legacy19 browser journeys, full PostgreSQL and app browser E2E.
+Exact-head guarded merge; no checks bypassed. Post-merge main CI40790844945 was
+in_progress when checked; no post-merge success claimed. Prior PR372/main CI passed.
+Current checkout codex/durable-plan-contract, based on origin/maincba8fba with
+upstream unset. Only this verified handoff is committed locally; include it with
+the next meaningful package, not a standalone documentation PR. No app DB migration,
+private credential/account or deployment action.
 
 ## Completed brief-driven prototype package
 
@@ -57,7 +62,7 @@ including recommendation without extra questions, rebind and captured-risk refus
 Legacy19 passed27.995s (yaparo-decision-4zmpbnx8). Compact-plan6 passed10.892s
 (yaparo-first-stage-kx3ys9sj), including long mobile input, live shares and geo.
 Runs use fake FX, assert no page errors/outbound provider calls, never access app DB.
-Required CI will recheck exact final head.
+Required CI40789784874 then passed exact final head, including all these suites.
 
 Desktop1440/mobile390 plan and viewport/review images inspected in kx3ys9sj.
 No horizontal overflow/repeated section; long literal rationale wrapping corrected.
