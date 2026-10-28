@@ -10,8 +10,11 @@ specifies9 purpose banks and outcome extensions, with official research sources.
 Current8014 implements all9 owned first-stage banks and46 compatible routes with
 typed conditional fields, validation/pruning, literal review and history. The old
 context prototype is retained at /legacy.html for regression. Explicit paid-plan
-classification stays in step2, with no inferred eligibility. Unmapped later-stage
-outcomes and content-only production remain held; this is not platform readiness.
+classification stays in step2, with no inferred eligibility. All46 routes now bind
+exact outcome/KPI/destination to three authored local concepts, editing, adaptations
+and review. Organic routes and channel-independent text/image drafts can proceed;
+undecided usage needs an explicit choice. Unsupported paid taxonomy remains held.
+This is local UX completion, not platform or real AI readiness.
 See [current implementation boundary](docs/product/progressive-brief.md).
 
 ## V2 catalog direction — 28 October 2026

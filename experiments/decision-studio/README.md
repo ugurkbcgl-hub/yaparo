@@ -16,15 +16,18 @@ and conditional manual fields are validated/pruned. Answers remain in versioned
 fail closed. See [current contract](../../docs/product/progressive-brief.md).
 
 No source business/sector is guessed. Paid authored planning asks explicit
-classification in step2. Unmapped outcomes, including email/social messaging,
-stay held rather than becoming WhatsApp/store-visit/fallback actions. Content-only
-and undecided usage are valid brief selections; their later format/mapping routes
-are separate work. No new provider, upload, persistence or publishing is enabled.
+classification in step2. The owned `outcome-contract.js` binds all46 exact outcomes,
+KPI labels and typed destinations to three authored local concepts. Email/social,
+material support and volunteering can continue through organic/content-only routes
+without WhatsApp/store-visit fallbacks. Content-only offers channel-independent
+text/image layout drafts; unsure usage requires an explicit choice. Paid mappings
+without an exact source taxonomy stay held; KPI labels are not measured results. No new provider, upload, persistence or publishing is enabled.
 Old compact-context workflow remains at `/legacy.html` for regression checks;
 `/v2.html` separately inspects the imported V2 catalogs. The historical context
 behavior described below belongs to that legacy workflow.
 
-Checks added: `node first-stage-bank.test.cjs` (all46 typed routes) and
+Checks added: `node outcome-contract.test.cjs` (46 routes/138 bound concepts),
+`node first-stage-bank.test.cjs` (all46 typed routes) and
 `python first_stage_check.py` (default-home UI plus existing plan integration).
 `check.py` retains the19 old journeys against `/legacy.html` plus the V2 preview.
 

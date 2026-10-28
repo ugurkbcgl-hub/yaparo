@@ -355,14 +355,117 @@ class FirstStageCheck(unittest.TestCase):
         self.submit()
         self.page.locator("#step-1").wait_for(state="visible")
         self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
-        self.assertTrue(self.page.locator("#step-1").is_visible())
-        self.assertEqual(self.page.locator(".concept-card").count(), 0)
+        self.page.locator("#step-2").wait_for(state="visible")
+        self.assertEqual(self.page.locator(".concept-card").count(), 3)
         self.assertEqual(self.snapshot()["brief"]["firstStage"]["outcome"], "volunteer")
         self.assertEqual(self.snapshot()["brief"]["action"], "")
+        self.page.locator(".choose").first.click()
+        self.assertEqual(self.snapshot()["creative"]["outcome"], "volunteer")
+        self.assertNotIn("WhatsApp", self.snapshot()["creative"]["cta"])
+
+    def test_community_registration_is_not_paid_event_registration(self):
+        self.select_pair("community", "register")
+        self.fill_remaining(mode="paid")
+        self.submit()
+        self.page.locator("#step-1").wait_for(state="visible")
+        self.assertEqual(self.page.locator("#action").input_value(), "")
+        self.assertIsNone(self.snapshot()["plan"])
+        self.assertIsNone(
+            self.snapshot()["brief"]["outcomeContract"]["legacyProjection"]
+        )
+        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.assertTrue(self.page.locator("#step-1").is_visible())
         self.assertIn(
-            "farklı bir aksiyonla devam edilmeyecek",
+            "ücretli kanal eşleştirmesi",
             self.page.locator("#plan-next-status").inner_text(),
         )
+
+    def test_owned_content_only_formats_destination_and_binding(self):
+        self.select_pair("fundraise", "materials")
+        self.fill_remaining(mode="content_only")
+        self.submit()
+        self.page.locator("#step-1").wait_for(state="visible")
+        self.assertTrue(self.page.locator("#owned-content-formats").is_visible())
+        self.assertTrue(self.page.locator("#organic-controls").is_hidden())
+        self.assertIsNone(self.snapshot()["plan"])
+        self.page.locator('[name="owned-format"][value="image"]').uncheck()
+        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.page.locator("#step-2").wait_for(state="visible")
+        self.assertEqual(self.page.locator(".concept-card").count(), 3)
+        self.page.locator(".choose").first.click()
+        creative = self.snapshot()["creative"]
+        self.assertEqual(creative["outcome"], "materials")
+        self.assertEqual(len(self.snapshot()["production"]["requirements"]), 1)
+        self.assertEqual(
+            self.snapshot()["production"]["requirements"][0]["medium"], "text"
+        )
+        self.page.locator("#adapt-content").click()
+        preview = self.snapshot()["adaptations"][0]
+        self.assertEqual(preview["outcomeSignature"], creative["outcomeSignature"])
+        self.assertEqual(preview["destination"], creative["destination"])
+        self.assertFalse(preview["publishable"])
+        self.page.locator("#content-next").click()
+        self.page.locator("#step-3").wait_for(state="visible")
+        self.assertIn(
+            creative["kpi"]["label"], self.page.locator("#review").inner_text()
+        )
+        self.page.evaluate("window.scrollTo(0,0)")
+        self.page.screenshot(
+            path=str(self.evidence / "owned-materials-review-desktop.png"),
+            full_page=True,
+        )
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        self.assertLessEqual(
+            self.page.evaluate("document.documentElement.scrollWidth"), 390
+        )
+        self.page.screenshot(
+            path=str(self.evidence / "owned-materials-review-mobile.png"),
+            full_page=True,
+        )
+        self.page.locator('#step-nav [data-step="1"]').click()
+        self.page.locator('[name="owned-format"][value="image"]').check()
+        self.assertTrue(self.snapshot()["stale"] is False)
+        self.assertIsNone(self.snapshot()["contentBinding"])
+        self.assertTrue(self.page.locator('#step-nav [data-step="2"]').is_disabled())
+
+    def test_unsure_requires_explicit_use_then_email_stays_email(self):
+        self.select_pair("promote", "contact")
+        self.field("action_contact").select_option("message")
+        self.field("action_message_method").select_option("email")
+        self.fill_remaining(mode="unsure")
+        self.submit()
+        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.assertTrue(self.page.locator("#step-1").is_visible())
+        self.page.locator("#owned-mode").select_option("content_only")
+        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.page.locator("#step-2").wait_for(state="visible")
+        self.page.locator(".choose").first.click()
+        first = self.snapshot()["creative"]
+        self.assertEqual(first["destination"]["email"], "sentetik@example.test")
+        self.page.locator(".concept-card").first.get_by_role(
+            "button", name="Benzerini gör"
+        ).click()
+        self.assertEqual(self.snapshot()["creative"]["cta"], first["cta"])
+        self.assertEqual(
+            self.snapshot()["creative"]["destination"], first["destination"]
+        )
+        self.page.locator("#regenerate").click()
+        self.page.locator(".choose").first.click()
+        self.assertEqual(
+            self.snapshot()["creative"]["destination"], first["destination"]
+        )
+        self.page.locator('#step-nav [data-step="0"]').click()
+        self.field("promote_name").fill("")
+        before = self.snapshot()["creative"]
+        self.page.locator("#chat-input").fill("Daha sade olsun")
+        self.page.locator("#chat-form").evaluate("form=>form.requestSubmit()")
+        self.assertEqual(
+            self.page.locator("#chat-log .assistant-message")
+            .last.get_by_role("button")
+            .count(),
+            0,
+        )
+        self.assertEqual(self.snapshot()["creative"], before)
 
     def test_mobile_layout_keyboard_focus_and_evidence(self):
         self.page.set_viewport_size({"width": 1100, "height": 900})

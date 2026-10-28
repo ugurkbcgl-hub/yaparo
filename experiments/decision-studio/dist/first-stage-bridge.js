@@ -6,8 +6,6 @@
   const M = window.YaparoFirstStage, studio = window.YaparoStudio;
   const D = window.YaparoResearch, B = window.YaparoBriefFlow;
   const intentMap = {promote:'product_service_intro',sell:'sale_promotion',event:'event',lead:'lead_request',hire:'recruitment',fundraise:'fundraising',announce:'announcement',community:'membership',reputation:'reputation'};
-  const actionMap = {remember:'remember',understand:'understand',traffic:'visit_website',visit:'visit_store',message:'message_whatsapp',call:'call',lead_form:'fill_form',book:'book_appointment',register:'register_event',apply:'apply_job',donate:'donate',follow:'follow_engage',subscribe:'join_membership',join:'join_membership',install:'download_app'};
-  const goals = {remember:'awareness',understand:'awareness',traffic:'traffic',visit:'store_visits',message:'calls_messages',call:'calls_messages',lead_form:'lead_generation',book:'appointment',register:'event_registration',apply:'job_application',donate:'donation',follow:'engagement',subscribe:'lead_generation',join:'lead_generation',install:'app_install',purchase:'ecommerce_purchase'};
   let ui, previousPair = '', pendingMode = '';
   const read = () => ui?.getSnapshot() || {version:'yaparo-first-stage-v1',intent:'',outcome:'',answers:{}};
   function node(tag, text) {const n = document.createElement(tag); if (text !== undefined) n.textContent = text; return n;}
@@ -16,23 +14,10 @@
     for (const row of rows) {const o = node('option',row.label); o.value = row.value; select.append(o);}
     select.value = rows.some(r => r.value === value) ? value : '';
   }
-  function sourceAction(s) {
-    if (s.outcome === 'purchase') return ({website:'buy_online',marketplace:'buy_marketplace'})[s.answers.action_checkout] || '';
-    if (s.outcome === 'contact') return s.answers.action_contact === 'message' ? (s.answers.action_message_method === 'whatsapp' ? 'message_whatsapp' : '') : ({phone:'call',form:'fill_form'})[s.answers.action_contact] || '';
-    if (s.outcome === 'message' && s.answers.action_message_method !== 'whatsapp') return '';
-    if (s.outcome === 'lead_form' && s.answers.action_lead_method !== 'form') return '';
-    if (s.outcome === 'book' && s.answers.action_booking !== 'page') return '';
-    if (s.outcome === 'apply' && !['form','career'].includes(s.answers.action_apply_method)) return '';
-    if (s.outcome === 'visit' && s.intent === 'event') return '';
-    if (['subscribe','join','follow'].includes(s.outcome)) return '';
-    return actionMap[s.outcome] || '';
-  }
+  function sourceAction(s) {return window.YaparoOutcomeContract.resolve(s).legacyProjection?.action || '';}
   function usage() {return read().answers.delivery_mode || '';}
   function mode() {return ({paid:'paid',organic:'organic',hybrid:'both',content_only:'organic'})[usage()] || 'paid';}
-  function sourceGoal(s) {
-    if (s.outcome === 'contact') return ({call:'calls_messages',message_whatsapp:'calls_messages',fill_form:'lead_generation'})[sourceAction(s)] || '';
-    return goals[s.outcome] || '';
-  }
+  function sourceGoal(s) {return window.YaparoOutcomeContract.resolve(s).legacyProjection?.goal || '';}
   function declaredRisk() {const s = read(); return s.intent === 'fundraise' ? 'fundraising' : s.answers.risk || 'normal';}
   function syncSource() {
     const s = read(); options($('communication'),D.options.filter(o => o.questionId === 'S1_Q01'),intentMap[s.intent] || '');
@@ -63,7 +48,14 @@
       branch:{},custom:{},destination:null,brief_policy:'yaparo-first-stage-v1',
       firstStage:{version:'yaparo-first-stage-v1',intent:s.intent,outcome:s.outcome,answers},
       planContext:{version:'owned-plan-context-v1',business:$('business').value,sector:$('sector').value,source:'explicit_user_selection',verified:false},
-      firstStageSummary:summary};
+      outcomeContract:contract(),firstStageSummary:summary};
+  }
+  function contract() {return window.YaparoOutcomeContract.resolve(read());}
+  function cards(revision) {return window.YaparoOutcomeContract.buildConcepts(read(),{revision});}
+  function alternative(card) {
+    const current=contract(); if(!current.valid || card.outcomeSignature!==current.binding.signature)return {};
+    const next = cards(card.revision+1)[card.kind]; if(!next)return {};
+    return {title:next.title,message:next.message,cta:next.cta,theme:next.theme};
   }
   function validate() {const s = read(), result = M.validate(s.intent,s.outcome,s.answers); if (!result.valid) ui.showErrors(result.errors); return result.valid;}
   function planIssue() {
@@ -75,11 +67,15 @@
     return '';
   }
   function nextIssue() {
+    if (!validate()) return 'İlk aşamadaki bilgileri tamamla.';
     if (usage() === 'unsure') return 'Devam etmeden önce kullanım yolunu seç.';
-    if (usage() === 'content_only') return 'İçerik isteğin kaydedildi. Kanaldan bağımsız üretim ve format seçimi bu plan demosuna henüz bağlı değil; indirme veya yayın başlatılmadı.';
-    if (!sourceAction(read()) || !sourceGoal(read())) return 'İlk aşaman tamamlandı. Seçtiğin sonucun içerik ve kanal eşleştirmesi hazırlanmayı bekliyor; farklı bir aksiyonla devam edilmeyecek.';
+    if (!contract().valid) return 'Bu isteğin içerik eşleştirmesi doğrulanamadı.';
+    if (['paid','hybrid'].includes(usage()) && (!sourceAction(read()) || !sourceGoal(read()))) return 'Seçtiğin sonuç korundu; ücretli kanal eşleştirmesi doğrulanmadan bütçe ile devam edilemez. Yalnız içerik veya kendi hesaplarında paylaşım yolunu ilk aşamadan seçebilirsin.';
+    if (usage() === 'content_only' && !formats().length) return 'En az bir içerik biçimi seç.';
     return '';
   }
+  function formats() {return [...formatBox.querySelectorAll('input:checked')].map(n=>n.value);}
+  function productionOptions() {return {outcomeSignature:contract().binding.signature,contentOnly:usage()==='content_only',formats:formats()};}
   // Existing source classifiers move to the paid planning stage. Never prefill them.
   const context = node('section'); context.id = 'owned-plan-context'; context.className = 'production-requirements';
   context.append(node('h2','Plan için çalışma bağlamı'),node('p','Yalnız plan örneğini değerlendirmek için seç. Bu seçimler hesap veya belge doğrulaması değildir.'));
@@ -96,13 +92,22 @@
   const modeSelect = node('select'); modeSelect.id = 'owned-mode';
   options(modeSelect,[{value:'paid',label:'Ücretli reklam'},{value:'organic',label:'Kendi hesaplarımda paylaşım'},{value:'hybrid',label:'İkisi birlikte'},{value:'content_only',label:'Yalnız içerik hazırlama'}]);
   modeBox.append(modeLabel,modeSelect); $('plan-form').prepend(modeBox);
+  const formatBox = node('section'); formatBox.className = 'production-requirements'; formatBox.id = 'owned-content-formats';
+  formatBox.append(node('h2','Hangi içerik biçimini hazırlayalım?'),node('p','Kanal seçmeden yerel taslak hazırla. Görsel, hazırlanmış bir yerleşim örneğidir; AI üretimi değildir.'));
+  for(const [value,label] of [['text','Metin'],['image','Görsel yerleşimi']]) {
+    const row=node('label',label), control=node('input'); control.type='checkbox'; control.name='owned-format'; control.value=value; control.checked=true; row.className='check-label'; row.prepend(control); formatBox.append(row);
+  }
+  $('plan-form').prepend(formatBox);
+  const outcomeNote = node('section'); outcomeNote.className='production-requirements'; outcomeNote.id='owned-outcome-summary'; $('plan-form').prepend(outcomeNote);
   const notice = node('p'); notice.id = 'owned-plan-note'; notice.className = 'inline-notice'; $('plan-form').prepend(notice);
   function configure() {
+    const c=contract(); outcomeNote.replaceChildren(); if(c.valid){outcomeNote.append(node('h2',c.outcomeLabel),node('p','Başarı göstergesi: '+c.kpi.label+' · Henüz ölçüm bağlı değil.')); for(const requirement of c.requirements)outcomeNote.append(node('p',requirement.label));}
     const selected = usage(); modeBox.hidden = selected !== 'unsure';
     notice.textContent = selected === 'unsure' ? 'İlk aşamadaki isteğin hazır. Şimdi kullanım yolunu netleştirelim.' : selected === 'content_only' ? 'Yalnız içerik hazırlama seçildi. Reklam, paylaşım veya indirme izni verilmiş sayılmaz.' : 'İlk aşama bilgilerin korundu. Aşağıdaki sonuçlar hazırlanmış yerel plan örnekleridir.';
     $('goal').disabled = true;
     $('organic-controls').hidden = selected === 'paid' || selected === 'content_only' || selected === 'unsure';
     context.hidden = !['paid','hybrid'].includes(selected);
+    formatBox.hidden = selected !== 'content_only';
   }
   function changed(snapshot) {
     const pair = `${snapshot.intent}/${snapshot.outcome}`;
@@ -126,7 +131,7 @@
     if (id === 'communication') return M.intents().find(i => i.id === read().intent)?.label || '';
     if (id === 'action') return M.outcomes(read().intent).find(o => o.id === read().outcome)?.label || '';
     if (id === 'journey-mode') return M.fields(read().intent,read().outcome,read().answers).find(f => f.id === 'delivery_mode')?.options.find(o => o.value === usage())?.label || '';
-  },mode,validate,planIssue,nextIssue,configure,restore,loadExample,syncClassification:classification,unclassified:()=>!$('business').value||!$('sector').value||$('sector').value==='other',review:()=>M.summary(read().intent,read().outcome,read().answers).map(row => [row.label,row.value])});
+  },mode,validate,planIssue,nextIssue,configure,restore,loadExample,contract,cards,alternative,productionOptions,syncClassification:classification,unclassified:()=>!$('business').value||!$('sector').value||$('sector').value==='other',review:()=>[['İstenen sonuç',contract().outcomeLabel],['Ölçüm durumu','Gerçek ölçüm bağlantısı ve sonuç tahmini yok.'],...M.summary(read().intent,read().outcome,read().answers).map(row => [row.label,row.value])]});
   const legacy = $('brief-form'); legacy.hidden = true;
   for (const control of legacy.querySelectorAll('input,select,textarea,button')) control.disabled = true;
   const mount = $('first-stage-root'); mount.hidden = false;
