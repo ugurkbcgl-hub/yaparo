@@ -600,6 +600,18 @@ class StudioCheck(unittest.TestCase):
         errors = []
         page.on("pageerror", lambda error: errors.append(str(error)))
         page.goto(self.origin)
+        first_purpose = page.locator("#purpose-choices button").first
+        first_purpose.focus()
+        first_purpose.press("ArrowRight")
+        self.assertEqual(
+            page.locator("#purpose-choices button:focus").get_attribute("data-purpose"),
+            "sale_promotion",
+        )
+        page.locator("#purpose-choices button:focus").press("ArrowRight")
+        self.assertEqual(
+            page.locator("#purpose-choices button:focus").get_attribute("data-purpose"),
+            "event",
+        )
         self.complete_brief(page, mode="organic")
         self.open_creatives(page)
         page.locator('#step-nav [data-step="0"]').click()
