@@ -1,5 +1,15 @@
 # Yaparo project brief
 
+## V2 catalog direction — 28 October 2026
+
+The owner's V2 follow-up supersedes the earlier initial Other/unsure exclusion
+for the new isolated preview: two choices open composed context modules, with
+relevant outcomes first and remaining/unsure routes accessible. First slice imports
+the fingerprinted owner workbook and resolves forms at `/v2.html`; the existing
+8014 draft remains unchanged. Plan/account/production/publishing integration is
+not complete. See [V2 integration and boundaries](docs/product/v2-flow-integration.md).
+Türkiye-first, export undecided, synthetic local-only and release gates remain.
+
 ## Research decision studio — 27 October 2026
 
 The owner requested rebuilding the prototype and design from the supplied Turkey

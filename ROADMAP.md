@@ -1,5 +1,14 @@
 # Yaparo roadmap
 
+## V2 follow-up — 28 October 2026
+
+First local slice: import seven V2 intent/outcome/form catalogs; owned conditional
+resolver; isolated two-question/module preview with missing-data refusal. Existing
+prototype preserved. Next: typed location/destination and stage2 collection;
+then source/freshness, read-only platform evidence, budget/production and finally
+publishing behind existing gates. Reference package test claims are unverified.
+See [V2 scope](docs/product/v2-flow-integration.md).
+
 ## Research decision studio — 27 October 2026
 
 Current owner priority: rebuild the draft from the supplied Turkey research and

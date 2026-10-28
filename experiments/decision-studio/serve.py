@@ -10,6 +10,11 @@ from sources import SourceService
 
 ROOT = Path(__file__).resolve().parent / "dist"
 ASSETS = {
+    "/v2.html": ("v2.html", "text/html; charset=utf-8"),
+    "/v2.css": ("v2.css", "text/css; charset=utf-8"),
+    "/v2-data.js": ("v2-data.js", "text/javascript; charset=utf-8"),
+    "/v2-flow.js": ("v2-flow.js", "text/javascript; charset=utf-8"),
+    "/v2-app.js": ("v2-app.js", "text/javascript; charset=utf-8"),
     "/": ("index.html", "text/html; charset=utf-8"),
     "/index.html": ("index.html", "text/html; charset=utf-8"),
     "/styles.css": ("styles.css", "text/css; charset=utf-8"),
