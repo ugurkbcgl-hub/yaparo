@@ -26,6 +26,10 @@ class PlanCheck(FirstStageCheck):
         for field in ["budget", "region", "radius", "start", "plan-end", "geo-mode"]:
             self.assertEqual(self.page.locator(f"#{field}").input_value(), "")
         self.assertIn("Bireyler", self.page.locator("#plan-brief-summary").inner_text())
+        self.assertIn(
+            "Somut sentetik açıklama",
+            self.page.locator("#plan-brief-summary").inner_text(),
+        )
         self.assertTrue(self.page.locator("#audience").is_hidden())
         self.assertTrue(self.page.locator("#plan-radius-section").is_hidden())
         self.assertIsNone(self.snapshot()["plan"])

@@ -103,7 +103,7 @@
       if(b.firstStage.intent==='sell'&&a.sell_timing==='range'&&!$('start').value&&!end.value){$('start').value=a.sell_start||'';end.value=a.sell_end||'';}
       datesNote.textContent=a.event_start?`Etkinlik tarihi: ${a.event_start}${a.event_end?' – '+a.event_end:''}. Reklamın yayın aralığını ayrıca seç.`:'';
     }
-    const c=b.outcomeContract||window.YaparoOutcomeContract.resolve(b.firstStage);briefTitle.textContent=c.intentLabel||'İsteğin';briefLine.textContent=c.outcomeLabel||'';
+    const c=b.outcomeContract||window.YaparoOutcomeContract.resolve(b.firstStage),subject=b.description?.trim();briefTitle.textContent=subject?(subject.length>100?subject.slice(0,100)+'…':subject):c.intentLabel||'İsteğin';briefTitle.title=subject||'';briefLine.textContent=c.outcomeLabel||'';
     answerList.replaceChildren();for(const row of b.firstStageSummary||[])answerList.append(node('dt',row.label),node('dd',row.value));
     configure();
   }
