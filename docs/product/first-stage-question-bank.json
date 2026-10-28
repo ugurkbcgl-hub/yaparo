@@ -1,0 +1,152 @@
+{
+  "version": "yaparo-first-stage-design-1",
+  "status": "owned_product_design_not_platform_evidence",
+  "date": "2026-10-28",
+  "question": "Bu çalışmayla ne yapmak istiyorsun?",
+  "second_question": "Gören kişi ne yapsın?",
+  "banks": [
+    {
+      "id": "promote", "answer": "Bir marka, ürün veya hizmeti tanıtmak",
+      "outcomes": ["Markayı veya mesajı hatırlasın", "Bilgilensin", "Web sitesini ziyaret etsin", "Mağazaya gelsin", "İletişime geçsin"],
+      "questions": [
+        ["Neyi tanıtıyoruz?", "Marka / Ürün / Hizmet / Proje / Kendi tanımımı ekleyeceğim"],
+        ["Adı nedir?", "Kayıtlı kimlikten seç veya kısa ad yaz. Ad bilinmiyorsa konu tanımı yeterli."],
+        ["En çok hangi yönü öne çıksın?", "Kalite / Kolaylık / Yenilik / Uzmanlık / Tasarım / Sosyal fayda / Kendi yanıtım"],
+        ["Kime fayda sağlıyor?", "Bireyler / Aileler / İşletmeler / Belirli bir topluluk; yalnız seçilen gruba uygun alt seçenekler"],
+        ["Bunu destekleyen ne var?", "Ürün bilgisi / Gösterim / İzinli kullanıcı yorumu / Belge veya kaynak / Henüz eklemeyeceğim"]
+      ],
+      "conditional": "Mağaza seçilirse ziyaret konumu; web sitesi seçilirse bağlantı; iletişim seçilirse telefon veya mesaj adresi açılır. Kanıt yoksa doğrulanmış üstünlük iddiası üretilmez.",
+      "exclude": "İndirim zorunluluğu, bağış izni, işe alım koşulları ve ilgisiz ticari alt sektörler."
+    },
+    {
+      "id": "sell", "answer": "Satış yapmak veya kampanya duyurmak",
+      "outcomes": ["Satın alsın", "Mağazaya gelsin", "Mesajla sipariş versin", "Telefonla sipariş versin", "Web sitesini ziyaret etsin", "Kampanyayı öğrensin"],
+      "questions": [
+        ["Ne sunuyorsun?", "Ürün / Hizmet / Paket / Abonelik / Kendi tanımım"],
+        ["Nasıl bir teklif var?", "Normal satış / İndirim / Yeni ürün / Paket avantajı / Deneme / Sınırlı fırsat"],
+        ["Ürün veya teklifin adı ne?", "Kısa ad; kayıtlı ürün varsa seçim"],
+        ["Hangi koşullar geçerli?", "Herkese açık / Seçili ürünlerde / Yeni müşterilerde / Üyelere özel / Adet koşullu / Kendi koşulum"],
+        ["Fiyatı içerikte gösterelim mi?", "Evet / Hayır / Henüz belli değil; evetse tutar ve para birimi"],
+        ["Teklifin süresi var mı?", "Sürekli / Belirli tarihler / Kontenjan veya stok bitene kadar; tarih veya limit yalnız ilgili yanıtta"]
+      ],
+      "conditional": "İndirim seçilirse önceki fiyat için dayanak sorulur. Satın alma aksiyonunda web / pazaryeri / mağaza / mesaj / telefon yolu ve ilgili adres açılır. Sadece bilgilendirmede satın alma bağlantısı zorunlu olmaz.",
+      "exclude": "Bağış yöntemi, gönüllü görevi, iş adayı özellikleri ve seçilmemiş teklif türlerinin ayrıntıları."
+    },
+    {
+      "id": "event", "answer": "Bir etkinliğe katılımcı bulmak",
+      "outcomes": ["Kayıt olsun", "Bilet alsın", "Etkinliğe gelsin", "Etkinlik hakkında bilgi alsın", "Mesajla bilgi istesin"],
+      "questions": [
+        ["Nasıl bir etkinlik?", "Atölye / Eğitim veya seminer / Konser veya gösteri / Buluşma / Fuar veya lansman / Spor / Kendi etkinliğim"],
+        ["Etkinliğin adı ne?", "Kısa ad"],
+        ["Nasıl yapılacak?", "Yüz yüze / Çevrimiçi / Karma"],
+        ["Ne zaman?", "Tek tarih / Tarih aralığı / Tekrarlayan / Henüz kesinleşmedi; kesin değilse yayın öncesi tamamlanır"],
+        ["Katılım ücretli mi?", "Ücretsiz / Ücretli / Bazı katılımlar ücretli / Henüz belli değil"],
+        ["Kimler katılabilir?", "Herkese açık / Başvuru ile / Üyelere özel / Ön koşullu; ön koşul seçilirse kısa açıklama"]
+      ],
+      "conditional": "Yüz yüze veya karma ise ziyaret konumu; çevrimiçi ise katılım yöntemi açılır. Kayıtta kayıt adresi, bilette bilet adresi, doğrudan katılımda açık adres gerekir. Kontenjan varsa sayı istenir.",
+      "exclude": "Genel B2B satış modeli, mağaza işletme türü ve seçilmemiş fiziksel/çevrimiçi katılım alanları."
+    },
+    {
+      "id": "lead", "answer": "Talep, teklif veya randevu almak",
+      "outcomes": ["Form doldursun", "Teklif istesin", "Randevu alsın", "Telefonla arasın", "Mesaj yazsın", "Görüşme ayarlasın"],
+      "questions": [
+        ["Hangi hizmet veya çözüm için?", "Mevcut hizmetten seç / Yeni hizmeti kısa tanımla"],
+        ["İlk temas ne için olacak?", "Bilgi alma / İhtiyaç görüşmesi / Fiyat teklifi / Rezervasyon / Hizmet randevusu / Kendi yanıtım"],
+        ["Bu hizmet kimler için?", "Bireyler / İşletmeler / Mevcut müşteriler / Belirli bir grup; ilgili alt seçenekler açılır"],
+        ["Hizmeti nasıl veriyorsun?", "İş yerimde / Müşterinin yerinde / Çevrimiçi / Birden fazla yöntem"],
+        ["Önceden bilinmesi gereken bir koşul var mı?", "Yok / Hizmet bölgesi / Uygunluk şartı / Asgari sipariş veya proje / Kendi koşulum"]
+      ],
+      "conditional": "Randevuda rezervasyon bağlantısı veya kabul yöntemi; formda form adresi; aramada telefon; mesajda mesaj adresi sorulur. Çalışma bölgesi hizmete erişim için alınır; reklam hedefleme alanıyla aynı kabul edilmez.",
+      "exclude": "İlgisiz ürün stoğu, bilet fiyatı, bağış teslimi ve tüm kullanıcılar için B2B eleme soruları."
+    },
+    {
+      "id": "hire", "answer": "İşe alım için başvuru toplamak",
+      "outcomes": ["İşe başvursun", "İlanı incelesin", "Başvuru hakkında mesaj yazsın"],
+      "questions": [
+        ["Hangi pozisyon için?", "Pozisyon adı; şirket veya ilan bilgisi varsa seç"],
+        ["Çalışma türü ne?", "Tam zamanlı / Yarı zamanlı / Sözleşmeli / Dönemsel / Staj"],
+        ["Nerede çalışılacak?", "İş yerinde / Uzaktan / Karma; yalnız gerekliyse şehir veya iş yeri konumu"],
+        ["Temel görev nedir?", "Kısa görev tanımı"],
+        ["Hangi işe ilişkin nitelikler gerekli?", "Deneyim / Teknik beceri / Eğitim veya yetkinlik / İşe özgü belge / Deneyim şartı yok; yalnız seçilen başlıkların ayrıntısı"],
+        ["Başvuru için son tarih var mı?", "Tarih var / Başvurular açık / Henüz kesinleşmedi"]
+      ],
+      "conditional": "Başvuruda form, kariyer sayfası veya başvuru iletişimi gerekir. Yalnız ilanı inceleme seçilirse ilan bağlantısı yeterlidir. Bu ilk aşama aday başvurusu toplamaz, ilanı hazırlayanın ihtiyacını öğrenir.",
+      "exclude": "Ürün satışı, müşteri segmenti, fotoğraf veya kimlik numarası; işle ilgisiz hassas kişisel özelliklere göre eleme."
+    },
+    {
+      "id": "fundraise", "answer": "Bağış veya gönüllü destek toplamak",
+      "outcomes": ["Bağış yapsın", "Malzeme desteği versin", "Gönüllü olsun", "Çalışma hakkında bilgilensin", "Destek sayfasını ziyaret etsin", "Çağrıyı paylaşsın"],
+      "questions": [
+        ["Bu çağrıyı kim düzenliyor?", "Dernek / Vakıf / Kurum / Kişi / Topluluk / Kendi tanımım; düzenleyici adı"],
+        ["Hangi amaç için destek istiyorsun?", "Eğitim / Gıda veya temel ihtiyaç / Afet ve acil destek / Sağlık desteği / Hayvan refahı / Çevre / Kültür veya topluluk / Kendi amacım"],
+        ["Ne tür destek bekliyorsun?", "Para / Malzeme / Gönüllü emek / Birden fazla tür; ikinci seçimle daralır"],
+        ["Destek neyi gerçekleştirecek?", "Kısa ve somut açıklama; kişi adı, tanı veya özel belge ilk aşamada istenmez"],
+        ["Hedef veya süre belirli mi?", "Belirli / Henüz belli değil; paraya yalnız parasal hedef, malzemeye adet veya liste, gönüllülüğe görev ve zaman"],
+        ["İzin veya istisna durumunu biliyor musun?", "İzin belgem var / İzin almadan toplama yetkisi veya istisna dayanağım var / Süreç devam ediyor / Bilmiyorum; beyan doğrulama sayılmaz"]
+      ],
+      "conditional": "Para seçilirse resmî bağış sayfası / yetkili platform / diğer yöntemi açıklama; ham IBAN ilk taslakta istenmez. Malzemede ihtiyaç listesi ve teslim yöntemi; gönüllülükte görev, zaman ve başvuru yolu açılır. Yalnız bilgilendirmede ödeme yöntemi ve parasal hedef gizlenir.",
+      "exclude": "Şirketlere ürün sunuyorum, mağazadan satış, ticari sektör, indirim ve gönüllü akışında para/IBAN alanları."
+    },
+    {
+      "id": "announce", "answer": "Bir duyuru veya özel gün mesajı paylaşmak",
+      "outcomes": ["Bilgilensin", "Mesajı hatırlasın", "Duyuru sayfasını ziyaret etsin", "Mesajı paylaşsın", "Hesabı takip etsin"],
+      "questions": [
+        ["Nasıl bir duyuru?", "Açılış / Hizmet veya saat değişikliği / Yeni gelişme / Kutlama veya teşekkür / Bilgilendirme / Kendi duyurum"],
+        ["Hangi kişi veya kurum adına?", "Kayıtlı kimlikten seç / Kısa ad ekle"],
+        ["İletilecek kesin bilgi ne?", "Kısa metin; duyuru için gerekli tarih, yer veya değişiklik"],
+        ["Ne zaman geçerli?", "Belirli tarih / Tarih aralığı / Sürekli / Tarih gerekmiyor"],
+        ["Kimleri ilgilendiriyor?", "Müşteriler / Çalışanlar / Üyeler / Bölge sakinleri / Genel kamu / Kendi grubum"]
+      ],
+      "conditional": "Saat değişikliğinde yeni saat, açılışta konum/tarih; web aksiyonunda duyuru bağlantısı açılır. Salt kutlama veya hatırlamada işlem bağlantısı zorunlu tutulmaz.",
+      "exclude": "Ürün fiyatı, müşteri satın alma yolu, bağış ve işe alım ayrıntıları."
+    },
+    {
+      "id": "community", "answer": "Topluluk, üyelik veya eğitim çalışmamı büyütmek",
+      "outcomes": ["Topluluğa katılsın", "Üye veya abone olsun", "Eğitime kayıt olsun", "İçeriği incelesin", "Hesabı takip etsin"],
+      "questions": [
+        ["Neye katılım istiyorsun?", "Topluluk / Üyelik veya abonelik / Kurs veya eğitim / Düzenli buluşma / Kendi çalışmam"],
+        ["Adı nedir?", "Topluluk, program veya eğitim adı"],
+        ["Katılımcı ne kazanacak?", "Öğrenme / Deneyim paylaşımı / Birlikte üretim / İçeriğe erişim / Dayanışma / Kendi faydam"],
+        ["Kimler için uygun?", "Herkese açık / Başlangıç düzeyi / Belirli deneyim düzeyi / Meslek veya ilgi alanı / Ön koşullu"],
+        ["Katılım ücretli mi?", "Ücretsiz / Tek seferlik ücret / Düzenli üyelik ücreti / Bazı bölümler ücretli / Henüz belli değil"]
+      ],
+      "conditional": "Katılımda davet veya kayıt adresi, abonelikte üyelik sayfası; eğitimde çevrimiçi/yüz yüze, gerekiyorsa tarih ve ön koşul açılır. Yalnız içerik incelemede üyelik ödeme bilgisi istenmez.",
+      "exclude": "Her topluluk için zorunlu etkinlik tarihi, genel mağaza/B2B profili ve ürün stoğu."
+    },
+    {
+      "id": "reputation", "answer": "Güven oluşturmak veya bir açıklama yapmak",
+      "outcomes": ["Mesajı anlasın", "Kurumu veya mesajı hatırlasın", "Açıklamayı veya dayanağı incelesin", "Mesajı paylaşsın"],
+      "questions": [
+        ["Nasıl bir çalışma?", "Uzmanlığı göstermek / Müşteri deneyimini anlatmak / Kurumsal açıklama / Yanlış bilgiyi düzeltmek / Toplumsal konuyu açıklamak / Kendi konum"],
+        ["Kim adına konuşuyoruz?", "Kayıtlı kimlikten seç / Kurum, kişi veya topluluk adı"],
+        ["Ana mesaj ne?", "Kısa ve doğrulanabilir açıklama"],
+        ["Mesajın dayanağı ne?", "Kamuya açık kaynak / Belge / İzinli deneyim veya yorum / Veriye dayalı açıklama / Henüz dayanak yok"],
+        ["Kimlerin bilmesini istiyorsun?", "Mevcut müşteriler / İş ortakları / Çalışanlar / Belirli topluluk / Genel kamu / Kendi grubum"]
+      ],
+      "conditional": "Dayanak inceleme seçilirse kaynak veya açıklama bağlantısı gerekir. Politik/sağlık/finans gibi özel kapsamlar belirlenirse ayrı politika incelemesi açılır; kutucukla onaylanmış sayılmaz.",
+      "exclude": "Otomatik başarı veya üstünlük iddiası, indirim, ürün satış yolu ve bağış ödeme soruları."
+    }
+  ],
+  "outcome_addons": [
+    ["Hatırlasın veya bilgilensin", "Ana mesaj; gerekiyorsa dayanak. Bağlantı zorunlu değil."],
+    ["Web sayfasını veya ilanı incelesin", "Amaca özgü sayfa bağlantısı. Satış için ürün, bağış için destek, işe alım için ilan adresi."],
+    ["Satın alsın", "Web / pazaryeri / mağaza / mesaj / telefon. Seçilen yola göre bağlantı, konum veya iletişim."],
+    ["Form doldursun veya teklif istesin", "Form veya talep yöntemi; mevcut form seçilmişse bağlantısı. İlk aşamada son müşterinin verisi toplanmaz."],
+    ["Telefon etsin veya mesaj yazsın", "Uygun iletişim yöntemi ve adresi; telefon veya WhatsApp seçilmişse geçerli numara."],
+    ["Randevu veya görüşme ayarlasın", "Rezervasyon sayfası / telefon / mesaj / mevcut sistem. Seçilen yöntemin adresi."],
+    ["Mağazaya veya etkinliğe gelsin", "Ziyaret konumu veya harita; gerekiyorsa tarih/saat. Reklam hedefleme bölgesinden ayrı."],
+    ["Kayıt olsun veya bilet alsın", "Kayıt/bilet yolu, ilgili bağlantı, ücret durumu ve biliniyorsa kontenjan."],
+    ["İşe başvursun", "Başvuru yolu ve iletişimi, varsa son tarih. Adayın kimlik veya hassas bilgisi bu formda yok."],
+    ["Bağış yapsın veya malzeme versin", "Destek türü → ilgili kabul/teslim yöntemi. Parasal hedef yalnız para seçilirse."],
+    ["Gönüllü olsun", "Görev → zaman veya beceri ihtiyacı → başvuru yolu. Para ve IBAN soruları yok."],
+    ["Üye olsun veya topluluğa katılsın", "Katılım yöntemi ve adresi; varsa ücret ve ön koşullar."],
+    ["Takip etsin veya paylaşsın", "İlgili profil veya paylaşılacak içerik. Banka/ödeme/satış adresi zorunlu değil."]
+  ],
+  "sources": [
+    ["GOV UK form yapısı", "https://www.gov.uk/service-manual/design/form-structure", "Her sorunun amacı ve kimlere sorulacağı belirlenmeli; ilgisiz sorular dallanmayla kaldırılmalı."],
+    ["NHS soru gerekliliği", "https://service-manual.nhs.uk/content/how-to-write-good-questions-for-forms/make-sure-you-need-each-question", "Gerekli olmayan bilgiyi istememe ve sorunun kullanımını tanımlama."],
+    ["Google Ads kampanya amaçları", "https://support.google.com/google-ads/answer/7450050?hl=en", "Amaç esas beklenen sonuca uymalı; ilgili ayarlar sonrasında gösterilmeli."],
+    ["LinkedIn iş ilanı ilkeleri", "https://www.linkedin.com/help/linkedin/answer/a1302046", "İş ilanının gerçek rol ve koşullara dayanması; yanıltıcı ilanlardan kaçınma."],
+    ["Vakıflar Genel Müdürlüğü yardım toplama", "https://engelsiz.vgm.gov.tr/vakif-islemleri/beyanname---bildirim-istisna-ve-muafiyetler/izin-almadan-yardim-toplayan-vakiflar", "İzin ve izin almadan toplama kapsamları ayrı değerlendirilir; salt beyan doğrulama değildir."]
+  ]
+}

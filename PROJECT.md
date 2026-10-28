@@ -1,5 +1,16 @@
 # Yaparo project brief
 
+## First stage question banks — 28 October 2026
+
+Owner confirmed scope: the whole first stage (two choices and each route's short
+form). Each purpose/outcome pair must select relevant questions AND answer sets;
+fundraising must not inherit commercial product/B2B questions. The owned design
+in [first-stage-question-bank.json](docs/product/first-stage-question-bank.json)
+specifies9 purpose banks and outcome extensions, with official research sources.
+Current8014 applies contextual shortlists/branch pruning; the full new typed bank
+is still a design target. Implement it before resuming unrelated geo/plan expansion.
+See [current implementation boundary](docs/product/progressive-brief.md).
+
 ## V2 catalog direction — 28 October 2026
 
 The owner's V2 follow-up supersedes the earlier initial Other/unsure exclusion

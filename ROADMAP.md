@@ -1,5 +1,15 @@
 # Yaparo roadmap
 
+## First stage correction — 28 October 2026
+
+Priority supersedes the next geo/stage2 slice: implement the9 dedicated first-stage
+question banks and outcome additions in
+[the owned design](docs/product/first-stage-question-bank.json), then exercise each
+compatible pair. Research and Word review document are complete; current8014
+context/options/hidden-branch correction is implemented. Separate typed questions
+for event date/location, job details and fundraising purpose remain to be built.
+Keep the first-stage two-choice screen and local synthetic scope.
+
 ## V2 follow-up — 28 October 2026
 
 First local slice: import seven V2 intent/outcome/form catalogs; owned conditional

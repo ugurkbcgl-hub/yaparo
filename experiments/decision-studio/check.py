@@ -632,7 +632,12 @@ class StudioCheck(unittest.TestCase):
         self.assertTrue(page.locator("#context-form").is_visible())
         self.assertEqual(page.locator("#action").input_value(), "understand")
         self.complete_brief(
-            page, communication="education", action="understand", submit=False
+            page,
+            communication="education",
+            business="media_creator",
+            sector="education_training",
+            action="understand",
+            submit=False,
         )
         self.assertEqual(page.locator("#communication").input_value(), "education")
         self.assertEqual(page.locator("#q-S1_ED01").count(), 1)
@@ -837,7 +842,7 @@ class StudioCheck(unittest.TestCase):
         self.assertFalse(page.locator("#q-S1_F04-url").is_visible())
         page.locator("#brief-submit").click()
         self.assertNotIn(
-            "url", page.evaluate("YaparoStudio.getSnapshot().brief.branch.S1_F04")
+            "S1_F04", page.evaluate("YaparoStudio.getSnapshot().brief.branch")
         )
         page.locator('#step-nav [data-step="0"]').click()
         page.locator('[data-action="donate"]').click()
@@ -895,6 +900,65 @@ class StudioCheck(unittest.TestCase):
         )
         self.assertNotIn(
             "S1_A01", page.evaluate("YaparoStudio.getSnapshot().brief.branch")
+        )
+        page.close()
+
+    def test_context_banks_remove_commerce_from_donation(self):
+        page = self.browser.new_page(viewport={"width": 1100, "height": 850})
+        page.goto(self.origin)
+        self.complete_brief(
+            page,
+            communication="fundraising",
+            business="nonprofit_fundraising",
+            sector="nonprofit_social_cause",
+            action="donate",
+            mode="organic",
+            submit=False,
+        )
+        self.assertEqual(
+            page.locator('label[for="business"]').inner_text(),
+            "Bağış çağrısı hangi yolla yapılacak?",
+        )
+        choices = page.locator("#business option").all_text_contents()
+        self.assertNotIn("Şirketlere ürün veya hizmet sunuyorum", choices)
+        self.assertNotIn("Mağazamdan / iş yerimden", choices)
+        self.assertIn("Yardım amaçlı etkinlik", choices)
+        page.locator("#q-S1_F04-kind").select_option("money")
+        page.locator("#q-S1_F04-channel").select_option("official_site")
+        page.locator("#q-S1_F04-url").fill("https://ornek.example/bagis")
+        page.locator('[data-action="understand"]').click()
+        self.assertEqual(page.locator("#q-S1_F04").count(), 0)
+        self.assertIn(
+            "Farkındalık / destek yayını", page.locator("#business").inner_text()
+        )
+        page.locator("#brief-submit").click()
+        self.assertNotIn(
+            "S1_F04", page.evaluate("YaparoStudio.getSnapshot().brief.branch")
+        )
+        page.locator('#step-nav [data-step="0"]').click()
+        page.locator('[data-action="donate"]').click()
+        self.assertEqual(page.locator("#q-S1_F04-kind").input_value(), "")
+        page.locator("#business").select_option("__other__")
+        self.assertNotIn(
+            "retail_ecommerce",
+            page.locator("#sector option").evaluate_all("ns=>ns.map(n=>n.value)"),
+        )
+        page.screenshot(
+            path=str(self.evidence / "donation-bank-desktop.png"), full_page=True
+        )
+        page.set_viewport_size({"width": 390, "height": 844})
+        self.assertLessEqual(page.evaluate("document.documentElement.scrollWidth"), 390)
+        page.screenshot(
+            path=str(self.evidence / "donation-bank-mobile.png"), full_page=True
+        )
+        page.locator('[data-purpose="event"]').click()
+        page.locator('[data-action="register_event"]').click()
+        self.assertEqual(page.locator("#business").input_value(), "")
+        self.assertEqual(page.locator("#sector").input_value(), "")
+        self.assertEqual(page.locator("#q-S1_F04").count(), 0)
+        self.assertEqual(page.locator("#q-S1_E01").count(), 1)
+        self.assertEqual(
+            page.locator('label[for="sector"]').inner_text(), "Etkinliğin konusu ne?"
         )
         page.close()
 

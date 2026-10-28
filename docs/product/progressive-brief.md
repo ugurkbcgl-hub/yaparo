@@ -21,7 +21,32 @@ silently replace that response. Custom business, sector and destination descript
 are supported in the detail form. Free description/audience/message are optional;
 empty text is not treated as a known business fact. Starter profiles remain available.
 
-Owned UX policy `yaparo-brief-flow-v3` is separate from source showWhen rules.
+Owned UX policy `yaparo-brief-flow-v4` is separate from source showWhen rules.
+
+Owner review on28October rejected shared commercial questions in fundraising.
+Current v4 projects purpose-specific context headings and answer shortlists for
+the9 main families (13 internal subtypes). Fundraising+donate offers only a social
+support work or a charity event; information routes may also choose an awareness
+publication. Fundraising sector choices exclude commercial product/B2B categories.
+Event, hiring, education, membership and public-message contexts also have owned
+shortlists. Manual Other remains explicit and never qualifies automatic paid spend.
+
+Source IDs/options are unchanged. These projections describe the current work;
+they do not prove real business ownership, account eligibility or economics and
+must not feed live forecasts without an explicit owned domain model. Response
+changes rerender the context options, clear incompatible selections and prune
+irrelevant details. Donation finance/permit-detail fields appear only for donate;
+permit status and risk/beneficiary declarations remain. Existing policy gates
+continue to block fundraising regardless of a selected event business category.
+
+The complete desired first-stage design is
+[first-stage-question-bank.json](first-stage-question-bank.json):9 purpose banks,
+recommended outcome choices, purpose-specific questions/answers and13 outcome
+extensions. This is authored product design informed by official form/objective
+guidance, not an imported platform rulebook or a fully implemented runtime catalog.
+Remaining UI work includes separately typed event date/location, job role/work
+model and fundraising purpose fields. Do not claim the9 complete new forms are
+implemented; current change corrects existing context/branch visibility first.
 Source taxonomy and research files remain unchanged. Source `unsure` is deliberately
 not exposed at entry. All other communication kinds retain explicit paths.
 

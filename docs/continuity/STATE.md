@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 14:45 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 17:32 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -17,10 +17,42 @@ undecided, not the next deliverable.
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
 Branch codex/unified-journey-prototype; PR369 OPEN.
-Predecessor acc373f full CI40651888006 SUCCESS verified live this turn.
-Current V2 package needs its own CI after push; no deployment or DB migration.
-First V2 commit07fc451 has CI40682615864 in progress at the last check; focused keyboard
-follow-up retains select focus and optional-section state during conditional render.
+Live recheck this turn:4541b21 full CI40683169197 SUCCESS, PR369 OPEN. The following
+question-bank correction is a new package and needs fresh CI after push.
+No deployment or DB migration. Source/current UI use the same feature branch.
+
+## Current owner priority and question bank milestone
+
+Owner supplied a fundraising screenshot with irrelevant B2B/product choices and
+confirmed the requested file covers the WHOLE first stage: two choices plus each
+route's short form. Official GOV.UK/NHS form guidance, Google Ads objectives,
+LinkedIn job guidelines and VGM help informed owned design, not copied schemas.
+Canonical docs/product/first-stage-question-bank.json contains9 banks with
+purpose-specific questions/answer sets, outcomes,13 outcome additions and sources.
+Word output: C:\Users\ugrkb\OneDrive\Masaüstü\Yaparo Araştırma\Yaparo_Ilk_Asama_Soru_Bankasi.docx
+All9 rendered pages viewed; final QA %TEMP%/yaparo-question-bank-final. First render
+needed local LibreOffice PATH; a subprocess text-decoding warning occurred but
+PDF/all9 PNGs were produced and reviewed. Source research files unchanged.
+
+Runtime correction in8014 owned brief policyv4: purpose-specific context question
+headings/options across9 families/13 subtypes. Fundraising+donate only social-support
+work/charity-event contexts, never product/B2B/shop choices. Sector lists narrowed;
+manual Other remains explicit. Outcome changes prune finance/permit details that
+no longer apply; permit status and risk declarations remain. Source data.js unchanged.
+Independent review found no permit/spend bypass: fundraising policy blocks by
+communication/action, independent of business selection. Context labels do not
+prove real business ownership or qualify live forecasts/economics.
+
+Local19 browser tests passed27.966s; pure brief-flow, syntax, Ruff/format and diff
+checks passed. Actual desktop/mobile screenshots were viewed at
+%TEMP%/yaparo-decision-tb19fxg0/donation-bank-desktop.png and donation-bank-mobile.png.
+No horizontal overflow found. IAB direct recheck still unavailable; these are
+isolated test-browser screenshots. No real API/account/spend/publishing action.
+
+Scope distinction: full9 new question banks are designed in the Word/JSON; current
+UI corrects existing categories/branches, not all new typed questions. Event
+date/location, job role/work model, fundraising purpose etc still need independent
+fields instead of composite source questions. V2 preview remains separate.
 
 ## Current milestone: V2 catalog and form preview
 
@@ -82,6 +114,7 @@ Prior8013/Django8002 remain separate.
 
 ## Next action
 
-Verify V2 PR CI, then implement owned typed location/destination components and
-stage2 collection without treating manual locations as verified platform IDs.
+Verify current PR CI, then implement the first-stage owned bank renderer/typed
+fields from first-stage-question-bank.json, beginning with donation and testing
+each compatible purpose/outcome. Do not jump to stage2 before the first-stage fix.
 Keep real account/forecast/AI/spend/launch gates closed.

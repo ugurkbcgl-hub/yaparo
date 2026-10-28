@@ -1,7 +1,7 @@
 /* Owned, versioned brief UX policy. Source question visibility is not option filtering. */
 (function(root){
   'use strict';
-  const version='yaparo-brief-flow-v3';
+  const version='yaparo-brief-flow-v4';
   const groups={
     communication:[
       {id:'offer',label:'Ürün, hizmet veya satış',values:['product_service_intro','launch','sale_promotion','lead_request']},
@@ -29,8 +29,25 @@
   const questions={communication:'S1_Q01',business:'S3_Q02',sector:'S3_Q03'};
   const offerJobs=new Set(['product_service_intro','launch','sale_promotion','lead_request']);
   const allBusinesses=groups.business.flatMap(group=>group.values);
-  const recruitmentBusinesses=['employer_recruitment','b2b_leadgen','local_service','media_creator','local_retail','saas_subscription'];
-  const fundraisingBusinesses=['nonprofit_fundraising','event','media_creator','b2b_leadgen','local_retail'];
+  // Owned wording/shortlists describe this work, never inferred ownership or eligibility.
+  // Source IDs remain unchanged; the user still explicitly chooses each answer.
+  const contextBanks={
+    product_service_intro:{business:'Ürününe veya hizmetine nasıl ulaşılıyor?',sector:'Ürün veya hizmet hangi alanda?',title:'Tanıtacağın şeyi netleştirelim'},
+    launch:{business:'Yeni ürününe veya hizmetine nasıl ulaşılıyor?',sector:'Yeni ürün veya hizmet hangi alanda?',title:'Lansmanı netleştirelim'},
+    sale_promotion:{business:'Satış hangi yoldan yapılıyor?',sector:'Kampanya hangi ürün veya hizmet alanında?',title:'Teklifini netleştirelim'},
+    lead_request:{business:'Talep hangi çalışma için toplanacak?',sector:'Talep hangi hizmet veya çözümle ilgili?',title:'Gelecek talebi netleştirelim',values:['local_service','b2b_leadgen','saas_subscription','local_retail','ecommerce_dtc','marketplace_seller','media_creator']},
+    event:{business:'Bu etkinlik hangi çalışma kapsamında?',sector:'Etkinliğin konusu ne?',title:'Etkinliğin ayrıntılarını netleştirelim',values:['event','local_retail','b2b_leadgen','media_creator','nonprofit_fundraising'],sectors:['entertainment_events','education_training','food_hospitality','travel_tourism','nonprofit_social_cause','other'],labels:{event:'Etkinlik / buluşma',local_retail:'Mağaza / iş yeri etkinliği',b2b_leadgen:'İşletmelere yönelik etkinlik',media_creator:'Yayın / içerik etkinliği',nonprofit_fundraising:'Sosyal fayda / yardım etkinliği'}},
+    recruitment:{business:'Bu iş ilanı hangi çalışma için?',sector:'Pozisyon hangi faaliyet alanında?',title:'Aradığın ekip arkadaşını netleştirelim',values:['employer_recruitment'],labels:{employer_recruitment:'Çalışan / ekip arkadaşı arayışı'}},
+    fundraising:{business:'Bu destek çağrısı nasıl yürütülecek?',sector:'Destek hangi alanda kullanılacak?',title:'Yardım çağrını netleştirelim',values:['nonprofit_fundraising','event','media_creator'],sectors:['nonprofit_social_cause','education_training','health_medical','other'],labels:{nonprofit_fundraising:'Yardım / sosyal destek çalışması',event:'Yardım amaçlı etkinlik',media_creator:'Farkındalık / destek yayını'}},
+    announcement:{business:'Duyuru hangi çalışma kapsamında?',sector:'Duyurunun ilgili olduğu alan ne?',title:'Paylaşacağın duyuruyu netleştirelim'},
+    celebration:{business:'Kutlama hangi çalışma kapsamında?',sector:'Kutlamanın ilgili olduğu alan ne?',title:'Kutlama mesajını netleştirelim'},
+    education:{business:'Eğitim içeriğini hangi çalışma kapsamında sunuyorsun?',sector:'Öğrenilecek konu hangi alanda?',title:'Öğrenme amacını netleştirelim',values:['media_creator','event','local_service','saas_subscription','nonprofit_fundraising'],sectors:['education_training','technology_saas','professional_services','health_medical','entertainment_events','nonprofit_social_cause','other'],labels:{media_creator:'Eğitici içerik / yayın',event:'Atölye / eğitim etkinliği',local_service:'Eğitim / danışmanlık hizmeti',saas_subscription:'Dijital eğitim / üyelik hizmeti',nonprofit_fundraising:'Sosyal fayda / ücretsiz eğitim çalışması'}},
+    membership:{business:'Katılacakları yapı ne sunuyor?',sector:'Topluluğun veya üyeliğin konusu ne?',title:'Katılımın değerini netleştirelim',values:['saas_subscription','media_creator','event','nonprofit_fundraising'],sectors:['education_training','technology_saas','professional_services','entertainment_events','nonprofit_social_cause','other'],labels:{saas_subscription:'Dijital hizmet / üyelik',media_creator:'İçerik / yayın topluluğu',event:'Buluşma / etkinlik topluluğu',nonprofit_fundraising:'Sosyal fayda / dayanışma topluluğu'}},
+    reputation:{business:'Açıklama hangi çalışma adına yapılacak?',sector:'Açıklamanın ilgili olduğu alan ne?',title:'Açıklamanın dayanağını netleştirelim'},
+    public_issue:{business:'Mesaj hangi çalışma kapsamında paylaşılacak?',sector:'Toplumsal mesajın konusu hangi alanda?',title:'Toplumsal mesajı netleştirelim',values:['nonprofit_fundraising','media_creator'],sectors:['public_political','nonprofit_social_cause','education_training','health_medical','other'],labels:{nonprofit_fundraising:'Sosyal fayda / sivil toplum çalışması',media_creator:'Kamuoyuna yönelik içerik / yayın'}},
+    unsure:{business:'Çalışmanı en iyi hangisi tanımlar?',sector:'Hangi alana daha yakın?',title:'Çalışmayı netleştirelim'}
+  };
+  function contextBank(communication,action){const bank=contextBanks[communication];if(!bank)return null;return {...bank,...(communication==='fundraising'&&action==='donate'?{values:['nonprofit_fundraising','event'],business:'Bağış çağrısı hangi yolla yapılacak?'}:{})};}
   const sectorChoices={
     local_retail:['fashion_beauty_lifestyle','food_hospitality','automotive','retail_ecommerce','health_medical','other'],
     local_service:['professional_services','local_home_services','health_medical','education_training','automotive','real_estate','travel_tourism','other'],
@@ -81,17 +98,17 @@
   function familyOf(kind,value){return groups[kind]?.find(group=>group.values.includes(value))?.id||null;}
   function options(data,question,values){return (data?.options||[]).filter(option=>option.questionId===question&&values.includes(option.value));}
   function choices(kind,family,data){const values=groups[kind]?.find(group=>group.id===family)?.values||[];return options(data,questions[kind],values);}
-  function businesses(communication,data){
+  function businesses(communication,data,action){
     if(!familyOf('communication',communication))return [];
-    const values=offerJobs.has(communication)?allBusinesses.filter(value=>!['nonprofit_fundraising','employer_recruitment'].includes(value)):
-      communication==='recruitment'?recruitmentBusinesses:communication==='fundraising'?fundraisingBusinesses:allBusinesses;
-    return options(data,'S3_Q02',values);
+    const bank=contextBank(communication,action),values=bank?.values||(offerJobs.has(communication)?allBusinesses.filter(value=>!['nonprofit_fundraising','employer_recruitment'].includes(value)):allBusinesses);
+    return options(data,'S3_Q02',values).map(o=>({...o,label:bank?.labels?.[o.value]||o.label}));
   }
-  function sectors(communication,business,data){
+  function sectors(communication,business,data,action){
     // Communication and business model are separate dimensions: a shop may host an event.
     // These are editable UX shortlists, not category eligibility or legal approval.
     if(!familyOf('communication',communication)||!familyOf('business',business))return [];
-    return options(data,'S3_Q03',sectorChoices[business]||[]);
+    const bank=contextBank(communication,action);
+    return options(data,'S3_Q03',bank?.sectors||sectorChoices[business]||[]);
   }
   function actions(communication,business,data,destination){
     if(!familyOf('communication',communication)||!familyOf('business',business))return [];
@@ -130,6 +147,14 @@
     }
     return result;
   }
+  function branchApplies(question,communication,action){
+    if(['S1_F03','S1_F04'].includes(question.id))return communication==='fundraising'&&action==='donate';
+    if(question.id==='S1_E03')return communication==='event'&&action==='register_event';
+    if(question.id==='S1_R03')return communication==='recruitment'&&['apply_job','fill_form'].includes(action);
+    if(question.id==='S1_B05')return !['remember','understand','visit_website','follow_engage'].includes(action);
+    return true;
+  }
+  function pruneContextAnswers(answers,questions,base={}){return pruneAnswers(answers,questions.filter(q=>branchApplies(q,base.S1_Q01,base.S1_Q04)),base);}
   // Intent is chosen before business/destination. Later detail edits must never
   // silently change what the viewer is being asked to do.
   const intentMap={
@@ -200,7 +225,7 @@
     if(type==='physical_store'&&!String(values.address||'').trim()&&!String(values.mapUrl||'').trim())errors.address='Açık adres veya harita / konum bağlantısı ekle.';
     return errors;
   }
-  const api={version,families,choices,familyOf,businesses,sectors,actions,pruneAnswers,intentActions,destinations,destinationApplies,destinationFields,validateDestination};
+  const api={version,families,choices,familyOf,businesses,sectors,actions,contextBank,branchApplies,pruneAnswers,pruneContextAnswers,intentActions,destinations,destinationApplies,destinationFields,validateDestination};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.YaparoBriefFlow=api;
 })(typeof window!=='undefined'?window:globalThis);
