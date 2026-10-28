@@ -83,3 +83,41 @@
   }
   root.YaparoSimulation={version,norm,hash,profiles,profile,cards,alternative,illustration,forecast,intent};
 })(typeof window==='undefined'?globalThis:window);
+/* Fixed synthetic starting briefs. They never choose usage, budget or readiness. */
+(function(root){
+  'use strict';
+  const version='yaparo-owned-examples-v1';
+  const examples={
+    cafe:{label:'Kafe açılışı',intent:'promote',outcome:'visit',answers:{
+      promote_kind:'brand',promote_name:'Sentetik Örnek Kafe · açılış daveti',
+      promote_strength:'other',promote_strength_other:'Mahallede yeni bir kahve ve sohbet noktası',
+      promote_audience:'individuals',promote_audience_detail:'everyday',promote_proof:'none',
+      action_location_address:'Sentetik adres · Örnek Mahallesi, İzmir. Gerçek bir işletme değildir.'}},
+    fashion:{label:'Butik koleksiyonu',intent:'promote',outcome:'visit',answers:{
+      promote_kind:'product',promote_name:'Sentetik Örnek Butik · yeni koleksiyon',
+      promote_strength:'design',promote_audience:'individuals',promote_audience_detail:'special',promote_proof:'none',
+      action_location_address:'Sentetik adres · Örnek Sokak, İstanbul. Gerçek bir mağaza değildir.'}},
+    saas:{label:'B2B yazılım',intent:'lead',outcome:'lead_form',answers:{
+      lead_service:'Sentetik Örnek Yazılım · ekip görev yönetimi',lead_contact_purpose:'discovery',
+      lead_audience:'business',lead_audience_detail:'small',lead_delivery:'online',lead_conditions:'none',
+      action_lead_method:'form',action_url:'https://ornek.example/yazilim/tanisma'}},
+    home:{label:'Yerel hizmet',intent:'lead',outcome:'call',answers:{
+      lead_service:'Sentetik Örnek Ev Hizmeti · bakım talebi',lead_contact_purpose:'quote',
+      lead_audience:'individuals',lead_audience_detail:'special',lead_delivery:'customer',lead_conditions:'region',
+      lead_condition_note:'Sentetik hizmet bölgesi: Ankara. Gerçek bir hizmet ağı değildir.',action_phone:'+90 555 000 00 00'}},
+    event:{label:'Atölye daveti',intent:'event',outcome:'register',answers:{
+      event_kind:'workshop',event_name:'Sentetik Örnek Atölye · seramik buluşması',event_mode:'physical',
+      event_timing:'unknown',event_location_address:'Sentetik adres · Örnek Sanat Alanı, İzmir. Gerçek bir etkinlik değildir.',
+      event_fee:'free',event_eligibility:'open',event_capacity_status:'known',event_capacity:12,
+      action_join_method:'page',action_url:'https://ornek.example/atolye/kayit'}}
+  };
+  function get(id){
+    if(typeof id!=='string'||!Object.hasOwn(examples,id))return null;
+    const example=examples[id];
+    return {id,label:example.label,version,origin:'authored_synthetic_example',
+      snapshot:{version:'yaparo-first-stage-v1',intent:example.intent,outcome:example.outcome,answers:structuredClone(example.answers)}};
+  }
+  const api=Object.freeze({version,ids:()=>Object.keys(examples),get});
+  if(typeof module!=='undefined'&&module.exports)module.exports=api;
+  root.YaparoOwnedExamples=api;
+})(typeof window!=='undefined'?window:globalThis);

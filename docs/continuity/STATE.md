@@ -1,79 +1,72 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 01:44 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified client date: 2026-10-29 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
-Owner accepted compact planning after the9-bank/46-route first stage: concise
-request/audience summary, only missing bounds, selected-channel percentages,
-reserve/reason and expandable details. Local synthetic only. Real data/accounts,
-AI production, ad forecasts, spending and publishing retain existing release gates.
-No usage monitoring; no new service/fees. Owner manages OpenRouter balance.
-Reviewed green PRs may merge; never direct main push. Download/export undecided.
+Owner asked to adapt all five starting scenarios to the owned first stage and
+compact plan. Local synthetic only; real data/accounts/AI production/ad forecasts/
+spend/publishing retain existing gates. Usage monitoring disabled. No new service/
+fees; owner manages OpenRouter balance. Reviewed green PRs may merge; never direct
+main push. Download/export undecided.
 
 ## Repository
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-PR371 MERGED at2026-10-29 01:44 Europe/Istanbul; squash6bbf7f8 on main.
-Reviewed head0cd0585; required CI40781135776 SUCCESS, including new planning,
-first-stage/legacy browser suites, full PostgreSQL and application browser E2E.
-Exact-head guarded merge; no checks bypassed. Post-merge main CI40782258240 was
-in_progress when checked; no post-merge success claimed.
-Current checkout codex/durable-plan-contract, based on origin/main6bbf7f8 with
-upstream unset. Only this verified handoff is committed locally; include it with
-the next meaningful feature package, not a standalone documentation PR.
-No deployment, application DB migration, credentials or real account action.
+Branch codex/owned-scenario-examples, based on main6bbf7f8 plus handoffb3e4e78.
+Current scenario package feature PR/required CI still pending; no merge claimed.
+PR371 merged; its required CI40781135776 and post-merge main CI40782258240 SUCCESS
+were reverified this turn. No application DB, credential, real account or deployment
+action. Local handoff is included with this meaningful package, not a docs-only PR.
 
-## Completed compact planning package
+## Completed scenario package
 
-plan-ui.js/CSS summarizes the concrete request and declared audience. No budget,
-center, date or economics facts are invented. Existing compatible sale dates can
-initialize bounds; event dates stay context, not assumed ad dates. Same-pair edits
-preserve manual bounds; incompatible audience/economics choices clear safely.
-Additional source classification stays explicit and no eligibility is inferred.
-Organic/content-only omit media budget. Full answers/readiness expand in review.
+YaparoOwnedExamples is a separate pure interface bundled in the already served
+simulation.js. Five typed snapshots replace the old subject-only guesses:
+- cafe opening / boutique collection: promote + visit, distinct synthetic subjects
+  and addresses; no unsupported price/discount or evidence claims.
+- B2B software: lead + form with reserved ornek.example endpoint.
+- local service: lead + call, explicitly synthetic service region/phone.
+- workshop: event + register, synthetic location/capacity and reserved page;
+  date remains unknown rather than becoming a stale hardcoded event date.
 
-plan-summary.js redistributes selected eligible percentages within test minima,
-channel/shared caps and exact kuruş totals. Reserve is explicit; no forced spend.
-Dragging previews peers live, including target0; release commits, cancellation
-restores. Zero/removal moves to collapsed catalog. Stale edits/continuation refuse;
-changed inputs/source/format invalidate prior content bindings/adaptations.
+Only delivery_mode remains required after loading a sample. User chooses usage;
+budget, targeting, dates, classification, economics/readiness are not assigned.
+Another sample resets local plan/cards/history/production/adaptation bindings and
+bounds; declared risk is retained. This is prototype memory only, not app storage.
+Status/active chip identify the fictional example and clear on incompatible pair
+or restored history. Helper free text enters only its own subject: no sample
+address, endpoint, proof or invented facts. No actual operation is authorized.
 
-Optional commercial economics starts blank/disabled. not_provided means no
-capacity/profitability assessment and total media budget as shared demo ceiling.
-Provided economics retains the prior stricter cap. Info dialog discloses missing
-data. Existing policy/account/asset/forecast/execution gates remain unchanged.
+## Verification actually run
 
-plan-geo.js uses exact copied, hash-pinned offline Turkey land/clipping assets and
-licenses from unified-journey. Explicit center inside Turkey, radius1..800km,
-land-clipped preview. No GPS/geocoder/CDN. Map clicks approximate; precise numeric
-coordinates are available under details. Not official border/platform verification.
-FX requests wait for complete owned paid context. Exact center is projected into
-the existing closed local source fingerprint; FX is not an ad forecast.
+Owned example pure tests passed five pairs,25 explicit mode completions, missing-
+mode refusal, pruning, reserved endpoints, no planning defaults, unknown ID refusal
+and isolated copies. Existing simulation tests and JS syntax passed; configured
+Ruff format/lint and diff checks passed.
 
-## Verified checks and visual evidence
+First-stage14 browser tests passed33.908s (yaparo-first-stage-kita6uuq), including
+three new cases covering all5 examples to content/review, old paid-plan clearing,
+risk persistence and helper isolation. After bundling in the existing asset, the
+five-example/active-chip regression passed3.182s (ah71vz0a). Required CI will recheck
+the exact final head with legacy19 and compact-plan6 suites. Isolated UI runs check
+no page errors/outbound provider requests and never load the application DB.
 
-Required CI40781135776 passed exact final head:6 compact-plan,11 first-stage and19
-legacy/V2 browser journeys; pure engine/share/geo and source checks; formatting,
-lint, hashes, full PostgreSQL suite and app browser E2E. All isolated UI runs use
-synthetic fields/mock public FX, assert no page errors/outbound provider requests,
-and never touch the application DB.
+Desktop cafe and390px boutique/risk screenshots inspected under
+%TEMP%/yaparo-first-stage-_5hwkdf9 (also fresh ah71vz0a cafe). No horizontal overflow.
+Independent read-only review found no material gate/stale/provenance issue.
+Current8014 /simulation.js returnedHTTP200 and contains the new interface; no new
+runtime asset route or process restart required. Refresh resets temporary work.
 
-Local6-plan run passed30.465s (ko6d9lbx); final mouse/zero/cancellation regression
-passed8.689s (w4n0q3ty), concrete summary passed1.770s (805tssnv), long140-character
-mobile summary/bounds retention passed3.557s (y077q10m). CI rechecked all together.
-Earlier11 first-stage18.568s and19 legacy30.670s runs are supplemented by that CI.
+## Preserved compact-plan capabilities
 
-Desktop1440/mobile390 plan, map, compact review and viewport screenshots inspected.
-Evidence under %TEMP%/yaparo-first-stage-kq0756zn and ko6d9lbx. No horizontal
-overflow/CTA-helper overlap; actual viewport checked in addition to full-page
-sticky-footer captures. Review findings (same-pair reset, cap-source claim,
-zero-share preview) corrected and regression-tested.
-
-Actual8014 exact process restarted; root and six new asset routes returnedHTTP200.
-Refresh resets temporary work. Source data.js, V2 catalogs and old8013/Django8002
-preserved. No AI/ad platform, upload, fee, private-data or publishing operation.
+Owned9-bank/46-route first stage and exact outcome/KPI/destination contracts remain.
+Compact plan: explicit missing bounds; selected-only constrained percentages and
+reserve; offline Turkey land-clipped1..800km preview; optional commercial economics
+without capacity/profit claims when absent; concise review with full answers.
+Real platform geo/forecast/permissions remain unverified. Source data.js and V2
+catalogs unchanged; legacy.html retained. PR371 is the durable implementation record.
 
 ## Preserved capabilities and protected work
 
@@ -93,6 +86,5 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 ## Next action
 
 Define the versioned durable campaign-draft contract for accepted plan bounds,
-allocations and source readiness before integrating this isolated prototype into
-the application. Incorporate owner UX feedback and preserve existing ownership,
-budget, generation and launch gates.
+allocations and source readiness before app integration, incorporating owner UX
+feedback and preserving existing ownership, budget, generation and launch gates.

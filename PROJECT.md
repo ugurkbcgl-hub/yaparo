@@ -1,5 +1,15 @@
 # Yaparo project brief
 
+## Owned starting examples — 29 October 2026
+
+The five example buttons now use typed owned first-stage snapshots: cafe opening
+and boutique collection → promote/visit; B2B software → lead/form; local service
+→ lead/call; workshop → event/register. Samples are explicitly fictional and leave
+delivery mode, media budget, targeting, dates and readiness to the user. Loading
+another sample clears the old local plan/content bindings while preserving an
+explicit risk declaration. Helper text never imports sample endpoints/facts.
+No real data, provider, spending or publishing action is added.
+
 ## Compact planning prototype — 29 October 2026
 
 Owner accepted a single compact planning screen: request summary → only missing

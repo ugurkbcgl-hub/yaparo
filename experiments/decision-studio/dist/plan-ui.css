@@ -14,4 +14,5 @@ body.owned-planning.planning-stage #plan-form{display:grid;grid-template-columns
 
 .owned-planning #plan-next-status:empty{display:none}
 .owned-planning .plan-brief{min-width:0;overflow-wrap:anywhere}
+.owned-planning #scenario-examples button[aria-pressed=true]{background:#edf2ff;border-color:#8fa7ed;color:#254dce}
 @media(max-width:600px){body.owned-planning #helper-toggle{top:14px;bottom:auto;right:16px;font-size:11px;padding:8px 11px}body.owned-planning.planning-stage .demo-banner{margin-top:10px;margin-bottom:12px;padding:10px 12px}body.owned-planning.planning-stage .demo-banner p{font-size:11px;line-height:1.5}body.owned-planning.planning-stage .section-heading .eyebrow{display:none}body.owned-planning.planning-stage .section-heading h1{font-size:25px;line-height:1.2;margin:0}body.owned-planning.planning-stage .lead{font-size:13px;line-height:1.5;margin:8px 0 14px}body.owned-planning.planning-stage .plan-brief{padding-top:12px;padding-bottom:12px}body.owned-planning.planning-stage .plan-brief p{font-size:12px}body.owned-planning.planning-stage .plan-footer{box-shadow:0 -3px 15px #1833500a}}

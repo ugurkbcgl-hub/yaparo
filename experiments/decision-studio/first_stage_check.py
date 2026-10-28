@@ -131,6 +131,125 @@ class FirstStageCheck(unittest.TestCase):
     def submit(self):
         self.page.locator("#first-stage-submit").click()
 
+    def test_owned_examples_fill_five_forms_and_reach_content(self):
+        pairs = {
+            "cafe": ("promote", "visit"),
+            "fashion": ("promote", "visit"),
+            "saas": ("lead", "lead_form"),
+            "home": ("lead", "call"),
+            "event": ("event", "register"),
+        }
+        for key, pair in pairs.items():
+            self.page.locator(f'[data-scenario="{key}"]').click()
+            current = self.snapshot()["firstStage"]
+            self.assertEqual((current["intent"], current["outcome"]), pair)
+            errors = self.page.evaluate(
+                "s=>YaparoFirstStage.validate(s.intent,s.outcome,s.answers).errors",
+                current,
+            )
+            self.assertEqual(list(errors), ["delivery_mode"])
+            self.assertIn(
+                "kurgusaldır", self.page.locator("#owned-example-status").inner_text()
+            )
+            self.assertEqual(
+                self.page.locator(f'[data-scenario="{key}"]').get_attribute(
+                    "aria-pressed"
+                ),
+                "true",
+            )
+            self.assertIsNone(self.snapshot()["plan"])
+            self.assertIsNone(self.snapshot()["adaptations"])
+            for field in ["budget", "region", "start", "plan-end"]:
+                self.assertEqual(self.page.locator(f"#{field}").input_value(), "")
+            if key == "cafe":
+                self.submit()
+                self.assertTrue(self.page.locator("#step-0").is_visible())
+                self.assertEqual(
+                    self.field("delivery_mode").get_attribute("aria-invalid"), "true"
+                )
+                self.page.evaluate("window.scrollTo(0,0)")
+                self.page.screenshot(
+                    path=str(self.evidence / "owned-cafe-example-desktop.png"),
+                    full_page=True,
+                )
+            self.field("delivery_mode").select_option("content_only")
+            self.submit()
+            self.page.locator("#step-1").wait_for(state="visible")
+            self.assertTrue(self.page.locator("#plan-bounds").is_hidden())
+            self.page.get_by_role("button", name="İçeriklere devam et").click()
+            self.page.locator("#step-2").wait_for(state="visible")
+            self.assertEqual(self.page.locator(".concept-card").count(), 3)
+            self.page.locator(".choose").first.click()
+            self.assertEqual(self.snapshot()["creative"]["outcome"], pair[1])
+            self.page.locator("#adapt-content").click()
+            self.page.locator("#content-next").click()
+            self.page.locator("#step-3").wait_for(state="visible")
+            self.assertIn("Sentetik Örnek", self.page.locator("#review").inner_text())
+            self.page.locator('#step-nav [data-step="0"]').click()
+
+        self.select_pair("fundraise", "volunteer")
+        self.assertTrue(self.page.locator("#owned-example-status").is_hidden())
+        self.assertEqual(
+            self.page.locator('[data-scenario][aria-pressed="true"]').count(), 0
+        )
+
+    def test_example_switch_clears_old_plan_but_preserves_declared_risk(self):
+        self.page.locator('[data-scenario="cafe"]').click()
+        self.field("delivery_mode").select_option("paid")
+        self.submit()
+        self.plan_basics()
+        self.page.locator("#business").select_option("local_retail")
+        self.page.locator("#sector").select_option("food_hospitality")
+        self.page.get_by_text(
+            "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
+        ).wait_for(state="attached")
+        self.page.locator("#recommend").click()
+        self.assertGreater(self.snapshot()["plan"]["allocated"], 0)
+        self.page.locator('#step-nav [data-step="0"]').click()
+        self.field("risk").evaluate(
+            "el=>{const detail=el.closest('details');if(detail)detail.open=true;}"
+        )
+        self.field("risk").select_option("health")
+        self.page.locator('[data-scenario="fashion"]').click()
+        current = self.snapshot()["firstStage"]
+        self.assertEqual(current["answers"]["risk"], "health")
+        self.assertNotIn("promote_strength_other", current["answers"])
+        self.assertNotIn("İzmir", current["answers"]["action_location_address"])
+        self.assertNotIn("delivery_mode", current["answers"])
+        self.assertIsNone(self.snapshot()["plan"])
+        self.assertIsNone(self.snapshot()["contentBinding"])
+        for field in [
+            "budget",
+            "region",
+            "radius",
+            "start",
+            "plan-end",
+            "business",
+            "sector",
+        ]:
+            self.assertEqual(self.page.locator(f"#{field}").input_value(), "")
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        self.page.evaluate("window.scrollTo(0,0)")
+        self.page.screenshot(
+            path=str(self.evidence / "owned-fashion-example-mobile.png"), full_page=True
+        )
+        self.assertLessEqual(
+            self.page.evaluate("document.documentElement.scrollWidth"), 390
+        )
+
+    def test_helper_brief_does_not_insert_synthetic_example_facts(self):
+        text = "Kafe açılışı için komşuları davet etmek istiyorum"
+        self.page.locator("#chat-input").fill(text)
+        self.page.locator("#chat-form").evaluate("form=>form.requestSubmit()")
+        self.page.locator("#chat-log .assistant-message").last.get_by_role(
+            "button", name="İsteğime yerleştir"
+        ).click()
+        answers = self.snapshot()["firstStage"]["answers"]
+        self.assertEqual(answers, {"promote_name": text})
+        self.assertIn(
+            "eklenmedi", self.page.locator("#owned-example-status").inner_text()
+        )
+
     def plan_basics(self):
         self.page.locator("#geo-mode").select_option("country")
         self.page.locator("#budget").fill("3000")
