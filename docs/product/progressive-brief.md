@@ -1,5 +1,22 @@
 # Intent and expected response — local brief prototype
 
+## Brief-driven recommendation
+
+The owner removed repeated step2 classification/audience/measurement questions.
+The owned adapter now validates the exact first-stage snapshot and combines its
+literal intent/outcome, subject, audience and destination with explicit geography,
+dates and budget. No free-text industry or legacy business class is guessed.
+Missing risk stays not_declared; explicit and forced risks remain blocking.
+
+Only known objective/geography/budget rules contribute to a partial authored rank,
+with unknown dimensions excluded and coverage disclosed separately. It is not
+the complete expert score or success probability. Authored forecast scenarios are
+not live market evidence; no account/measurement/asset/permission is qualified.
+The public FX context omits the raw snapshot. Read-only basis/readiness replaces
+customer classification controls, and commercial economics is separately optional.
+Exact projection refusal, minima/caps/reserve and invalidation remain. See
+[ADR0073](../adr/0073-brief-driven-prototype-recommendation.md).
+
 ## Accepted compact plan and review
 
 Owner approved the compact planning draft. Default8014 shows a
@@ -64,9 +81,9 @@ question/answer pairs in review. Examples/helpers/history use the owned snapshot
 changing an answer invalidates the old plan/production binding. No bank/identity
 uploads, private-account access, AI, spend or publishing action is introduced.
 
-The bridge never infers source business/sector from these answers. Explicit
-classification, when needed for the paid authored simulation, is collected in
-step2. No known mapping or no explicit classification means no allocation. Email
+The bridge never infers source business/sector from these answers. Owned planning
+uses first-stage analysis without repeated source classification. No exact outcome
+mapping means no allocation. Email
 and social messaging are never relabeled as WhatsApp; purchase is not relabeled
 as a store visit. The owned outcome contract now covers all46 routes with exact
 CTA, KPI and typed destination, full canonical snapshot binding and three authored
@@ -79,8 +96,9 @@ Organic routes can continue without a paid-taxonomy projection. Content-only let
 the user choose independent text/image layout drafts without an organic channel;
 undecided usage requires an explicit choice before continuing. Missing custom/new
 endpoints stay unverified and visible; none authorize publication. Unsupported paid
-mappings remain held without an allocation. The old paid source classification and
-policy gates are unchanged. This completes local outcome-to-content UX, not real
+mappings remain held without an allocation. Policy and actual execution gates
+remain closed; the old full classification workflow is retained only in legacy.
+This completes local outcome-to-content UX, not real
 AI, campaign persistence or platform/production/launch integration.
 
 ## Previous context prototype retained for regression

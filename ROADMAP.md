@@ -1,5 +1,15 @@
 # Yaparo roadmap
 
+## Brief-driven recommendation — 29 October 2026
+
+Removed repeated plan classification, audience and measurement questions. The
+owned adapter binds first-stage facts with explicit plan bounds and explains its
+known/unknown basis. Missing classes do not become invented scores; policy, caps
+and real execution gates remain. Readiness is read-only; economics stays optional.
+Legacy complete scoring remains available only in the regression workflow.
+ADR0073 records the partial authored rank and scope. Durable application contract
+work remains the next integration task.
+
 ## Owned examples — 29 October 2026
 
 Updated all five starting examples to the owned question banks and compact plan.

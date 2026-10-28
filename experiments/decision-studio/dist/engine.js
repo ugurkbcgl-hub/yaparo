@@ -3,6 +3,7 @@
   'use strict';
   const cents = n => Math.round(n * 100);
   const finite = (n, lo, hi) => Number.isFinite(n) && n >= lo && n <= hi;
+  const ownedKey = {};
   const reasonText = {
     policy_review: 'Belge / politika incelemesi bekliyor', objective_not_supported: 'Seçilen optimizasyon hedefi desteklenmiyor',
     account_not_ready: 'Örnek hesap / satın alma erişimi hazır değil', asset_not_ready: 'Gerekli kreatif veya katalog eksik',
@@ -19,7 +20,8 @@
       ['health_medical','finance_insurance','public_political','real_estate','recruitment','nonprofit_social_cause'].includes(input.sector) ||
       ['sale_promotion','public_issue','recruitment','reputation'].includes(input.communication);
   }
-  function evaluate(input, data, simulation=null, liveFx=null) {
+  function evaluate(input, data, simulation=null, liveFx=null, ownedContext=null) {
+    if(ownedContext&&ownedContext.key!==ownedKey)throw new Error('Geçerli ilk aşama analizi gerekli.');
     if (!finite(input.budget,0,1000000) || !Number.isInteger(input.days) || !finite(input.days,1,365) ||
         !finite(input.value,0,100000000) || !finite(input.margin,0,100) || !finite(input.cpa,0,10000000) ||
         !Number.isInteger(input.capacity) || !finite(input.capacity,0,1000000) ||
@@ -28,7 +30,7 @@
     }
     if(input.economicsMode!==undefined&&!['provided','not_provided'].includes(input.economicsMode))throw new Error('İş ekonomisi tercihini kontrol et.');
     const economicsProvided=input.economicsMode!=='not_provided';
-    const total = cents(input.budget), blocked = policy(input);
+    const total = cents(input.budget), blocked = policy(input)||!!ownedContext?.analysis.risks.some(r=>['fundraising','health','finance','political','children','alcohol_tobacco','gambling'].includes(r));
     const interactive = input.fixture === 'interactive' && simulation?.kind === 'authored_simulation' && simulation.signature === JSON.stringify(input);
     // Only SC01 has forecast fixtures. Never rebind its observations to other audiences/regions/dates.
     const bound = input.fixture === 'demo' && input.goal === 'store_visits' && input.business === 'local_retail' &&
@@ -71,17 +73,19 @@
       const demand = contextBound && f?.hasForecast ? cents(f.potentialBudget) : null;
       const cap = owned ? 0 : demand === null ? null : Math.min(total,demand,businessCap);
       const budgetScore = platform !== null && total < platform ? 0 : total < useful ? 1 : total < useful * 1.5 ? 3 : 5;
-      const dimensions = { objective:input.goal,business_model:input.business,audience:input.audience,sector:input.sector,
+      const dimensions = ownedContext?{...ownedContext.analysis.scoringDimensions,geo:input.geo}:{ objective:input.goal,business_model:input.business,audience:input.audience,sector:input.sector,
         geo:input.geo,creative:'static_image',measurement:input.measurement };
       const breakdown = data.weights.map(w => {
         const found = data.scoreRules.find(r => r.channelId === channel.id && r.dimension === w.dimension && r.value === dimensions[w.dimension]);
-        const score = w.dimension === 'budget' ? budgetScore : (found?.score ?? 0);
-        return {dimension:w.dimension,weight:w.weight,score,points:w.weight * score / 5};
+        const known=!ownedContext||w.dimension==='budget'||!!found;
+        const score = known?(w.dimension === 'budget' ? budgetScore : (found?.score ?? 0)):null;
+        return {dimension:w.dimension,weight:w.weight,score,points:known?w.weight * score / 5:0,...(ownedContext?{known}: {})};
       });
-      const score = Math.round(breakdown.reduce((s,x) => s+x.points,0)*100)/100;
+      const coverageWeight=breakdown.reduce((s,x)=>s+(x.known!==false?x.weight:0),0);
+      const score = Math.round(breakdown.reduce((s,x) => s+x.points,0)*(ownedContext&&coverageWeight?100/coverageWeight:1)*100)/100;
       if (cap !== null && cap < useful && !owned) reasons.push('cap_below_useful_minimum');
       if (score < 60 && !owned) reasons.push('score_below_threshold');
-      return {channel,f,owned,platform,useful,cap,score,breakdown,reasons:[...new Set(reasons)],eligible:!owned && !reasons.length,amount:0};
+      return {channel,f,owned,platform,useful,cap,score,breakdown,...(ownedContext?{coverageWeight,scoreBasis:'known_facts_only'}:{}),reasons:[...new Set(reasons)],eligible:!owned && !reasons.length,amount:0};
     });
     const eligible = rows.filter(r => r.eligible).sort((a,b) => b.score-a.score || a.channel.id.localeCompare(b.channel.id));
     const mins = eligible.map(r => r.useful).sort((a,b)=>a-b);
@@ -114,7 +118,30 @@
     const allocated = rows.reduce((s,r)=>s+r.amount,0);
     return {version:data.version,createdAt:new Date().toISOString(),input:{...input},bound,interactive,blocked,total,businessCap,rows,
       allocated,unallocated:total-allocated,economicsProvided,externalQuery:false,model:null,quality:interactive?'authored_simulation_NOT_market_data':'demo_illustrative',simulationVersion:interactive?simulation.version:null,
+      ...(ownedContext?{analysis:ownedContext.analysis,qualification:{status:'not_evaluated',publishReady:false},scoreBasis:'known_facts_only'}:{}),
       fx:{rate:exchangeRate,source:usableFx?liveFx.snapshot.source:'research_example',source_as_of:usableFx?liveFx.snapshot.source_as_of:'2026-10-26',snapshot_id:usableFx?liveFx.snapshot.id:null,expires_at:usableFx?liveFx.snapshot.expires_at:null,indicative_only:true},publishable:false};
+  }
+  function evaluateOwned(input,data,liveFx=null){
+    const analysis=root.YaparoOutcomeContract?.analyze(input?.firstStage);
+    if(!analysis?.valid)throw new Error('İlk aşamadaki bilgileri tamamla.');
+    if(!['paid','hybrid'].includes(analysis.delivery))throw new Error('Ücretli kanal planı için kullanım yolunu seç.');
+    if(!analysis.legacyProjection)throw new Error('Seçilen sonucun ücretli kanal eşleştirmesi henüz bağlı değil.');
+    if(!['district_city','radius_local','nationwide'].includes(input.geo))throw new Error('Planın bölgesini seç.');
+    if(input.geo==='district_city'&&(typeof input.region!=='string'||!input.region.trim()))throw new Error('Şehir veya bölgeyi belirt.');
+    if(typeof input.start!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(input.start)||!Number.isFinite(Date.parse(input.start))||new Date(input.start).toISOString().slice(0,10)!==input.start)throw new Error('Geçerli yayın başlangıcı gerekli.');
+    const i={...input,firstStage:structuredClone(analysis.binding.snapshot),goal:analysis.goal,communication:analysis.communication,action:analysis.action,
+      risk:analysis.risk||'not_declared',business:'owned_unspecified',sector:'owned_unspecified',audience:analysis.ownedAudience||'owned_unspecified',
+      ownedAudience:analysis.ownedAudience,fixture:'interactive',readiness:'core',measurement:'none',tracking:false,catalog:false,economicsMode:input.economicsMode??'not_provided'};
+    if(i.economicsMode==='not_provided')Object.assign(i,{value:0,margin:0,cpa:0,capacity:0});
+    if(input.geo==='radius_local'){
+      const point=root.YaparoPlanGeo?.calculate({...input.geoCenter,radius:input.radius});
+      if(!point?.valid)throw new Error('Türkiye içinde geçerli bir merkez ve mesafe seç.');
+      i.geoCenter={lat:point.lat,lon:point.lon,boundary:root.YaparoPlanGeo.version,verified:false};
+      i.region=`Konum ${point.lat}, ${point.lon} · Türkiye`;
+    }else{delete i.geoCenter;if(input.geo==='nationwide')i.region='Türkiye';}
+    const simulation=root.YaparoSimulation?.forecast(i,data);
+    if(!simulation)throw new Error('Yerel örnek hesap bağlantısı hazır değil.');
+    return evaluate(i,data,simulation,liveFx,{key:ownedKey,analysis});
   }
   function manual(plan,id,amount) {
     const row = plan.rows.find(r=>r.channel.id===id);
@@ -124,5 +151,5 @@
     if (other+amount>plan.businessCap) throw new Error('Toplam bütçe veya ortak işletme tavanı aşılır. Önce başka bir payı azalt.');
     row.amount=amount;plan.allocated=other+amount;plan.unallocated=plan.total-plan.allocated;plan.manual=true;
   }
-  root.YaparoDecision = {evaluate,manual,reasonText};
+  root.YaparoDecision = {evaluate,evaluateOwned,manual,reasonText};
 })(typeof window === 'undefined' ? globalThis : window);

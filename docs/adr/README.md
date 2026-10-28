@@ -53,3 +53,4 @@ ADRs capture decisions that would be costly or confusing to reverse. Keep propos
 - [0031 — Scoped Google TEST candidate boundary](0031-scoped-google-test-candidate-boundary.md) — Accepted for mocked adapter validation only
 
 - [ADR-0072 — Plan before placement-specific production](0072-plan-before-placement-production.md): paid/organic routes, shared ideas, requirements and downstream invalidation.
+- [ADR-0073 — Brief-driven local recommendation](0073-brief-driven-prototype-recommendation.md): no repeated classification form; bound first-stage facts, explicit unknowns and partial authored ranking.

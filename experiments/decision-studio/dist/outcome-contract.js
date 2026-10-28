@@ -113,6 +113,49 @@
       usage:{mode,resolved:mode!=='unsure',contentOnly:mode==='content_only'},requirements,legacyProjection:projection(s),
       facts:M.summary(s.intent,s.outcome,s.answers)});
   }
+  function analyze(snapshot) {
+    const c=resolve(snapshot),analysisVersion='yaparo-owned-brief-analysis-v1';
+    const base={version:analysisVersion,valid:c.valid,errors:c.errors,signature:c.binding.signature,binding:c.binding,
+      externalQuery:false,model:null,authorship:c.authorship,
+      policy:{status:'not_evaluated',publishReady:false,platformQualified:false},
+      sourceBusiness:null,sourceSector:null,sourceAudience:null};
+    if(!c.valid)return freeze({...base,intent:null,outcome:null,subject:null,identity:null,message:null,audienceLabel:null,
+      ownedAudience:null,delivery:null,destination:null,goal:null,communication:null,action:null,risk:null,riskDeclared:null,
+      risks:[],legacyProjection:null,scoringDimensions:{},known:[],unknown:[],reason:'İlk aşamadaki geçerli bilgileri tamamla.'});
+    const a=c.binding.snapshot.answers,fields=M.fields(c.intent,c.outcome,a);
+    const role=key=>{
+      const f=fields.find(field=>field.role===key&&a[field.id]!==undefined);
+      if(!f)return null;
+      const value=a[f.id],label=value==='other'&&typeof a[f.id+'_other']==='string'?a[f.id+'_other']:
+        f.options?.find(option=>option.value===value)?.label||(Array.isArray(value)?value.map(item=>f.options?.find(option=>option.value===item)?.label||item).join(', '):String(value));
+      return {id:f.id,value,label};
+    };
+    const subject=role('subject'),identity=role('identity'),message=role('message'),audience=role('audience');
+    const declared=typeof a.risk==='string'?a.risk:null,risk=c.intent==='fundraise'?'fundraising':declared;
+    const risks=[...new Set([risk,declared].filter(Boolean))];
+    const known=[{id:'intent',label:'Çalışmanın amacı',value:c.intentLabel},{id:'outcome',label:'Beklenen adım',value:c.outcomeLabel},
+      ...c.facts.map((row,index)=>({id:fields.find(field=>field.label===row.label)?.id||'declared_'+index,label:row.label,value:row.value}))]
+      .map(row=>({...row,source:'first_stage',verified:false}));
+    const unknown=[
+      {id:'business_model',label:'İşletme modeli otomatik sınıflandırılmadı.',status:'unclassified'},
+      {id:'sector',label:'Faaliyet alanı metinden tahmin edilmedi.',status:'unclassified'},
+      {id:'source_audience',label:'Kitle beyanı reklam platformunun doğrulanmış hedef kitlesi değildir.',status:'unverified'},
+      {id:'account_permissions',label:'Gerçek reklam hesabı ve izinleri doğrulanmadı.',status:'unverified'},
+      {id:'measurement',label:'Gerçek sonuç ölçümü doğrulanmadı.',status:'unverified'},
+      {id:'platform_forecast',label:'Güncel platform erişim ve maliyet tahmini yok.',status:'unverified'},
+      ...c.requirements.map(requirement=>({id:requirement.id,label:requirement.label,status:requirement.status}))
+    ];
+    if(!audience)unknown.push({id:'declared_audience',label:'İlk aşamada ayrı bir hedef kitle beyanı bulunmuyor.',status:'not_declared'});
+    if(!declared)unknown.push({id:'declared_risk',label:'Özel koşul beyanı bulunmuyor; politika uygunluğu varsayılmaz.',status:'not_declared'});
+    if(!c.legacyProjection)unknown.push({id:'paid_outcome',label:'Bu sonucun ücretli kanal eşleştirmesi henüz bağlı değil.',status:'unsupported'});
+    const description=[subject?.label||identity?.label,c.outcomeLabel,audience?.label].filter(Boolean).join(' · ');
+    return freeze({...base,intent:c.intent,outcome:c.outcome,subject:subject?.label||null,identity:identity?.label||null,
+      message:message?.label||null,audienceLabel:audience?.label||null,ownedAudience:typeof audience?.value==='string'?audience.value:null,
+      delivery:c.usage.mode,destination:c.destination,goal:c.legacyProjection?.goal||null,
+      communication:communication[c.intent],action:c.legacyProjection?.action||null,risk,riskDeclared:declared,risks,
+      legacyProjection:c.legacyProjection,scoringDimensions:c.legacyProjection?{objective:c.legacyProjection.goal}:{},known,unknown,
+      reason:description+'. İlk aşamadaki bu beyanlar planın bölge, tarih ve bütçe seçimleriyle birlikte değerlendirilir; hesap, ölçüm veya yayın onayı değildir.'});
+  }
   function buildConcepts(snapshot,options={}) {
     const c=resolve(snapshot);if(!c.valid)return [];
     const revision=Number.isInteger(options.revision)&&options.revision>0?options.revision:1;
@@ -136,5 +179,5 @@
       provenance:{kind:'authored_local_simulation',version,externalQuery:false,model:null,fictional:true},notes,
       disclaimer:'Hazırlanmış yerel taslak örneği; gerçek AI üretimi, platform onayı, performans tahmini veya yayın değildir.'}));
   }
-  return freeze({version,snapshotVersion,resolve,buildConcepts,signature});
+  return freeze({version,snapshotVersion,resolve,analyze,buildConcepts,signature});
 });

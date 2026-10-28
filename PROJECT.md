@@ -1,5 +1,16 @@
 # Yaparo project brief
 
+## Brief-driven planning — 29 October 2026
+
+Owner removed the repeated "additional information for recommendation" form.
+Default8014 derives its starting proposal from the exact first-stage snapshot plus
+geography, dates and budget. No business/sector/audience class is guessed to fill
+legacy inputs. Only known objective/geography/budget rules contribute to a partial
+authored rank; coverage and unknown readiness remain explicit. This is a local
+scenario, not real AI, platform evidence or approval. Retired controls cannot
+change intent, risk or readiness. Commercial economics stays separately optional;
+full first-stage basis/readiness is read-only. See [ADR0073](docs/adr/0073-brief-driven-prototype-recommendation.md).
+
 ## Owned starting examples — 29 October 2026
 
 The five example buttons now use typed owned first-stage snapshots: cafe opening
@@ -16,8 +27,8 @@ Owner accepted a single compact planning screen: request summary → only missin
 region/audience, dates and total media budget → selected channels with editable
 percentages and a reason. Default8014 now uses that view. No budget, geographic
 center or economic facts are prefilled. First-stage audience is summarized;
-explicit source classification/refinement remains under additional information
-where needed, without inferred eligibility. Compatible manual plan bounds survive
+the declared first-stage context drives the proposal without repeated source
+classification or inferred eligibility. Compatible manual plan bounds survive
 same-pair brief edits; changes invalidate old allocation/adaptations.
 
 Percentage edits rebalance only selected eligible channels within test minima,
@@ -39,8 +50,8 @@ in [first-stage-question-bank.json](docs/product/first-stage-question-bank.json)
 specifies9 purpose banks and outcome extensions, with official research sources.
 Current8014 implements all9 owned first-stage banks and46 compatible routes with
 typed conditional fields, validation/pruning, literal review and history. The old
-context prototype is retained at /legacy.html for regression. Explicit paid-plan
-classification stays in step2, with no inferred eligibility. All46 routes now bind
+context prototype is retained at /legacy.html for regression. Owned paid planning
+uses first-stage analysis with no inferred eligibility. All46 routes now bind
 exact outcome/KPI/destination to three authored local concepts, editing, adaptations
 and review. Organic routes and channel-independent text/image drafts can proceed;
 undecided usage needs an explicit choice. Unsupported paid taxonomy remains held.

@@ -18,7 +18,7 @@
   function usage() {return read().answers.delivery_mode || '';}
   function mode() {return ({paid:'paid',organic:'organic',hybrid:'both',content_only:'organic'})[usage()] || 'paid';}
   function sourceGoal(s) {return window.YaparoOutcomeContract.resolve(s).legacyProjection?.goal || '';}
-  function declaredRisk() {const s = read(); return s.intent === 'fundraise' ? 'fundraising' : s.answers.risk || 'normal';}
+  function declaredRisk() {const s = read(); return s.intent === 'fundraise' ? 'fundraising' : s.answers.risk || 'not_declared';}
   function syncSource() {
     const s = read(); options($('communication'),D.options.filter(o => o.questionId === 'S1_Q01'),intentMap[s.intent] || '');
     options($('action'),D.options.filter(o => o.questionId === 'S1_Q04'),sourceAction(s)); $('journey-mode').value = mode(); $('risk').value = declaredRisk();
@@ -43,11 +43,11 @@
     const s = read(), answers = M.prune(s.intent,s.outcome,s.answers), summary = M.summary(s.intent,s.outcome,answers);
     const subject = roleValue('subject'), message = roleValue('message');
     const labels = summary.map(row => `${row.label}: ${row.value}`).join(' · ');
-    return {mode:mode(),communication:intentMap[s.intent] || '',business:$('business').value,sector:$('sector').value,action:sourceAction(s),risk:declaredRisk(),
+    return {mode:mode(),communication:intentMap[s.intent] || '',business:'',sector:'',action:sourceAction(s),risk:declaredRisk(),
       description:[subject,message].filter(Boolean).join('. ') || labels,audience:roleValue('audience'),identity:roleValue('identity'),message,
       branch:{},custom:{},destination:null,brief_policy:'yaparo-first-stage-v1',
       firstStage:{version:'yaparo-first-stage-v1',intent:s.intent,outcome:s.outcome,answers},
-      planContext:{version:'owned-plan-context-v1',business:$('business').value,sector:$('sector').value,source:'explicit_user_selection',verified:false},
+      planContext:{version:'owned-plan-context-v2',source:'first_stage_analysis',verified:false},
       outcomeContract:contract(),firstStageSummary:summary};
   }
   function contract() {return window.YaparoOutcomeContract.resolve(read());}
@@ -62,8 +62,6 @@
     if (!validate()) return 'İlk aşamadaki bilgileri tamamlayıp yeniden devam et.';
     if (usage() === 'unsure') return 'Önce bu çalışmayı reklamda mı, kendi hesabında mı kullanacağını seç.';
     if (!sourceAction(read()) || !sourceGoal(read())) return 'Seçtiğin sonuç kaydedildi. Bu sonucun kanal ve ölçüm eşleştirmesi henüz bağlı değil; bütçe önerilmeyecek.';
-    if (!$('business').value || !$('sector').value) return 'Plan için çalışma biçimini ve ilgili alanı seç. İlk aşamadaki yanıtlarından bunları varsaymıyoruz.';
-    if ($('sector').value === 'other') return 'Bu faaliyet alanının kanal eşleştirmesi henüz netleşmedi; bütçe önerilmeyecek.';
     return '';
   }
   function nextIssue() {
@@ -119,7 +117,7 @@
     if(exampleNotice)exampleNotice.hidden=true;examplePair='';document.querySelectorAll('[data-scenario]').forEach(button=>button.setAttribute('aria-pressed','false'));
     ui.restore(b.firstStage); previousPair = `${b.firstStage.intent}/${b.firstStage.outcome}`;
     syncSource(); classification();
-    $('business').value = b.planContext?.business || ''; classification(); $('sector').value = b.planContext?.sector || '';
+    $('business').value='';classification();$('sector').value='';
     configure();
   }
   function loadExample(profile, description) {
@@ -146,7 +144,7 @@
     if (id === 'communication') return M.intents().find(i => i.id === read().intent)?.label || '';
     if (id === 'action') return M.outcomes(read().intent).find(o => o.id === read().outcome)?.label || '';
     if (id === 'journey-mode') return M.fields(read().intent,read().outcome,read().answers).find(f => f.id === 'delivery_mode')?.options.find(o => o.value === usage())?.label || '';
-  },mode,validate,planIssue,nextIssue,configure,restore,loadExample,contract,cards,alternative,productionOptions,syncClassification:classification,unclassified:()=>!$('business').value||!$('sector').value||$('sector').value==='other',review:()=>[['İstenen sonuç',contract().outcomeLabel],['Ölçüm durumu','Gerçek ölçüm bağlantısı ve sonuç tahmini yok.'],...M.summary(read().intent,read().outcome,read().answers).map(row => [row.label,row.value])]});
+  },mode,validate,planIssue,nextIssue,configure,restore,loadExample,contract,cards,alternative,productionOptions,syncClassification:classification,unclassified:()=>false,review:()=>[['İstenen sonuç',contract().outcomeLabel],['Ölçüm durumu','Gerçek ölçüm bağlantısı ve sonuç tahmini yok.'],...M.summary(read().intent,read().outcome,read().answers).map(row => [row.label,row.value])]});
   const legacy = $('brief-form'); legacy.hidden = true;
   for (const control of legacy.querySelectorAll('input,select,textarea,button')) control.disabled = true;
   const mount = $('first-stage-root'); mount.hidden = false;

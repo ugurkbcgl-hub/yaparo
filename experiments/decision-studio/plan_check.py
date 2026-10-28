@@ -11,8 +11,6 @@ class PlanCheck(FirstStageCheck):
         self.fill_remaining(mode="paid")
         self.submit()
         self.plan_basics()
-        self.page.locator("#business").select_option("local_retail")
-        self.page.locator("#sector").select_option("fashion_beauty_lifestyle")
         self.page.get_by_text(
             "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
         ).wait_for(state="attached")
@@ -194,7 +192,6 @@ class PlanCheck(FirstStageCheck):
 
     def test_plan_visual_desktop_mobile_and_compact_review(self):
         self.ready_paid()
-        self.page.locator("#plan-advanced > summary").click()
         self.page.evaluate("window.scrollTo(0,0)")
         self.page.screenshot(
             path=str(self.evidence / "compact-plan-desktop.png"), full_page=True

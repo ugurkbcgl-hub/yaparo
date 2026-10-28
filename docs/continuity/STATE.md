@@ -1,76 +1,77 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 02:18 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified client date: 2026-10-29 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
-Owner asked to adapt all five starting scenarios to the owned first stage and
-compact plan. Local synthetic only; real data/accounts/AI production/ad forecasts/
-spend/publishing retain existing gates. Usage monitoring disabled. No new service/
-fees; owner manages OpenRouter balance. Reviewed green PRs may merge; never direct
-main push. Download/export undecided.
+Owner removed repeated planning questions and explicitly wants the recommendation
+to use first-stage answers together with geography, dates and budget. Local
+synthetic only; real account/data/AI production/ad forecasts/spend/publishing gates
+remain. Usage monitoring disabled; no new service/fees. Owner manages OpenRouter
+balance. Reviewed green PRs may merge; never direct main push. Export undecided.
 
 ## Repository
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-PR372 MERGED at2026-10-29 02:18 Europe/Istanbul, squashbf7146c on main.
-Reviewed head9c7484c; required CI40785311821 SUCCESS, including14 first-stage,
-compact-plan6/legacy19 browser journeys, full PostgreSQL and app browser E2E.
-Exact-head guarded merge; no checks bypassed. Post-merge main CI40786403411 was
-in_progress when checked; no post-merge success claimed. Prior PR371/main CI passed.
-Current checkout codex/durable-plan-contract, based on origin/mainbf7146c with
-upstream unset. Only this verified handoff is committed locally; include it with
-the next meaningful package, not a standalone documentation PR. No application DB,
-credential, real account or deployment action.
+Branch codex/brief-driven-recommendations, based on mainbf7146c plus handoffe692903.
+Current feature PR/required CI pending; no merge claimed. PR372 required
+CI40785311821 and post-merge main CI40786403411 SUCCESS were reverified.
+No app DB migration, private credential/account or deployment action.
 
-## Completed scenario package
+## Completed brief-driven prototype package
 
-YaparoOwnedExamples is a separate pure interface bundled in the already served
-simulation.js. Five typed snapshots replace the old subject-only guesses:
-- cafe opening / boutique collection: promote + visit, distinct synthetic subjects
-  and addresses; no unsupported price/discount or evidence claims.
-- B2B software: lead + form with reserved ornek.example endpoint.
-- local service: lead + call, explicitly synthetic service region/phone.
-- workshop: event + register, synthetic location/capacity and reserved page;
-  date remains unknown rather than becoming a stale hardcoded event date.
+OutcomeContract.analyze validates the exact firstStage and binds literal subject,
+intent/outcome, audience, endpoint and declared risks. No sector/business/source
+audience is guessed. Absent risk is not_declared in the bridge, null in analysis,
+not a verified normal scope. Forced fundraising and explicit risks remain.
 
-Only delivery_mode remains required after loading a sample. User chooses usage;
-budget, targeting, dates, classification, economics/readiness are not assigned.
-Another sample resets local plan/cards/history/production/adaptation bindings and
-bounds; declared risk is retained. This is prototype memory only, not app storage.
-Status/active chip identify the fictional example and clear on incompatible pair
-or restored history. Helper free text enters only its own subject: no sample
-address, endpoint, proof or invented facts. No actual operation is authorized.
+Decision.evaluateOwned re-derives authority from the validated snapshot and ignores
+retired inputs. Exact outcome projection/paid usage, geographic center/date/budget
+and numerical bounds validate. Captured risks, policy refusal, asset/minimum/shared
+caps, reserve and downstream invalidation remain; publishable/qualification false.
+
+Only known objective/geography/budget dimensions contribute to the partial local
+authored rank; unknown dimensions have no score. Points normalize over known
+weight and record coverage (normally40/100), never expert completeness, confidence
+or success probability. Typed business audience can condition authored scenario
+values; no verified platform audience/readiness is inferred. Legacy complete
+evaluate and benchmarks remain unchanged. ADR0073 records this local-only choice.
+
+Plan step has no repeated business/sector/audience/measurement questionnaire.
+First-stage audience is summary-only, edit goes back to stage1. Commercial economics
+is separately optional; missing mode means not_provided and inactive values zero.
+The explanation shows current brief plus bounds, with known/unknown facts and
+readiness read-only. FX source is read-only and receives no raw firstStage; legacy
+provider selection remains. Compatibility IDs are hidden, disabled and ignored.
 
 ## Verification actually run
 
-Owned example pure tests passed five pairs,25 explicit mode completions, missing-
-mode refusal, pruning, reserved endpoints, no planning defaults, unknown ID refusal
-and isolated copies. Existing simulation tests and JS syntax passed; configured
-Ruff format/lint and diff checks passed.
+Pure46-route analysis, owned recommendation, legacy engine, share and simulation
+checks passed. Tests include hidden-field injection refusal, exact binding, absent/
+forced risks, unsupported outcomes, dates/radius, optional economics, caps/reserve
+and private known-only path. JS syntax, configured Ruff format/lint, diff checks pass.
 
-First-stage14 browser tests passed33.908s (yaparo-first-stage-kita6uuq), including
-three new cases covering all5 examples to content/review, old paid-plan clearing,
-risk persistence and helper isolation. After bundling in the existing asset, the
-five-example/active-chip regression passed3.182s (ah71vz0a). Required CI40785311821
-then passed the exact final head with legacy19 and compact-plan6. Isolated UI runs check
-no page errors/outbound provider requests and never load the application DB.
+First-stage16 browser tests passed24.090s (%TEMP%/yaparo-first-stage-4_0soaj9),
+including recommendation without extra questions, rebind and captured-risk refusal.
+Legacy19 passed27.995s (yaparo-decision-4zmpbnx8). Compact-plan6 passed10.892s
+(yaparo-first-stage-kx3ys9sj), including long mobile input, live shares and geo.
+Runs use fake FX, assert no page errors/outbound provider calls, never access app DB.
+Required CI will recheck exact final head.
 
-Desktop cafe and390px boutique/risk screenshots inspected under
-%TEMP%/yaparo-first-stage-_5hwkdf9 (also fresh ah71vz0a cafe). No horizontal overflow.
-Independent read-only review found no material gate/stale/provenance issue.
-Current8014 /simulation.js returnedHTTP200 and contains the new interface; no new
-runtime asset route or process restart required. Refresh resets temporary work.
+Desktop1440/mobile390 plan and viewport/review images inspected in kx3ys9sj.
+No horizontal overflow/repeated section; long literal rationale wrapping corrected.
+Independent read-only review found only absent-risk normal fallback; corrected.
+Actual8014 existing asset routes serve analyze/evaluateOwned and no repeated-section
+definition. No new runtime route or process restart. Refresh resets temporary work.
 
-## Preserved compact-plan capabilities
+## Preserved implementation and next integration boundary
 
-Owned9-bank/46-route first stage and exact outcome/KPI/destination contracts remain.
-Compact plan: explicit missing bounds; selected-only constrained percentages and
-reserve; offline Turkey land-clipped1..800km preview; optional commercial economics
-without capacity/profit claims when absent; concise review with full answers.
-Real platform geo/forecast/permissions remain unverified. Source data.js and V2
-catalogs unchanged; legacy.html retained. PR371 is the durable implementation record.
+Nine banks/46 routes, five synthetic examples, literal endpoint/CTA/KPI contracts,
+creative editing/history and channel adaptations remain. Offline pinned Turkey
+clipping, percentage caps and reserve preserved. Source data.js/V2 catalogs and
+legacy.html unchanged. No real AI or new provider/account permission is introduced.
+PR371/372 record compact-plan/example work; durable app integration is separate.
 
 ## Preserved capabilities and protected work
 
@@ -89,6 +90,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Define the versioned durable campaign-draft contract for accepted plan bounds,
-allocations and source readiness before app integration, incorporating owner UX
-feedback and preserving existing ownership, budget, generation and launch gates.
+Define the versioned durable campaign-draft contract for accepted first-stage
+analysis, plan bounds, allocations and source readiness before app integration,
+preserving existing ownership, budget, generation and launch gates.

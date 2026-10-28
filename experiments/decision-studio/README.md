@@ -8,7 +8,7 @@ old8013 draft and existing8002 application are preserved.
 ## Compact owned plan
 
 `plan-ui.js`/CSS presents a concise request summary, only missing plan bounds,
-optional advanced context and compact percentages. `plan-summary.js` previews and
+separately optional economics and compact percentages. `plan-summary.js` previews and
 redistributes selected-only percentages with exact kuruş totals, minimum/shared/
 channel caps and unallocated reserve. No customer budget/location/economic facts
 are prefilled. Missing economics is explicit and does not claim a capacity/ROI cap;
@@ -22,7 +22,7 @@ Full answers and readiness are disclosed, rather than repeated in the main view.
 
 Checks: `node plan-summary.test.cjs`, `node plan-geo.test.cjs`,
 `python plan_check.py` (6 focused browser journeys plus desktop/mobile evidence).
-The full first-stage11 and legacy19 suites remain separate. Local test servers
+The full first-stage16 and legacy19 suites remain separate. Local test servers
 use fake public FX transport and do not access application databases or providers.
 
 ## Implemented
@@ -35,8 +35,13 @@ and conditional manual fields are validated/pruned. Answers remain in versioned
 `brief.firstStage` and literal review/history. Unknown pairs or restore versions
 fail closed. See [current contract](../../docs/product/progressive-brief.md).
 
-No source business/sector is guessed. Paid authored planning asks explicit
-classification in step2. The owned `outcome-contract.js` binds all46 exact outcomes,
+No source business/sector is guessed. The bound `analyze(snapshot)` and
+`evaluateOwned` path uses first-stage facts plus plan bounds, with unknown source
+dimensions omitted from its partial authored rank and coverage kept separate.
+Hidden legacy controls cannot change goal/risk/readiness; full legacy scoring is
+unchanged. Readiness is read-only, not another customer questionnaire. See ADR0073.
+Pure checks: `brief-analysis.test.cjs`, `owned-recommendation.test.cjs`.
+The owned `outcome-contract.js` binds all46 exact outcomes,
 KPI labels and typed destinations to three authored local concepts. Email/social,
 material support and volunteering can continue through organic/content-only routes
 without WhatsApp/store-visit fallbacks. Content-only offers channel-independent
@@ -59,7 +64,7 @@ remain explicit. URLs use ornek.example. Another example clears local bounds,
 classification/cards/adaptations; declared risk stays. Helper free text imports
 only its own subject, never sample facts. `node owned-examples.test.cjs` and three
 additional first-stage browser journeys cover the five routes, plan reset, risk
-retention and helper isolation. Main first-stage suite now has14 tests. No new
+retention and helper isolation. Main first-stage suite now has16 tests. No new
 runtime asset route, source readiness or actual permission is introduced.
 
 The legacy authored demo retains five quick-start profiles (cafe, boutique,
