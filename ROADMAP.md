@@ -45,6 +45,12 @@ Actual IAB desktop/mobile review completed; mobile selectors moved to one column
 Next: extend the same compact typed-form approach to event details, preserving
 current source/plan/publishing gates.
 
+Destination follow-up implemented: conditional URL/phone/address/map details,
+required/format validation, current-type-only state/history and final review.
+Event/application/social responses now collect appropriate destinations too.
+Local17browser journeys and actual desktop/mobile review passed; current CI
+must be checked after push. No external URL fetch or map-provider connection.
+
 ## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more

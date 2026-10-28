@@ -149,10 +149,58 @@
   };
   function intentActions(communication){return [...(intentMap[communication]||[])];}
   function destinations(action,data){
-    const fixed={visit_store:['physical_store'],buy_online:['own_website'],buy_marketplace:['marketplace'],message_whatsapp:['whatsapp_phone'],call:['whatsapp_phone'],fill_form:['lead_form','own_website'],book_appointment:['lead_form','own_website','whatsapp_phone'],download_app:['app']};
-    return (data?.options||[]).filter(o=>o.questionId==='S1_B02'&&(!fixed[action]||fixed[action].includes(o.value)));
+    if(!Object.values(intentMap).some(values=>values.includes(action)))return [];
+    const fixed={visit_store:['physical_store'],visit_website:['own_website'],buy_online:['own_website'],buy_marketplace:['marketplace'],message_whatsapp:['whatsapp_phone'],call:['whatsapp_phone'],fill_form:['lead_form','own_website'],book_appointment:['lead_form','own_website','whatsapp_phone'],download_app:['app'],register_event:['lead_form','own_website','physical_store'],apply_job:['lead_form','own_website','whatsapp_phone']};
+    // These two entries are owned UI extensions, not invented source enums.
+    if(action==='follow_engage')return [{value:'social_profile',label:'Sosyal medya profili / içerik',owned:true}];
+    const available=(data?.options||[]).filter(o=>o.questionId==='S1_B02');
+    const result=fixed[action]?fixed[action].map(value=>available.find(o=>o.value===value)).filter(Boolean):[...available];
+    if(['understand','remember'].includes(action))result.push({value:'none',label:'Yönlendirme yok · mesajı görmesi yeterli',owned:true});
+    return result;
   }
-  const api={version,families,choices,familyOf,businesses,sectors,actions,pruneAnswers,intentActions,destinations};
+  function destinationApplies(communication,action,data){
+    if(!intentActions(communication).includes(action))return false;
+    const source=data?.questions?.find(q=>q.id==='S1_B02');
+    return source?.showWhen?.S1_Q01?.includes(communication)===true ||
+      ['visit_store','visit_website','buy_online','buy_marketplace','message_whatsapp','call','fill_form','book_appointment','download_app','register_event','apply_job','follow_engage'].includes(action);
+  }
+  const urlLabels={own_website:'Web sitesi / sayfa bağlantısı',marketplace:'Ürün / mağaza bağlantısı',lead_form:'Başvuru / kayıt formu bağlantısı',app:'Uygulama / mağaza bağlantısı',social_profile:'Sosyal medya profili / içerik bağlantısı'};
+  const knownDestinations=new Set([...Object.keys(urlLabels),'physical_store','whatsapp_phone','none','__other__']);
+  function destinationFields(type,action){
+    if(Object.hasOwn(urlLabels,type))return [{key:'url',label:urlLabels[type],type:'url',required:true,maxLength:2048,placeholder:'https://ornek.example/'}];
+    if(type==='whatsapp_phone')return [{key:'phone',label:action==='call'?'Aranacak telefon numarası':'WhatsApp / telefon numarası',type:'tel',required:true,maxLength:40,placeholder:'+90 555 000 00 00'}];
+    if(type==='physical_store')return [
+      {key:'address',label:'Açık adres',type:'text',required:false,maxLength:400,placeholder:'Mahalle, sokak, bina ve şehir'},
+      {key:'mapUrl',label:'Harita / konum bağlantısı',type:'url',required:false,maxLength:2048,placeholder:'https://harita.example/konum'}
+    ];
+    return [];
+  }
+  function validWebUrl(value){
+    if(value.length>2048 || /[\u0000-\u0020\u007f-\u009f\\]|\s/.test(value) || !/^https?:\/\//i.test(value))return false;
+    try{const parsed=new URL(value);return ['http:','https:'].includes(parsed.protocol)&&!!parsed.hostname&&!parsed.username&&!parsed.password;}catch{return false;}
+  }
+  function validateDestination(type,values={},action){
+    if(!knownDestinations.has(type))return {_form:'Geçerli bir yönlendirme türü seç.'};
+    if(values===null)values={};
+    if(typeof values!=='object'||Array.isArray(values))return {_form:'Yönlendirme bilgilerini alanlara ayrı ayrı gir.'};
+    const fields=destinationFields(type,action),allowed=new Set(fields.map(field=>field.key)),errors={};
+    if(Object.keys(values).some(key=>!allowed.has(key)))errors._form='Bu yönlendirmeyle ilgisi olmayan bilgileri kaldır.';
+    for(const field of fields){
+      const value=values[field.key]===undefined?'':values[field.key];
+      if(typeof value!=='string'){errors[field.key]='Bu alanı metin olarak gir.';continue;}
+      if(value.length>field.maxLength){errors[field.key]=`En fazla ${field.maxLength} karakter gir.`;continue;}
+      if(!value.trim()){if(field.required)errors[field.key]='Bu bilgiyi tamamla.';else if(field.type==='url'&&value)errors[field.key]='http:// veya https:// ile başlayan geçerli bir bağlantı gir.';continue;}
+      if(field.type==='url'&&!validWebUrl(value))errors[field.key]='http:// veya https:// ile başlayan, kullanıcı adı veya parola içermeyen geçerli bir bağlantı gir.';
+      if(field.type==='tel'){
+        const count=value.replace(/\D/g,'').length;
+        if(!/^\+?[0-9() .-]+$/.test(value)||count<10||count>15)errors[field.key]='Ülke / alan koduyla birlikte 10–15 rakam içeren telefon numarası gir.';
+      }
+      if(field.key==='address'&&value.trim().length<5)errors.address='Adresi en az 5 karakterle açıkla.';
+    }
+    if(type==='physical_store'&&!String(values.address||'').trim()&&!String(values.mapUrl||'').trim())errors.address='Açık adres veya harita / konum bağlantısı ekle.';
+    return errors;
+  }
+  const api={version,families,choices,familyOf,businesses,sectors,actions,pruneAnswers,intentActions,destinations,destinationApplies,destinationFields,validateDestination};
   if(typeof module!=='undefined'&&module.exports)module.exports=api;
   root.YaparoBriefFlow=api;
 })(typeof window!=='undefined'?window:globalThis);

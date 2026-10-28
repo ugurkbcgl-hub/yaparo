@@ -88,11 +88,21 @@ class StudioCheck(unittest.TestCase):
         page.locator("#sector").select_option(sector)
         if page.locator("#q-S1_B02").is_visible():
             page.locator("#q-S1_B02").select_option(destination)
+        self.fill_destination(page)
         page.locator("#journey-mode").select_option(mode)
         if description is not None:
             page.locator("#brief").fill(description)
         if submit:
             page.locator("#brief-submit").click()
+
+    def fill_destination(self, page):
+        for selector, value in [
+            ("#destination-url", "https://ornek.example/kampanya"),
+            ("#destination-phone", "+90 555 000 00 00"),
+            ("#destination-address", "Sentetik Örnek Mahallesi, Örnek Sokak No: 1"),
+        ]:
+            if page.locator(selector).is_visible():
+                page.locator(selector).fill(value)
 
     def start_plan(self, page):
         page.goto(self.origin)
@@ -549,6 +559,7 @@ class StudioCheck(unittest.TestCase):
         self.assertLess(len(actions), 16)
         page.locator('[data-action="visit_website"]').click()
         page.locator("#q-S1_B02").select_option("own_website")
+        self.fill_destination(page)
         self.assertEqual(page.locator("#action").input_value(), "visit_website")
         self.assertTrue(page.locator("#context-form").is_visible())
         page.screenshot(
@@ -673,6 +684,107 @@ class StudioCheck(unittest.TestCase):
             page.evaluate("YaparoStudio.getSnapshot().production.publishable")
         )
         self.assertEqual(page.locator('img[src*="example.invalid"]').count(), 0)
+        page.close()
+
+    def test_destination_required_validation_review_and_type_change(self):
+        page = self.browser.new_page()
+        outbound = []
+        page.on(
+            "request",
+            lambda request: (
+                outbound.append(request.url)
+                if not request.url.startswith(self.origin)
+                else None
+            ),
+        )
+        page.goto(self.origin)
+        self.complete_brief(
+            page,
+            communication="sale_promotion",
+            action="buy_online",
+            destination="own_website",
+            mode="organic",
+            submit=False,
+        )
+        page.locator("#destination-url").fill("")
+        page.locator("#brief-submit").click()
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().brief"))
+        page.locator("#destination-url").fill("javascript:alert(1)")
+        page.locator("#brief-submit").click()
+        self.assertIsNone(page.evaluate("YaparoStudio.getSnapshot().brief"))
+        url = "https://ornek.example/urun?renk=mavi"
+        page.locator("#destination-url").fill(url)
+        page.locator("#brief-submit").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().brief.destination.values"),
+            {"url": url},
+        )
+        self.open_creatives(page)
+        self.adapt_and_review(page)
+        self.assertIn(url, page.locator("#review").inner_text())
+        page.locator('#step-nav [data-step="2"]').click()
+        page.locator("#regenerate").click()
+        page.locator("#previous-trio").click()
+        self.assertEqual(page.locator("#destination-url").input_value(), url)
+        page.locator('#step-nav [data-step="0"]').click()
+        page.locator('[data-action="visit_store"]').click()
+        page.locator("#q-S1_B02").select_option("physical_store")
+        self.assertEqual(page.locator("#destination-url").count(), 0)
+        self.assertEqual(page.locator("#destination-address").input_value(), "")
+        page.locator("#brief-submit").click()
+        self.assertTrue(page.locator("#step-0").is_visible())
+        page.locator("#destination-mapUrl").fill("https://harita.example/konum")
+        page.locator("#brief-submit").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().brief.destination.values"),
+            {"mapUrl": "https://harita.example/konum"},
+        )
+        self.assertEqual(outbound, [])
+        page.close()
+
+    def test_event_registration_collects_destination_and_phone(self):
+        page = self.browser.new_page()
+        page.goto(self.origin)
+        self.complete_brief(
+            page,
+            communication="event",
+            business="event",
+            sector="entertainment_events",
+            action="register_event",
+            destination="lead_form",
+            mode="organic",
+            submit=False,
+        )
+        self.assertTrue(page.locator("#destination-url").is_visible())
+        page.locator("#brief-submit").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().brief.destination.type"),
+            "lead_form",
+        )
+        # The owned destination is retained even where source S1_B02 does not apply.
+        self.assertNotIn(
+            "S1_B02", page.evaluate("YaparoStudio.getSnapshot().brief.branch")
+        )
+        page.locator('#step-nav [data-step="0"]').click()
+        self.complete_brief(
+            page,
+            communication="lead_request",
+            business="local_service",
+            sector="professional_services",
+            action="call",
+            destination="whatsapp_phone",
+            mode="organic",
+            submit=False,
+        )
+        page.locator("#destination-phone").fill("123")
+        page.locator("#brief-submit").click()
+        self.assertTrue(page.locator("#step-0").is_visible())
+        page.locator("#destination-phone").fill("+90 555 000 00 00")
+        page.locator("#brief-submit").click()
+        self.assertEqual(
+            page.evaluate("YaparoStudio.getSnapshot().brief.destination.values.phone"),
+            "+90 555 000 00 00",
+        )
         page.close()
 
     def test_structured_dates_and_non_cash_fundraising(self):

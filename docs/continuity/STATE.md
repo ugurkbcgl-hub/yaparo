@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 10:18 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 10:37 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -19,8 +19,8 @@ remains undecided/deferred. Preserve private ledger/TEST/account history.
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
 Branch codex/unified-journey-prototype; PR369 OPEN.
-Predecessorf19e0c9 full CI40646877347 SUCCESS verified, including14browser journeys.
-Current compact-form follow-up below requires its own CI after push. Prior
+Predecessor9ddc022 full CI40649316034 SUCCESS verified, including15browser journeys.
+Current destination-details follow-up below requires its own CI after push. Prior
 baseline01a77b4 CI40534250684 SUCCESS. No deployment or DB migration.
 
 ## Current change: intent + response before context
@@ -46,6 +46,25 @@ is refused; material/volunteer support clears incompatible payment/amount and
 hides its monetary target. These values do not feed operational budget/eligibility.
 Permit/evidence and remaining typed forms remain open. Business labels simplified.
 See docs/product/progressive-brief.md.
+
+Destination details now collect required URLs for website/marketplace/form/app/
+social profile; phone for phone/WhatsApp; address OR map link for physical places.
+Format/required checks refuse executable/credential-bearing URLs and bad phones.
+Type changes/hiding clear old details; business rerenders/history retain the same
+destination. Details invalidate plans and appear as literal text in final review.
+Direct event registrations/applications/social routes now collect destinations;
+owned none/social_profile stay separate from source enums. brief.destination uses
+version yaparo-destination-v1/type/values. No URL fetch, location query, geocoding
+or transmission; targeting region stays separate from visit address.
+
+Current local17browser journeys passed24.566s (%TEMP%/yaparo-decision-aghfxfy7),
+including required/bad URL, literal review, history, map-only location, type-change
+pruning, event form destination and phone validation. Pure destination/schema/
+source-immutability tests and syntax/configured Ruff passed. Independent source
+review found no blocker in integration. Actual IAB website desktop/mobile390px
+and location mobile reviewed with no horizontal overflow375/390; viewport reset.
+Evidence %TEMP%/yaparo-destination-20261028: website-desktop.png,
+website-mobile.png, location-mobile.png. Prior visual evidence below retained.
 
 Local15browser journeys passed22.945s (%TEMP%/yaparo-decision-6nop5vr6); focused
 structured-date/noncash test reran successfully after hiding irrelevant target

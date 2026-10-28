@@ -14,6 +14,52 @@ assert.deepEqual(F.intentActions('__other__'),[]);
 assert.deepEqual(F.destinations('buy_online',D).map(o=>o.value),['own_website']);
 assert.deepEqual(F.destinations('visit_store',D).map(o=>o.value),['physical_store']);
 assert.ok(!F.destinations('call',D).some(o=>o.value==='marketplace'));
+const originalSourceOptions=JSON.stringify(D.options);
+assert.deepEqual(F.destinations('unknown',D),[]);
+assert.deepEqual(F.destinations('',D),[]);
+assert.deepEqual(F.destinations('visit_website',D).map(o=>o.value),['own_website']);
+assert.deepEqual(F.destinations('register_event',D).map(o=>o.value),['lead_form','own_website','physical_store']);
+assert.deepEqual(F.destinations('apply_job',D).map(o=>o.value),['lead_form','own_website','whatsapp_phone']);
+assert.equal(F.destinations('follow_engage',D)[0].value,'social_profile');
+assert.equal(F.destinations('follow_engage',D)[0].owned,true);
+assert.ok(F.destinations('remember',D).some(o=>o.value==='none'&&o.owned===true));
+assert.equal(JSON.stringify(D.options),originalSourceOptions,'owned route extensions never change source rows');
+assert.equal(F.destinationApplies('event','register_event',D),true);
+assert.equal(F.destinationApplies('recruitment','apply_job',D),true);
+assert.equal(F.destinationApplies('education','follow_engage',D),true);
+assert.equal(F.destinationApplies('fundraising','visit_website',D),true);
+assert.equal(F.destinationApplies('fundraising','donate',D),false,'donation does not silently require a website');
+assert.equal(F.destinationApplies('unknown','visit_website',D),false);
+assert.equal(F.destinationApplies('fundraising','apply_job',D),false,'incompatible purpose/action fails closed');
+for(const type of ['own_website','marketplace','lead_form','app','social_profile']){
+  assert.deepEqual(F.destinationFields(type,'visit_website').map(field=>field.key),['url']);
+  assert.equal(F.destinationFields(type,'visit_website')[0].required,true);
+  assert.deepEqual(F.validateDestination(type,{url:'https://ornek.example/kampanya?source=demo'},'visit_website'),{});
+  assert.deepEqual(F.validateDestination(type,{url:'http://ornek.example/'},'visit_website'),{});
+  for(const url of ['', 'javascript:alert(1)','data:text/html,test','ftp://ornek.example/','https://user:pass@ornek.example/','https://ornek.example/a b','https://ornek.example/\nnext','https://ornek.example/\u007f','https:\\ornek.example/','https://ornek.example/'+'x'.repeat(2048)]){
+    assert.ok(F.validateDestination(type,{url},'visit_website').url,`${type}: reject malformed/unsafe URL`);
+  }
+}
+assert.match(F.destinationFields('whatsapp_phone','call')[0].label,/Aranacak/);
+assert.match(F.destinationFields('whatsapp_phone','message_whatsapp')[0].label,/WhatsApp/);
+assert.deepEqual(F.validateDestination('whatsapp_phone',{phone:'+90 (555) 000-00-00'},'call'),{});
+for(const phone of ['','123','+1234567890123456','+90 call 5550000000','90+5550000000','+90\n5550000000'])assert.ok(F.validateDestination('whatsapp_phone',{phone},'call').phone);
+assert.deepEqual(F.validateDestination('physical_store',{address:'Örnek Mahallesi, Örnek Sokak No: 1'},'visit_store'),{});
+assert.deepEqual(F.validateDestination('physical_store',{mapUrl:'https://harita.example/konum'},'visit_store'),{});
+assert.ok(F.validateDestination('physical_store',{},'visit_store').address);
+assert.ok(F.validateDestination('physical_store',{address:'Kısa'},'visit_store').address);
+assert.ok(F.validateDestination('physical_store',{address:'x'.repeat(401)},'visit_store').address);
+assert.ok(F.validateDestination('physical_store',{mapUrl:'javascript:alert(1)'},'visit_store').mapUrl);
+assert.ok(F.validateDestination('own_website',{url:{value:'https://ornek.example/'}},'visit_website').url);
+assert.ok(F.validateDestination('own_website',{url:'https://ornek.example/',phone:'5550000000'},'visit_website')._form);
+for(const type of ['none','__other__']){
+  assert.deepEqual(F.destinationFields(type,'remember'),[]);
+  assert.deepEqual(F.validateDestination(type,{},'remember'),{});
+  assert.ok(F.validateDestination(type,{url:'https://old.example/'},'remember')._form,'no stale hidden details admitted');
+}
+assert.deepEqual(F.destinationFields('unknown','remember'),[]);
+assert.ok(F.validateDestination('unknown',{},'remember')._form);
+assert.ok(F.validateDestination('own_website',[],'visit_website')._form);
 for(const comm of D.options.filter(o=>o.questionId==='S1_Q01'&&o.value!=='unsure')){
   assert.ok(F.intentActions(comm.value).length);
   for(const value of F.intentActions(comm.value))assert.ok(D.options.some(o=>o.questionId==='S1_Q04'&&o.value===value));

@@ -46,6 +46,12 @@ support removes irrelevant money fields. Desktop and390px IAB visual review foun
 and corrected cramped mobile selectors. These notes do not qualify account,
 evidence, publishing or spend readiness.
 
+Destination selection now collects the corresponding URL, phone or address/map
+details, with format/required checks and a literal final-review summary. Direct
+event/application/social routes use the same owned destination projection even
+outside source S1_B02. Values stay in page memory; changing type clears old details.
+No URL fetch, geocoding, external transmission or publishing readiness is implied.
+
 ## Previous unified journey draft — superseded, retained locally
 
 The owner prioritized reviewing a simpler single-workspace journey BEFORE more

@@ -46,6 +46,31 @@ literal strings entered by the user; they are not transferred to spend/cap model
 They survive form rerenders/history and are pruned with their source branch.
 Full permit/evidence controls and the remaining typed forms remain open.
 
+## Destination details — 28 October follow-up
+
+Selecting a destination reveals its required details: website, marketplace,
+form/registration, app and social profile require an HTTP(S) URL; phone/WhatsApp
+requires a phone number; a physical destination requires an address or map URL.
+Destination availability is not inferred from a correctly formed link. URL
+format validation rejects executable schemes, credentials and embedded whitespace;
+phone validation checks permitted characters and10–15digits. No link is fetched,
+opened or sent to an external provider. Map URLs are entered literally; no map
+provider, geolocation permission or address lookup is added.
+
+Direct event registrations, job applications and social-follow responses now
+collect destinations too, even where source S1_B02 does not apply. An owned
+social_profile destination and an awareness-only none option are explicit UI
+extensions. They are not inserted into source enums. Known applicable source
+destinations remain in branch.S1_B02; every destination uses the separate
+brief.destination projection {version:yaparo-destination-v1,type,values}.
+
+Details remain page-memory draft values, independent of targeting geography.
+Changing destination type or hiding it removes old values. Unchanged destinations
+survive business/sector rerenders and saved-trio history. Changes invalidate the
+plan/content; literal details appear in the final review. Prepared synthetic
+profiles use reserved .example URLs or explicitly synthetic address/phone data.
+Manual Other still requires its existing explanation and remains unqualified.
+
 ## State and manual details
 
 Purpose/response edits invalidate the existing plan/content. Branch answers and

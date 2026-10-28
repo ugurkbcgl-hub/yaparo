@@ -20,3 +20,4 @@ body{font-size:14px}label{font-size:12px}.hint,.quiet-note,.demo-banner p,.inlin
 @media(max-width:600px){.primary-context-fields{grid-template-columns:1fr}.structured-detail{gap:8px}.structured-detail input{padding:10px 6px;font-size:13px}}
  .structured-question{grid-column:1/-1}
 @media(max-width:600px){.structured-detail{grid-template-columns:1fr}}
+.destination-details{display:grid;grid-template-columns:1fr;gap:12px;margin:12px 0 18px;padding:14px;border:1px solid var(--line);border-radius:9px;background:#fff}.destination-details input,.destination-details textarea{min-width:0;max-width:100%}.destination-details .hint{margin:0}

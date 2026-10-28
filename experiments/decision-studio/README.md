@@ -32,6 +32,12 @@ support clears irrelevant money fields. These are draft details, not verified
 evidence or operational budget inputs. Actual IAB desktop/mobile visual review
 was completed on28October; narrow structured controls use one column.
 
+Destination choices reveal required URL/phone/address-or-map details. Unknown or
+malformed destinations refuse; source enums remain unchanged. Event/application/
+social delivery can use an independent owned projection. Details survive history,
+clear on type changes and appear as literal text in final review. No destination
+fetch/open, geocoding or external transmission occurs; values remain in memory.
+
 Four-step single-workspace flow: structured communication job + business model +
 desired action + free text + audience/sector → channel/material plan → shared
 creative concepts and placement adaptations → review. Paid, organic-only and
