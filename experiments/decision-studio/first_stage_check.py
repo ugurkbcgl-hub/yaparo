@@ -370,10 +370,15 @@ class FirstStageCheck(unittest.TestCase):
         self.page.locator("#step-1").wait_for(state="visible")
         self.assertEqual(self.page.locator("#action").input_value(), "")
         self.assertIsNone(self.snapshot()["plan"])
-        self.assertIsNone(self.snapshot()["brief"]["outcomeContract"]["legacyProjection"])
+        self.assertIsNone(
+            self.snapshot()["brief"]["outcomeContract"]["legacyProjection"]
+        )
         self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
         self.assertTrue(self.page.locator("#step-1").is_visible())
-        self.assertIn("ücretli kanal eşleştirmesi", self.page.locator("#plan-next-status").inner_text())
+        self.assertIn(
+            "ücretli kanal eşleştirmesi",
+            self.page.locator("#plan-next-status").inner_text(),
+        )
 
     def test_owned_content_only_formats_destination_and_binding(self):
         self.select_pair("fundraise", "materials")
@@ -391,7 +396,9 @@ class FirstStageCheck(unittest.TestCase):
         creative = self.snapshot()["creative"]
         self.assertEqual(creative["outcome"], "materials")
         self.assertEqual(len(self.snapshot()["production"]["requirements"]), 1)
-        self.assertEqual(self.snapshot()["production"]["requirements"][0]["medium"], "text")
+        self.assertEqual(
+            self.snapshot()["production"]["requirements"][0]["medium"], "text"
+        )
         self.page.locator("#adapt-content").click()
         preview = self.snapshot()["adaptations"][0]
         self.assertEqual(preview["outcomeSignature"], creative["outcomeSignature"])
@@ -399,12 +406,22 @@ class FirstStageCheck(unittest.TestCase):
         self.assertFalse(preview["publishable"])
         self.page.locator("#content-next").click()
         self.page.locator("#step-3").wait_for(state="visible")
-        self.assertIn(creative["kpi"]["label"], self.page.locator("#review").inner_text())
+        self.assertIn(
+            creative["kpi"]["label"], self.page.locator("#review").inner_text()
+        )
         self.page.evaluate("window.scrollTo(0,0)")
-        self.page.screenshot(path=str(self.evidence / "owned-materials-review-desktop.png"), full_page=True)
-        self.page.set_viewport_size({"width":390,"height":844})
-        self.assertLessEqual(self.page.evaluate("document.documentElement.scrollWidth"), 390)
-        self.page.screenshot(path=str(self.evidence / "owned-materials-review-mobile.png"), full_page=True)
+        self.page.screenshot(
+            path=str(self.evidence / "owned-materials-review-desktop.png"),
+            full_page=True,
+        )
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        self.assertLessEqual(
+            self.page.evaluate("document.documentElement.scrollWidth"), 390
+        )
+        self.page.screenshot(
+            path=str(self.evidence / "owned-materials-review-mobile.png"),
+            full_page=True,
+        )
         self.page.locator('#step-nav [data-step="1"]').click()
         self.page.locator('[name="owned-format"][value="image"]').check()
         self.assertTrue(self.snapshot()["stale"] is False)
@@ -425,18 +442,29 @@ class FirstStageCheck(unittest.TestCase):
         self.page.locator(".choose").first.click()
         first = self.snapshot()["creative"]
         self.assertEqual(first["destination"]["email"], "sentetik@example.test")
-        self.page.locator(".concept-card").first.get_by_role("button", name="Benzerini gör").click()
+        self.page.locator(".concept-card").first.get_by_role(
+            "button", name="Benzerini gör"
+        ).click()
         self.assertEqual(self.snapshot()["creative"]["cta"], first["cta"])
-        self.assertEqual(self.snapshot()["creative"]["destination"], first["destination"])
+        self.assertEqual(
+            self.snapshot()["creative"]["destination"], first["destination"]
+        )
         self.page.locator("#regenerate").click()
         self.page.locator(".choose").first.click()
-        self.assertEqual(self.snapshot()["creative"]["destination"], first["destination"])
+        self.assertEqual(
+            self.snapshot()["creative"]["destination"], first["destination"]
+        )
         self.page.locator('#step-nav [data-step="0"]').click()
         self.field("promote_name").fill("")
         before = self.snapshot()["creative"]
         self.page.locator("#chat-input").fill("Daha sade olsun")
         self.page.locator("#chat-form").evaluate("form=>form.requestSubmit()")
-        self.assertEqual(self.page.locator("#chat-log .assistant-message").last.get_by_role("button").count(), 0)
+        self.assertEqual(
+            self.page.locator("#chat-log .assistant-message")
+            .last.get_by_role("button")
+            .count(),
+            0,
+        )
         self.assertEqual(self.snapshot()["creative"], before)
 
     def test_mobile_layout_keyboard_focus_and_evidence(self):
