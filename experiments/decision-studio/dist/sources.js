@@ -22,7 +22,7 @@
     const refresh=node('button',busy?'Kaynak kontrol ediliyor…':'↻ Kaynakları yenile');refresh.type='button';refresh.id='source-refresh';refresh.className='secondary';refresh.disabled=busy;refresh.addEventListener('click',()=>request(true,true));heading.append(refresh);element.append(heading);
     const sourceLabel=node('label','Kur kaynağı');sourceLabel.htmlFor='fx-provider';const selector=node('select');selector.id='fx-provider';for(const [v,t] of [['ecb','ECB · EUR üzerinden USD/TRY çapraz referans'],['tcmb','TCMB · USD döviz satış göstergesi']]){const o=node('option',t);o.value=v;selector.append(o);}selector.value=provider;selector.disabled=busy;selector.addEventListener('change',()=>{provider=selector.value;bundle=null;changed();config.onChange();});element.append(sourceLabel,selector);
     const fxState=bundle?.fx;const line=node('p');line.id='source-status';line.setAttribute('role','status');
-    line.textContent=busy?`${providerName()} kaynağı kontrol ediliyor. Reklam platformlarına istek gönderilmez.`:`${providerName()} USD/TRY · ${labels[fxState?.status]||'Durum okunuyor'}`;element.append(line);
+    line.textContent=config.canRequest&&!config.canRequest()?'Kur kontrolü için plan bilgilerini tamamla.':busy?`${providerName()} kaynağı kontrol ediliyor. Reklam platformlarına istek gönderilmez.`:`${providerName()} USD/TRY · ${labels[fxState?.status]||'Durum okunuyor'}`;element.append(line);
     const record=fxState?.snapshot;
     if(record?.payload?.rate){const value=node('p',`Son kayıt: 1 USD = ${money(record.payload.rate)} TRY · ${fxState.usable?providerName():'Güncel hesapta kullanılmıyor'}`);value.className='source-rate';element.append(value);
       const dates=node('p',`Kaynak tarihi: ${record.source_as_of} · Alındı: ${dateTime(record.fetched_at)} · Geçerlilik: ${dateTime(record.expires_at)}`);dates.className='hint';element.append(dates);
@@ -37,6 +37,7 @@
     element.append(details);const foot=node('p','Seçilen resmî kaynağın son yayını kullanılır; otomatik kaynak değişimi yoktur. ECB çapraz kuru TCMB satış kuru değildir. Sorgu tarihi yayın tarihi değildir. İşlem kuru / performans garantisi sunulmaz.');foot.className='hint';element.append(foot);
   }
   async function request(refresh=false,force=false){
+    if(config.canRequest&&!config.canRequest()){sequence++;busy=false;bundle=null;render();return;}
     const own=++sequence,context=config.readContext(),key=stable(context),channels=config.readChannels(),requestedProvider=provider;
     if(refresh){busy=true;render();}
     try{

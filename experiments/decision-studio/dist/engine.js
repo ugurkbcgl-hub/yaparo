@@ -26,6 +26,8 @@
         (input.geo === 'radius_local' && (!Number.isInteger(input.radius) || !finite(input.radius,1,800)))) {
       throw new Error('Bütçe, süre, yarıçap ve ekonomi alanlarını kontrol et.');
     }
+    if(input.economicsMode!==undefined&&!['provided','not_provided'].includes(input.economicsMode))throw new Error('İş ekonomisi tercihini kontrol et.');
+    const economicsProvided=input.economicsMode!=='not_provided';
     const total = cents(input.budget), blocked = policy(input);
     const interactive = input.fixture === 'interactive' && simulation?.kind === 'authored_simulation' && simulation.signature === JSON.stringify(input);
     // Only SC01 has forecast fixtures. Never rebind its observations to other audiences/regions/dates.
@@ -40,7 +42,7 @@
     const exchangeRate = usableFx ? liveFx.rate : 49.7627;
     const profitCPA = Math.min(input.cpa, input.value * input.margin / 100);
     // Capacity and profitability are a SHARED portfolio cap, not counted once per channel.
-    const businessCap = Math.min(total, Math.floor(input.capacity * input.days * profitCPA * 100));
+    const businessCap = economicsProvided?Math.min(total, Math.floor(input.capacity * input.days * profitCPA * 100)):total;
     const rows = data.channels.map(channel => {
       const f = (interactive ? simulation.forecasts : data.forecasts).find(x => x.channelId === channel.id);
       const owned = channel.tier === 'non_paid_recommendation';
@@ -111,7 +113,7 @@
     }
     const allocated = rows.reduce((s,r)=>s+r.amount,0);
     return {version:data.version,createdAt:new Date().toISOString(),input:{...input},bound,interactive,blocked,total,businessCap,rows,
-      allocated,unallocated:total-allocated,externalQuery:false,model:null,quality:interactive?'authored_simulation_NOT_market_data':'demo_illustrative',simulationVersion:interactive?simulation.version:null,
+      allocated,unallocated:total-allocated,economicsProvided,externalQuery:false,model:null,quality:interactive?'authored_simulation_NOT_market_data':'demo_illustrative',simulationVersion:interactive?simulation.version:null,
       fx:{rate:exchangeRate,source:usableFx?liveFx.snapshot.source:'research_example',source_as_of:usableFx?liveFx.snapshot.source_as_of:'2026-10-26',snapshot_id:usableFx?liveFx.snapshot.id:null,expires_at:usableFx?liveFx.snapshot.expires_at:null,indicative_only:true},publishable:false};
   }
   function manual(plan,id,amount) {

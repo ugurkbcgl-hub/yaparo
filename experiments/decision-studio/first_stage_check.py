@@ -131,6 +131,15 @@ class FirstStageCheck(unittest.TestCase):
     def submit(self):
         self.page.locator("#first-stage-submit").click()
 
+    def plan_basics(self):
+        self.page.locator("#geo-mode").select_option("country")
+        self.page.locator("#budget").fill("3000")
+        self.page.locator("#start").fill("2026-11-01")
+        self.page.locator("#plan-end").fill("2026-11-07")
+        if not self.page.locator("#plan-advanced").get_attribute("open") == "":
+            self.page.locator("#plan-advanced > summary").click()
+        self.page.locator("#audience").select_option("local_nearby")
+
     def test_every_pair_has_own_form_and_no_cross_bank_fields(self):
         intents = self.page.evaluate("YaparoFirstStage.intents()")
         self.assertEqual(len(intents), 9)
@@ -270,7 +279,7 @@ class FirstStageCheck(unittest.TestCase):
         self.assertEqual(self.page.locator("#sector").input_value(), "")
         self.assertIsNone(self.snapshot()["plan"])
         self.assertIn(
-            "varsaymıyoruz", self.page.locator("#decision-status").inner_text()
+            "bölgesini seç", self.page.locator("#decision-status").inner_text()
         )
         self.assertFalse(self.snapshot()["brief"]["planContext"]["verified"])
         self.assertEqual(
@@ -287,7 +296,7 @@ class FirstStageCheck(unittest.TestCase):
         self.page.locator("#step-1").wait_for(state="visible")
         self.assertIsNone(self.snapshot()["plan"])
         self.assertTrue(self.page.locator("#owned-plan-context").is_hidden())
-        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.page.get_by_role("button", name="İçeriklere devam et").click()
         self.page.locator("#step-2").wait_for(state="visible")
         self.assertEqual(self.page.locator(".concept-card").count(), 3)
         old_name = self.snapshot()["brief"]["firstStage"]["answers"]["promote_name"]
@@ -317,16 +326,17 @@ class FirstStageCheck(unittest.TestCase):
         self.page.locator("#step-1").wait_for(state="visible")
         self.assertIsNone(self.snapshot()["plan"])
         self.assertEqual(self.page.locator("#business").input_value(), "")
+        self.plan_basics()
         self.page.locator("#business").select_option("local_retail")
         self.page.locator("#sector").select_option("fashion_beauty_lifestyle")
         self.page.get_by_text(
             "ECB çapraz referans USD/TRY · Güncel kayıt", exact=True
-        ).wait_for()
+        ).wait_for(state="attached")
         self.page.locator("#recommend").click()
         self.assertEqual(self.page.locator("#action").input_value(), "visit_store")
         self.assertGreater(self.snapshot()["plan"]["allocated"], 0)
         self.assertFalse(self.snapshot()["plan"]["publishable"])
-        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.page.get_by_role("button", name="İçeriklere devam et").click()
         self.page.locator("#step-2").wait_for(state="visible")
         self.page.locator('#step-nav [data-step="0"]').click()
         self.field("promote_name").fill("Sentetik değişen mağaza çalışması")
@@ -341,8 +351,7 @@ class FirstStageCheck(unittest.TestCase):
         self.fill_remaining(mode="paid")
         self.submit()
         self.page.locator("#step-1").wait_for(state="visible")
-        self.page.locator("#business").select_option("local_retail")
-        self.page.locator("#sector").select_option("fashion_beauty_lifestyle")
+        self.plan_basics()
         self.page.locator("#recommend").click()
         self.assertEqual(self.page.locator("#action").input_value(), "")
         self.assertIsNone(self.snapshot()["plan"])
@@ -354,7 +363,7 @@ class FirstStageCheck(unittest.TestCase):
         self.fill_remaining(mode="organic")
         self.submit()
         self.page.locator("#step-1").wait_for(state="visible")
-        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.page.get_by_role("button", name="İçeriklere devam et").click()
         self.page.locator("#step-2").wait_for(state="visible")
         self.assertEqual(self.page.locator(".concept-card").count(), 3)
         self.assertEqual(self.snapshot()["brief"]["firstStage"]["outcome"], "volunteer")
@@ -373,7 +382,8 @@ class FirstStageCheck(unittest.TestCase):
         self.assertIsNone(
             self.snapshot()["brief"]["outcomeContract"]["legacyProjection"]
         )
-        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.plan_basics()
+        self.page.get_by_role("button", name="İçeriklere devam et").click()
         self.assertTrue(self.page.locator("#step-1").is_visible())
         self.assertIn(
             "ücretli kanal eşleştirmesi",
@@ -389,7 +399,7 @@ class FirstStageCheck(unittest.TestCase):
         self.assertTrue(self.page.locator("#organic-controls").is_hidden())
         self.assertIsNone(self.snapshot()["plan"])
         self.page.locator('[name="owned-format"][value="image"]').uncheck()
-        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.page.get_by_role("button", name="İçeriklere devam et").click()
         self.page.locator("#step-2").wait_for(state="visible")
         self.assertEqual(self.page.locator(".concept-card").count(), 3)
         self.page.locator(".choose").first.click()
@@ -434,10 +444,10 @@ class FirstStageCheck(unittest.TestCase):
         self.field("action_message_method").select_option("email")
         self.fill_remaining(mode="unsure")
         self.submit()
-        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.page.get_by_role("button", name="İçeriklere devam et").click()
         self.assertTrue(self.page.locator("#step-1").is_visible())
         self.page.locator("#owned-mode").select_option("content_only")
-        self.page.get_by_role("button", name="Yaratıcı fikirleri keşfet").click()
+        self.page.get_by_role("button", name="İçeriklere devam et").click()
         self.page.locator("#step-2").wait_for(state="visible")
         self.page.locator(".choose").first.click()
         first = self.snapshot()["creative"]
