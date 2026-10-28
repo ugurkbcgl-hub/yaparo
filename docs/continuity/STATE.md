@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 20:04 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 20:53 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -16,9 +16,13 @@ service/recharge. Download/export remains undecided.
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/unified-journey-prototype; PR369 OPEN at verification.
-Predecessor72c89c5 full CI40707898330 SUCCESS verified live. This complete-bank
-package needs new CI after push. No deployment, DB migration or account action.
+PR369 MERGED at2026-10-28 20:52 Europe/Istanbul, squash0930ca8 on main.
+Reviewed head6bfafec full PostgreSQL CI40735090819 SUCCESS verified, including
+Django and browser E2E. Exact-head guarded merge used; no checks bypassed.
+Local checkout now codex/first-stage-plan-outcomes, based on origin/main0930ca8.
+Only this verified handoff is committed locally on the new branch; no new product
+change or standalone documentation PR. Push it with the next meaningful package.
+No deployment, DB migration or account action was performed.
 
 Complete-bank commit9710dc1 CI40732927463: owned-form checks SUCCESS; later Django
 step failed on an existing oversized-package browser fixture. Its intentional
@@ -26,9 +30,9 @@ stream cancellation made response.body() unavailable to Playwright. Test-only
 follow-up witnesses fulfilled byte length/hash headers for that oversized fixture;
 small fixtures retain full-body hashing and every rejection/download assertion.
 Production JS and size guard unchanged. Focused test passed3.361s in a fresh
-in-memory SQLite rehearsal; no local app/PostgreSQL data accessed. Fresh full
-PostgreSQL CI remains required after the follow-up push; do not bypass or merge
-on the failed run.
+in-memory SQLite rehearsal; no local app/PostgreSQL data accessed. The fresh full
+PostgreSQL CI40735090819 then passed before merge. The earlier failed run was
+not bypassed; production JS/size enforcement and rejection checks remain intact.
 
 ## Completed first-stage package
 
@@ -105,6 +109,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Verify current PR CI; then map the newly captured stage1 outcomes into the later
-plan/content contract explicitly, starting with donation/material/volunteer
+Map the newly captured stage1 outcomes into the later plan/content contract
+explicitly, starting with donation/material/volunteer
 semantics and preserving source/account/forecast/production gates.
