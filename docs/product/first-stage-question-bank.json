@@ -7,7 +7,7 @@
   "banks": [
     {
       "id": "promote", "answer": "Bir marka, ürün veya hizmeti tanıtmak",
-      "outcomes": ["Markayı veya mesajı hatırlasın", "Bilgilensin", "Web sitesini ziyaret etsin", "Mağazaya gelsin", "İletişime geçsin"],
+      "outcomes": ["Markayı veya mesajı hatırlasın", "Bilgilensin", "Web sitesini ziyaret etsin", "Mağazaya gelsin", "İletişime geçsin", "Uygulamayı indirsin"],
       "questions": [
         ["Neyi tanıtıyoruz?", "Marka / Ürün / Hizmet / Proje / Kendi tanımımı ekleyeceğim"],
         ["Adı nedir?", "Kayıtlı kimlikten seç veya kısa ad yaz. Ad bilinmiyorsa konu tanımı yeterli."],
@@ -140,7 +140,8 @@
     ["Bağış yapsın veya malzeme versin", "Destek türü → ilgili kabul/teslim yöntemi. Parasal hedef yalnız para seçilirse."],
     ["Gönüllü olsun", "Görev → zaman veya beceri ihtiyacı → başvuru yolu. Para ve IBAN soruları yok."],
     ["Üye olsun veya topluluğa katılsın", "Katılım yöntemi ve adresi; varsa ücret ve ön koşullar."],
-    ["Takip etsin veya paylaşsın", "İlgili profil veya paylaşılacak içerik. Banka/ödeme/satış adresi zorunlu değil."]
+    ["Takip etsin veya paylaşsın", "İlgili profil veya paylaşılacak içerik. Banka/ödeme/satış adresi zorunlu değil."],
+    ["Uygulamayı indirsin", "Android / iOS / İkisi. Seçilen mağazaların bağlantıları; indirme, etkin kullanım veya satın alma ile aynı sonuç sayılmaz."]
   ],
   "sources": [
     ["GOV UK form yapısı", "https://www.gov.uk/service-manual/design/form-structure", "Her sorunun amacı ve kimlere sorulacağı belirlenmeli; ilgisiz sorular dallanmayla kaldırılmalı."],

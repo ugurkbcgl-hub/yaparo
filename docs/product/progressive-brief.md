@@ -41,7 +41,7 @@ continue to block fundraising regardless of a selected event business category.
 
 The complete desired first-stage design is
 [first-stage-question-bank.json](first-stage-question-bank.json):9 purpose banks,
-recommended outcome choices, purpose-specific questions/answers and13 outcome
+recommended outcome choices, purpose-specific questions/answers and14 outcome
 extensions. This is authored product design informed by official form/objective
 guidance, not an imported platform rulebook or a fully implemented runtime catalog.
 Remaining UI work includes separately typed event date/location, job role/work

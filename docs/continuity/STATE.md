@@ -28,9 +28,10 @@ confirmed the requested file covers the WHOLE first stage: two choices plus each
 route's short form. Official GOV.UK/NHS form guidance, Google Ads objectives,
 LinkedIn job guidelines and VGM help informed owned design, not copied schemas.
 Canonical docs/product/first-stage-question-bank.json contains9 banks with
-purpose-specific questions/answer sets, outcomes,13 outcome additions and sources.
+purpose-specific questions/answer sets, outcomes,14 outcome additions and sources.
 Word output: C:\Users\ugrkb\OneDrive\Masaüstü\Yaparo Araştırma\Yaparo_Ilk_Asama_Soru_Bankasi.docx
-All9 rendered pages viewed; final QA %TEMP%/yaparo-question-bank-final. First render
+All9 rendered pages viewed; final QA %TEMP%/yaparo-question-bank-delivery. Unchanged
+pages1–7 matched viewed images; final changed outcome/source pages reviewed. First render
 needed local LibreOffice PATH; a subprocess text-decoding warning occurred but
 PDF/all9 PNGs were produced and reviewed. Source research files unchanged.
 
