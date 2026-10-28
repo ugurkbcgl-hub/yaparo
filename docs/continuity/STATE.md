@@ -20,6 +20,16 @@ Branch codex/unified-journey-prototype; PR369 OPEN at verification.
 Predecessor72c89c5 full CI40707898330 SUCCESS verified live. This complete-bank
 package needs new CI after push. No deployment, DB migration or account action.
 
+Complete-bank commit9710dc1 CI40732927463: owned-form checks SUCCESS; later Django
+step failed on an existing oversized-package browser fixture. Its intentional
+stream cancellation made response.body() unavailable to Playwright. Test-only
+follow-up witnesses fulfilled byte length/hash headers for that oversized fixture;
+small fixtures retain full-body hashing and every rejection/download assertion.
+Production JS and size guard unchanged. Focused test passed3.361s in a fresh
+in-memory SQLite rehearsal; no local app/PostgreSQL data accessed. Fresh full
+PostgreSQL CI remains required after the follow-up push; do not bypass or merge
+on the failed run.
+
 ## Completed first-stage package
 
 Owned schema first-stage-bank.js, UI first-stage-ui.js/CSS, integration bridge.

@@ -390,9 +390,16 @@ class HostedAdBrowserTests(SavedTrialsFixture, LiveServerTestCase):
 
                     def corrupt_snapshot(route, request, payload=body):
                         intercepted.append(request.url)
+                        encoded = payload.encode("utf-8")
                         route.fulfill(
                             status=200,
                             content_type="application/json",
+                            headers={
+                                "Content-Length": str(len(encoded)),
+                                "X-Yaparo-Test-Payload-SHA256": sha256(
+                                    encoded
+                                ).hexdigest(),
+                            },
                             body=payload,
                         )
 
@@ -404,10 +411,24 @@ class HostedAdBrowserTests(SavedTrialsFixture, LiveServerTestCase):
                             page.locator("#ad-package").click()
                         response = response_event.value
                         self.assertEqual(intercepted, [pattern])
+                        self.assertEqual(response.status, 200)
                         self.assertEqual(
-                            sha256(response.body()).hexdigest(),
+                            response.headers["x-yaparo-test-payload-sha256"],
                             sha256(body.encode("utf-8")).hexdigest(),
                         )
+                        self.assertEqual(
+                            int(response.headers["content-length"]),
+                            len(body.encode("utf-8")),
+                        )
+                        # The size guard cancels this stream intentionally. Chromium
+                        # may discard an aborted body before Playwright can read it.
+                        # Keep header/interception witnesses for that exact payload;
+                        # smaller fixtures additionally witness the complete body.
+                        if label != "oversized":
+                            self.assertEqual(
+                                sha256(response.body()).hexdigest(),
+                                sha256(body.encode("utf-8")).hexdigest(),
+                            )
                         expect(page.locator("#package-status")).to_contain_text(
                             "Paket doğrulanamadı"
                         )
