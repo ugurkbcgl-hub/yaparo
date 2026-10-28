@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 21:18 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 21:29 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -15,10 +15,13 @@ Download/export remains undecided.
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/first-stage-plan-outcomes, based on origin/main0930ca8.
-Prior PR369 merged20:52 Istanbul; required CI40735090819 SUCCESS reverified.
-Current outcome package is being prepared for its feature PR; no current CI or
-merge claimed yet. Earlier local handoff945a0e6 is included with this package.
+PR370 MERGED at2026-10-28 21:28 Europe/Istanbul; squash949872f on main.
+Reviewed headcd274ca; required CI40744077661 SUCCESS including all11 new-home
+browser journeys, legacy19, full PostgreSQL suite and application browser E2E.
+Exact-head guarded squash merge used; no checks bypassed. Prior PR369 remains merged.
+Local checkout is now codex/owned-review-summary, based on origin/main949872f,
+with upstream unset. Only this verified handoff is committed locally; include it
+with the next meaningful package, not as a standalone documentation PR.
 No deployment, DB migration, credential or real account action.
 
 ## Completed outcome package
@@ -46,7 +49,9 @@ remain held. Default8014 changed; legacy.html and V2 catalogs unchanged.
 Pure outcome contract passed46 paths/138 bound authored concepts; malformed/unknown
 snapshots fail closed, exact endpoint distinctions/signature invalidation/source
 bytes checked. First-stage9/46 and production contract tests passed. JS syntax,
-configured Ruff and git diff --check passed.
+configured Ruff format/lint and git diff --check passed. Initial CI40743758048
+stopped only at formatter check for the new test file. Formatting corrected in
+cd274ca; the fresh full required run40744077661 passed before merge.
 
 Default full-app10 browser tests passed18.931s after the single-source paid mapping
 fix (%TEMP%/yaparo-first-stage-h37sa11v). Additional community paid-registration
