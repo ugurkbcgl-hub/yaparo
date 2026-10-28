@@ -45,12 +45,16 @@ class PlanCheck(FirstStageCheck):
     def test_plan_same_pair_brief_edit_preserves_manual_bounds(self):
         self.ready_paid()
         self.page.locator('#step-nav [data-step="0"]').click()
-        self.field("promote_name").fill("Sentetik güncel isim")
+        self.field("promote_name").fill("Ö" * 140)
         self.submit()
         self.assertEqual(self.page.locator("#budget").input_value(), "3000")
         self.assertEqual(self.page.locator("#geo-mode").input_value(), "country")
         self.assertEqual(self.page.locator("#start").input_value(), "2026-11-01")
         self.assertEqual(self.page.locator("#plan-end").input_value(), "2026-11-07")
+        self.page.set_viewport_size({"width": 390, "height": 844})
+        self.assertLessEqual(
+            self.page.evaluate("document.documentElement.scrollWidth"), 390
+        )
 
     def test_plan_percentages_selection_reserve_and_stale_guards(self):
         self.ready_paid()
