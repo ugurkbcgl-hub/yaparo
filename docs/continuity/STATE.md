@@ -1,96 +1,68 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 20:53 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 21:18 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
-Owner explicitly authorized ALL first-stage question banks from the reviewed
-9-page Word/JSON design: two choices → purpose/outcome-specific typed short form.
-Default8014 now implements9 intents and46 compatible paths. Owned-core ADR0040
-and plan-first ADR0072 remain. Local synthetic only; real customer/account/spend/
-publishing/production gates closed. Usage monitoring disabled. Reviewed green PRs
-may merge; no direct main push. Owner manages OpenRouter balance; no new paid
-service/recharge. Download/export remains undecided.
+All9 first-stage banks/46 routes are implemented. Current slice connects exact
+outcomes to planning/content/review, with owned-core ADR0040 and plan-first ADR0072
+retained. Local synthetic only; real customer/account/spend/publishing/production
+gates closed. Usage monitoring disabled. Reviewed green PRs may merge; no direct
+main push. Owner manages OpenRouter balance; no new paid service/recharge.
+Download/export remains undecided.
 
 ## Repository
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-PR369 MERGED at2026-10-28 20:52 Europe/Istanbul, squash0930ca8 on main.
-Reviewed head6bfafec full PostgreSQL CI40735090819 SUCCESS verified, including
-Django and browser E2E. Exact-head guarded merge used; no checks bypassed.
-Local checkout now codex/first-stage-plan-outcomes, based on origin/main0930ca8.
-Only this verified handoff is committed locally on the new branch; no new product
-change or standalone documentation PR. Push it with the next meaningful package.
-No deployment, DB migration or account action was performed.
+Branch codex/first-stage-plan-outcomes, based on origin/main0930ca8.
+Prior PR369 merged20:52 Istanbul; required CI40735090819 SUCCESS reverified.
+Current outcome package is being prepared for its feature PR; no current CI or
+merge claimed yet. Earlier local handoff945a0e6 is included with this package.
+No deployment, DB migration, credential or real account action.
 
-Complete-bank commit9710dc1 CI40732927463: owned-form checks SUCCESS; later Django
-step failed on an existing oversized-package browser fixture. Its intentional
-stream cancellation made response.body() unavailable to Playwright. Test-only
-follow-up witnesses fulfilled byte length/hash headers for that oversized fixture;
-small fixtures retain full-body hashing and every rejection/download assertion.
-Production JS and size guard unchanged. Focused test passed3.361s in a fresh
-in-memory SQLite rehearsal; no local app/PostgreSQL data accessed. The fresh full
-PostgreSQL CI40735090819 then passed before merge. The earlier failed run was
-not bypassed; production JS/size enforcement and rejection checks remain intact.
+## Completed outcome package
 
-## Completed first-stage package
+outcome-contract.js resolves every accepted pair into exact CTA, KPI label and
+typed destination, full canonical immutable snapshot binding and3 distinct authored
+local concepts. This is not real AI, platform approval or performance measurement.
+Para bağışı, malzeme desteği, gönüllü başvurusu, kayıt/bilet, satınalma/ziyaret,
+email/social/phone and subscription/follow/share retain their meanings.
 
-Owned schema first-stage-bank.js, UI first-stage-ui.js/CSS, integration bridge.
-All9 accepted design intents/outcomes retained; source data.js and fingerprinted
-V2 catalogs unchanged. Separate typed fields cover:
-- event mode/date/time/timezone/location, ticket/registration and participation;
-- job role/type/model/location/skills/application and deadlines;
-- fundraising organizer/purpose/permit declaration, money/currency/target,
-  materials/delivery and volunteer task/time/application;
-- all other design banks and14 outcome additions with relevant endpoint types.
+Bridge/app preserve firstStage, outcome and destination through concepts,
+alternatives/helper/editor/history, adaptation and review. Source/format changes
+invalidate old adaptations; stale helper changes refuse to mix a new brief into
+an old card. Paid source action/goal now use the same conservative contract
+projection. Community registration cannot become an event-registration campaign.
 
-Parent changes prune hidden values to fixed point; explicit risk stays across pair
-changes. Required/date/calendar/order/time/number/currency/URL/phone/email/address-
-or-map/manual-answer validation is enforced. Unknown pairs/enums/snapshot versions
-fail closed. No real document upload or bank-account intake. Permit/risk answers
-are declarations, never verification. State remains in tab memory.
-
-Main home8014 mounts the owned first stage. Pair collapses to editable summary;
-optional questions disclose separately. Full snapshot is brief.firstStage, with
-literal summary and history/editor re-entry; edits invalidate old plan/content.
-Examples/helper proposals now enter owned snapshots rather than hidden legacy form.
-Legacy prototype retained at /legacy.html for checks; /v2.html remains separate.
-
-Paid plan business/sector is explicitly selected in step2, never inferred. Mapping
-holds refuse unmapped email/social messaging, offline purchase→visit substitution,
-unbound outcomes and fallback CTAs. Source hidden action list is refilled before
-projection. Positive paid authored allocation and organic full flow both tested.
-All46 FIRST-stage paths work; not every new outcome has a later plan/content
-adapter. Content-only production and undecided usage resolution remain later work.
-This is not completion of AI/platform/production or launch readiness.
+Organic routes proceed without a paid mapping; content_only chooses independent
+text/image layout drafts with no channel allocation. Unsure usage needs an explicit
+choice. Missing custom/new endpoints and measurement/permit/account requirements
+remain visibly unverified; publication stays closed. Unsupported paid mappings
+remain held. Default8014 changed; legacy.html and V2 catalogs unchanged.
 
 ## Verification actually run
 
-Pure model tests: all9 banks/46 compatible typed fixture completions, canonical
-design coverage, blank/unknown refusal, hidden pruning, zero, malformed multi,
-date/end ordering, URLcredentials/protocol/whitespace, phone/email and location
-constraints passed. Syntax, configured Ruff format/lint and diff checks passed.
+Pure outcome contract passed46 paths/138 bound authored concepts; malformed/unknown
+snapshots fail closed, exact endpoint distinctions/signature invalidation/source
+bytes checked. First-stage9/46 and production contract tests passed. JS syntax,
+configured Ruff and git diff --check passed.
 
-Default full-app8 browser tests passed13.530s:
-%TEMP%/yaparo-first-stage-4csmamjb. Includes all46 pair routes/domain exclusions,
-required/errors/focus, risk persistence, donation endpoint/target pruning,
-event date/location, independent hiring controls, literal review/history,
-organic full flow, positive paid classification+allocation and edit invalidation,
-unmapped email/volunteer hold. No page errors/outbound calls in the isolated runs.
+Default full-app10 browser tests passed18.931s after the single-source paid mapping
+fix (%TEMP%/yaparo-first-stage-h37sa11v). Additional community paid-registration
+regression passed1.817s (%TEMP%/yaparo-first-stage-4of8q30e). Stale simplify regression
+passed2.203s before the final paid-mapping-only change. All isolated runs check no
+page errors/outbound calls. Legacy19 journeys passed35.434s, evidence
+%TEMP%/yaparo-decision-2qqit4ns. No application database was touched.
 
-Legacy19 journeys passed27.714s (%TEMP%/yaparo-decision-nji2q4t1). Focused mobile/
-keyboard visual rerun passed1.569s, %TEMP%/yaparo-first-stage-ere3rz1w. Desktop and
-390px donation/hiring images viewed, no horizontal overflow/cut fields found.
-Normalized screenshots scroll to top to avoid full-page sticky-position artifacts.
-IAB tool still unavailable; these are actual isolated test-browser images.
-Independent cross-review found mapping/hidden-action-list issues; fixed and
-regressions passed in parent verification.
+Desktop1440 and mobile390 material-support review screenshots viewed; no horizontal
+overflow. This is actual isolated Playwright browser evidence, not a manual IAB
+pass. Latest mobile evidence: yaparo-first-stage-h37sa11v/owned-materials-review-mobile.png.
+Independent review found stale helper mixing and community/register taxonomy
+substitution; both corrected and regression-tested.
 
-Actual8014 server restarted after checking its exact command. HTTP / and all4new
-assets returned200. Source Word/research files unchanged this turn. Initial design
-Word remains in Yaparo Araştırma/Yaparo_Ilk_Asama_Soru_Bankasi.docx; current runtime
-status is in PROJECT/ROADMAP/progressive-brief.md and design JSON runtime metadata.
+Actual8014 server restarted after verifying its exact process command; new
+/outcome-contract.js returns HTTP200. Old8013/Django8002 left alone.
 
 ## Preserved capabilities and protected work
 
@@ -109,6 +81,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Map the newly captured stage1 outcomes into the later plan/content contract
-explicitly, starting with donation/material/volunteer
-semantics and preserving source/account/forecast/production gates.
+Simplify the plan/content/review presentation for the owned routes: show concise
+outcome/destination/requirements summaries and expand full answers on demand,
+then review desktop/mobile without changing accepted fields or launch gates.

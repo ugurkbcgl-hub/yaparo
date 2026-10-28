@@ -34,11 +34,20 @@ The bridge never infers source business/sector from these answers. Explicit
 classification, when needed for the paid authored simulation, is collected in
 step2. No known mapping or no explicit classification means no allocation. Email
 and social messaging are never relabeled as WhatsApp; purchase is not relabeled
-as a store visit. Newly introduced outcomes with no old plan/content mapping are
-accepted by stage1 and explicitly held later, instead of generating a fallback
-CTA. Content-only and undecided usage are collected correctly but their later
-format/decision routes remain separate work. This is completion of stage1, not
-completion of platform/production/launch integrations.
+as a store visit. The owned outcome contract now covers all46 routes with exact
+CTA, KPI and typed destination, full canonical snapshot binding and three authored
+local concepts. No short hash is used for binding and no cryptographic claim is
+made. Concept revisions, alternatives and helper edits preserve outcome/destination;
+source or format changes invalidate adaptations. Review shows the literal form and
+unverified measurement/permission requirements. No KPI value or forecast is invented.
+
+Organic routes can continue without a paid-taxonomy projection. Content-only lets
+the user choose independent text/image layout drafts without an organic channel;
+undecided usage requires an explicit choice before continuing. Missing custom/new
+endpoints stay unverified and visible; none authorize publication. Unsupported paid
+mappings remain held without an allocation. The old paid source classification and
+policy gates are unchanged. This completes local outcome-to-content UX, not real
+AI, campaign persistence or platform/production/launch integration.
 
 ## Previous context prototype retained for regression
 

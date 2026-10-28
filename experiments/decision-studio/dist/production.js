@@ -35,7 +35,7 @@
     if(!['paid','organic','both'].includes(options.mode))throw new Error('Çalışma türünü seç.');
     const videoAllowed=options.videoAllowed===true,videoAvailable=options.videoAvailable===true;
     const destinations=[...new Set(options.organicPlatforms||[])].sort();
-    const selected=options.mode==='organic'?[]:(options.plan?.rows||[]).filter(r=>!r.owned&&r.channel?.tier!=='non_paid_recommendation'&&Number.isFinite(r.amount)&&r.amount>0).map(r=>({id:r.channel.id,amount:r.amount})).sort((a,b)=>a.id.localeCompare(b.id));
+    const selected=options.mode==='organic'||options.contentOnly?[]:(options.plan?.rows||[]).filter(r=>!r.owned&&r.channel?.tier!=='non_paid_recommendation'&&Number.isFinite(r.amount)&&r.amount>0).map(r=>({id:r.channel.id,amount:r.amount})).sort((a,b)=>a.id.localeCompare(b.id));
     const requirements=[];
     function add(channelId,items,kind){
       for(const [key,placement,medium,purpose] of items){
@@ -48,16 +48,20 @@
       add(row.id,recipes[row.id],'paid');
       if(row.id==='meta_social'&&videoAllowed&&videoAvailable)add(row.id,[['reels','Instagram / Facebook Reels','video','Seçilen ortak fikrin hareketli uyarlaması; video render bağlı değil']],'paid');
     });
-    if(options.mode!=='paid')destinations.forEach(id=>add(id,organic[id]||[['unknown','Tanımsız organik hedef','task','Bu hedef için üretim reçetesi yok']],'organic'));
-    const signature=JSON.stringify({version,mode:options.mode,selected,destinations:options.mode==='paid'?[]:destinations,videoAllowed,videoAvailable});
+    if(options.contentOnly){
+      for(const format of [...new Set(options.formats||[])].sort()){
+        if(['text','image'].includes(format))add('independent',[[format,format==='text'?'Kanaldan bağımsız metin':'Kanaldan bağımsız görsel yerleşimi',format,'Seçilen amaç ve aksiyon için içerik taslağı; yayın alanı belirlenmedi']],'content_only');
+      }
+    }else if(options.mode!=='paid')destinations.forEach(id=>add(id,organic[id]||[['unknown','Tanımsız organik hedef','task','Bu hedef için üretim reçetesi yok']],'organic'));
+    const signature=JSON.stringify({version,mode:options.mode,selected,destinations:options.mode==='paid'||options.contentOnly?[]:destinations,contentOnly:options.contentOnly===true,formats:options.contentOnly?[...new Set(options.formats||[])].filter(f=>['text','image'].includes(f)).sort():[],outcomeSignature:options.outcomeSignature||null,videoAllowed,videoAvailable});
     const blocked=requirements.filter(r=>r.status!=='preview_ready').length;
     return {version,signature,requirements,ready:requirements.length>0&&blocked===0,blocked,disclaimer,publishable:false};
   }
   function adapt(core,requirements){
     if(!core||typeof core.id!=='string'||!Number.isInteger(core.revision)||core.revision<1)throw new Error('Seçilmiş yaratıcı fikir ve revizyonu gerekli.');
     return requirements.filter(r=>r.status==='preview_ready'&&['text','image'].includes(r.medium)).map(r=>{
-      const common={id:`${r.id}:${core.id}:r${core.revision}`,requirementId:r.id,channelId:r.channelId,placement:r.placement,medium:r.medium,status:'preview_ready',coreId:core.id,coreRevision:core.revision,quality:'authored_demo',publishable:false};
-      if(r.medium==='text')return {...common,title:core.title||'',headlines:[core.title||'',core.angle||'',core.cta||''],descriptions:[core.message||'',`${core.cta||''} · ${r.purpose}`],destination:null,notice:'Arama metni taslağı; yönlendirme, uzunluk ve iddialar ayrıca doğrulanmalı. Görsel üretilmez.'};
+      const common={id:`${r.id}:${core.id}:r${core.revision}`,requirementId:r.id,channelId:r.channelId,placement:r.placement,medium:r.medium,status:'preview_ready',coreId:core.id,coreRevision:core.revision,quality:'authored_demo',publishable:false,...(core.outcomeSignature?{outcomeSignature:core.outcomeSignature,outcome:core.outcome,kpi:core.kpi,destination:core.destination}: {})};
+      if(r.medium==='text')return {...common,title:core.title||'',headlines:[core.title||'',core.angle||'',core.cta||''],descriptions:[core.message||'',`${core.cta||''} · ${r.purpose}`],destination:core.destination||null,notice:'Metin taslağı; yönlendirme, uzunluk ve iddialar ayrıca doğrulanmalı. Görsel üretilmez.'};
       return {...common,title:core.title||'',message:core.message||'',caption:`${core.message||''} ${core.cta||''}`.trim(),cta:core.cta||'',theme:core.theme,kind:core.kind,x:core.x,y:core.y,notice:'Ortak fikirden hazırlanmış görsel yerleşim örneği; kanal şartnamesi doğrulanmadı.'};
     });
   }
