@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-28 09:49 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-28 09:55 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -19,8 +19,10 @@ remains undecided/deferred. Preserve private ledger/TEST/account history.
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
 Branch codex/unified-journey-prototype; PR369 OPEN.
-Last verified committed baseline01a77b4, CI40534250684 SUCCESS. The current paired
-entry revision requires its own CI after push. No deployment or DB migration.
+Functional revision1499677 pushed. Its studio step in CI40646592142 SUCCESS:
+14browser journeys/8source tests and pure contracts passed; full CI still running
+at this snapshot. This documentation update follows that code revision. Prior
+baseline01a77b4 CI40534250684 SUCCESS. No deployment or DB migration.
 
 ## Current change: intent + response before context
 
@@ -42,12 +44,16 @@ or preparation, never verification. Typed date/finance/permit forms and detailed
 pair-specific refinement remain open. See docs/product/progressive-brief.md.
 
 Local verification: JavaScript syntax, engine/brief/production/simulation contracts,
-Ruff with apps/web/pyproject.toml config, format and diff checks passed. Browser
-journeys updated for card entry, detail preservation, subtype branches, prior-plan
-invalidation, manual notes and history; new execution/CI not yet verified here.
-Previous local browser test attempt timed out and was stopped; IAB reported local
-browser use disabled in Work settings. Do not report visual verification or14
-updated browser journeys as passed until actual results are checked. No provider,
+Ruff with apps/web/pyproject.toml config, format and diff checks passed. CI studio
+step passed14browser journeys/8source tests, including card entry, keyboard focus,
+detail preservation, subtype branches, prior-plan invalidation, manual notes and
+history. Independent source review found state/validation/restore issues and focus
+loss; corrected. Initial CI40646358215 passed13/14browser journeys but found the
+internal select's CSS-only hiding; native hidden corrected it in1499677. Local
+HTTP200 verifies updated8014 files; server session2860 is running at this snapshot.
+Local visual review remains unverified: IAB reported local browser use disabled
+in Work settings. Earlier local browser test attempt timed out and was stopped.
+No provider,
 account, secret, upload, paid service, migration, deployment or publish action.
 
 ## Preserved previous capabilities
@@ -79,6 +85,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Finish PR369 verification for the paired-intent entry, then visually review the
-relevant forms on8014 and refine the remaining typed context fields. Keep real
+Visually review the paired-intent entry and relevant forms on8014, then refine
+the remaining typed context fields. Verify the latest PR369 CI before merging. Keep real
 AI/account/forecast/spend/launch gates closed.
