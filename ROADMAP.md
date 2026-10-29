@@ -1,3 +1,16 @@
+## Local business-fit budget preview — 29 October 2026
+
+Implemented local8014 slice: optional media ceiling, separate result deadline,
+incremental period capacity, explicit synthetic comparison, finite sample scenario
+cards, separate cost totals and conditional cash declarations/filtering. Only
+purchase/ticket paths use declared unit contribution; no upstream action is a sale.
+Pure Python economics/shared-resource declarations are also implemented, separately
+from the UI calculator. No actual forecast, persistence, shared reservation,
+delivery cash timing or provider/account rollout. See
+[ADR0077](docs/adr/0077-synthetic-business-budget-comparison.md).
+Next: bind accepted discovery/economics and qualified evidence to a trusted,
+versioned candidate service before replacing local sample calculations.
+
 # Yaparo roadmap
 
 ## Budget discovery planning update — 29 October 2026

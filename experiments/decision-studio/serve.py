@@ -10,6 +10,7 @@ from sources import SourceService
 
 ROOT = Path(__file__).resolve().parent / "dist"
 ASSETS = {
+    "/budget-planner.js": ("budget-planner.js", "text/javascript; charset=utf-8"),
     "/plan-summary.js": ("plan-summary.js", "text/javascript; charset=utf-8"),
     "/plan-ui.js": ("plan-ui.js", "text/javascript; charset=utf-8"),
     "/plan-ui.css": ("plan-ui.css", "text/css; charset=utf-8"),

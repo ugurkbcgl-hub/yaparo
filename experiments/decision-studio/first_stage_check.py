@@ -314,6 +314,7 @@ class FirstStageCheck(unittest.TestCase):
         self.fill_remaining(mode="paid")
         self.field("action_url").fill("https://ornek.example/ziyaret")
         self.submit()
+        self.plan_basics()
         self.page.locator("#recommend").click()
         current = self.snapshot()["plan"]
         self.assertEqual(current["input"]["goal"], "traffic")
@@ -326,6 +327,7 @@ class FirstStageCheck(unittest.TestCase):
         )
         self.field("risk").select_option("health")
         self.submit()
+        self.plan_basics()
         self.page.locator("#recommend").click()
         self.assertEqual(self.snapshot()["plan"]["allocated"], 0)
         self.assertIn("health", self.snapshot()["plan"]["analysis"]["risks"])
@@ -333,9 +335,22 @@ class FirstStageCheck(unittest.TestCase):
 
     def plan_basics(self):
         self.page.locator("#geo-mode").select_option("country")
-        self.page.locator("#budget").fill("3000")
         self.page.locator("#start").fill("2026-11-01")
         self.page.locator("#plan-end").fill("2026-11-07")
+        self.page.locator("#plan-result-deadline").fill("2026-11-14")
+        self.page.locator("#plan-media-ceiling").fill("3000")
+        self.page.locator("#plan-period-capacity").fill("100")
+        if self.page.locator("#plan-contribution").is_visible():
+            self.page.locator("#plan-contribution").fill("500")
+        if not self.page.locator("#plan-production-cost").is_visible():
+            self.page.get_by_text(
+                "Üretim ve hizmet maliyetleri · biliyorsan ekle", exact=True
+            ).click()
+        self.page.locator("#plan-production-cost").fill("0")
+        self.page.locator("#plan-service-cost").fill("0")
+        self.page.locator("#plan-evidence").select_option("synthetic")
+        self.page.locator("#budget-compare").click()
+        self.page.locator('[data-media-minor="300000"]').click()
 
     def test_every_pair_has_own_form_and_no_cross_bank_fields(self):
         intents = self.page.evaluate("YaparoFirstStage.intents()")

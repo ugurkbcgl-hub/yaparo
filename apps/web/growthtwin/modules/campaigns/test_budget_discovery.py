@@ -4,6 +4,7 @@ import json
 from copy import deepcopy
 from dataclasses import MISSING, FrozenInstanceError, fields, replace
 from datetime import date, datetime, timedelta, timezone
+from decimal import Decimal
 from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
@@ -16,6 +17,7 @@ from growthtwin.modules.campaigns.recommendations.contracts import (
     DeclaredBrief,
     OwnerScope,
     PlanBounds,
+    _digest,
 )
 from growthtwin.modules.campaigns.recommendations.discovery import (
     BudgetDiscoveryDraft,
@@ -27,6 +29,18 @@ from growthtwin.modules.campaigns.recommendations.discovery import (
     record_cash_availability,
     revise_discovery,
     select_scenario,
+)
+from growthtwin.modules.campaigns.recommendations.economics import (
+    SCHEMA as ECONOMICS_SCHEMA,
+)
+from growthtwin.modules.campaigns.recommendations.economics import (
+    CapacityBasis,
+    CapacityEnvelope,
+    CapacityObservation,
+    CapacityResource,
+    ResourceIdentity,
+    TaxBasis,
+    UnitEconomics,
 )
 from growthtwin.modules.campaigns.recommendations.validation import AcceptedBrief
 
@@ -125,6 +139,78 @@ class BudgetDiscoveryTests(TestCase):
         )
         values.update(overrides)
         return revise_discovery(draft, **values)
+
+    def test_optional_business_binding_is_strict_and_default_remains_unresolved(self):
+        self.assertIsNone(self.context.business_inputs_binding)
+        for invalid in (True, 123, "", "0" * 63, "0" * 65, "g" * 64, "A" * 64):
+            with self.subTest(invalid=invalid), self.assertRaises(ContractError):
+                replace(self.context, business_inputs_binding=invalid)
+        self.assertEqual(
+            replace(
+                self.context, business_inputs_binding="a" * 64
+            ).business_inputs_binding,
+            "a" * 64,
+        )
+
+    def test_economic_or_capacity_revision_invalidates_selection_and_cash(self):
+        provenance = dict(
+            source="synthetic_declaration",
+            revision=1,
+            observed_at=self.now,
+            expires_at=self.now + timedelta(hours=1),
+        )
+        economics = UnitEconomics(
+            "completed_order",
+            "TRY",
+            TaxBasis.EXCLUSIVE,
+            10000,
+            (),
+            **provenance,
+            costs_complete=True,
+        )
+        observation = CapacityObservation(
+            self.context.flight_start,
+            self.context.flight_end,
+            CapacityBasis.ADVERTISABLE_INCREMENTAL,
+            Decimal(10),
+            (),
+            **provenance,
+            deductions_complete=True,
+        )
+        identity = ResourceIdentity(
+            2, "shop", "slots", "appointments", "Europe/Istanbul"
+        )
+        envelope = CapacityEnvelope(2, (CapacityResource(identity, observation),))
+        combined = _digest((ECONOMICS_SCHEMA, economics.binding, envelope.binding))
+        context = replace(self.context, business_inputs_binding=combined)
+        confirmed = self.confirmed(self.selected(replace(self.draft, context=context)))
+        self.assertEqual(
+            confirmed.stage_at(self.now + timedelta(minutes=2)), "cash_confirmed"
+        )
+        changed_economics = replace(economics, revision=2)
+        changed_resource = replace(
+            envelope.resources[0], period=replace(observation, revision=2)
+        )
+        changed_envelope = replace(envelope, resources=(changed_resource,))
+        revised_bindings = (
+            _digest((ECONOMICS_SCHEMA, changed_economics.binding, envelope.binding)),
+            _digest((ECONOMICS_SCHEMA, economics.binding, changed_envelope.binding)),
+            None,
+        )
+        for binding in revised_bindings:
+            with self.subTest(binding=binding):
+                revised = self.revised(
+                    confirmed, context=replace(context, business_inputs_binding=binding)
+                )
+                self.assertNotEqual(revised.context_binding, confirmed.context_binding)
+                self.assertIsNone(revised.selection)
+                self.assertIsNone(revised.cash_fit)
+                self.assertEqual(revised.stage_at(self.now), "discovery")
+                self.assertEqual(
+                    revised.context_revision, confirmed.context_revision + 1
+                )
+                with self.assertRaises(ContractError):
+                    self.selected(revised, scenario=confirmed.selection)
 
     def test_unknown_zero_positive_ceiling_remain_distinct(self):
         unknown = self.draft

@@ -1,3 +1,16 @@
+## Local business-fit budget preview — 29 October 2026
+
+Implemented local8014 slice: optional media ceiling, separate result deadline,
+incremental period capacity, explicit synthetic comparison, finite sample scenario
+cards, separate cost totals and conditional cash declarations/filtering. Only
+purchase/ticket paths use declared unit contribution; no upstream action is a sale.
+Pure Python economics/shared-resource declarations are also implemented, separately
+from the UI calculator. No actual forecast, persistence, shared reservation,
+delivery cash timing or provider/account rollout. See
+[ADR0077](docs/adr/0077-synthetic-business-budget-comparison.md).
+Next: bind accepted discovery/economics and qualified evidence to a trusted,
+versioned candidate service before replacing local sample calculations.
+
 # Yaparo project brief
 
 ## Business-fit budget planning decision — 29 October 2026
@@ -13,8 +26,9 @@ Owner approved implementation on29October2026. The first WP01 slice now adds a
 pure budget-optional discovery contract with separate context/state revisions,
 synthetic scenario selection and cash declaration/withdrawal. See
 [ADR0076](docs/adr/0076-budget-optional-discovery-contract.md).
-No numeric recommendation engine, shared capacity, durable save or UI connection
-is implemented yet. Existing PlanBounds and execution caps remain unchanged;
+At ADR0076 only, no numeric engine, shared capacity or UI was implemented.
+ADR0077 above adds the separate synthetic preview and pure capacity declarations;
+durable application integration is still pending. Existing PlanBounds and execution caps remain unchanged;
 cash confirmation is never publication or spending permission.
 
 ## Recommendation-engine research — 29 October 2026

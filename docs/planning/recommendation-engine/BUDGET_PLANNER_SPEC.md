@@ -1,3 +1,9 @@
+Uygulama güncellemesi29Ekim2026: [ADR0077](../../adr/0077-synthetic-business-budget-comparison.md)
+ile8014 üzerinde açıkça seçilen sentetik aday karşılaştırması, maliyet/nakit ve
+isteğe bağlı tavan ekranı eklendi. Saf Python ekonomi/ortak kaynak sözleşmeleri
+ayrı temel olarak hazır. Aşağıdaki hedef gerçek tahmin motoru, kalıcı sahiplik,
+rezervasyon ve nakit takvimi halen tamamlanmış değildir.
+
 # İşletmeye uygun bütçe ve anlık senaryo karşılaştırması
 
 Ürün kararı ve uygulama onayı:29Ekim2026, Europe/Istanbul. Mevcut araştırma, kabul

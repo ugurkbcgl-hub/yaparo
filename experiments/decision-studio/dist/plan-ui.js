@@ -10,7 +10,7 @@
   const snap=()=>studio.getSnapshot(), brief=()=>snap().firstStage, usage=()=>brief()?.answers.delivery_mode;
   const paid=()=>['paid','hybrid'].includes(usage());
   const summary=()=>brief()?window.YaparoFirstStage.summary(brief().intent,brief().outcome,brief().answers):[];
-  let lastBrief='', lastPair='', lastAudience='', lastPlan=null;
+  let lastBrief='', lastPair='', lastAudience='', lastPlan=null, budgetComparison=null, selectedBudget=null, cashConfirmed=false, compared=false, budgetBasis='', cashLimitMinor=null;
   document.body.classList.add('owned-planning');
   const form=$('plan-form'), controls=$('plan-controls'), results=$('plan-results');
   const heading=$('step-1').querySelector('.section-heading h1'), lead=$('step-1').querySelector('.lead');
@@ -29,8 +29,7 @@
   const audienceEmpty=node('option','Kitleyi seç');audienceEmpty.value='';$('audience').prepend(audienceEmpty);$('audience').value='';
   const audienceLabels={b2c_new:'Yeni müşteriler',b2c_existing:'Mevcut müşteriler',b2b_decision_makers:'İşletmelerde karar verenler',professionals_job_seekers:'Profesyoneller / iş arayanlar',young_18_24:'18–24 yaş yetişkinler',parents_families:'Ebeveynler / aileler',high_intent_searchers:'İlgili konuda arama yapanlar',local_nearby:'Yakındaki kişiler',broad_mass:'Genel kitle'};
   for(const option of $('audience').options)if(audienceLabels[option.value])option.textContent=audienceLabels[option.value];
-  const budgetBox=moveField('budget','Toplam reklam bütçesi (TL)');$('budget').value='';$('budget').min='1';$('budget').placeholder='Ayırmak istediğin toplam tutar';
-  const presets=node('div',undefined,'plan-presets');for(const amount of [1000,3000,5000])presets.append(button(`${amount.toLocaleString('tr-TR')} TL`,()=>{$('budget').value=amount;$('budget').dispatchEvent(new Event('input',{bubbles:true}));}));budgetBox.append(presets,node('small','Yalnız medya bütçesi. İçerik üretimi ve hizmet bedeli ayrıca gösterilir; bu demoda hesaplanmaz.'));
+  const budgetBox=moveField('budget','Seçilen senaryonun medya tutarı');$('budget').value='';$('budget').min='1';budgetBox.hidden=true;
   const startBox=moveField('start','Yayın başlangıcı');$('start').value='';
   const endBox=node('div',undefined,'plan-field'),endLabel=node('label','Yayın bitişi'),end=node('input');end.id='plan-end';end.type='date';end.required=true;endLabel.htmlFor=end.id;endBox.append(endLabel,end);fields.append(endBox);
   const datesNote=node('p',undefined,'plan-muted');datesNote.id='plan-date-note';bounds.append(datesNote);
@@ -41,16 +40,83 @@
   const coords=node('div',undefined,'plan-coordinates');
   for(const [id,label,min,max] of [['plan-latitude','Enlem',35,43],['plan-longitude','Boylam',25,45]]){const box=node('div'),l=node('label',label),input=node('input');input.id=id;input.type='number';input.step='0.00001';input.min=min;input.max=max;l.htmlFor=id;box.append(l,input);coords.append(box);}
   const precise=node('details');precise.id='plan-coordinate-details';precise.append(node('summary','Hassas konum için koordinat gir'),coords);radiusSection.append(precise,node('p','Harita seçimi yaklaşık konumdur; hassas merkez için koordinat girebilirsin. Daire Türkiye kara sınırıyla kesilir; gerçek platform hedeflemesi doğrulanmış sayılmaz.','plan-muted'));bounds.append(radiusSection);
-  const geoView=window.YaparoPlanGeo.mount(mapRoot,{onSelect:({lat,lon})=>{$('plan-latitude').value=lat;$('plan-longitude').value=lon;updateMap();studio.planChanged();updateFooter();}});
+  const geoView=window.YaparoPlanGeo.mount(mapRoot,{onSelect:({lat,lon})=>{$('plan-latitude').value=lat;$('plan-longitude').value=lon;updateMap();clearBudgetSelection();if(compared)compareBudgets();studio.planChanged();updateFooter();}});
   const retired=node('div');retired.hidden=true;retired.id='plan-retired-controls';controls.append(retired);
   retired.append($('owned-plan-context'),audienceBox);
   retired.append(moveField('measurement','Ölçüm hazırlığı',node('div')));
-  const economics=$('plan-controls').querySelector('.economics');economics.id='plan-economics';economics.classList.add('plan-card');
-  const economicFields=node('div',undefined,'field-pair four-fields');
-  for(const [id,label]of [['order-value','Ortalama sipariş değeri (TL)'],['margin','Katkı marjı (%)'],['cpa','Kabul edilebilir edinme maliyeti (TL)'],['capacity','Günlük kapasite']])moveField(id,label,economicFields);
-  const oldEcon=economics.querySelector('.details-inner');for(const child of [...oldEcon.children])retired.append(child);
-  const economicsChoice=node('label',undefined,'check-label'),economicsCheck=node('input');economicsCheck.id='plan-economics-enabled';economicsCheck.type='checkbox';economicsChoice.append(economicsCheck,document.createTextNode('Kapasite ve kârlılık sınırı eklemek istiyorum'));
-  const econInner=node('div',undefined,'details-inner');econInner.append(economicsChoice,economicFields);economics.replaceChildren(node('summary','Planı ayrıntılandır · isteğe bağlı'),econInner);
+  retired.append(budgetBox);
+  const economics=$('plan-controls').querySelector('.economics');economics.id='plan-economics';economics.classList.add('plan-card');economics.open=true;
+  for(const id of ['order-value','margin','cpa','capacity'])retired.append(moveField(id,id,node('div')));
+  for(const child of [...economics.children])retired.append(child);
+  const economicFields=node('div',undefined,'plan-fields');
+  economics.replaceChildren(node('summary','İşletmene uygun başlangıcı bulalım'),node('p','Bütçeni bilmen gerekmiyor. Yalnız bu çalışmanın karşılanabilir sınırlarını belirt.','plan-muted'),economicFields);
+  function budgetField(id,label,{type='number',note='',parent=economicFields,min='0'}={}){const box=node('div',undefined,'plan-field'),l=node('label',label),c=node('input');l.htmlFor=id;c.id=id;c.type=type;if(type==='number'){c.min=min;c.max='100000000';c.step='0.01';}box.append(l,c);if(note)box.append(node('small',note));parent.append(box);return {box,control:c};}
+  const deadlineField=budgetField('plan-result-deadline','Ne zamana kadar sonuç bekliyorsun?',{type:'date',note:'Yayın bitişinden farklı olabilir; uzun satış süresi varsa daha ileri bir tarih seçebilirsin.'});
+  const capacityField=budgetField('plan-period-capacity','Bu dönemde kaç ek hedef eylemi karşılayabilirsin?',{note:'Yayın döneminin tamamında, mevcut işler sonrası yalnız bu reklama ayırdığın ek kapasite. Bilmiyorsan boş bırak.'});capacityField.control.step='1';
+  const contributionField=budgetField('plan-contribution','Bir satıştan doğrudan giderler çıktıktan sonra ne kalıyor? (TL)',{note:'Ürün, komisyon ve teslim giderleri çıktıktan sonraki tutar; muhasebe net kârı değildir. Bilmiyorsan boş bırak.'});
+  const ceilingField=budgetField('plan-media-ceiling','Aşmamamızı istediğin reklam tutarı var mı? (TL)',{note:'İsteğe bağlı medya tavanı. Boş: birlikte hesaplayalım. 0: ücretli reklam istemiyorum. Üretim ve hizmet ayrıca gösterilir.'});
+  const costDetails=node('details',undefined,'budget-cost-details');costDetails.append(node('summary','Üretim ve hizmet maliyetleri · biliyorsan ekle'));
+  const costFields=node('div',undefined,'plan-fields');costDetails.append(costFields);economics.append(costDetails,node('p','Para birimi: TL. Bu prototipte beyan ettiğin tutarlar aynı kapsamda, vergiler dahil karşılaştırılır; vergi hesabı veya fiyat teklifi yapılmaz.','plan-muted'));
+  budgetField('plan-production-cost','Bu çalışma için toplam içerik üretimi (TL)',{parent:costFields,note:'Bilmiyorsan boş; ek bedel yoksa açıkça 0 yaz.'});
+  budgetField('plan-service-cost','Bu çalışma için toplam hizmet gideri (TL)',{parent:costFields,note:'Satış başına yukarıda düştüğün giderleri tekrar ekleme. Bilmiyorsan boş bırak.'});
+  const evidenceBox=node('div',undefined,'plan-field'),evidenceLabel=node('label','Karşılaştırma için veri');evidenceLabel.htmlFor='plan-evidence';const evidence=node('select');evidence.id='plan-evidence';for(const [value,text]of [['none','Gerçek tahmin verisi bağlı değil'],['synthetic','Hazırlanmış sayılarla işleyişi dene']]){const o=node('option',text);o.value=value;evidence.append(o);}evidenceBox.append(evidenceLabel,evidence,node('small','Örnek seçim gerçek platform verisi, AI sorgusu veya satış beklentisi değildir.'));economics.append(evidenceBox);
+  const compareButton=button('Bütçe seçeneklerini karşılaştır',()=>compareBudgets(true),'primary');compareButton.id='budget-compare';economics.append(compareButton);
+  const scenarioPanel=node('section',undefined,'plan-card budget-scenarios');scenarioPanel.id='budget-scenarios';scenarioPanel.setAttribute('aria-live','polite');results.prepend(scenarioPanel);
+  const cashPanel=node('section',undefined,'plan-card budget-cash');cashPanel.id='budget-cash';cashPanel.hidden=true;
+  cashPanel.append(node('h2','Bu tutar işletmeni zorlar mı?'),node('p','Bu yalnız nakit beyanıdır. Seçim veya teyit harcama ve yayın izni oluşturmaz.','plan-muted'));
+  const cashField=budgetField('plan-cash-available','Bu çalışmaya ayırabileceğin toplam nakit (TL)',{parent:cashPanel,note:'Mevcut yükümlülükler sonrası kullanılabilir tutar. Boş bırakabilirsin.'});
+  const cashActions=node('div',undefined,'budget-cash-actions');cashActions.append(button('Karşılayabilirim',confirmCash,'secondary'),button('Bu nakde uyan seçenekleri bul',()=>{const limit=amount('plan-cash-available');if(!Number.isSafeInteger(limit)||limit<0){cashStatus.textContent='Önce geçerli bir nakit tutarı belirt.';return;}cashLimitMinor=limit;compareBudgets(true);},'text-button'),button('Henüz emin değilim',()=>{cashConfirmed=false;cashField.control.value='';renderCash();},'text-button'));
+  const cashStatus=node('p',undefined,'plan-muted');cashStatus.id='plan-cash-status';cashStatus.setAttribute('role','status');cashPanel.append(cashActions,cashStatus);scenarioPanel.after(cashPanel);
+  const budgetInputs=['plan-result-deadline','plan-period-capacity','plan-contribution','plan-media-ceiling','plan-production-cost','plan-service-cost','plan-evidence'];
+  function isCommercial(){return ['purchase','ticket'].includes(brief()?.outcome);}
+  function amount(id){const c=$(id);return c.value.trim()===''?null:c.checkValidity()?Math.round(Number(c.value)*100):NaN;}
+  function comparisonInput(){return {mode:usage(),outcome:brief()?.outcome,commercial:isCommercial(),capacity:$('plan-period-capacity').value.trim()===''?null:Number($('plan-period-capacity').value),contributionMinor:isCommercial()?amount('plan-contribution'):null,ceilingMinor:amount('plan-media-ceiling'),cashMinor:cashLimitMinor,days:Number($('duration').value),evidence:evidence.value,productionMinor:amount('plan-production-cost'),serviceMinor:amount('plan-service-cost')};}
+  function currentBudgetBasis(){return JSON.stringify({brief:lastBrief,input:comparisonInput(),geo:[$('geo-mode').value,$('region').value,$('plan-latitude').value,$('plan-longitude').value,$('radius').value],dates:[$('start').value,end.value,$('plan-result-deadline').value],materials:[$('video').checked,$('video-allowed').checked,$('catalog').checked]});}
+  function clearBudgetSelection(){selectedBudget=null;cashConfirmed=false;$('budget').value='';cashField.control.value='';cashPanel.hidden=true;}
+  function resetBudget(){clearBudgetSelection();cashLimitMinor=null;budgetComparison=null;compared=false;budgetBasis='';for(const id of budgetInputs)$(id).value=id==='plan-evidence'?'none':'';renderBudgetComparison();}
+  function budgetContextIssue(){
+    if(!$('geo-mode').value)return 'Önce reklamın bölgesini seç.';
+    if($('geo-mode').value!=='country'&&$('geo-mode').value!=='radius'&&!$('region').value.trim())return 'Şehir veya bölgeyi yaz.';
+    if($('geo-mode').value==='radius'&&!updateMap()?.valid)return 'Türkiye içinde bir konum ve 1–800 km arasında mesafe seç.';
+    syncDates();if(!$('start').value||!end.value||!end.checkValidity()||!$('duration').value)return 'Yayın başlangıcı ve bitişini seç (en fazla 365 gün).';
+    if(!$('plan-result-deadline').value||!$('plan-result-deadline').checkValidity()||$('plan-result-deadline').value<$('start').value)return 'Sonuç beklediğin tarihi yayın başlangıcından önce olmayacak şekilde seç.';
+    for(const id of budgetInputs)if(!$(id).disabled&&!$(id).checkValidity())return 'Tutarları ve ek kapasiteyi geçerli, negatif olmayan değerlerle belirt.';
+    return '';
+  }
+  function compareBudgets(explicit=false){
+    if(!paid())return;if(explicit){compared=true;clearBudgetSelection();studio.planChanged();}
+    const problem=budgetContextIssue();
+    if(problem){budgetComparison={status:'missing',missing:[problem],candidates:[],reasons:[]};}
+    else try{budgetComparison=window.YaparoBudgetPlanner.compare(comparisonInput());}catch(error){budgetComparison={status:'missing',missing:[error.message],candidates:[],reasons:[]};}
+    budgetBasis=currentBudgetBasis();renderBudgetComparison();updateFooter();
+  }
+  function chooseBudget(candidate){
+    if(!budgetComparison||budgetBasis!==currentBudgetBasis()){compareBudgets(true);return;}
+    selectedBudget=candidate;cashConfirmed=false;cashField.control.value='';$('budget').value=String(candidate.mediaMinor/100);studio.planChanged();renderBudgetComparison();renderCash();$('recommend').click();updateFooter();
+  }
+  function renderBudgetComparison(){
+    scenarioPanel.replaceChildren(node('h2','İşletmene uygun bütçe seçenekleri'));
+    if(!budgetComparison){scenarioPanel.append(node('p','Bütçe girmeden başlayabilirsin. Bölge, dönem ve ek kapasiteyi tamamla; karşılaştırma için veri seç.','plan-muted'));return;}
+    if(budgetComparison.missing?.length){const list=node('ul',undefined,'budget-missing');for(const missing of budgetComparison.missing)list.append(node('li',missing));scenarioPanel.append(list);}
+    for(const reason of budgetComparison.reasons||[])scenarioPanel.append(node('p',reason,'plan-muted'));
+    if(!budgetComparison.candidates?.length){scenarioPanel.append(node('p',budgetComparison.status==='no_paid'?'Ücretli medya istemediğin için bütçe önerilmedi. Organik veya yalnız içerik yoluna ilk aşamadan geçebilirsin.':'Bu koşullarda güvenilir bir ücretli seçenek gösteremiyoruz. Eksikleri tamamla veya kapsamı değiştir.','plan-muted'));cashPanel.hidden=true;return;}
+    if(cashLimitMinor!==null){scenarioPanel.append(node('p',`Nakit sınırın: ${money(cashLimitMinor)} · bilinen kampanya toplamına göre süzüldü.`,'plan-muted'),button('Nakit sınırını kaldır',()=>{cashLimitMinor=null;compareBudgets(true);}));}
+    scenarioPanel.append(node('p','HAZIRLANMIŞ ÖRNEK · Gerçek reklam tahmini değildir. Sonlu örnekler; günlük yoğunluk, tahsilat ve yeni işi teslim etme nakdi doğrulanmadı.','budget-fixture-note'));
+    const cards=node('div',undefined,'budget-card-grid');
+    for(const candidate of budgetComparison.candidates){const card=node('article',undefined,'budget-option');card.dataset.scenario=candidate.id;card.classList.toggle('selected',selectedBudget?.id===candidate.id);card.append(node('h3',candidate.label),node('strong',money(candidate.mediaMinor),'budget-media'),node('p','Medya bütçesi','plan-muted'));
+      const facts=node('dl');for(const [label,value]of [['Kampanya toplamı',candidate.campaignCostMinor===null?'Maliyet bilgisi eksik':money(candidate.campaignCostMinor)],['Örnek sonuç',`${candidate.resultsLow}–${candidate.resultsHigh} ${candidate.resultUnit||'varsayımsal hedef eylem'}`],['Dönem ek kapasitesi',String(candidate.capacityLimit)],['Koşullu katkı',candidate.contributionLowMinor===null?'Hesaplanmadı':money(candidate.contributionLowMinor)]])facts.append(node('dt',label),node('dd',value));card.append(facts,node('p',candidate.reason,'plan-muted'));
+      const details=node('details');details.append(node('summary','Hesap dayanakları ve sınırlar'),node('p',candidate.evidenceLabel||'Sentetik örnek veriler','plan-muted'));const costs=node('dl');for(const [label,value]of [['Üretim',candidate.productionMinor===null?'Bilinmiyor':money(candidate.productionMinor)],['Hizmet',candidate.serviceMinor===null?'Bilinmiyor':money(candidate.serviceMinor)]])costs.append(node('dt',label),node('dd',value));details.append(costs);for(const text of candidate.assumptions||[])details.append(node('p',text,'plan-muted'));details.append(node('p','Gösterim, tıklama ve mesaj satış sayılmaz. Kanal dağılımı ayrı temsili hesaplanır; bu sonuçlar kanalların toplam tahmini değildir.','plan-muted'));card.append(details);
+      const choose=button(selectedBudget?.id===candidate.id?'Seçildi ✓':'Bu senaryoyla devam et',()=>chooseBudget(candidate),'secondary');choose.dataset.budgetScenario=candidate.id;choose.dataset.mediaMinor=String(candidate.mediaMinor);choose.setAttribute('aria-pressed',String(selectedBudget?.id===candidate.id));card.append(choose);cards.append(card);
+    }scenarioPanel.append(cards,node('p','Tutar seçimi harcama yetkisi değildir. Kanalları aşağıda düzenleyebilirsin; öneri kartları karşılaştırma örneği olarak kalır.','plan-muted'));
+  }
+  function renderCash(){
+    cashPanel.hidden=!selectedBudget;if(!selectedBudget)return;const need=selectedBudget.peakCashMinor,available=amount('plan-cash-available');
+    cashStatus.textContent=budgetBasis!==currentBudgetBasis()||snap().stale?'Planın koşulları değişti; önce bütçe seçimini ve dağılımı yenile. Önceki nakit teyidi geçersiz.':available!==null&&(!Number.isSafeInteger(available)||available<0)?'Geçerli, negatif olmayan bir nakit tutarı belirt.':need===null?'Üretim/hizmet giderleri eksik; toplam kampanya nakdi hesaplanamıyor. Teyit verilemez.':available===null?'Henüz nakit beyanı yok. Seçtiğin senaryo koşullu taslak olarak korunur.':available<need?`Beyan ettiğin nakit kampanya toplamının ${money(need-available)} altında. Daha küçük bir senaryo seçebilirsin.`:cashConfirmed?`Beyanına göre ${money(need)} kampanya gideri karşılanabilir. Teslim giderleri, tahsilat ve günlük kapasite hâlâ doğrulanmadı; yayın/harcama izni yok.`:'Tutar kampanya giderini karşılıyor. İstersen beyanını teyit et; bu banka veya ödeme doğrulaması değildir.';
+  }
+  function confirmCash(){const available=amount('plan-cash-available');cashConfirmed=!!selectedBudget&&budgetBasis===currentBudgetBasis()&&!snap().stale&&selectedBudget.peakCashMinor!==null&&Number.isSafeInteger(available)&&available>=selectedBudget.peakCashMinor;renderCash();}
+  // Cash declarations do not edit channel allocation. Keep the old generic form
+  // invalidator from treating a declaration as a new allocation request.
+  for(const eventName of ['input','change'])cashPanel.addEventListener(eventName,event=>{event.stopPropagation();cashConfirmed=false;renderCash();});
   const basis=node('section');basis.id='plan-analysis-basis';
   const dataDetails=node('details',undefined,'plan-card plan-data-details');dataDetails.id='plan-data-details';dataDetails.append(node('summary','Önerinin dayanakları ve hazırlık durumu'),basis,node('p','Bu yerel örnekte hesap, maliyet ve erişim verileri doğrulanmış değildir. Gerçek AI / reklam platformu sorgusu veya sonuç garantisi yok.','plan-muted'));
   if($('source-panel'))dataDetails.append($('source-panel'));results.append(dataDetails);
@@ -62,30 +128,34 @@
   const productionDetails=node('details',undefined,'plan-card plan-production-details');productionDetails.append(node('summary','İçerik ve yayın hazırlığı'));
   productionDetails.append($('material-controls'),$('plan-production'),$('owned-outcome-summary'));form.append(productionDetails);
   $('owned-plan-note').hidden=true;
-  const toolbar=results.querySelector('.decision-toolbar');toolbar.querySelector('strong').textContent='Bütçeni uygun kanallara paylaştıralım.';toolbar.querySelector('p').textContent='Yerel demo · gerçek erişim veya satış tahmini değil.';
+  const toolbar=results.querySelector('.decision-toolbar');toolbar.querySelector('strong').textContent='Seçtiğin senaryonun kanal dağılımı.';toolbar.querySelector('p').textContent='Yerel demo · gerçek erişim veya satış tahmini değil.';
   $('recommend').textContent='Dağılım öner';toolbar.append(node('small','Yeniden öneri, elle değiştirdiğin payları güncel seçimlere göre sıfırlar.'));
   const footer=form.querySelector('.form-footer');footer.classList.add('plan-footer');const footerSummary=node('p');footerSummary.id='plan-footer-summary';footer.prepend(footerSummary);form.append(footer);
   footer.querySelector('button[type="submit"]').textContent='İçeriklere devam et ↗';
   function roleAudience(){const s=brief();if(!s)return '';const f=window.YaparoFirstStage.fields(s.intent,s.outcome,s.answers).find(f=>f.role==='audience');return f?summary().find(r=>r.label===f.label)?.value||'':'';}
   function updateMap(){const selection={lat:Number($('plan-latitude').value),lon:Number($('plan-longitude').value),radius:Number($('radius').value)};return geoView.update($('plan-latitude').value&&$('plan-longitude').value&&$('radius').value?selection:null);}
-  function syncDates(){end.min=$('start').value;const start=Date.parse($('start').value),finish=Date.parse(end.value);end.setCustomValidity(Number.isFinite(start)&&Number.isFinite(finish)&&finish<start?'Bitiş başlangıçtan önce olamaz.':'');const days=Math.round((finish-start)/86400000)+1;$('duration').value=Number.isInteger(days)&&days>0?days:'';end.max=$('start').value?new Date(start+364*86400000).toISOString().slice(0,10):'';}
+  function syncDates(){deadlineField.control.min=$('start').value;end.min=$('start').value;const start=Date.parse($('start').value),finish=Date.parse(end.value);end.setCustomValidity(Number.isFinite(start)&&Number.isFinite(finish)&&finish<start?'Bitiş başlangıçtan önce olamaz.':'');const days=Math.round((finish-start)/86400000)+1;$('duration').value=Number.isInteger(days)&&days>0?days:'';end.max=$('start').value?new Date(start+364*86400000).toISOString().slice(0,10):'';}
   function updateFooter(){const stale=snap().stale;results.querySelector('.channel-section-heading h2').textContent=stale&&lastPlan?'Önceki dağılım · yeniden öner':'Planında yer alanlar';if(stale)for(const control of form.querySelectorAll('#recommended input,#other-channels input'))control.disabled=true;const date=$('start').value&&end.value?`${$('start').value} – ${end.value}`:'Tarih seçilmedi';const budget=paid()&&$('budget').value?money(Math.round(Number($('budget').value)*100)):paid()?'Bütçe seçilmedi':'Medya bütçesi yok';if(!paid()){footerSummary.textContent=usage()==='content_only'?'Kanaldan bağımsız içerik · medya bütçesi yok':usage()==='unsure'?'Önce kullanım yolunu seç.':'Kendi hesaplarında paylaşım · medya bütçesi yok';return;}footerSummary.textContent=`${budget} · ${$('geo-mode').value==='country'?'Türkiye geneli':$('geo-mode').value==='radius'&&$('plan-latitude').value?`${$('radius').value} km · seçilen konum`:$('region').value||'Bölge seçilmedi'} · ${paid()?date:'Ücretli kanal seçimi yok'}${lastPlan&&!snap().stale?' · '+lastPlan.rows.filter(r=>r.amount>0).length+' kanal':''}`;}
   function configure(){
-    const isPaid=paid(),mode=usage(),commerce=['promote','sell','lead'].includes(brief()?.intent);
-    heading.textContent=isPaid?'Bütçen, bölgen, doğru kanallar.':mode==='content_only'?'İçeriğinin biçimini seç.':'Nerede paylaşmak istiyorsun?';
-    lead.textContent=isPaid?'İsteğini biliyoruz. Planın sınırlarını belirle; payları birlikte netleştirelim.':'İsteğin korundu. Yalnız bu kullanım için gerekli seçimlerle devam et.';
+    if(selectedBudget&&budgetBasis!==currentBudgetBasis()){clearBudgetSelection();if(compared)compareBudgets();else renderBudgetComparison();}
+    const isPaid=paid(),mode=usage();
+    heading.textContent=isPaid?'İşletmene uygun bir başlangıç.':mode==='content_only'?'İçeriğinin biçimini seç.':'Nerede paylaşmak istiyorsun?';
+    lead.textContent=isPaid?'İsteğini biliyoruz. Bütçe bilmeden de başlayabilir, seçenekleri birlikte karşılaştırabilirsin.':'İsteğin korundu. Yalnız bu kullanım için gerekli seçimlerle devam et.';
     controls.hidden=!isPaid;results.hidden=!isPaid;bounds.hidden=!isPaid;dataDetails.hidden=!isPaid;
     for(const c of controls.querySelectorAll('input,select,textarea'))c.disabled=!isPaid;
     $('goal').disabled=true;
-    for(const id of ['region','radius','budget','start'])$(id).required=isPaid;
+    for(const id of ['region','radius','start'])$(id).required=isPaid;$('budget').required=false;
     end.required=isPaid;
     regionBox.hidden=$('geo-mode').value==='country'||$('geo-mode').value==='radius';$('region').disabled=!isPaid||regionBox.hidden;
     $('region').required=isPaid&&!regionBox.hidden;
     radiusSection.hidden=!isPaid||$('geo-mode').value!=='radius';
     for(const c of radiusSection.querySelectorAll('input'))c.disabled=radiusSection.hidden;
     for(const id of ['plan-latitude','plan-longitude'])$(id).required=false;
-    economics.hidden=!isPaid||!commerce;
-    for(const id of ['order-value','margin','cpa','capacity']){$(id).disabled=!isPaid||!commerce||!economicsCheck.checked;$(id).required=isPaid&&commerce&&economicsCheck.checked;}
+    economics.hidden=!isPaid;contributionField.box.hidden=!isCommercial();$('plan-contribution').disabled=!isPaid||!isCommercial();for(const id of ['order-value','margin','cpa','capacity']){$(id).disabled=true;$(id).required=false;}
+    capacityField.box.querySelector('label').textContent=isCommercial()?'Bu dönemde kaç ek satış / katılımcıyı karşılayabilirsin?':'Bu dönemde kaç ek hedef eylemi karşılayabilirsin?';
+    scenarioPanel.hidden=!isPaid;cashPanel.hidden=!isPaid||!selectedBudget;
+    for(const input of cashPanel.querySelectorAll('input'))input.disabled=!isPaid;
+    deadlineField.control.min=$('start').value;
     for(const control of sourceControls.querySelectorAll('input,select,textarea')){control.disabled=true;control.required=false;}
     const audience=roleAudience();audienceLine.textContent=audience?`Kitle: ${audience}`:'';audienceLine.hidden=!audience;
     $('audience').required=false;$('audience').disabled=true;
@@ -97,7 +167,7 @@
   }
   function prefill(b){
     const signature=window.YaparoOutcomeContract.signature(b.firstStage);
-    if(signature!==lastBrief){const first=!lastBrief,pair=b.firstStage.intent+'/'+b.firstStage.outcome;if(!first){if(pair!==lastPair||lastAudience!==roleAudience())$('audience').value='';if(pair!==lastPair){economicsCheck.checked=false;for(const id of ['order-value','margin','cpa','capacity'])$(id).value='';}}lastPair=pair;lastAudience=roleAudience();lastBrief=signature;lastPlan=null;if(first){for(const id of ['budget','region','radius','plan-latitude','plan-longitude','start','plan-end','duration','audience','order-value','margin','cpa','capacity'])$(id).value='';$('geo-mode').value='';$('measurement').value='none';economicsCheck.checked=false;}
+    if(signature!==lastBrief){clearBudgetSelection();budgetComparison=null;compared=false;budgetBasis='';renderBudgetComparison();const first=!lastBrief,pair=b.firstStage.intent+'/'+b.firstStage.outcome;if(!first){if(pair!==lastPair||lastAudience!==roleAudience())$('audience').value='';if(pair!==lastPair){resetBudget();for(const id of ['order-value','margin','cpa','capacity'])$(id).value='';}}lastPair=pair;lastAudience=roleAudience();lastBrief=signature;lastPlan=null;if(first){for(const id of ['budget','region','radius','plan-latitude','plan-longitude','start','plan-end','duration','audience','order-value','margin','cpa','capacity'])$(id).value='';$('geo-mode').value='';$('measurement').value='none';resetBudget();}
       const a=b.firstStage.answers;
       if(b.firstStage.intent==='sell'&&a.sell_timing==='range'&&!$('start').value&&!end.value){$('start').value=a.sell_start||'';end.value=a.sell_end||'';}
       datesNote.textContent=a.event_start?`Etkinlik tarihi: ${a.event_start}${a.event_end?' – '+a.event_end:''}. Reklamın yayın aralığını ayrıca seç.`:'';
@@ -111,17 +181,17 @@
     if(!$('geo-mode').value)return 'Önce reklamın bölgesini seç.';
     if($('geo-mode').value!=='country'&&$('geo-mode').value!=='radius'&&!$('region').value.trim())return 'Şehir veya bölgeyi yaz.';
     if($('geo-mode').value==='radius'){const map=updateMap();if(!map?.valid)return 'Türkiye içinde bir konum ve 1–800 km arasında bir mesafe seç.';}
-    if(!$('budget').value||!$('budget').checkValidity())return 'Toplam reklam bütçeni belirt.';
+    if(!selectedBudget||Number($('budget').value)*100!==selectedBudget.mediaMinor||budgetBasis!==currentBudgetBasis())return 'Önce bütçe seçeneklerini karşılaştır ve bir senaryo seç.';
     syncDates();if(!$('start').value||!end.value||!end.checkValidity()||!$('duration').value)return 'Geçerli bir yayın başlangıcı ve bitişi seç (en fazla 365 gün).';
     return '';
   }
-  function inputPatch(){const isEconomics=paid()&&!economics.hidden&&economicsCheck.checked,a=window.YaparoOutcomeContract.analyze(brief());return {firstStage:brief(),ownedAudience:a.ownedAudience,
+  function inputPatch(){const isEconomics=false,a=window.YaparoOutcomeContract.analyze(brief());return {firstStage:brief(),ownedAudience:a.ownedAudience,
     goal:a.goal||'unsupported',communication:a.communication||'not_provided',action:a.action||'unsupported',risk:a.risk||'not_declared',business:'owned_unspecified',sector:'owned_unspecified',audience:a.ownedAudience||'owned_unspecified',
     fixture:'interactive',readiness:'core',measurement:'none',tracking:false,catalog:false,economicsMode:isEconomics?'provided':'not_provided',...(isEconomics?{}:{value:0,margin:0,cpa:0,capacity:0}),
     ...(paid()&&$('geo-mode').value==='radius'?{region:'Haritada seçilen konum',geoCenter:{lat:Number($('plan-latitude').value),lon:Number($('plan-longitude').value),boundary:window.YaparoPlanGeo.version,verified:false}}:{})};}
-  function share(plan,row,value){try{const result=studio.changeShare(row.channel.id,Number(value));$('decision-status').textContent=result.limited?'Pay, kanalın test minimumu veya bütçe sınırında tutuldu. Diğer paylar dengelendi.':'Paylar güncellendi. Diğer seçili kanallar orantılı dengelendi; yeniden öneri elle yaptığın değişikliği sıfırlar.';updateFooter();}catch(error){$('decision-status').textContent=error.message;renderPlan(plan);}}
+  function share(plan,row,value){cashConfirmed=false;renderCash();try{const result=studio.changeShare(row.channel.id,Number(value));$('decision-status').textContent=result.limited?'Pay, kanalın test minimumu veya bütçe sınırında tutuldu. Diğer paylar dengelendi.':'Paylar güncellendi. Diğer seçili kanallar orantılı dengelendi; yeniden öneri elle yaptığın değişikliği sıfırlar.';updateFooter();}catch(error){$('decision-status').textContent=error.message;renderPlan(plan);}}
   function renderPlan(plan){
-    lastPlan=plan;const stats=$('plan-summary');stats.replaceChildren();for(const [label,amount] of [['Toplam',plan.total],['Kanallara ayrılan',plan.allocated],['Ayrılmayan',plan.unallocated]]){const box=node('div',undefined,'summary-stat');box.append(node('span',label),node('strong',money(amount)));stats.append(box);}
+    cashConfirmed=false;renderCash();lastPlan=plan;const stats=$('plan-summary');stats.replaceChildren();for(const [label,amount] of [['Toplam',plan.total],['Kanallara ayrılan',plan.allocated],['Ayrılmayan',plan.unallocated]]){const box=node('div',undefined,'summary-stat');box.append(node('span',label),node('strong',money(amount)));stats.append(box);}
     const upper=$('recommended'),lower=$('other-channels');upper.replaceChildren();lower.replaceChildren();
     const groups={};for(const [key,label] of [['paid','Diğer reklam kanalları'],['managed','Partner / yönetilen kanallar'],['owned','Medya bütçesi dışındaki yollar']]){const section=node('section',undefined,'catalog-group');section.append(node('h3',label));lower.append(section);groups[key]=section;}
     for(const row of [...plan.rows].sort((a,b)=>b.amount-a.amount||b.score-a.score)){
@@ -159,12 +229,18 @@
     const c=b.outcomeContract;for(const [label,value] of [['Amaç',c.intentLabel],['Beklenen adım',c.outcomeLabel],['İçerik',`${creative.title} · ${creative.cta}`],['Başarı göstergesi',`${c.kpi.label} · gerçek ölçüm bağlı değil`],['Yönlendirme',[c.destination.url,c.destination.phone,c.destination.email,c.destination.address,c.destination.mapUrl,c.destination.androidUrl,c.destination.iosUrl].filter(Boolean).join(' · ')||'İlk aşamadaki yöntem; yayın öncesi doğrulanmalı'],['Medya bütçesi',plan?`${money(plan.total)} · ${money(plan.unallocated)} ayrılmadı`:'Medya bütçesi yok'],['Kanal dağılımı',plan?plan.rows.filter(r=>r.amount).map(r=>`${r.channel.name} %${(r.amount/plan.total*100).toLocaleString('tr-TR',{maximumFractionDigits:2})}`).join(' · '):usage()==='content_only'?'Kanaldan bağımsız içerik': 'Kendi hesaplarında paylaşım'],['Yayın aralığı',plan?`${plan.input.start} · ${plan.input.days} gün`:'Ücretli yayın planı yok']])dl.append(node('dt',label),node('dd',value));panel.append(dl);root.append(panel);
     const all=node('details',undefined,'plan-card');all.id='review-all-answers';all.append(node('summary','Tüm yanıtların ve hazırlık ayrıntıları'));const list=node('dl');for(const row of b.firstStageSummary)list.append(node('dt',row.label),node('dd',row.value));all.append(list);for(const req of c.requirements)all.append(node('p',req.label));for(const req of production.requirements)all.append(node('p',`${req.placement} · ${req.label}`));root.append(all);
     if(production.requirements.some(r=>r.medium==='image'))root.append(artwork(creative));
+    if(selectedBudget)root.append(node('p',`Seçilen bütçe: ${money(selectedBudget.mediaMinor)} medya · toplam ${selectedBudget.campaignCostMinor===null?'maliyet bilgisi eksik':money(selectedBudget.campaignCostMinor)}. Nakit: ${cashConfirmed?'kullanıcının koşullu beyanı':'teyit edilmedi'}. Gerçek tahmin ve harcama izni yok.`,'plan-muted'));
     root.append(node('p',`${adaptations?.length||0} yerel içerik taslağı. Gerçek AI, ölçüm, fiyatlandırma ve yayın bağlantıları açılmadı.`,'plan-muted'));
   }
-  for(const id of ['geo-mode','plan-latitude','plan-longitude','radius','plan-economics-enabled'])$(id).addEventListener('change',configure);
+  for(const id of ['geo-mode','plan-latitude','plan-longitude','radius'])$(id).addEventListener('change',configure);
   for(const id of ['start','plan-end'])$(id).addEventListener('input',syncDates);
-  form.addEventListener('input',()=>{syncDates();updateMap();updateFooter();});
-  form.addEventListener('change',()=>{syncDates();updateMap();updateFooter();});
-  studio.attachPlanUI({resetForExample(){lastBrief='';lastPair='';lastAudience='';lastPlan=null;for(const id of ['budget','region','radius','plan-latitude','plan-longitude','start','plan-end','duration','audience','order-value','margin','cpa','capacity'])$(id).value='';$('geo-mode').value='';$('measurement').value='none';economicsCheck.checked=false;end.setCustomValidity('');geoView.update(null);},prefill,configure,issue,sourceReady:()=>paid()&&!issue()&&!!window.YaparoOutcomeContract.analyze(brief()).legacyProjection,inputPatch,renderPlan,renderReview,onStep(step){banner.textContent=step===1?'Yerel demo · gerçek AI, reklam tahmini veya yayın yapılmaz. Yalnız sentetik örnek kullan; yenileme çalışmayı sıfırlar.':originalBanner;if(step===1){configure();if(lastPlan)renderPlan(lastPlan);}}});
+  function budgetChanged(event){
+    syncDates();updateMap();
+    if(event.composedPath().includes($('recommended'))||event.composedPath().includes($('other-channels'))){cashConfirmed=false;renderCash();updateFooter();return;}
+    if(paid()&&budgetBasis&&(currentBudgetBasis()!==budgetBasis||selectedBudget&&Number($('budget').value)*100!==selectedBudget.mediaMinor)){clearBudgetSelection();if(compared)compareBudgets();else renderBudgetComparison();}
+    updateFooter();
+  }
+  form.addEventListener('input',budgetChanged);form.addEventListener('change',budgetChanged);
+  studio.attachPlanUI({resetForExample(){lastBrief='';lastPair='';lastAudience='';lastPlan=null;for(const id of ['budget','region','radius','plan-latitude','plan-longitude','start','plan-end','duration','audience','order-value','margin','cpa','capacity'])$(id).value='';$('geo-mode').value='';$('measurement').value='none';resetBudget();end.setCustomValidity('');geoView.update(null);},prefill,configure,issue,sourceReady:()=>paid()&&!issue()&&!!window.YaparoOutcomeContract.analyze(brief()).legacyProjection,inputPatch,renderPlan,renderReview,onStep(step){banner.textContent=step===1?'Yerel demo · gerçek AI, reklam tahmini veya yayın yapılmaz. Yalnız sentetik örnek kullan; yenileme çalışmayı sıfırlar.':originalBanner;if(step===1){configure();if(lastPlan)renderPlan(lastPlan);}}});
   configure();
 })();

@@ -1,3 +1,8 @@
+Uygulama güncellemesi29Ekim2026: WP02 saf beyan/ortak kapasite temeli ve
+WP06/WP07 yerel sentetik karşılaştırma/ekran dilimi [ADR0077](../../adr/0077-synthetic-business-budget-comparison.md)
+ile eklendi. Tarayıcı örnek hesabı Python servisinin yerine geçmez; gerçek kanıt,
+kalıcı kayıt ve uygulama bağlantısı açık işlerdir.
+
 # Yaparo reklam önerisi ve bütçe motoru — uygulama planı
 
 Durum: ilk plan ve işletmeye uygun bütçe güncellemesi29Ekim2026'da kullanıcı
