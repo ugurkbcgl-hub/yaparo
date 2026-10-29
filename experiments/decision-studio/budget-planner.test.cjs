@@ -36,4 +36,3 @@ for(const [key,values] of Object.entries({ceilingMinor:[undefined,NaN,-1,1.5,'10
 assert.deepEqual(compare(example),normal);
 assert.equal(example.ceilingMinor,null);
 console.log('Budget planner: missing/zero/ceiling, finite candidates, capacity/cash/economics, unknown costs, immutability and strict inputs passed.');
-

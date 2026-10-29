@@ -44,8 +44,8 @@ not yet created at this verification. Do not claim merged until checked.
 
 54 pure discovery/economics tests passed (29+25), no DB/provider.
 8 plan browser tests passed, including2 new discovery/cash/invalidation checks.
-Original first-stage suite re-run after explicit re-selection helper updates;
-record final result after completion. Kernel comparison tests passed; Ruff format
+Original16 first-stage browser tests passed after explicit re-selection helper
+updates. Kernel comparison tests passed; Ruff format
 363 application files/lint and studio checks passed. Independent read-only source
 review found and resolved semantic sales conversion, invalid cash, stale context,
 map and lower-cash gaps. Desktop/mobile screenshots inspected in private evidence
