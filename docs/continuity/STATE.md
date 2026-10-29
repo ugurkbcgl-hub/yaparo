@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 11:36 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 18:11 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and constraints
 
@@ -13,9 +13,13 @@ or new service. Usage monitoring disabled. Export remains undecided.
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/accepted-brief-analysis, from local handoffc09cd3c on maince36b03.
-Prior PR374 merged; its main CI40839160910 was rechecked SUCCESS.
-Issue375 records current validator work. New PR/required CI pending at this note.
+PR376 MERGED at2026-10-29 18:11 Europe/Istanbul, squashb75e16b on main.
+Reviewed head6a18edd; required CI40843454047 SUCCESS; exact-head guarded merge.
+Issue375 CLOSED automatically by the merged PR. Prior PR374 main CI passed.
+Current checkout codex/durable-owned-drafts, based on origin/mainb75e16b,
+upstream unset. This verified handoff is local only; include with the next
+meaningful package instead of a standalone documentation PR.
+Post-merge main CI40899075957 was IN_PROGRESS when checked; no success claimed.
 Protected Google/AI/DB/consumption history not opened, changed or replayed.
 
 ## Implemented server form slice (ADR0075)
@@ -56,7 +60,12 @@ Agent additionally compared3488 field scenarios and probed7590 malformed mutatio
 these are synthetic ad hoc probes, not extra committed tests or account evidence.
 Independent review found invalid-IP and IDNA-joiner gaps; corrected, regression
 tested and re-reviewed with no remaining blocker. No UI asset changed and no new
-manual browser visual check claimed. Required PR CI still pending, no merge claim.
+manual browser visual check claimed. Required CI40843454047 completed successfully
+on exact reviewed head:1210 tests (4 explicit skips),45 app browser E2E,
+16 first-stage/6 compact-plan/19 legacy browser tests plus source/generator drift,
+format/lint/security/build checks. On owner resume, only live status/log inspection,
+guarded merge and verified notes were needed; no extra code/test round was run.
+App PR attachment again hit the100-artifact limit; ordinary PR376 URL is valid.
 
 ## Preserved capabilities and protected work
 
@@ -75,7 +84,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Finish required CI/review/PR for this validator, then implement the separate
-durable owner-scoped synthetic draft service with accepted-analysis binding,
+Implement the separate durable owner-scoped synthetic draft service with accepted-analysis binding,
 locked expected revision and request replay. Keep operational publisher fields
 and protected histories unchanged; no provider/account rollout implied.

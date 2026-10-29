@@ -88,5 +88,8 @@ Combined with existing23 contracts,5 calendar and18 metric tests:62 local passes
 no DB setup/provider. Ruff format/check and generator --check passed. Independent
 review found invalid IP and IDNA-joiner gaps; both fixed with regressions and
 re-reviewed. Extra agent probes were synthetic only, not additional account proof.
-Required PR CI remains the merge gate; no manual visual check is claimed because
-no browser UI changed. Existing prototype/browser regressions remain required.
+PR376 required CI40843454047 passed exact reviewed head6a18edd:1210 tests
+(4 explicit skips),45 app browser E2E, prototype/browser regressions, generator
+drift and format/lint/security/build checks. Exact-head guarded mergeb75e16b
+completed29October2026 18:11 Europe/Istanbul. Main CI was still running when
+checked. No manual visual check is claimed because no browser UI changed.
