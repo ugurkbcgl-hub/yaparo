@@ -52,6 +52,9 @@ class DiscoveryContext:
     flight_start: date | None = None
     flight_end: date | None = None
     region_declaration: str | None = None
+    # Pure reference to economics/capacity revisions; not provider evidence,
+    # ownership verification, a resource reservation or financial authorization.
+    business_inputs_binding: str | None = None
 
     def __post_init__(self):
         _country(self.business_country)
@@ -79,6 +82,8 @@ class DiscoveryContext:
                 _require(self.result_deadline >= self.flight_start)
         if self.region_declaration is not None:
             _text(self.region_declaration, 500)
+        if self.business_inputs_binding is not None:
+            _binding(self.business_inputs_binding)
 
     @property
     def flight_days(self):

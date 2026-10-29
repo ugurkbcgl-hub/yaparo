@@ -96,6 +96,7 @@ jobs:
           node experiments/decision-studio/owned-recommendation.test.cjs
           node experiments/decision-studio/owned-examples.test.cjs
           node experiments/decision-studio/plan-summary.test.cjs
+          node experiments/decision-studio/budget-planner.test.cjs
           node experiments/decision-studio/plan-geo.test.cjs
           node --check experiments/decision-studio/dist/plan-ui.js
           node --check experiments/decision-studio/dist/first-stage-ui.js

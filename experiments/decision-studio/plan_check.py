@@ -45,7 +45,8 @@ class PlanCheck(FirstStageCheck):
         self.page.locator('#step-nav [data-step="0"]').click()
         self.field("promote_name").fill("Ö" * 140)
         self.submit()
-        self.assertEqual(self.page.locator("#budget").input_value(), "3000")
+        self.assertEqual(self.page.locator("#budget").input_value(), "")
+        self.assertEqual(self.page.locator("#plan-media-ceiling").input_value(), "3000")
         self.assertEqual(self.page.locator("#geo-mode").input_value(), "country")
         self.assertEqual(self.page.locator("#start").input_value(), "2026-11-01")
         self.assertEqual(self.page.locator("#plan-end").input_value(), "2026-11-07")
@@ -68,7 +69,7 @@ class PlanCheck(FirstStageCheck):
         other_value = self.page.locator(
             '#recommended input[type="number"]'
         ).evaluate_all("nodes=>nodes.map(n=>n.value)")
-        slider.scroll_into_view_if_needed()
+        slider.evaluate("el=>el.scrollIntoView({block:'center'})")
         box = slider.bounding_box()
         current = float(slider.input_value()) / 100
         self.page.mouse.move(
@@ -76,7 +77,7 @@ class PlanCheck(FirstStageCheck):
         )
         self.page.mouse.down()
         self.page.mouse.move(
-            box["x"] + box["width"] * 0.60, box["y"] + box["height"] / 2, steps=5
+            box["x"] + box["width"] * 0.35, box["y"] + box["height"] / 2, steps=5
         )
         self.assertNotEqual(
             self.page.locator('#recommended input[type="number"]').evaluate_all(
@@ -123,7 +124,7 @@ class PlanCheck(FirstStageCheck):
             )["amount"],
             0,
         )
-        self.page.locator("#budget").fill("5000")
+        self.page.locator("#plan-media-ceiling").fill("5000")
         self.assertTrue(self.snapshot()["stale"])
         self.assertIsNone(self.snapshot()["adaptations"])
         self.assertTrue(
@@ -151,7 +152,7 @@ class PlanCheck(FirstStageCheck):
             path=str(self.evidence / "compact-map-desktop.png"), full_page=True
         )
         self.assertTrue(self.snapshot()["stale"])
-        self.page.locator("#recommend").click()
+        self.page.locator('[data-media-minor="300000"]').click()
         self.assertEqual(self.snapshot()["plan"]["input"]["geoCenter"]["lat"], 41.005)
         self.assertEqual(self.snapshot()["plan"]["input"]["geo"], "radius_local")
         self.assertFalse(self.snapshot()["plan"]["publishable"])
@@ -182,13 +183,74 @@ class PlanCheck(FirstStageCheck):
         self.select_pair("fundraise", "donate")
         self.fill_remaining(mode="paid")
         self.submit()
-        self.assertTrue(self.page.locator(".economics").is_hidden())
+        self.assertTrue(self.page.locator("#plan-contribution").is_hidden())
         self.assertTrue(self.page.locator("#order-value").is_disabled())
         self.plan_basics()
         self.page.locator("#recommend").click()
         self.assertTrue(
             self.snapshot()["plan"] is None or self.snapshot()["plan"]["allocated"] == 0
         )
+
+    def test_plan_budget_discovery_unknown_zero_and_live_context(self):
+        self.select_pair("promote", "visit")
+        self.fill_remaining(mode="paid")
+        self.submit()
+        self.page.locator("#geo-mode").select_option("country")
+        self.page.locator("#start").fill("2026-11-01")
+        self.page.locator("#plan-end").fill("2026-11-07")
+        self.page.locator("#plan-result-deadline").fill("2026-11-14")
+        self.page.locator("#budget-compare").click()
+        self.assertIn(
+            "Gerçek tahmin bağlantısı yok",
+            self.page.locator("#budget-scenarios").inner_text(),
+        )
+        self.assertEqual(self.page.locator("#budget").input_value(), "")
+        self.page.locator("#plan-media-ceiling").fill("0")
+        self.assertIn(
+            "Ücretli medya", self.page.locator("#budget-scenarios").inner_text()
+        )
+        self.assertEqual(self.page.locator("[data-budget-scenario]").count(), 0)
+        self.page.locator("#plan-media-ceiling").fill("")
+        self.page.locator("#plan-period-capacity").fill("30")
+        self.page.locator("#plan-evidence").select_option("synthetic")
+        self.assertGreater(self.page.locator("[data-budget-scenario]").count(), 0)
+        self.assertIn(
+            "Maliyet bilgisi eksik", self.page.locator("#budget-scenarios").inner_text()
+        )
+        self.page.locator("[data-budget-scenario]").first.click()
+        self.page.locator("#plan-cash-available").fill("5000")
+        self.page.get_by_role("button", name="Karşılayabilirim", exact=True).click()
+        self.assertNotIn(
+            "Nakdi karşılayabileceğini beyan ettin",
+            self.page.locator("#plan-cash-status").inner_text(),
+        )
+        self.page.locator("#plan-period-capacity").fill("0")
+        self.assertEqual(self.page.locator("[data-budget-scenario]").count(), 0)
+        self.assertEqual(self.page.locator("#budget").input_value(), "")
+
+    def test_plan_budget_cash_filter_confirmation_and_invalidation(self):
+        self.ready_paid()
+        self.page.locator("#plan-cash-available").fill("3000")
+        self.page.get_by_role("button", name="Karşılayabilirim", exact=True).click()
+        self.assertIn(
+            "Beyanına göre", self.page.locator("#plan-cash-status").inner_text()
+        )
+        self.page.locator("#plan-cash-available").fill("-1")
+        self.assertIn("Geçerli", self.page.locator("#plan-cash-status").inner_text())
+        self.page.locator("#plan-cash-available").fill("1000")
+        self.page.get_by_role(
+            "button", name="Bu nakde uyan seçenekleri bul", exact=True
+        ).click()
+        self.assertEqual(self.page.locator("[data-budget-scenario]").count(), 1)
+        self.assertEqual(self.page.locator("#budget").input_value(), "")
+        self.page.locator("[data-budget-scenario]").click()
+        self.assertEqual(self.page.locator("#budget").input_value(), "1000")
+        self.page.locator("#plan-cash-available").fill("1000")
+        self.page.get_by_role("button", name="Karşılayabilirim", exact=True).click()
+        self.page.locator("#plan-service-cost").fill("50")
+        self.assertEqual(self.page.locator("#budget").input_value(), "")
+        self.assertTrue(self.page.locator("#plan-cash-status").is_hidden())
+        self.assertTrue(self.snapshot()["stale"])
 
     def test_plan_visual_desktop_mobile_and_compact_review(self):
         self.ready_paid()

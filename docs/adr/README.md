@@ -57,3 +57,5 @@ ADRs capture decisions that would be costly or confusing to reverse. Keep propos
 - [ADR-0074 — Unqualified recommendation contracts](0074-unqualified-recommendation-contracts.md): pure immutable declarations/evidence/bounds, metadata replay, explicit qualification hold and inclusive preview dates.
 - [ADR-0075 — Server-owned first-stage validation](0075-server-first-stage-validation.md): all46 form paths, normalized declarations and literal analysis, differential fixtures, no operational qualification.
 - [ADR-0076 — Budget-optional discovery](0076-budget-optional-discovery-contract.md): separate unresolved ceiling/context, synthetic selection and cash metadata, monotonic state binding, no execution authority.
+
+- [ADR-0077 — Local business budget comparison](0077-synthetic-business-budget-comparison.md): optional ceiling, explicit sample candidates, separate cash state, declared economics/shared capacity; no actual forecast or execution.

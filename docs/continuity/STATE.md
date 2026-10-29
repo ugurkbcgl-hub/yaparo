@@ -1,65 +1,66 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 18:43 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 23:43 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and authorization
 
-Owner approved business-fit budget-planner implementation. First small WP01 slice
-now implements pure budget-optional discovery/context and synthetic selection/cash
-metadata only. Local synthetic; no real data/account/provider/AI/ad/spend/release
-or new service. Usage monitoring disabled. No prototype UI/DB/runtime change.
+Owner approved the business-fit budget draft and its local screen implementation.
+Local synthetic only; no real data/account/provider/AI/ad/spend/release/service.
+Usage monitoring remains disabled. No protected DB/schema/history change.
 
 ## Repository
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/budget-discovery-contract, from local planning5be6a3b/handoffd8ae2c3
-on origin/mainb75e16b. PR376 merged, issue375 closed, main CI40899075957 SUCCESS.
-Planning update plus new code belong in the upcoming feature PR; no PR at initial
-check. Required CI/merge still pending for this package.
+Branch codex/shared-business-resources, from main c834d5e plus local completion
+note9d6a283. PR377 already merged; main CI40906309933 SUCCESS. New package PR/CI
+not yet created at this verification. Do not claim merged until checked.
 
-## Completed first discovery contract slice (ADR0076)
+## Implemented (ADR0077)
 
-New campaigns/recommendations/discovery.py:
-- DiscoveryContext without budget; optional result deadline/flight/region and
-  separate business/account/market/currency/timezone. Incomplete context valid.
-- BudgetDiscoveryDraft None=unknown,0=no-paid, positive=media ceiling. Existing
-  PlanBounds and operational hard limits unchanged, no dummy0/sample amount.
-- Exact accepted-analysis/scope/context/version binding. Context revision changes
-  clear selection/cash. Separate monotonic state_revision stops stale/ABA requests
-  after selection/cash/withdrawal without changing candidate context binding.
-- SyntheticScenario closed fixture with total media/production/service costs,
-  unknown-or-known peak cash and explicit synthetic-upfront-campaign-v1 cash model.
-  Known peak >= campaign cost is a deliberately narrow fixture assumption, not
-  actual cash-flow math or full candidate engine.
-- Paid/hybrid current fixture selection only, within declared media ceiling;
-  no organic/content-only/unsure paid selection. New selections need complete
-  metadata/current not-yet-started flight; exact current repeat is no-op.
-- CashFit user-declared fixture binds full selected scenario/context/currency.
-  Lower/unknown/insufficient cash can be recorded without confirmation. Renew,
-  withdraw and strict sufficient-fit helper; older/equal-but-different declarations
-  reject. Expiry and flights rechecked, UTC instant comparisons include DST.
-- Stage derived at supplied time, never input ready flag. cash_confirmed is
-  not financial proof/consent. publication_enabled/execution_authorized alwaysFalse.
-  No separately_spend_authorized transition or automatic PlanBounds conversion.
+- Pure economics.py: typed unit contribution/campaign cost, strict currency/tax,
+  component identities/completeness/expiry; no double deduction or invented profit.
+- Shared CapacityEnvelope: workspace/site/resource identity, explicit unique loads,
+  total/free/incremental basis, period and daily bottlenecks; unknown daily data
+  never becomes equal-split proof. Pure metadata, no reservation or owner service.
+- DiscoveryContext optional business_inputs_binding: changing economics/resource
+  revisions invalidates old scenario/cash. Existing operational PlanBounds unchanged.
+-8014 Plan screen: brief reused; missing geography/flight, separate result deadline,
+  period incremental capacity, optional media ceiling blank/0/positive. Contribution
+  only purchase/ticket; no click/message/visit converted into completed sales.
+- Explicit sample evidence opt-in. Default no real forecast => no numeric scenarios.
+  Fixed finite sample grid and fabricated100–200TL per target action are labeled;
+  test/recommended/upper cards deduplicated, never force three. This browser fixture
+  calculator is NOT connected to Python contracts or an actual forecast service.
+- Unknown production/service => no total/contribution/cash confirmation; explicit0
+  valid. Period capacity, ceiling and lower-cash filter limit sample candidates.
+- Selecting a current sample sets the hidden operational budget then reuses owned
+  channel allocation/share constraints. Context edits clear scenario/cash; manual
+  channel edits withdraw cash confirmation. Cash declaration never permits spend.
+- Screen desktop cards compare across a row; cost assumptions collapsed. Mobile
+  overflow/helper/footer layout reviewed. Original legacy/organic paths retained.
 
 ## Verification actually run
 
-27 new pure tests plus prior62 accepted-bank/contracts/calendar/metric tests:
-89 local passes, no DB setup/migration/provider. Ruff format/check passed361 files.
-Independent read-only review found semantic-version binding, cash withdrawal/
-renewal, stale declaration and ABA gaps; fixed with targeted regressions and
-re-reviewed without blocker. No UI change/manual visual claim.
-Required PR CI still pending; do not claim merged/real-ready planner.
+54 pure discovery/economics tests passed (29+25), no DB/provider.
+8 plan browser tests passed, including2 new discovery/cash/invalidation checks.
+Original16 first-stage browser tests passed after explicit re-selection helper
+updates. Kernel comparison tests passed; Ruff format
+363 application files/lint and studio checks passed. Independent read-only source
+review found and resolved semantic sales conversion, invalid cash, stale context,
+map and lower-cash gaps. Desktop/mobile screenshots inspected in private evidence
+folder yaparo-first-stage-yvhyd7z7. No real campaign/account/AI claim.
+Required PR CI is still pending at this snapshot.
 
-## Planning preserved and updated
+## Runtime and limits
 
-BUDGET_PLANNER_SPEC and source/acceptance/implementation research remain included.
-Owner approval recorded; currentimplemented boundary clear in PROJECT/ROADMAP.
-30budget acceptance scenarios are future full-planner tests, not all implemented.
-Numerical recommendations, shared capacity/economics, actual cash timing, durable
-owner service and UI are still pending. Existing8014 uses mandatory-budget authored
-demo; this pure backend foundation does not yet alter that screen.
+Owned loopback8014 preview restarted for the new asset allowlist, tool session10511.
+No public hosting/deployment. Sample comparisons are not measured price/outcomes,
+physical capacity proof or deliverability. Cash model covers upfront campaign only,
+not fulfillment financing/collection timing. No persistent save or trusted candidate
+service; Python rich shared-resource checks are separate from the UI period field.
+Issue378 remains the durable WP02 record; result-to-resource consumption integration
+and trusted service use remain open before actual forecasts can qualify.
 
 ## Preserved capabilities and protected work
 
@@ -78,6 +79,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Finish review/required PR CI for this package, then WP02: typed economics and
-shared response/delivery resource/deduction semantics with synthetic examples.
-Finite budget candidates and WP07 UI follow; no real provider/account rollout.
+Finish reviewed package PR and required CI, then bind accepted discovery, economics,
+resource revisions and qualified evidence to a provider-free candidate service.
+Keep sample browser output separate from actual forecasts and spend authority.
