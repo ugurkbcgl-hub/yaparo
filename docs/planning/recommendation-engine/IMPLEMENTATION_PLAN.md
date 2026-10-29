@@ -5,8 +5,10 @@ Durum: **29 Ekim2026'da kullanıcı tarafından onaylandı**. Araştırma tarihi
 kampanya, paket sürümü, ücret veya yayın değişikliği içermez.
 
 Uygulama kaydı: ilk WP01 dilimi sağlayıcısız, immutable ve daima
-`declared_unqualified` sözleşmeler olarak başladı; tam form doğrulaması/kalıcı
-kayıt/gerçek tahmin tamamlanmadı. Güncel sınır ve testler
+`declared_unqualified` sözleşmeler olarak başladı. Sonraki dilimde46 yolun sunucu form
+doğrulaması ve normalize beyana bağlı analiz eklendi
+([ADR0075](../../adr/0075-server-first-stage-validation.md)); bu, politika/hesap
+doğrulaması değildir. Kalıcı kayıt ve gerçek tahmin halen tamamlanmadı. İlk dilimin sınır ve testleri
 [ADR0074](../../adr/0074-unqualified-recommendation-contracts.md) içindedir.
 Aşağıdaki mimari hedef planıdır, tamamlanmış özellik listesi değildir.
 
@@ -541,6 +543,6 @@ kontrolü görevini bu plan otomatik açmaz.
    kalibrasyon coverage ve tazelik SLO'ları pilot amacına göre önce kaydedilip
    backtestte sınanacak. Kalite kanıtı yoksa büyüme yerine ölçüm/test önerilecek.
 
-**Sonraki tek iş:** WP01'in tam sunucu form doğrulaması ve kabul edilmiş analiz
-sözleşmesini46 yol için tamamla; ilk unqualified dilimi kabul edilmiş müşteri
-analizi gibi kullanma. Kalıcı servis/şema ve gerçek kaynaklar ayrı kapılardır.
+**Sonraki tek iş:** WP01'in kalıcı, sahipli sentetik taslak servisini; doğrulanmış
+form analizi, revizyon ve istek tekrarı sınırlarıyla tasarla/uygula. Form geçerliliği
+gerçek bilgi veya platform uygunluğu sayılmaz. Gerçek kaynaklar ayrı kapılardır.

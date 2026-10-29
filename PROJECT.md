@@ -4,10 +4,14 @@
 
 Owner approved the recommendation-engine plan on29October2026. First WP01 slice:
 pure immutable, always-unqualified declarations, plan/evidence/allocation bindings
-and metadata revision/replay. Full server form validation, durable storage,
-provider qualification and UI integration remain pending. Preview calendar
+and metadata revision/replay. Next slice now validates all46 first-stage routes
+server-side and derives version-bound literal outcome/destination/KPI analysis
+from normalized declarations (ADR0075). Form validity is not fact/policy/account
+verification. Durable storage, provider qualification and UI integration remain
+pending. Preview calendar
 averages now count both dates, matching ADR0071.
 See [ADR0074](docs/adr/0074-unqualified-recommendation-contracts.md).
+See [ADR0075](docs/adr/0075-server-first-stage-validation.md) for the new validator.
 The four-document research package starts at
 [the implementation plan](docs/planning/recommendation-engine/IMPLEMENTATION_PLAN.md).
 It preserves the four-stage journey, ADR0073 and existing ownership/spend/launch

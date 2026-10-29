@@ -1,7 +1,7 @@
 """Immutable local planning metadata, not authorization or accepted form analysis.
 
 No database, HTTP, credential, clock or provider I/O. The future owner service must
-resolve trusted scope, port the complete first-stage bank validation, and enforce
+resolve trusted scope, use the separate accepted bank validator, and enforce
 transactional revision/nonce uniqueness before persisting these values.
 """
 
@@ -35,6 +35,7 @@ ROUTES = (
 RISKS = frozenset(
     {
         "normal",
+        "fundraising",
         "health",
         "finance",
         "political",
@@ -52,7 +53,7 @@ class ContractError(ValueError):
 class Delivery(StrEnum):
     PAID = "paid"
     ORGANIC = "organic"
-    COMBINED = "combined"
+    HYBRID = "hybrid"
     CONTENT_ONLY = "content_only"
     UNSURE = "unsure"
 
@@ -173,7 +174,7 @@ class OwnerScope:
 
 @dataclass(frozen=True, slots=True)
 class DeclaredBrief:
-    """Canonical browser declaration; full bank/field validation is still pending.
+    """Canonical unqualified declaration; AcceptedBrief separately validates fields.
 
     Constructor only accepts the closed envelope/route and bounded flat answers.
     No caller-provided valid/analysis/readiness field is trusted or retained.

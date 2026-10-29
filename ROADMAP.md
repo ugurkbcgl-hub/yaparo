@@ -4,9 +4,11 @@
 
 Owner approved implementation on29October2026. First WP01 slice: immutable
 unqualified declaration/bounds/evidence/allocation/revision contracts and inclusive
-preview date correction; no persistence/provider/UI wiring. Next within WP01:
-port/review all46 server-side form banks and accepted analysis before a durable
-owner service (ADR0074). Audit, official provider
+preview date correction; no persistence/provider/UI wiring. All46 server-side
+form banks and normalized analysis are now implemented separately (ADR0075).
+Next within WP01: durable owner-scoped synthetic draft service with immutable
+accepted-analysis binding, expected revision and request replay; no projection
+into existing operational publisher fields. Audit, official provider
 capability matrix, implementation sequence and acceptance plan are in
 [docs/planning/recommendation-engine](docs/planning/recommendation-engine/IMPLEMENTATION_PLAN.md).
 Approved first packages: WP01 owned draft/evidence contract; WP02 business outcomes

@@ -1,68 +1,62 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 11:01 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 11:36 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
-## Objective and authorization
+## Objective and constraints
 
-Owner approved the recommendation-engine plan on29October2026. Local synthetic
-implementation may proceed; actual account/real data/provider/spend/publishing/
-production and paid-service gates remain closed. Usage monitoring disabled.
-First implementation is deliberately a small WP01 foundation, NOT full accepted
-brief analysis, persistent storage or operational recommendation integration.
+Owner requested completing the next WP01 step: full server-owned46-route form
+validation and normalized literal analysis. Approved recommendation plan remains.
+Local synthetic only; no real account/data/provider/AI/spend/publishing/deployment
+or new service. Usage monitoring disabled. Export remains undecided.
 
 ## Repository
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-PR374 MERGED at2026-10-29 11:01 Europe/Istanbul, squashce36b03 on main.
-Reviewed headd43214f; required CI40838250522 SUCCESS (exact-head guarded merge).
-The earlier c55cccc run was cancelled only after a superseding DST fix; final
-head completed all required checks. Researchf534af7/handoff87fa86d included.
-Current checkout codex/accepted-brief-analysis, based on origin/maince36b03,
-upstream unset. This verified handoff is local only; carry it with the next
-meaningful package instead of creating a standalone documentation PR.
-Post-merge main CI40839160910 was IN_PROGRESS when checked, no success claimed.
+Branch codex/accepted-brief-analysis, from local handoffc09cd3c on maince36b03.
+Prior PR374 merged; its main CI40839160910 was rechecked SUCCESS.
+Issue375 records current validator work. New PR/required CI pending at this note.
+Protected Google/AI/DB/consumption history not opened, changed or replayed.
 
-## Completed local package
+## Implemented server form slice (ADR0075)
 
-The four research documents in docs/planning/recommendation-engine are retained.
-Owner approval recorded in PROJECT/ROADMAP/implementation plan. ADR0074 records
-new pure campaigns/recommendations/contracts.py and all qualifications:
+Pure bank.py ports current9 intent banks/46 routes and conditional field IDs,
+options/labels/roles/required/numeric/UTF16 limits. validation.py normalizes and
+validates bounded flat answers, visibility, scalar/multi enums and cross-field
+date/location/physical-visit/price/qualification/overnight conditions.
+Default rejects unknown/inactive keys; explicit prune_hidden returns a separate
+preview, accepted constructor revalidates the clean canonical snapshot.
 
-- Immutable canonical browser declarations with exact46 route vocabulary, usage,
-  retained explicit/fundraising risks. Always declared_unqualified. Full bank
-  required/conditional/hidden-field validator is NOT yet ported server-side.
-- Separate business/account countries, markets, language/currency/timezone,
-  inclusive1..365day local dates, media budget/allocations/reserve.
-- Structural evidence available0 versus nullable unavailable states, separate
-  source kind/as-of/fetch/expiry, owner/context and account/generation binding.
-- Scope metadata is not authorization. status_at checks declared expiry only,
-  not real provider max-age/terms/quality/permissions. No active-generation lookup.
-- Pure expected-version/history/request replay decision; exact replay returns
-  original revision without restoring current authority. New past plans refuse.
-  No persistence, transaction/race guarantee, HTTP, worker, credential or provider.
-- publication_enabled always False; organic/content-only/unsure0 media does not
-  loosen existing WorkspaceCampaignDraft DB constraints or touch old records.
+AcceptedBrief means server_form_valid_declaration ONLY, never verified truth,
+policy/account readiness or consent. Binding includes validator/bank versions.
+Old DeclaredBrief remains unqualified and DraftContent exact-type stays unchanged.
+Corrected source enum gaps: hybrid (not combined) and selectable fundraising.
+No actual stored record used these pure contracts; no data/schema migration.
 
-Existing planning.py descriptive daily average now counts both endpoints,
-matching ADR0071/brand_settings; same-day1 and leap dates covered. Publisher
-budgets/pacing unchanged. No prototype8014 asset change.
+AcceptedAnalysis re-derives exact literal subject/identity/message/audience,
+destination, CTA/KPI, forced+explicit risks and known/unknowns. Unsupported paid
+mapping null; missing forms/custom destinations unresolved. No keyword guessing.
+Policy/platform/measurement/publish flags false; forecast/model null.
+Immutable source, detached output. No route/ORM/persistence/provider integration.
+
+URL declarations are never fetched/ownership verified. Server narrower policy
+rejects userinfo, controls, invalid numeric IP/IPFuture, encoded/ambiguous hosts
+and IDNA joiners; not a complete WHATWG implementation or an SSRF fetch gate.
+Literal text must still be escaped by future renderers.
 
 ## Verification actually run
 
-23 pure contracts +5 calendar +18 existing metric tests =46 local passes;
-Django system check clear. All selected tests are database-free; no DB setup,
-migration or provider. Configured Ruff format/check passed355 files.
-Independent review found a repeated-DST-hour instant-ordering edge; evidence and
-history comparisons now normalize UTC, with a passing regression. Earlier
-read-only source review found no blocker in unqualified/unwired scope
-and recorded the remaining qualification boundaries above. Documentation updated.
-Required CI40838250522 passed all checks: full PostgreSQL suite1194 tests
-(4 explicit skips) and45 app browser E2E, plus16 first-stage/6 compact-plan/
-19 legacy browser checks and source/editor/packaging/lint/audit checks.
-Final temporal re-review found no blocker. No deployment or actual provider claim.
-PR artifact UI attachment failed at the app's100-attachment limit; ordinary PR
-URL remains usable. Follow-up issue375 records the remaining WP01 validator work.
+16 new tests include414 JS differential cases (46 base routes,418 enum transitions,
+198 shared field specs), per-base required/enum mutations and targeted malformed/
+risk/UTF16/ASCII/date/destination/flags/rebind tests. Together with prior23 pure
+contracts,5 calendar and18 metric tests:62 local passes, no DB setup/provider.
+Ruff format/check passed359 files. Deterministic generator --check passed;
+source hashes normalize UTF8-LF. CI adds this read-only drift check.
+Agent additionally compared3488 field scenarios and probed7590 malformed mutations;
+these are synthetic ad hoc probes, not extra committed tests or account evidence.
+Independent review found invalid-IP and IDNA-joiner gaps; corrected, regression
+tested and re-reviewed with no remaining blocker. No UI asset changed and no new
+manual browser visual check claimed. Required PR CI still pending, no merge claim.
 
 ## Preserved capabilities and protected work
 
@@ -81,7 +75,7 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Complete/review the server-owned first-stage field validator and accepted
-analysis across46 routes (GitHub issue375) before any durable owner service or
-actual forecast integration. Full bank qualification is still pending; do not
-consume declared_unqualified answers as accepted analysis.
+Finish required CI/review/PR for this validator, then implement the separate
+durable owner-scoped synthetic draft service with accepted-analysis binding,
+locked expected revision and request replay. Keep operational publisher fields
+and protected histories unchanged; no provider/account rollout implied.
