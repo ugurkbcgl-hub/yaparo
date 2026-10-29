@@ -8,6 +8,7 @@ from decimal import Decimal
 from pathlib import Path
 from unittest import TestCase
 from uuid import UUID, uuid4
+from zoneinfo import ZoneInfo
 
 from growthtwin.modules.campaigns.recommendations.contracts import (
     ROUTES,
@@ -430,3 +431,35 @@ class RecommendationContractTests(TestCase):
             replace(self.content, evidence=(first,)).binding,
             replace(self.content, evidence=(second,)).binding,
         )
+
+    def test_dst_fold_compares_instants_for_evidence_and_revision_history(self):
+        zone = ZoneInfo("America/New_York")
+        earlier = datetime(2026, 11, 1, 1, 45, fold=0, tzinfo=zone)
+        later = datetime(2026, 11, 1, 1, 30, fold=1, tzinfo=zone)
+        with self.assertRaises(ContractError):
+            self.evidence(
+                source_as_of=later,
+                fetched_at=earlier,
+                expires_at=later + timedelta(hours=2),
+            )
+        with self.assertRaises(ContractError):
+            self.evidence(source_as_of=earlier, fetched_at=later, expires_at=earlier)
+        evidence = self.evidence(
+            source_as_of=earlier, fetched_at=earlier, expires_at=later
+        )
+        self.assertEqual(evidence.status_at(later), "stale")
+        reverse = self.evidence(
+            source_as_of=earlier,
+            fetched_at=later,
+            expires_at=later + timedelta(hours=2),
+        )
+        self.assertEqual(reverse.status_at(earlier), "not_yet_observed")
+        bounds = replace(self.bounds, start=date(2026, 11, 3), end=date(2026, 11, 7))
+        content = replace(self.content, bounds=bounds)
+        first = self.save(now=later, content=content)
+        with self.assertRaises(ContractError):
+            self.save((first,), now=earlier, content=content)
+        # A locally increasing wall time is nevertheless a decreasing instant.
+        second = DraftRevision(self.scope, 2, uuid4(), content, earlier)
+        with self.assertRaises(ContractError):
+            self.save((first, second), now=later + timedelta(hours=2), content=content)

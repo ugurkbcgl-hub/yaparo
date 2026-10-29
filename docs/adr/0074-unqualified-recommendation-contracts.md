@@ -69,10 +69,12 @@ objects without a database connection.
 
 ## Verification and next boundary
 
-22 pure tests cover46-route parity, canonical binding/mutation, risk, strict
+23 pure tests cover46-route parity, canonical binding/mutation, risk, strict
 types, zero/unknown, signed money, dates/currencies, account generation/context,
 allocation/reserve, cross-scope/history/replay and stale metadata. Combined with
-five calendar and existing metric tests:45 local passes, no DB setup/provider.
+five calendar and existing metric tests:46 local passes, no DB setup/provider.
+Instant comparisons use UTC, including repeated DST-fold wall times; local
+calendar dates still use the selected timezone for new-plan date checks.
 Configured formatting/lint and independent read-only source review passed.
 Required CI must still pass before merge; its ephemeral DB tests are not evidence
 of changes to the preserved local databases or actual provider accounts.

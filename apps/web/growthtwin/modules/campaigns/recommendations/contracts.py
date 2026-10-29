@@ -104,6 +104,11 @@ def _aware(value):
     _require(type(value) is datetime and value.utcoffset() is not None)
 
 
+def _utc(value):
+    _aware(value)
+    return value.astimezone(timezone.utc)
+
+
 def _currency(value):
     # Deliberately bounded initial money contract; not a market capability claim.
     _require(type(value) is str and value in {"TRY", "USD", "EUR"})
@@ -353,10 +358,10 @@ class EvidenceMetric:
             _require(self.currency is None)
         _aware(self.fetched_at)
         _aware(self.expires_at)
-        _require(self.expires_at > self.fetched_at)
+        _require(_utc(self.expires_at) > _utc(self.fetched_at))
         if self.source_as_of is not None:
             _aware(self.source_as_of)
-            _require(self.source_as_of <= self.fetched_at)
+            _require(_utc(self.source_as_of) <= _utc(self.fetched_at))
         if self.status is MetricStatus.AVAILABLE:
             _require(type(self.value) is Decimal and self.value.is_finite())
             _require(self.source_as_of is not None)
@@ -371,9 +376,9 @@ class EvidenceMetric:
 
     def status_at(self, now):
         _aware(now)
-        if self.fetched_at > now:
+        if _utc(self.fetched_at) > _utc(now):
             return "not_yet_observed"
-        if self.status is MetricStatus.AVAILABLE and now >= self.expires_at:
+        if self.status is MetricStatus.AVAILABLE and _utc(now) >= _utc(self.expires_at):
             return MetricStatus.STALE.value
         return self.status.value
 
@@ -477,9 +482,10 @@ def propose_revision(
     for number, record in enumerate(history, 1):
         _require(type(record) is DraftRevision and record.scope == trusted_scope)
         _require(record.revision == number and record.request_id not in seen)
-        _require(record.recorded_at <= now)
-        _require(previous_time is None or record.recorded_at >= previous_time)
-        previous_time = record.recorded_at
+        instant = _utc(record.recorded_at)
+        _require(instant <= _utc(now))
+        _require(previous_time is None or instant >= previous_time)
+        previous_time = instant
         seen.add(record.request_id)
     for record in history:
         if record.request_id == request_id:

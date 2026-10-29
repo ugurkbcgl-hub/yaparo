@@ -45,10 +45,12 @@ budgets/pacing unchanged. No prototype8014 asset change.
 
 ## Verification actually run
 
-22 pure contracts +5 calendar +18 existing metric tests =45 local passes;
+23 pure contracts +5 calendar +18 existing metric tests =46 local passes;
 Django system check clear. All selected tests are database-free; no DB setup,
 migration or provider. Configured Ruff format/check passed355 files.
-Independent read-only source review found no blocker in unqualified/unwired scope
+Independent review found a repeated-DST-hour instant-ordering edge; evidence and
+history comparisons now normalize UTC, with a passing regression. Earlier
+read-only source review found no blocker in unqualified/unwired scope
 and recorded the remaining qualification boundaries above. Documentation updated.
 Required PR CI not yet run; do not claim merge/deployment success.
 
