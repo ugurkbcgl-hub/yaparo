@@ -1,5 +1,16 @@
 # Yaparo roadmap
 
+## Recommendation-engine planning — 29 October 2026
+
+Current owner request is research only; do not start the earlier durable-contract
+implementation until the owner approves the new plan. Audit, official provider
+capability matrix, implementation sequence and acceptance plan are in
+[docs/planning/recommendation-engine](docs/planning/recommendation-engine/IMPLEMENTATION_PLAN.md).
+Proposed first packages: WP01 owned draft/evidence contract; WP02 business outcomes
+and metric semantics; WP03 provider capabilities/freshness. Then qualify authorized
+read-only forecasts before calibration/allocation. All account/real-data/launch
+gates remain. This is proposed sequencing, not completed implementation.
+
 ## Brief-driven recommendation — 29 October 2026
 
 Removed repeated plan classification, audience and measurement questions. The

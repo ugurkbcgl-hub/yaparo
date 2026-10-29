@@ -1,5 +1,16 @@
 # Yaparo project brief
 
+## Recommendation-engine research — 29 October 2026
+
+Owner requested a source-backed audit and implementation plan only, with explicit
+approval before application coding. The four-document research package starts at
+[the implementation plan](docs/planning/recommendation-engine/IMPLEMENTATION_PLAN.md).
+It preserves the four-stage journey, ADR0073 and existing ownership/spend/launch
+gates; proposes versioned evidence, business outcomes and provider capability
+contracts before real forecast allocation. Current8014 is still authored simulation.
+No new provider, budget, account access, model, stack, migration or rollout is
+approved by this research. Current platform documentation is not account evidence.
+
 ## Brief-driven planning — 29 October 2026
 
 Owner removed the repeated "additional information for recommendation" form.

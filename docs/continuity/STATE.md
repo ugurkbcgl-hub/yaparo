@@ -1,82 +1,73 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 02:57 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 09:40 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
-## Objective and constraints
+## Current objective and boundary
 
-Owner removed repeated planning questions and explicitly wants the recommendation
-to use first-stage answers together with geography, dates and budget. Local
-synthetic only; real account/data/AI production/ad forecasts/spend/publishing gates
-remain. Usage monitoring disabled; no new service/fees. Owner manages OpenRouter
-balance. Reviewed green PRs may merge; never direct main push. Export undecided.
+Owner supplied a detailed recommendation/budget-engine research brief. This task
+is research, audit and implementation planning ONLY. Four-stage journey remains:
+clarify request → build plan → create content → review/publish. Owner explicitly
+requires approval BEFORE application coding. No new migration, dependency upgrade,
+account read, OAuth, ad object, publishing, spending or deployment was performed.
+Local synthetic product work remains gated as before. Usage monitoring disabled.
 
-## Repository
+## Repository and evidence
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-PR373 MERGED at2026-10-29 02:57 Europe/Istanbul, squashcba8fba on main.
-Reviewed headb3c6d69; required CI40789784874 SUCCESS including16 first-stage,
-compact-plan6 and legacy19 browser journeys, full PostgreSQL and app browser E2E.
-Exact-head guarded merge; no checks bypassed. Post-merge main CI40790844945 was
-in_progress when checked; no post-merge success claimed. Prior PR372/main CI passed.
-Current checkout codex/durable-plan-contract, based on origin/maincba8fba with
-upstream unset. Only this verified handoff is committed locally; include it with
-the next meaningful package, not a standalone documentation PR. No app DB migration,
-private credential/account or deployment action.
+Current feature branch codex/recommendation-engine-research, from local87fa86d
+handoff on maincba8fba. No open PR at initial live check.
+PR373 merge and required CI40789784874 remain historical success; main
+CI40790844945 has now been rechecked COMPLETED/SUCCESS for cba8fba.
+Research package is local for owner review; no PR/new CI triggered this task.
+Do not mistake the earlier handoff's in-progress main CI for current status.
 
-## Completed brief-driven prototype package
+## Completed planning deliverable
 
-OutcomeContract.analyze validates the exact firstStage and binds literal subject,
-intent/outcome, audience, endpoint and declared risks. No sector/business/source
-audience is guessed. Absent risk is not_declared in the bridge, null in analysis,
-not a verified normal scope. Forced fundraising and explicit risks remain.
+docs/planning/recommendation-engine/:
+- AUDIT.md: actual code/function/data/test inventory; working vs authored vs
+  designed/unverified, reference-package defects, preserved boundaries.
+- PROVIDER_CAPABILITIES.md: official sources checked29Oct; Google Search/YouTube,
+  Meta, LinkedIn, TikTok, Microsoft, Yandex; access/version/mutation/metric limits,
+  unknown costs/retention and account/pazar validation; no live account evidence.
+- IMPLEMENTATION_PLAN.md: proposed owned contracts, metric/event/evidence models,
+  cache/approval invalidation, per-purpose marginal allocation,11 work packages
+  with dependencies/acceptance/effort/rollback, costs and approval gates.
+- ACCEPTANCE_TESTS.md:36 scenarios, mathematical invariants, frozen forecast
+  evaluation, maturity/dedup/attribution vs incrementality, G0–G4 and visual gates.
 
-Decision.evaluateOwned re-derives authority from the validated snapshot and ignores
-retired inputs. Exact outcome projection/paid usage, geographic center/date/budget
-and numerical bounds validate. Captured risks, policy refusal, asset/minimum/shared
-caps, reserve and downstream invalidation remain; publishable/qualification false.
+PROJECT/ROADMAP point to research and record implementation approval hold.
+This proposal does not select a new provider/stack/database/budget or approve
+production/real data. First proposed work: WP01 versioned owned draft/evidence,
+WP02 business outcomes/metric semantics, WP03 capabilities/freshness.
 
-Only known objective/geography/budget dimensions contribute to the partial local
-authored rank; unknown dimensions have no score. Points normalize over known
-weight and record coverage (normally40/100), never expert completeness, confidence
-or success probability. Typed business audience can condition authored scenario
-values; no verified platform audience/readiness is inferred. Legacy complete
-evaluate and benchmarks remain unchanged. ADR0073 records this local-only choice.
+## Material findings
 
-Plan step has no repeated business/sector/audience/measurement questionnaire.
-First-stage audience is summary-only, edit goes back to stage1. Commercial economics
-is separately optional; missing mode means not_provided and inactive values zero.
-The explanation shows current brief plus bounds, with known/unknown facts and
-readiness read-only. FX source is read-only and receives no raw firstStage; legacy
-provider selection remains. Compatibility IDs are hidden, disabled and ignored.
+8014 still uses authored Simulation.forecast and score-squared allocation.
+Public FX is not an account forecast. Django draft only Google Search/lead and
+positive media budget; organic/46routes require a separate versioned contract.
+Existing report_metrics ownership/completeness/zero/freshness patterns are reusable.
+planning.py date difference vs brand_settings inclusive+1 is a real source
+inconsistency; resolve/test in WP01 before real pacing, no code fix done here.
 
-## Verification actually run
+Official current Google docs differ from old token/v23 assumptions: Cloud-project
+access and v24+ strategy-dependent forecast fields must be qualified. Meta
+SDK gives audience size, not a proven paid result curve. Some Meta references
+were inaccessible; current Graph version/change date remain unverified.
+Yandex report creation is not strictly read-only. All current account/production
+forecast access remains unverified; protected TEST work is not permission proof.
 
-Pure46-route analysis, owned recommendation, legacy engine, share and simulation
-checks passed. Tests include hidden-field injection refusal, exact binding, absent/
-forced risks, unsupported outcomes, dates/radius, optional economics, caps/reserve
-and private known-only path. JS syntax, configured Ruff format/lint, diff checks pass.
+## Verification this task
 
-First-stage16 browser tests passed24.090s (%TEMP%/yaparo-first-stage-4_0soaj9),
-including recommendation without extra questions, rebind and captured-risk refusal.
-Legacy19 passed27.995s (yaparo-decision-4zmpbnx8). Compact-plan6 passed10.892s
-(yaparo-first-stage-kx3ys9sj), including long mobile input, live shares and geo.
-Runs use fake FX, assert no page errors/outbound provider calls, never access app DB.
-Required CI40789784874 then passed exact final head, including all these suites.
-
-Desktop1440/mobile390 plan and viewport/review images inspected in kx3ys9sj.
-No horizontal overflow/repeated section; long literal rationale wrapping corrected.
-Independent read-only review found only absent-risk normal fallback; corrected.
-Actual8014 existing asset routes serve analyze/evaluateOwned and no repeated-section
-definition. No new runtime route or process restart. Refresh resets temporary work.
-
-## Preserved implementation and next integration boundary
-
-Nine banks/46 routes, five synthetic examples, literal endpoint/CTA/KPI contracts,
-creative editing/history and channel adaptations remain. Offline pinned Turkey
-clipping, percentage caps and reserve preserved. Source data.js/V2 catalogs and
-legacy.html unchanged. No real AI or new provider/account permission is introduced.
-PR371/372 record compact-plan/example work; durable app integration is separate.
+Independent read-only integrated reviews corrected inaccurate symbol names and
+clarified spend invariant/cache scope wording. No unresolved material review issue.
+Agent actually ran pure brief-analysis, owned-recommendation and V2 importer
+--check successfully; source workbook/hash matched. No generated source change.
+Four document deliverables/local links/UTF8/fence checks and git diff --check passed.
+No new application/DB/browser/provider suite was run; no UI change or new visual
+verification claimed. Prior PR373 desktop/mobile evidence remains historical.
+Source research and case studies explicitly distinguish provider claims, model
+projections, inaccessible evidence and actual measured outcomes.
 
 ## Preserved capabilities and protected work
 
@@ -95,6 +86,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Define the versioned durable campaign-draft contract for accepted first-stage
-analysis, plan bounds, allocations and source readiness before app integration,
-preserving existing ownership, budget, generation and launch gates.
+Present the completed research plan for owner approval. Wait for that approval
+before implementing WP01's synthetic owned draft/evidence contract. No real
+provider/account operation is part of that first development package.
