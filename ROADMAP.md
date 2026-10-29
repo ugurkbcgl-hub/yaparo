@@ -2,10 +2,12 @@
 
 ## Budget discovery planning update — 29 October 2026
 
-Current task is documentation only; pause the previously recorded next coding
-step until the owner approves the revised
+Owner approved the revised
 [budget planner](docs/planning/recommendation-engine/BUDGET_PLANNER_SPEC.md).
-No code, migration or runtime/account change in this update. Revised first jobs:
+First WP01 foundation now implements pure unresolved-budget/context and synthetic
+selection/cash transition contracts (ADR0076), with no DB/provider/UI wiring.
+Next bounded package is WP02 economics and shared response/delivery resource
+semantics; then finite candidates and UI. Revised first jobs:
 WP01 optional-budget discovery contract; WP02 economics and shared response/
 delivery resources; WP06 candidate comparison with WP03 fake data, then WP07 UX.
 Cash-fit confirmation and media-spend authorization remain separate. Existing

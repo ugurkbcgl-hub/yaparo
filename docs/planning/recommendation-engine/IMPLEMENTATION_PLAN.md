@@ -1,10 +1,9 @@
 # Yaparo reklam önerisi ve bütçe motoru — uygulama planı
 
-Durum: ilk plan29Ekim2026'da onaylandı; aynı tarihli **işletmeye uygun bütçe
-önerisi güncellemesi araştırma/planlama aşamasındadır, uygulama onayı bekler**.
-Bu güncellemede ürün kodu, migration, hesap nesnesi, kampanya, paket sürümü,
-ücret veya yayın değişikliği yapılmaz. Önceki uygulama onayı bu yeni bütçe
-davranışını kendiliğinden açmaz.
+Durum: ilk plan ve işletmeye uygun bütçe güncellemesi29Ekim2026'da kullanıcı
+tarafından onaylandı. İlk yeni WP01 dilimi saf keşif/seçim/nakit sözleşmesi
+olarak uygulandı (ADR0076); tam planlayıcı/UI/gerçek kaynak bağlantısı değil.
+Migration, hesap nesnesi, kampanya, paket sürümü, ücret veya yayın değişikliği yok.
 
 Uygulama kaydı: ilk WP01 dilimi sağlayıcısız, immutable ve daima
 `declared_unqualified` sözleşmeler olarak başladı. Sonraki dilimde46 yolun sunucu form
@@ -50,8 +49,8 @@ Yeni karardan sonra ilk üç küçük ve bağımsız doğrulanabilir iş:
 
 Bu üçü bitmeden gerçek tahmine dayanan otomatik dağılım veya satış beklentisi
 etiketi eklenmez. Şu anda başka kullanıcı bilgisi gerekmiyor. Yeni bütçe diliminin
-uygulaması için onay; gerçek veri/hesap denemesi için ayrıca aşağıdaki kapılar
-gerekir. İlk güvenilir kapsam sentetik, sonlu adaylı ve neden hesaplanamadığını
+uygulaması onaylandı; gerçek veri/hesap denemesi için ayrıca aşağıdaki kapılar
+gerekir. İlk güvenilir hedef kapsam sentetik, sonlu adaylı ve neden hesaplanamadığını
 da gösterebilen bir karşılaştırıcıdır; otomatik harcama veya model zorunlu değildir.
 
 ## 2. Korunan kullanıcı deneyimi
@@ -459,7 +458,8 @@ takvim/sağlayıcı onay süresi taahhüdü değildir.
 - Bileşen: `outcome-contract.js`, `first-stage-bridge.js`, campaign models ve
   mevcut saf `contracts.py`, `validation.py`, `analysis.py`; yeni keşif sözleşmesi
   ve mevcut plan revision/owner/idempotence desenleri. Saf temel/form doğrulaması
-  ADR0074/0075 ile mevcut; yeni keşif/kalıcı sahiplik bölümü henüz yapılmadı.
+  ADR0074/0075 ile mevcut; saf bütçesiz keşif/seçim/nakit temeli ADR0076 ile eklendi.
+  Kalıcı sahiplik, gerçek aday üretimi ve UI bağlantısı henüz yok.
 - Veri/yetki: sentetik snapshot, kullanıcı sahibi ve context; dış erişim yok.
 - Bağımlılık: ADR0071–0073 ve audit eşlemesi; WP02/03'ün ortak zemini.
 - Kabul:46 route/delivery, unknown≠zero, cross-tenant refusal, stale revision,
@@ -653,7 +653,7 @@ kontrolü görevini bu plan otomatik açmaz.
    kalibrasyon coverage ve tazelik SLO'ları pilot amacına göre önce kaydedilip
    backtestte sınanacak. Kalite kanıtı yoksa büyüme yerine ölçüm/test önerilecek.
 
-**Sonraki tek iş:** Yeni bütçe planı onaylanırsa WP01'in ayrı, bütçesiz keşif
-sözleşmesini ve WP02 ekonomi/ortak kapasite örneklerini sentetik olarak uygula;
-eski zorunlu bütçeli PlanBounds'u gevşetme. Şimdiki görev yalnız plan güncellemesi,
-uygulama onayı beklenir. Form geçerliliği gerçek bilgi/platform uygunluğu değildir.
+**Sonraki tek iş:** WP02 ekonomi ve ortak talep/teslim kapasitesi sözleşmelerini
+sentetik olarak uygula; mevcut saf keşif temeline bağla, eski zorunlu bütçeli
+PlanBounds'u gevşetme. Sonlu sayısal adaylar ve UI sonra gelir. Form geçerliliği
+gerçek bilgi/platform uygunluğu değildir; kalıcı servis ve yürütme kapıları ayrıdır.

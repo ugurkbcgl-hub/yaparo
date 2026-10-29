@@ -56,3 +56,4 @@ ADRs capture decisions that would be costly or confusing to reverse. Keep propos
 - [ADR-0073 — Brief-driven local recommendation](0073-brief-driven-prototype-recommendation.md): no repeated classification form; bound first-stage facts, explicit unknowns and partial authored ranking.
 - [ADR-0074 — Unqualified recommendation contracts](0074-unqualified-recommendation-contracts.md): pure immutable declarations/evidence/bounds, metadata replay, explicit qualification hold and inclusive preview dates.
 - [ADR-0075 — Server-owned first-stage validation](0075-server-first-stage-validation.md): all46 form paths, normalized declarations and literal analysis, differential fixtures, no operational qualification.
+- [ADR-0076 — Budget-optional discovery](0076-budget-optional-discovery-contract.md): separate unresolved ceiling/context, synthetic selection and cash metadata, monotonic state binding, no execution authority.

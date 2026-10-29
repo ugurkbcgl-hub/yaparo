@@ -1,10 +1,11 @@
 # İşletmeye uygun bütçe ve anlık senaryo karşılaştırması
 
-Ürün kararı:29Ekim2026, Europe/Istanbul. **Yalnız araştırma ve geliştirme planı;
-yeni davranışın uygulaması kullanıcı onayı bekliyor.** Mevcut araştırma, kabul
+Ürün kararı ve uygulama onayı:29Ekim2026, Europe/Istanbul. Mevcut araştırma, kabul
 edilmiş46-yol doğrulayıcısı ve dört aşama korunur. Bu belgede anlatılan bütçe
-planlayıcı henüz çalışmıyor. Kod, migration, paket, hesap, kampanya, harcama veya
-sunucu ayarı değiştirilmedi.
+planlayıcı henüz çalışmıyor. İlk WP01 uygulaması yalnız saf keşif/seçim/nakit
+metadata sözleşmesidir; [ADR0076](../../adr/0076-budget-optional-discovery-contract.md).
+Sayısal öneri, ortak kapasite, kalıcı kayıt ve UI bağlantısı henüz yoktur.
+Migration, paket, hesap, kampanya, harcama veya sunucu ayarı değiştirilmedi.
 
 [Mevcut denetim](AUDIT.md), [uygulama işleri](IMPLEMENTATION_PLAN.md),
 [sağlayıcı kanıtları](PROVIDER_CAPABILITIES.md) ve
@@ -447,8 +448,9 @@ erişim/terms/kota; işletme stok/takvim/sonuç bağlantısının freshness ve r
 semantiği; stop gecikmesi, gerçek+bekleyen harcama ve onay bağları. Belgelenen
 servis özelliği veya bir TEST başarısı bu kanıtların hepsi değildir.
 
-Şimdi kullanıcıdan gereken tek karar **bu bütçe planı güncellemesinin uygulama
-onayı**. İlk sentetik dilim için parola/anahtar, yeni ücret veya gerçek veri
-gerekmez. Gerçek pilot öncesi hangi işletme kaynağının bağlanacağı, risk/güvenlik
+Kullanıcı bu bütçe planının uygulamasını onayladı. İlk sentetik dilimler için
+parola/anahtar, yeni ücret veya gerçek veri gerekmez. Gerçek pilot öncesi hangi
+işletme kaynağının bağlanacağı, risk/güvenlik
 tercihi, nakit/test kaybı tavanı, veri/hukuk ve hesap/medya izinleri ayrıca gerekir;
-bu kararlar varsayımla alınmayacak. Uygulama onayı gelene kadar kodlamaya geçme.
+bu kararlar varsayımla alınmayacak. İlk sözleşmenin varlığını tam planlayıcı
+veya gerçek harcama yetkisi gibi yorumlama.

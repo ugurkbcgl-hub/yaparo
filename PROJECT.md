@@ -9,9 +9,13 @@ Four stages/two first questions and organic/content-only paths remain. Three
 levels (starting test/recommended/current planning upper) are not forced when
 data or feasibility only supports fewer. Proposed spec:
 [business-fit budget planner](docs/planning/recommendation-engine/BUDGET_PLANNER_SPEC.md).
-This update is documentation/research ONLY; implementation requires renewed
-owner approval. Existing PlanBounds, actual code/UI and execution caps remain
-unchanged. Earlier implementation permission does not open this new behavior.
+Owner approved implementation on29October2026. The first WP01 slice now adds a
+pure budget-optional discovery contract with separate context/state revisions,
+synthetic scenario selection and cash declaration/withdrawal. See
+[ADR0076](docs/adr/0076-budget-optional-discovery-contract.md).
+No numeric recommendation engine, shared capacity, durable save or UI connection
+is implemented yet. Existing PlanBounds and execution caps remain unchanged;
+cash confirmation is never publication or spending permission.
 
 ## Recommendation-engine research — 29 October 2026
 
