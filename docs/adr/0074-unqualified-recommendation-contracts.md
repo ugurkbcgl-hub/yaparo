@@ -76,8 +76,11 @@ five calendar and existing metric tests:46 local passes, no DB setup/provider.
 Instant comparisons use UTC, including repeated DST-fold wall times; local
 calendar dates still use the selected timezone for new-plan date checks.
 Configured formatting/lint and independent read-only source review passed.
-Required CI must still pass before merge; its ephemeral DB tests are not evidence
-of changes to the preserved local databases or actual provider accounts.
+PR374 required CI40838250522 passed the reviewed d43214f head:1194 PostgreSQL
+suite tests (4 explicit skips),45 app browser E2E and prototype/source/build
+checks. Exact-head guarded squash mergece36b03 completed29October2026.
+These ephemeral DB tests are not evidence of changes to preserved local databases
+or actual provider accounts. Post-merge main CI was still running when checked.
 
 No prototype8014 UI asset changed; no new visual claim is made. The accepted
 prototype/editor and protected Google/AI histories remain untouched.

@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 10:51 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 11:01 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and authorization
 
@@ -14,9 +14,14 @@ brief analysis, persistent storage or operational recommendation integration.
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/recommendation-contracts, from local researchf534af7 and handoff87fa86d
-on maincba8fba. No PR open at initial check; creation/required CI pending.
-Prior PR373/main CI40790844945 SUCCESS was rechecked in the research task.
+PR374 MERGED at2026-10-29 11:01 Europe/Istanbul, squashce36b03 on main.
+Reviewed headd43214f; required CI40838250522 SUCCESS (exact-head guarded merge).
+The earlier c55cccc run was cancelled only after a superseding DST fix; final
+head completed all required checks. Researchf534af7/handoff87fa86d included.
+Current checkout codex/accepted-brief-analysis, based on origin/maince36b03,
+upstream unset. This verified handoff is local only; carry it with the next
+meaningful package instead of creating a standalone documentation PR.
+Post-merge main CI40839160910 was IN_PROGRESS when checked, no success claimed.
 
 ## Completed local package
 
@@ -52,7 +57,12 @@ Independent review found a repeated-DST-hour instant-ordering edge; evidence and
 history comparisons now normalize UTC, with a passing regression. Earlier
 read-only source review found no blocker in unqualified/unwired scope
 and recorded the remaining qualification boundaries above. Documentation updated.
-Required PR CI not yet run; do not claim merge/deployment success.
+Required CI40838250522 passed all checks: full PostgreSQL suite1194 tests
+(4 explicit skips) and45 app browser E2E, plus16 first-stage/6 compact-plan/
+19 legacy browser checks and source/editor/packaging/lint/audit checks.
+Final temporal re-review found no blocker. No deployment or actual provider claim.
+PR artifact UI attachment failed at the app's100-attachment limit; ordinary PR
+URL remains usable. Follow-up issue375 records the remaining WP01 validator work.
 
 ## Preserved capabilities and protected work
 
@@ -71,6 +81,7 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Finish review/required PR CI for this foundation. Then complete/review the
-server-owned first-stage field validator and accepted analysis across46 routes
-before any durable owner service or actual forecast integration.
+Complete/review the server-owned first-stage field validator and accepted
+analysis across46 routes (GitHub issue375) before any durable owner service or
+actual forecast integration. Full bank qualification is still pending; do not
+consume declared_unqualified answers as accepted analysis.
