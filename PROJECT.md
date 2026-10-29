@@ -1,5 +1,18 @@
 # Yaparo project brief
 
+## Business-fit budget planning decision — 29 October 2026
+
+Owner changed the planning direction: an upfront media budget is optional.
+Recommend bounded scenarios from the requested outcome, business economics and
+shared incremental capacity, then confirm cash fit and separately authorize spend.
+Four stages/two first questions and organic/content-only paths remain. Three
+levels (starting test/recommended/current planning upper) are not forced when
+data or feasibility only supports fewer. Proposed spec:
+[business-fit budget planner](docs/planning/recommendation-engine/BUDGET_PLANNER_SPEC.md).
+This update is documentation/research ONLY; implementation requires renewed
+owner approval. Existing PlanBounds, actual code/UI and execution caps remain
+unchanged. Earlier implementation permission does not open this new behavior.
+
 ## Recommendation-engine research — 29 October 2026
 
 Owner approved the recommendation-engine plan on29October2026. First WP01 slice:

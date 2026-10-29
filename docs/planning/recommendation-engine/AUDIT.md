@@ -8,6 +8,14 @@ kontrol et ve yayınla. Aşağıdaki yollar depo köküne göredir.
 
 ## 1. Sonuç
 
+29Ekim2026 planlama eki: bütçenin başta isteğe bağlı olması yönündeki yeni ürün
+kararı [BUDGET_PLANNER_SPEC.md](BUDGET_PLANNER_SPEC.md) içinde tasarlandı; henüz
+uygulanmadı. Mevcut `plan-ui.js` ve `engine.js` açık bütçe girdisiyle çalışıyor,
+`contracts.py::PlanBounds` çözülmüş bütçe tutarını zorunlu tutuyor. Yeni keşif
+durumu, aday bütçe karşılaştırması, ortak çok-kampanya kapasitesi ve nakit teyidi
+çalışan özellik gibi sunulamaz. Daha önce tamamlanan sunucu46-yol validatorü
+ADR0075 kapsamındadır; ilk araştırma aşağıda tarihsel temelini korur.
+
 Yaparo'da korunmaya değer çalışan form, bağlama, açıklama, mali sınır ve sahiplik
 bileşenleri var. Buna karşılık8014'te görülen medya önerisi **piyasa tahmini
 değil, açıkça etiketli yerel senaryo**. Gerçek hesap tahmini, işletme sonuçları,

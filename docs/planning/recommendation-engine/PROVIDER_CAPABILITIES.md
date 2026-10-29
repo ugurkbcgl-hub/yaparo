@@ -245,3 +245,43 @@ Facebook giriş ekranına yönlendi; yöntem/karşılaştırma ayrıntısı okun
 Bu yüzden Resident başlığındaki artış iddiası doğrulanmış gerçekleşme olarak
 aktarılmıyor. Erişilemeyen başarı hikâyesi yerine tahmin doğrulama testleri esas
 alınmalı; başka işletmenin sonucu Yaparo müşterisine garanti değildir.
+
+## İşletmeye uygun bütçe: harcama ve durdurma semantiği
+
+**Resmî sayfa kontrolü:29Ekim2026, Europe/Istanbul.** Bu ek yalnız araştırmadır;
+hesap/API çağrısı, bütçe düzenleme, nesne oluşturma, yayın veya harcama yapılmadı.
+İlgili tasarım [bütçe planlayıcı şartnamesinde](BUDGET_PLANNER_SPEC.md) bulunur.
+Belge erişimi gerçek hesaptaki ürün/para birimi/ülke davranışının kanıtı değildir.
+
+| Sağlayıcı / bütçe tipi | Resmî belgede görülen davranış | Yaparo için sonuç / açık doğrulama |
+| --- | --- | --- |
+| Google ortalama günlük | Çoğu kampanyada bir günün ücretlendirilen limiti ortalamanın2katı; aylık limit30,4katı. Ortalama günlük bütçe katı günlük tavan değildir. [Ortalama günlük bütçe](https://support.google.com/google-ads/answer/6385083), [harcama limitleri](https://support.google.com/google-ads/answer/10486637/about-spending-limits) | Tahmini günlük ortalamayı operasyonel kapasite sınırı gibi kullanma. Dönem/ayar değişikliği, istisna kampanya tipi ve hesabın gerçek bütçe profilini ayrı doğrula. Served cost ile billed cost farklı olabilir; sağlayıcı kredisi/refund anlık nakit telafisi varsayılmaz. |
+| Google kampanya toplamı | Yeni kampanyada belirli başlangıç/bitiş ve toplam tutar; günlük harcama limiti yok, toplamdan fazla ücretlendirme yok. Tür sonradan değiştirilemiyor; uygun kampanya türleri ve3–90gün / bazı video-Demand Gen yollarında1yıla kadar dönem koşulları var. [Kampanya toplam bütçesi](https://support.google.com/google-ads/answer/10486938/about-campaign-total-budgets) | Toplam medya tavanı günlük iş yükünü korumaz. Günü gününe stok/randevu/yanıt yükü için ayrıca kaynak kontrolü ve gerekiyorsa sınırlı aşama gerekir. Tür/sürüm/hesap desteği kabul testinden geçmeden mevcut TEST profilini gerçek hesaba genelleme. |
+| Meta | Güncel resmî bütçe, günlük bütçe, değişiklik ve account-limit sayfaları bu araştırmada giriş/erişim engeline yönlendi; güncel sayısal aşım oranı ve uygulama gecikmesi doğrulanamadı. [Günlük bütçe](https://www.facebook.com/business/help/190490051321426), [bütçe türleri](https://www.facebook.com/business/help/214319341922580), [bütçe değişikliği](https://www.facebook.com/business/help/196976447912140), [hesap limiti](https://www.facebook.com/business/help/141820733085330) | Üçüncü tarafların aktardığı yüzde/gecikmeler onaylı kural yapılmaz. Güncel resmî semantik ve hesabın ayarları doğrulanana kadar katı nakit/günlük kapasite garantisi verilmez; canlı yürütme kapısı kapalı kalır. |
+| TikTok standart günlük / lifetime | Günlük ortalama ve tüm dönem toplamı ayrılıyor; lifetime günlere eşit dağılmayabilir. Bütçe tipi yayın sonrası değiştirilemiyor; minimumlar kampanya/adgroup/dönem düzeyinde. [Bütçe rehberi, Temmuz2026](https://ads.tiktok.com/resources/help/article/budget) | Belgedeki USD minimumu TRY hesabına körlemesine çevrilmez; teknik minimum ile anlamlı test ayrı kalır. Güncel hesap/amaç/ürün profilini kontrol et. |
+| TikTok Dynamic Daily | Yedi günlük ortalama; bazı günler25% fazla, Pazar–Cumartesi hafta toplamı günlük tutarın7katıyla sınırlı. Amaçlara göre kullanılabilirlik ve sınırlı erişim koşulları var. [Dynamic Daily, Şubat2025 güncellemesi](https://ads.tiktok.com/resources/help/article/about-dynamic-daily-budget?lang=en) | “Daily” etiketine bakarak sabit tavan varsayma; gerçekten kullanılan pacing türünü kaydet. Kaynak eski diye kontrol tarihi yeniymiş gibi yayın tarihi değiştirilmez. |
+| LinkedIn | Günlük bütçe ortalama; gün içinde50% fazla olabilir. Sürekli planda Pazartesi–Pazar haftalık toplam7kat; sabit tarihte günlük×gün toplamı. Lifetime bütçe tüm süre toplamıdır; kampanya/adset hiyerarşisi ve Dynamic Group Budget ayrı. [Güncel bütçe yardımı](https://www.linkedin.com/help/lms/answer/a420155), [API campaign/pacing açıklaması](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-campaigns?view=li-lms-2026-05) | Tek campaign budget alanını bütün yüzeylere kopyalama. Aktif API sürümü, kampanya/adset, pacingStrategy ve gerçek hesabın bütçe tipini birlikte sınayarak eşle. Tahsis ile sağlayıcının optimize ettiği günlük dağılım ayrı. |
+| Microsoft Advertising | Günlük tutar hedef; aylık bütçe günlük×30,4. Ay içi değişiklikte geçmiş harcama+günlük×kalan gün hesabı. Günlük aşımın genellikle100%'den az tutulduğu ifadesi kesin garanti değil. Lifetime pacing güncel kalan tutar/günlerle yenilenir; aşım halinde iade anlatılır. [Resmî bütçe seçenekleri](https://help.ads.microsoft.com/apex/index/3/en/51006/) | “Genellikle” bir güvenlik tavanı değildir. İade olasılığını eldeki nakit sayma. Lifetime/API desteğini seçilen kampanya/hesap için ayrıca kanıtla. |
+| Yandex | Haftalık bütçe Pazartesi–Pazar dağıtılır; haftalık bütçe değişikliği harcama sayacını sıfırlayabilir, hafta ortasında önceki harcama yeni limite dahil olmayabilir. Günlük pay zaman planına ve devreden bütçeye bağlı. [Resmî haftalık bütçe](https://yandex.ru/support/direct/en/strategies/week-budget) | Bütçe azaltmak her zaman kalan harcamayı aynı ölçüde azaltmaz. Yaparo'nun dönemi kapsayan harcama+bekleyen taahhüt defteri korunur; provider reset güvenlik defterini sıfırlamaz. Mevcut Türkiye hesabı/para koşulları hâlâ doğrulanmamış. |
+
+### Ortak uygulama ön koşulu — öneri ile gerçek harcama ayrı
+
+Kaydırıcının yerel senaryo hesabı hiçbir platform bütçesini değiştirmez. Salt
+okunur forecast kotası/çağrı maliyeti, reklam medya bütçesinden farklıdır; forecast
+bütçe ızgarası seçmek ödeme/yayın yetkisi değildir. Öneri, nakit uygunluğu,
+plan seçimi ve operasyonel harcama onayı ayrı sürümlü kayıtlar olmalıdır.
+
+Yayın adaptöründen önce doğrulanacak alanlar: provider/API sürümü, budget_type,
+budget_level, pacing tipi, hesap timezone'u, dönem/gün kapsamı, birim/para/vergi,
+değişiklikte limit-reset davranışı, gerçekleşen/bekleyen harcama tanımı ve
+hesapta kullanılabilir sert toplam limit. Bu kontrol tamamlanmadıysa taslak
+karşılaştırma yapılabilir; yürütme açılmaz. Hiçbir sağlayıcıda anlık bütçe kesme
+veya durdurma SLA'sı bu araştırmada hesapla test edilmiş sayılmıyor.
+
+Durdurma onayı, önceden oluşmuş gösterim/ziyaret/talep ve sonradan kaydedilecek
+satışın sona erdiğini göstermez. Planın kapasite güvenlik payı ve günlük yoğunluk
+kontrolü bu gecikmeli yükü dikkate almalı; gerçek stok/randevu rezervasyonu ve
+bekleme listesi ayrı işletme kontrolüdür. Kaynak koptuğunda eski sayılar gerçek
+zamanlı etiketlenmez. Otomatik büyüme yalnız açık izinli tutar/kanal/tarih/içerik
+sınırları içinde ve güncel kapasiteyle olabilir; sözleşmedeki sınırı aşan artış
+yeni kullanıcı onayı gerektirir.
