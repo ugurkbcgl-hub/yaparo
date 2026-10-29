@@ -1,5 +1,18 @@
 # Yaparo roadmap
 
+## Budget discovery planning update — 29 October 2026
+
+Owner approved the revised
+[budget planner](docs/planning/recommendation-engine/BUDGET_PLANNER_SPEC.md).
+First WP01 foundation now implements pure unresolved-budget/context and synthetic
+selection/cash transition contracts (ADR0076), with no DB/provider/UI wiring.
+Next bounded package is WP02 economics and shared response/delivery resource
+semantics; then finite candidates and UI. Revised first jobs:
+WP01 optional-budget discovery contract; WP02 economics and shared response/
+delivery resources; WP06 candidate comparison with WP03 fake data, then WP07 UX.
+Cash-fit confirmation and media-spend authorization remain separate. Existing
+server validation, immutable history and hard execution limits are preserved.
+
 ## Recommendation-engine planning — 29 October 2026
 
 Owner approved implementation on29October2026. First WP01 slice: immutable

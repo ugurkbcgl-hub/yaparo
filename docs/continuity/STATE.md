@@ -1,62 +1,65 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 11:36 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 18:43 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
-## Objective and constraints
+## Objective and authorization
 
-Owner requested completing the next WP01 step: full server-owned46-route form
-validation and normalized literal analysis. Approved recommendation plan remains.
-Local synthetic only; no real account/data/provider/AI/spend/publishing/deployment
-or new service. Usage monitoring disabled. Export remains undecided.
+Owner approved business-fit budget-planner implementation. First small WP01 slice
+now implements pure budget-optional discovery/context and synthetic selection/cash
+metadata only. Local synthetic; no real data/account/provider/AI/ad/spend/release
+or new service. Usage monitoring disabled. No prototype UI/DB/runtime change.
 
 ## Repository
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/accepted-brief-analysis, from local handoffc09cd3c on maince36b03.
-Prior PR374 merged; its main CI40839160910 was rechecked SUCCESS.
-Issue375 records current validator work. New PR/required CI pending at this note.
-Protected Google/AI/DB/consumption history not opened, changed or replayed.
+Branch codex/budget-discovery-contract, from local planning5be6a3b/handoffd8ae2c3
+on origin/mainb75e16b. PR376 merged, issue375 closed, main CI40899075957 SUCCESS.
+Planning update plus new code belong in the upcoming feature PR; no PR at initial
+check. Required CI/merge still pending for this package.
 
-## Implemented server form slice (ADR0075)
+## Completed first discovery contract slice (ADR0076)
 
-Pure bank.py ports current9 intent banks/46 routes and conditional field IDs,
-options/labels/roles/required/numeric/UTF16 limits. validation.py normalizes and
-validates bounded flat answers, visibility, scalar/multi enums and cross-field
-date/location/physical-visit/price/qualification/overnight conditions.
-Default rejects unknown/inactive keys; explicit prune_hidden returns a separate
-preview, accepted constructor revalidates the clean canonical snapshot.
-
-AcceptedBrief means server_form_valid_declaration ONLY, never verified truth,
-policy/account readiness or consent. Binding includes validator/bank versions.
-Old DeclaredBrief remains unqualified and DraftContent exact-type stays unchanged.
-Corrected source enum gaps: hybrid (not combined) and selectable fundraising.
-No actual stored record used these pure contracts; no data/schema migration.
-
-AcceptedAnalysis re-derives exact literal subject/identity/message/audience,
-destination, CTA/KPI, forced+explicit risks and known/unknowns. Unsupported paid
-mapping null; missing forms/custom destinations unresolved. No keyword guessing.
-Policy/platform/measurement/publish flags false; forecast/model null.
-Immutable source, detached output. No route/ORM/persistence/provider integration.
-
-URL declarations are never fetched/ownership verified. Server narrower policy
-rejects userinfo, controls, invalid numeric IP/IPFuture, encoded/ambiguous hosts
-and IDNA joiners; not a complete WHATWG implementation or an SSRF fetch gate.
-Literal text must still be escaped by future renderers.
+New campaigns/recommendations/discovery.py:
+- DiscoveryContext without budget; optional result deadline/flight/region and
+  separate business/account/market/currency/timezone. Incomplete context valid.
+- BudgetDiscoveryDraft None=unknown,0=no-paid, positive=media ceiling. Existing
+  PlanBounds and operational hard limits unchanged, no dummy0/sample amount.
+- Exact accepted-analysis/scope/context/version binding. Context revision changes
+  clear selection/cash. Separate monotonic state_revision stops stale/ABA requests
+  after selection/cash/withdrawal without changing candidate context binding.
+- SyntheticScenario closed fixture with total media/production/service costs,
+  unknown-or-known peak cash and explicit synthetic-upfront-campaign-v1 cash model.
+  Known peak >= campaign cost is a deliberately narrow fixture assumption, not
+  actual cash-flow math or full candidate engine.
+- Paid/hybrid current fixture selection only, within declared media ceiling;
+  no organic/content-only/unsure paid selection. New selections need complete
+  metadata/current not-yet-started flight; exact current repeat is no-op.
+- CashFit user-declared fixture binds full selected scenario/context/currency.
+  Lower/unknown/insufficient cash can be recorded without confirmation. Renew,
+  withdraw and strict sufficient-fit helper; older/equal-but-different declarations
+  reject. Expiry and flights rechecked, UTC instant comparisons include DST.
+- Stage derived at supplied time, never input ready flag. cash_confirmed is
+  not financial proof/consent. publication_enabled/execution_authorized alwaysFalse.
+  No separately_spend_authorized transition or automatic PlanBounds conversion.
 
 ## Verification actually run
 
-16 new tests include414 JS differential cases (46 base routes,418 enum transitions,
-198 shared field specs), per-base required/enum mutations and targeted malformed/
-risk/UTF16/ASCII/date/destination/flags/rebind tests. Together with prior23 pure
-contracts,5 calendar and18 metric tests:62 local passes, no DB setup/provider.
-Ruff format/check passed359 files. Deterministic generator --check passed;
-source hashes normalize UTF8-LF. CI adds this read-only drift check.
-Agent additionally compared3488 field scenarios and probed7590 malformed mutations;
-these are synthetic ad hoc probes, not extra committed tests or account evidence.
-Independent review found invalid-IP and IDNA-joiner gaps; corrected, regression
-tested and re-reviewed with no remaining blocker. No UI asset changed and no new
-manual browser visual check claimed. Required PR CI still pending, no merge claim.
+27 new pure tests plus prior62 accepted-bank/contracts/calendar/metric tests:
+89 local passes, no DB setup/migration/provider. Ruff format/check passed361 files.
+Independent read-only review found semantic-version binding, cash withdrawal/
+renewal, stale declaration and ABA gaps; fixed with targeted regressions and
+re-reviewed without blocker. No UI change/manual visual claim.
+Required PR CI still pending; do not claim merged/real-ready planner.
+
+## Planning preserved and updated
+
+BUDGET_PLANNER_SPEC and source/acceptance/implementation research remain included.
+Owner approval recorded; currentimplemented boundary clear in PROJECT/ROADMAP.
+30budget acceptance scenarios are future full-planner tests, not all implemented.
+Numerical recommendations, shared capacity/economics, actual cash timing, durable
+owner service and UI are still pending. Existing8014 uses mandatory-budget authored
+demo; this pure backend foundation does not yet alter that screen.
 
 ## Preserved capabilities and protected work
 
@@ -75,7 +78,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Finish required CI/review/PR for this validator, then implement the separate
-durable owner-scoped synthetic draft service with accepted-analysis binding,
-locked expected revision and request replay. Keep operational publisher fields
-and protected histories unchanged; no provider/account rollout implied.
+Finish review/required PR CI for this package, then WP02: typed economics and
+shared response/delivery resource/deduction semantics with synthetic examples.
+Finite budget candidates and WP07 UI follow; no real provider/account rollout.

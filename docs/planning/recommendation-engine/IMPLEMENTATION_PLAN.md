@@ -1,8 +1,9 @@
 # Yaparo reklam önerisi ve bütçe motoru — uygulama planı
 
-Durum: **29 Ekim2026'da kullanıcı tarafından onaylandı**. Araştırma tarihi:
-29 Ekim 2026, Europe/Istanbul. Bu paket ürün kodu, migration, hesap nesnesi,
-kampanya, paket sürümü, ücret veya yayın değişikliği içermez.
+Durum: ilk plan ve işletmeye uygun bütçe güncellemesi29Ekim2026'da kullanıcı
+tarafından onaylandı. İlk yeni WP01 dilimi saf keşif/seçim/nakit sözleşmesi
+olarak uygulandı (ADR0076); tam planlayıcı/UI/gerçek kaynak bağlantısı değil.
+Migration, hesap nesnesi, kampanya, paket sürümü, ücret veya yayın değişikliği yok.
 
 Uygulama kaydı: ilk WP01 dilimi sağlayıcısız, immutable ve daima
 `declared_unqualified` sözleşmeler olarak başladı. Sonraki dilimde46 yolun sunucu form
@@ -12,7 +13,8 @@ doğrulaması değildir. Kalıcı kayıt ve gerçek tahmin halen tamamlanmadı. 
 [ADR0074](../../adr/0074-unqualified-recommendation-contracts.md) içindedir.
 Aşağıdaki mimari hedef planıdır, tamamlanmış özellik listesi değildir.
 
-Bu plan [denetim](AUDIT.md), [sağlayıcı matrisi](PROVIDER_CAPABILITIES.md) ve
+Bu plan [denetim](AUDIT.md), [sağlayıcı matrisi](PROVIDER_CAPABILITIES.md),
+[bütçe planlayıcı tanımı](BUDGET_PLANNER_SPEC.md) ve
 [kabul planıyla](ACCEPTANCE_TESTS.md) birlikte okunur. Mevcut ADR0072/0073,
 hesap sahipliği, nesil/revizyon, tekrar çalıştırmama, bütçe ve yayın kapıları
 korunur. Metin, sağlayıcı erişimi veya hukuki uygunluk kararı değildir.
@@ -23,23 +25,33 @@ Mevcut sistemi yeniden yazmayalım. İki sorulu dinamik formu, dört aşamayı,
 editörü, kuruş hassasiyetindeki sınırları, ayrılmamış bütçeyi, açık kaynak
 güncellik yapısını ve Django sahiplik/geçmiş desenlerini koruyalım.
 Değişmesi gereken, **örnek kanal puanından gerçek sonuç beklentisine geçişteki
-kanıt zinciri**. Kur uygunluğu, hesap erişimi veya satış tahmini değildir.
+kanıt zinciri** ve bütçenin başlangıçta zorunlu müşteri girdisi sayılmasıdır.
+Yeni sıra: istenen sonuç → işletme ekonomisi ve reklama ayrılabilir ek kapasite
+→ uygun kaynak/kanal tahminleri → uygulanabilir bütçe adayları → sonuç/katkı/iş
+yükü karşılaştırması → nakit uygunluğu → açık harcama sınırı/onayı.
+Kur uygunluğu, hesap erişimi veya satış tahmini değildir. Amaç tam bütçeyi
+harcatmak değil, işletmenin karşılayabileceği anlamlı ek işi bulmaktır.
 
-İlk üç bağımsız geliştirme paketi:
+Yeni karardan sonra ilk üç küçük ve bağımsız doğrulanabilir iş:
 
-1. **WP01 — Sürümlü plan/kanıt sözleşmesi.** İlk aşama ve plan sınırlarını
-   sunucunun doğruladığı, sahibine bağlı, değişiklikte eskiyen bir taslak olarak
-   tanımla. Demo, platform tahmini, gerçekleşme ve işletme varsayımını ayır.
-2. **WP02 — Metrik ve işletme sonucu alımı.** Önce sentetik dosya ile test edilen
-   yetkili dışa aktarım yolu; satış, nitelikli talep, iptal/iade ve kapasiteyi ayrı
-   kaydet. Ortak satışları platform toplamından türetme.
-3. **WP03 — Yetenek/güncellik kaydı ve yalnız okuma adaptör sınırı.** Gerçek
-   hesap erişmeden erişimsizlik, desteklenmeme ve eskimeyi işle; Google Search
-   adayını güncel sürüm/izin kanıtıyla daha sonra bağla.
+1. **WP01 — Bütçesiz keşif taslağı.** Mevcut kabul edilmiş form analizi ve
+   sahiplik deseninin yanına, isteğe bağlı bütçe tavanı taşıyan ayrı keşif
+   sözleşmesi tasarla. Bütçesi bilinmiyor ile0 ayrılır; keşif, seçilmiş senaryo,
+   nakit teyidi ve harcama onayı ayrı durumlar olur. Mevcut PlanBounds gevşetilmez.
+2. **WP02 — İşletme ekonomisi ve ortak kaynaklar.** Kısa yardımcı sorularla birim
+   gider sonrası değeri ve talebi karşılama/teslim kapasitesini topla. Toplam,
+   mevcut işler sonrası boş ve reklama ayrılmış ek kapasite ayrılır; aynı yük
+   iki kez düşülmez. İlk sürüm sentetik beyan/export ile çalışır.
+3. **WP06 + WP03 sahte adaptör sınırı — Aday karşılaştırması.** Kanıt aralığı
+   içindeki küçük bütçe ızgarasını sonuç, ek katkı ve yüksek talep kapasitesiyle
+   karşılaştır. Üç seviye oluşmuyorsa zorlamadan açıklama üret. Geçerli veriden
+   yerel slider önizlemesi; gerçek adaptör veya LLM çağrısı gerekmez.
 
 Bu üçü bitmeden gerçek tahmine dayanan otomatik dağılım veya satış beklentisi
-etiketi eklenmez. Şu anda başka kullanıcı bilgisi gerekmiyor. Plan onaylandı;
-gerçek veri/hesap denemesi için ayrıca aşağıdaki kapılar gerekir.
+etiketi eklenmez. Şu anda başka kullanıcı bilgisi gerekmiyor. Yeni bütçe diliminin
+uygulaması onaylandı; gerçek veri/hesap denemesi için ayrıca aşağıdaki kapılar
+gerekir. İlk güvenilir hedef kapsam sentetik, sonlu adaylı ve neden hesaplanamadığını
+da gösterebilen bir karşılaştırıcıdır; otomatik harcama veya model zorunlu değildir.
 
 ## 2. Korunan kullanıcı deneyimi
 
@@ -47,10 +59,16 @@ gerçek veri/hesap denemesi için ayrıca aşağıdaki kapılar gerekir.
 
 - İlk iki seçim ve uygun kısa form, niyet/istenen eylem için tek giriş kaynağı.
   `OutcomeContract.analyze` sonucunu sunucu tekrar doğrular; tarayıcıya güvenmez.
-- Plan aşaması yalnız eksik bölge, tarih, medya bütçesi ve amaca gerekli bir
-  işletme bilgisini sorar. Bilinen kitle/link/telefon/risk tekrar sorulmaz.
-  İşletme katsayıları yoksa kullanıcıyı uzun bir finans formuna zorlamak yerine
-  satış beklentisi gösterilmez veya küçük test yolu sunulur.
+- Plan aşaması yalnız eksik bölge, sonuç beklenen dönem ve amaca gerekli
+  ekonomik/kapasite bilgisini kısa sorularla alır. Başlangıç medya bütçesi
+  **zorunlu değildir**; mevcut bütçesi olan isteğe bağlı tavan girebilir.
+  Bilinen kitle/link/telefon/risk tekrar sorulmaz. “Bilmiyorum, birlikte
+  hesaplayalım” yalnız iş modeline gerekli yardımcı alanları açar. Maliyet yoksa
+  kârlılık, kapasite yoksa güvenli büyüme uydurulmaz.
+- İlk adaylar gösterildikten sonra toplam plan maliyeti ve sonuç düşük kalsa da
+  karşılanabilirliği sorulur. Daha düşük nakit tavanı yeni karşılaştırma üretir.
+  Tahsilat gecikmesi ve yeni işin üretim/hizmet nakit ihtiyacı gerektiğinde ayrı
+  değerlendirilir. Nakit teyidi/onay yokken sonuç koşullu taslaktır.
 - Ücretli, organik, birlikte ve yalnız içerik ayrı yollardır. Organik/yalnız
   içerikte medya bütçesi sıfır olabilir; üretim maliyeti yine ayrı kalır.
   Eski `WorkspaceCampaignDraft` pozitif bütçe şartı sessizce kaldırılmaz.
@@ -76,10 +94,14 @@ kartı oluşmaz. Örnek sayılar gerçek tahmin kartına taşınmaz.
 `veri_eskimiş`, `sınırlı_test`, `karşılaştırılabilir_tahmin`, `uygun_değil`.
 Hiçbiri yayın izni değildir. Hukuk/hesap/medya yetkisi ayrıca değerlendirilir.
 
-“Temkinli/öğrenme/büyüme” ancak farklı hesaplanmış sınırları varsa gösterilir:
-temkinli açık risk sınırı ve korunacak rezerv; öğrenme açıkça izinli test tutarı
-ve durdurma kuralı; büyüme olgun veri ve pozitif marjinal değer şartı. Verisiz
-işletmeye üç farklı isimle aynı yüzde tablosu sunulmaz.
+Üç seviye artık **Başlangıç testi / Değerlendirilen seçenekler içinde önerilen /
+Mevcut koşullarda üst sınır** olarak tanımlanır. Başlangıç testi kanal/amaç/ölçüm
+gereksinimine özgüdür; teknik minimum ve anlamlı test minimumu farklıdır. Önerilen
+seçenek üst sınırdan düşük olabilir. Üst sınır stok/personel/talep/nakit/veri/risk
+gerekçesini taşır ve harcama hedefi değildir. Nakit henüz bilinmiyorsa yalnız
+“nakit teyidine bağlı” planlama sınırı gösterilebilir. Uygulanabilir üç aday yoksa
+üç kart zorlanmaz; test minimumu sınırı aşıyorsa “ücretli test önermiyoruz” doğru
+sonuçtur. Ayrıntılı ekran metinleri ve sentetik örnekler yeni tanımdadır.
 
 ## 3. Mevcut yığına yerleşim
 
@@ -88,15 +110,17 @@ Python 3.13 + Django 5.2 modüler monolit + PostgreSQL korunur. Prototip JS,
 standart kütüphane ve mevcut ORM desenleriyle kurulabilir; yeni vektör veri tabanı,
 ajan çerçevesi, mikroservis veya ML servisi gerekmiyor.
 
-Önerilen bileşen adları **henüz mevcut dosya değildir**:
+`contracts.py`, `bank.py`, `validation.py` ve `analysis.py` mevcut saf temel
+modüllerdir (ADR0074/0075); aşağıdaki diğer adlar önerilen hedeflerdir, mevcut
+veya tamamlanmış entegrasyon sayılmaz:
 
 | Yeni sınır | Mevcut karşılık / değişim |
 | --- | --- |
-| `campaigns/recommendations/contracts.py` | `outcome-contract.js`, `WorkspaceCampaignDraft`, `CampaignPlanRevision` arasında sürümlü sahiplik eşlemesi |
+| Mevcut `campaigns/recommendations/contracts.py` ve yeni keşif sözleşmesi | Mevcut zorunlu bütçeli PlanBounds korunur; isteğe bağlı tavana sahip keşif kaydı ayrı sürümle önerilir; kalıcı sahiplik eşlemesi henüz yok |
 | `campaigns/recommendations/capabilities.py` | `sources.py` içindeki sabit reklam kaynak listesini gerçek yetenek/kanıt kaydına ayırma |
 | `campaigns/recommendations/evidence.py` | `report_metrics.py` açık eksiklik/güncellik desenini tahmine genişletme |
 | `campaigns/recommendations/decision.py` | `engine.js` uygunluk/gerekçe kurallarını saf fonksiyon olarak taşıma; örnek tahmini gerçek yolun dışında tutma |
-| `campaigns/recommendations/allocation.py` | `engine.js::evaluate/manual`, `plan-summary.js::redistribute/check` sınırlarını koruyup skor² yerine desteklenen tepki eğrilerini kullanma |
+| `campaigns/recommendations/allocation.py` ve aday karşılaştırıcısı | `engine.js::evaluate/manual`, `plan-summary.js::redistribute/check` sınırlarını koruyup skor² yerine sonlu desteklenen bütçe adaylarını, üretim maliyeti eşiklerini ve ortak kaynakları karşılaştırma |
 | `campaigns/recommendations/calibration.py` | Olgun sonuçlardan işletme düzeltmesi; yeterli veri yoksa çalışmayan ayrı modül |
 | `connections` içindeki ayrı forecast adaptörleri | Mevcut dispatch/OAuth backend'inden ayrı çağrı listesi; yayın metoduna erişemez |
 | `campaigns/recommendations/evaluation.py` | Dondurulmuş tahmin–olgun gerçekleşme karşılaştırması; bugünkü raporu geçmiş tahmin yerine koymaz |
@@ -115,9 +139,38 @@ Alanlar tasarım önerisidir; şema/migration bu görevde uygulanmadı.
 `brand_id?`, `draft_id`, artan `revision`, `request_id`, `expected_revision`,
 `first_stage_schema`, doğrulanmış snapshot ve digest, `analysis_version`,
 `delivery_mode`, `goal_metric`, literal CTA/destination; ayrı risk ve hazırlık
-durumları. `PlanBoundsV1`: ülke/pazarlar, hedefleme türü ve sağlayıcıya uygun
-konum kimlikleri, dil, tarih/saat dilimi, kampanya para birimi, toplam medya
-minor-unit bütçesi, üretim/hizmet kalemleri, test izni ve rezerv tercihi.
+durumları. Yeni önerilen `BudgetDiscoveryDraft`: aynı sahibi ve accepted-analysis
+bağı; planlama dönemi, `optional_ceiling_minor=null|integer`, ekonomi/kapasite
+referansları ve eksik veri durumları. Null “bilinmiyor”,0 “ücretli medya istemiyor”
+anlamındadır; biri diğerine çevrilmez. Bu keşif kaydı harcama yetkisi taşımaz.
+
+Mevcut `PlanBounds` zorunlu integer bütçeyi tutar; başta boş bütçeye uydurmak için
+gevşetilmez veya örnek tutarla doldurulmaz. Önerilen geçiş:
+`discovery → conditional_candidates → scenario_selected → cash_confirmed →
+separately_spend_authorized`. Seçilmiş senaryonun bütçesi ancak açık karar sonrası resolved
+plan sınırına dönüşür; seçim veya nakit teyidi tek başına yayın izni değildir.
+Resolved sınırlar ülke/pazar, hedefleme, dil, tarih/saat dilimi, currency, medya
+minor-unit bütçesi, üretim/hizmet kalemleri ve izinli rezervi bağlar. Harcama
+yetkisinin tutar/hesap/kanal/tarih/içerik kapsamı ayrıca sabitlenir.
+
+`BusinessEconomics`, kaynak/tarih/currency/vergi ve maliyet kapsamını; bir satışın
+doğrudan giderler sonrası katkısını veya bunu hesaplamak için fiyat/doğrudan
+giderleri taşır. Aynı gider birim katkıda ve kampanya maliyetinde ikinci kez
+düşülmez. Unknown değer null+gerekçedir. Nakit ihtiyacı ekonomik sonuçtan ayrıdır:
+medya/üretim/hizmet çıkışı, yeni işi teslim gideri ve tahsilat zamanı birlikte
+değerlendirilebilir; takvimdeki en yüksek finansman açığı göz ardı edilmez.
+
+`CapacityResource` ve dönem gözlemi; doğru birim, lokasyon/ürün/hizmet, zaman
+dilimi, kaynak/revizyon/tarih ve `total | free_after_commitments | advertisable_incremental`
+anlamını taşır. Kaynak tüketim katsayısı ürün/hizmet başına açık tutulur. Aynı
+kaynak kanallar ve eşzamanlı kampanyalar arasında ortaktır. Temas/görüşme/teklif
+kapasitesi ile stok/personel/teslim kapasitesi ayrı kaynak gruplarıdır.
+Hangi yükün önce düşüldüğü kaydedilmeden kullanılabilir kapasite hesaplanmaz;
+“ek kapasite” beyanından mevcut işleri ve reklamsız talebi tekrar düşme.
+Güvenlik payı kaynak belirsizliği/gecikme/tercihe göre sürümlenir, evrensel yüzde
+değildir. Kavram başına otomatik yeni tablo önerilmez: taslak girdileri sürümlü
+snapshot'ta, paylaşılan kaynak/rezervasyon ise ileride tek otoriter sahiplik
+sınırında tutulur. Kesin ORM/tablo tasarımı ayrı uygulama incelemesindedir.
 
 Digest bütünlük/bağlama içindir, kimlik doğrulaması veya imza değildir. Scope
 tarayıcıdan kabul edilmez. Eski kayıtlar yerinde yeniden yorumlanmaz; yeni
@@ -225,7 +278,11 @@ kanal, daha zengin verisi olduğu için seçilemez. Pazar payı medya payı değ
 ### C — Veri
 
 Yalnız uygun ve izinli adaylara, açık “öneri oluştur” işleminde küçük bir bütçe
-ızgarası iste. Her slider/tuş/LLM mesajı API çağrısı yapmaz. Endpoint bütçe eğrisi
+ızgarası iste. Müşteri başlangıç tutarı bilmiyorsa teknik/test minimumu, eldeki
+kanıt aralığı ve koşullu ekonomik/kapasite sınırından sonlu aday kümesi hazırlanır;
+bu sorgu bütçeleri harcama izni değildir. Hiçbir güvenilir aday kurulamazsa önce
+ölçüm/hazırlık veya eksik bilgi önerilir; uydurma varsayılan tutar konmaz.
+Her slider/tuş/LLM mesajı API çağrısı yapmaz. Endpoint bütçe eğrisi
 vermiyorsa kitle büyüklüğünden bir eğri uydurma. Sonuç tahminlenemiyorsa kanal
 “sınırlı test” veya niteliksel aday olarak kalır; bütçe harcanmayabilir.
 
@@ -247,6 +304,13 @@ maliyeti, işe alımda nitelikli başvuru, farkındalıkta tanımlı erişim/fre
 ayrı objective strategy gerekir. Kâr fonksiyonunu hepsine dayatma. İşletme talebi
 ve kapasitesi bilinmiyorsa “kârlı büyüme” planı sunulmaz.
 
+İşletme katkısı hesaplanabiliyorsa düşük sonuç senaryosuyla ekonomik dayanıklılık,
+yüksek talep senaryosuyla kaynak yeterliliği ayrı kontrol edilir. Platforma atıflı
+satış doğrulanmış ek satış değildir: artımlı etki kanıtlanmadıysa hesap “koşullu
+model senaryosu”dur, net muhasebe kârı veya garanti değildir. Çok ürün/hizmette
+tek ortalama marj bütün ürünlere taşınmaz; ürün karması ve kaynak katsayıları
+bilinmiyorsa ekonomik öneri daha dar veya unavailable kalır.
+
 ### E — Sınırlı dağıtım
 
 İlk yöntem: küçük, denetlenebilir bütçe ızgarası + kısıtlı marjinal artış seçimi.
@@ -254,19 +318,26 @@ Bu **sezgisel yöntemdir; global optimum veya nedensel fayda kanıtı değildir*
 
 1. Tüm tutarlar currency-aware minor unit; USD micros ayrı ölçektir. Teknik
    minimum, anlamlı test minimumu ve ekonomik/operasyonel maksimum ayrı kayıtlar.
-2. Toplam medya bütçesinden açık rezerv/test sınırını ve kesin gider ayrımlarını
-   belirle. Medya bütçesinden üretim kredisi kendiliğinden düşme.
+2. Keşifte zorunlu toplam bütçe yerine her adayın medya, üretim, ek hizmet ve
+   toplam maliyetini hesapla; varsa müşteri tavanını uygula. Sonraki nakit teyidi
+   yetkili sınırı daraltabilir. Çözülmüş/onaylanmış planda paylar+rezerv tam
+   bütçeye eşittir. Medya bütçesinden üretim kredisi kendiliğinden düşme.
 3. Uygun başlangıç alt kümeleri için minimumları kontrol et. Bütün kanalları az
    tutarla bölmek yerine anlamlı testin mümkün olduğu küçük aday kümesini karşılaştır.
 4. Uyumlu kanalda desteklenen eğriden `Δsonuç/Δbütçe` veya ticari modda
    `Δnet_katkı` hesapla. Kullanıcı risk stratejisi, belirsizlik ve shared-cap altında
    sıradaki artışı seç. Ortak bir hedef tanımı yoksa sonuçları tek puanda toplama.
-5. Min/max, izinli hesap/kanal, toplam, kapasite veya kanıt sınırında dur.
+5. Min/max, izinli hesap/kanal, varsa müşteri tavanı, kapasite, nakit veya kanıt
+   sınırında dur. Nakit bilinmiyorsa öneri yalnız koşulludur; yürütme sınırı yoktur.
    Sonraki adım desteklenmiyor/olumsuz/çok belirsizse kalan para **ayrılmamış**.
    Bütçeyi doldurmak için tahmin uzatma veya ucuz kanal icat etme.
-6. Kullanıcının yüzde değişikliği aynı sınır fonksiyonundan geçer. Nokta tahmini
-   bozulan manuel pay için eski performans aralığı aynen korunmaz. Tutar ve rezerv
-   tam eşitlikle bağlanır; yuvarlama en son kontrollü yapılır.
+6. Kullanıcının yüzde/tutar değişikliği aynı sınır fonksiyonundan geçer. Geçerli
+   bütçe adayları ve kanıt aralığı içinde sonuç/ek katkı/iş yükü/fark yerel
+   hesaplanır; API veya LLM çağrısı yoktur. Ara değerleme yalnız aynı kanal/format/
+   kaynak bağlamında, belgelenmiş yöntemle yapılır; üretim maliyeti eşikleri
+   üzerinden düz çizgi çekilmez. Aralık dışında extrapolation yerine yeni öneri
+   iste veya en yakın desteklenen adayı göster. Kaydırıcı gerçek hesap bütçesine
+   yazmaz. Tutar ve rezerv çözülmüş planda tam eşitlikle bağlanır.
 
 Talep eğrisi ölçüm gürültüsünde monoton olmayabilir. Çelişen/eşleşmeyen noktaları
 sessiz düzleştirip kesin getiri sunma; inceleme/test gerekçesi üret. Kanalların
@@ -276,6 +347,12 @@ elde edilen dağılım bağımsızlık yaklaşımıdır.
 Tek stok/randevu grubu tüm kanallarda ortak tüketilir. Beklenen sonuç üst sınırıyla
 yapılan tahsis **gerçek stok garantisi değildir**; sert operasyon sınırı için
 işletme sistemi rezervasyonu, satış durumu ve yayın durdurma entegrasyonu gerekir.
+Bu paylaşım eşzamanlı kampanyaları da kapsar. Talep karşılama kapasitesi (telefon/
+mesaj/görüşme/teklif) ve işi teslim kapasitesi (stok/personel/oda/üretim/gönderim)
+farklı birim/dönemlerle denetlenir; dönem toplamı uygun olsa bile tek günlük
+yoğunluk planı eleyebilir. Kaynağın zaten hangi işleri içerdiği bilinmeden aynı
+rezervasyon ikinci kez düşülmez. Gecikmiş talep ve stop/raporlama gecikmesi için
+gerekçeli güvenlik payı ve işletme içi kontenjan/bekleme listesi gerekir.
 Bilinmeyen kaynak durumunda büyüme kapalıdır. Aynı para/dönem/vergi kapsamında
 `gerçekleşen_harcama + henüz_gerçekleşmemiş_taahhütler + önerilen_yeni_tutar
 <= yetkili_medya_tavanı` sağlanmadan yeni harcama izni verilemez. Gerçekleşmiş
@@ -299,6 +376,10 @@ Cache key: server tenant/account/connector-generation, API+capability version,
 market/language/currency/timezone, objective/conversion action/attribution,
 dates, bid strategy, bütçe ızgarası, geo/keywords/audience/placement/material
 digest ve gerçek yanıtı etkileyen diğer parametrelerin canonical digest'i.
+Karşılaştırma cache'i ayrıca ekonomi/maliyet kapsamı, ortak kapasite+yük
+revizyonları, nakit sınırı/teyit sürümü, üretim tarifi/fiyatı ve seçilen aday
+sürümünü bağlar. Platform tahmini ile yerel aday hesabının cache kapsamı farklıdır;
+yalnız kapasite değişti diye geçerli bir platform gözlemi yeniden sorgulanmaz.
 Ham token, client secret, parola veya kişisel kimlik bilgisi cache key/log içinde
 yer almaz; sunucunun opaque tenant/account/generation kapsamı anahtarda bulunur.
 Public FX ayrı public cache'tir;
@@ -318,6 +399,8 @@ Yetki iptali/401/403 refresh fırtınası yaratmaz; account/generation cache'i k
 | Konum/pazar/dil/tarih/teklif/bütçe | İlgili forecast cache key, dağılım, maliyet ve yayın onayı | Önceki karar tarihsel olarak saklanır |
 | İçerik/format/destination | İçerik/policy; ilgili forecast creative-sensitive ise o tahmin; yayın onayı | Bağlamdan bağımsız geçerli tahminler |
 | Yeni outcome/iade/stok | İşletme düzeltmesi/kapasite/dağılım; yürütmeden önce limit kontrolü | İlk form ve önceki sonuçlar |
+| Nakit sınırı, tahsilat zamanı veya birim maliyet değişimi | Aday toplam maliyeti/ek katkı/nakit değerlendirmesi ve etkilenen onay; gerekirse öneri daralır | Geçerli platform metrikleri, ilk-aşama cevabı |
+| Aynı kaynağa bağlı başka kampanya/yük değişimi | Ortak dönem/günlük kapasite ve ilgili aday/onaylar; kaynak revizyonu tekrar denetlenir | Kullanıcı taslağı ve geçmiş senaryolar |
 | Veri eskimesi/şema kalkması | İlgili kanıt ve tahsis stale; kritik yürütme kapalı | Form/editor/salt okunur geçmiş |
 | Hesap/connector nesli/izin iptali | Tüm bağlı okumalar/onaylar geçersiz; yeni yetki gerekir | Kullanıcının sahip olduğu taslak |
 | Sadece kart açma/etiket yazımı | Hiçbir dış sorgu veya yeni onay yok | Her şey |
@@ -373,13 +456,16 @@ takvim/sağlayıcı onay süresi taahhüdü değildir.
 - Problem/değer: geçici prototip bağlamını kaybetmeden sahipli ve sürümlü plana
   dönüştürmek; örneği gerçek tahmin gibi göstermemek.
 - Bileşen: `outcome-contract.js`, `first-stage-bridge.js`, campaign models ve
-  önerilen contracts; mevcut plan revision/owner/idempotence desenleri.
+  mevcut saf `contracts.py`, `validation.py`, `analysis.py`; yeni keşif sözleşmesi
+  ve mevcut plan revision/owner/idempotence desenleri. Saf temel/form doğrulaması
+  ADR0074/0075 ile mevcut; saf bütçesiz keşif/seçim/nakit temeli ADR0076 ile eklendi.
+  Kalıcı sahiplik, gerçek aday üretimi ve UI bağlantısı henüz yok.
 - Veri/yetki: sentetik snapshot, kullanıcı sahibi ve context; dış erişim yok.
 - Bağımlılık: ADR0071–0073 ve audit eşlemesi; WP02/03'ün ortak zemini.
 - Kabul:46 route/delivery, unknown≠zero, cross-tenant refusal, stale revision,
-  stable replay; eski Google/AI/plan kayıtlarına dokunulmaz. `planning.py` ile
-  `brand_settings.py` arasındaki exclusive/inclusive gün farkı, aynı-gün ve
-  timezone örnekleriyle karara bağlanır; gerçek pacing'e belirsizlik taşınmaz.
+  stable replay; bütçesiz keşif, null≠0, varsa isteğe bağlı tavan ve cash/spend
+  aşamalarının ayrı bağlanması. Eski PlanBounds ve Google/AI/plan kayıtları
+  korunur. Inclusive takvim düzeltmesi mevcut; yeni dönemler aynı sözleşmeye uyar.
 - Risk/dönüş: iki domain'i yanlış birleştirme; yeni şema/anahtar kapalı,
   önce saf sözleşme, gerçek migration daha sonra ayrı inceleme.
 
@@ -387,12 +473,16 @@ takvim/sağlayıcı onay süresi taahhüdü değildir.
 
 - Problem/değer: platform conversion'ını satış sanmamak, net değer ve kapasiteyi
   kanıtla ilişkilendirmek.
-- Bileşen: `report_metrics.py`, rapor testleri; yeni outcome import/evidence sınırı.
+- Bileşen: `report_metrics.py`, rapor testleri; yeni ekonomi/ortak kaynak/yük
+  sözleşmesi ve outcome import/evidence sınırı; yardımcı form banka alanları.
 - Veri/yetki: sentetik CSV önce; gerçek export için hesap sahibi izin/dayanak,
   alan/saklama/minimizasyon kararı. Başlangıçta e-posta/telefon gerekmez.
-- Bağımlılık: WP01; mapping preview ve idempotent import.
+- Bağımlılık: WP01; mapping preview ve idempotent import. İlk dilim kısa sentetik
+  beyanlarla çalışabilir; gerçek entegrasyon bunun tamamlanmasını bekler.
 - Kabul: ödeme/iptal/iade/attendance, duplicate sale, timezone/currency/tax,
-  partial/mature window testleri; satış atıfları ayrı.
+  partial/mature window testleri; satış atıfları ayrı. Toplam/boş/reklama ek
+  kapasite, temas/teslim, günlük/dönem, çok ürün kaynak katsayıları, maliyet kapsamı
+  ve sıfır/bilinmeyen kapasite testleri; mevcut yük iki kez sayılmaz.
 - Risk/dönüş: mükerrer/kişisel veri alımı; importer kapalı, batch quarantine ve
   geçmişi bozmadan yeni düzeltme olayı; izin yoksa sadece sentetik.
 
@@ -405,6 +495,8 @@ takvim/sağlayıcı onay süresi taahhüdü değildir.
 - Bağımlılık: WP01; kaynak matrisindeki belirsizlikler kapalı varsayılır.
 - Kabul: schema/version/metric-specific TTL, stale/unsupported/unauthorized,
   context/tenant key, no demo fallback, schema removal ve late-response testleri.
+  Bütçe aday ızgarası, platform verisi ve kapasite tarihi ayrı; yerel slider
+  önizlemesi sorgu üretmez. Başlangıçta yalnız sahte adaptör kabul örnekleri.
 - Risk/dönüş: doküman kanıtını hesap izni sanmak; adapter default-off,
   yalnız test kayıtlarını kullan; eski public FX bozulmaz.
 
@@ -429,19 +521,27 @@ takvim/sağlayıcı onay süresi taahhüdü değildir.
 - Veri/yetki: aynı işletmenin izinli olgun kohortları; yeterlilik eşiği backtestle.
 - Bağımlılık: WP02 ve karşılaştırılabilir kaynak WP04 veya export.
 - Kabul: cold-start/az veri/olgun veri ayrımı, zero outcome, gecikme/iade,
-  time split/no leakage, bias/MAE/coverage; yetersiz veride satış yok.
+  time split/no leakage, bias/MAE/coverage; yetersiz veride satış yok. Kârlılık
+  düşük-sonuç senaryosu, kaynak kontrolü yüksek-talep senaryosu kullanır; iki
+  aralık aynı belirsizlik/atıf anlamına gelmez. Tahsilat gecikmesi ayrıca taşınır.
 - Risk/dönüş: sahte kesinlik/drift; model sürümünü kapat, platform metriği veya
   açık sınırlı test moduna dön; geçmiş tahmin silinmez.
 
-### WP06 — Kısıtlı marjinal bütçe motoru · sonra · büyük
+### WP06 — Bütçe adayları ve kısıtlı dağıtım · ilk sentetik dilim şimdi, gerçek veri sonra · büyük
 
-- Problem/değer: puan² dağıtımı yerine desteklenen ilave değer ve ortak sınırlar.
+- Problem/değer: bütçesini bilmeyen kullanıcıya işletmesine uygun sonlu adaylar;
+  puan² dağıtımı yerine desteklenen ilave değer ve ortak sınırlar.
 - Bileşen: yeni saf allocation + mevcut engine allocation/share/min/max davranışı;
   medya/üretim/hizmet finans ayrımı.
 - Veri/yetki: karşılaştırılabilir eğri veya açık pilot sınırı; harcama yetkisi yok.
-- Bağımlılık: WP01/03/05; teknik/test minimum kayıtları ve shared-cap tanımı.
+- Bağımlılık: ilk sentetik dilimde WP01/02 + WP03 sahte adaptörü; gerçek sayısal
+  öneride uygun kaynak WP04/export ve gerektiğinde WP05. Teknik/test minimumları,
+  üretim maliyet eşikleri, shared-cap ve nakit anlamları önceden tanımlı.
 - Kabul: tam kuruş bütçe=paylar+rezerv, eksik/sıfır ayrımı, min/max, ortak kapasite,
   noncommercial objective, no extrapolation; exhaustive küçük problem referansı.
+  Başlangıç/önerilen/üst sınır ayrımı, zorla üç aday yaratmama, önerilenin üst
+  sınırdan düşük olması, negatif ek katkılı yüksek aday, nakit daraltması,
+  günlük+yığılmış kapasite ve üretim eşiğinde yeni maliyet karşılaştırması.
 - Risk/dönüş: heuristiğin optimum sanılması; shadow comparison, yayımlanamaz
   sonuç, eski demo yalnız etiketiyle kalır; gerçek tahsis otomatik çalışmaz.
 
@@ -453,6 +553,10 @@ takvim/sağlayıcı onay süresi taahhüdü değildir.
 - Bağımlılık: WP03/06; UI prototipi sentetik kanıtla paralel hazırlanabilir.
 - Kabul: tekrar form yok, plan hatada korunur, kaynak/tarih/metric/null nedenleri,
   keyboard/mobile visual, stale approval; API çağrısı slider başına artmaz.
+  Başta zorunlu bütçe yok; dönem/ek kapasite/gider sonrası kalan tutar için kısa
+  sorular ve “birlikte hesaplayalım”; öneri sonrası nakit teyidi. Slider medya,
+  toplam maliyet, iş sonucu, katkı/iş yükü ve farkı birlikte günceller; “canlı
+  hesaplama” canlı piyasa verisi diye etiketlenmez ve hesaba bütçe yazmaz.
 - Risk/dönüş: örnek/gerçek karışması; feature flag ve önceki kabul edilmiş8014
   görüntüsü korunur; eski onay yeni sürüme taşınmaz.
 
@@ -464,6 +568,8 @@ takvim/sağlayıcı onay süresi taahhüdü değildir.
 - Bağımlılık: WP02/05; ayrı attributable vs incremental labels.
 - Kabul: matured cohort/time split, error/bias/interval genişliği ve kapsama,
   channel/market/goal segmenti, late conversion revision; no pooling by default.
+  Kapasite gözlemi/günlük yoğunluk/stop sonrası talep, no-show ve tahsilat gecikmesi
+  sürümlenir; veri kesilince büyüme askıya alınır. Öneri üretildiği haliyle saklanır.
 - Risk/dönüş: otomatik yanlış öğrenme; shadow-only sürüm, driftte son doğrulanmış
   sürüme dön; kötü veri geçmişi korunur, canlı bütçe değişmez.
 
@@ -488,6 +594,10 @@ takvim/sağlayıcı onay süresi taahhüdü değildir.
 - Bağımlılık: WP01–08 ve ilgili platform kanıtı; onay beklentileri açık.
 - Kabul: operation-time revalidation, stale consent refusal, no resend,
   actual+reserved spend cap, stop/reconcile, data deletion ve rollback kanıtı.
+  Nakit teyidi/spend onayı ayrı ve güncel olmalı; onay anında ortak kaynakların
+  revizyonu yeniden kontrol edilip eşzamanlı kampanyalar mükerrer kapasite alamaz.
+  Yüksek harcama tavanı peşin harcama talimatı değildir; olgunlaşma ve kapasite
+  kontrolüyle dilimlenen büyüme izinli kapsamı aşarsa yeni onay gerekir.
 - Risk/dönüş: aşım/çift yayın; fail closed ve bağımsız stop; DB restore ile
   tüketilmiş yetkiyi geri açma veya geçmişi sıfırlama yok.
 
@@ -543,6 +653,7 @@ kontrolü görevini bu plan otomatik açmaz.
    kalibrasyon coverage ve tazelik SLO'ları pilot amacına göre önce kaydedilip
    backtestte sınanacak. Kalite kanıtı yoksa büyüme yerine ölçüm/test önerilecek.
 
-**Sonraki tek iş:** WP01'in kalıcı, sahipli sentetik taslak servisini; doğrulanmış
-form analizi, revizyon ve istek tekrarı sınırlarıyla tasarla/uygula. Form geçerliliği
-gerçek bilgi veya platform uygunluğu sayılmaz. Gerçek kaynaklar ayrı kapılardır.
+**Sonraki tek iş:** WP02 ekonomi ve ortak talep/teslim kapasitesi sözleşmelerini
+sentetik olarak uygula; mevcut saf keşif temeline bağla, eski zorunlu bütçeli
+PlanBounds'u gevşetme. Sonlu sayısal adaylar ve UI sonra gelir. Form geçerliliği
+gerçek bilgi/platform uygunluğu değildir; kalıcı servis ve yürütme kapıları ayrıdır.

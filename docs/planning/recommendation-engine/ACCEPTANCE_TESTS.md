@@ -6,6 +6,13 @@ kampanya, harcama veya uygulama kodu üzerinde işlem yapılmadı. Aşağıdaki 
 senaryolar gelecekte uygulanacaktır. Sentetik başarı gerçek hesap yetkisi,
 platform geçerliliği veya satış başarısı sayılmaz.
 
+29 Ekim2026 bütçe planlayıcı kararı bu belgeye entegre edildi. Yeni beklenti:
+bütçe ilk girişte zorunlu değil; işletme koşullarına göre öneri → senaryo
+karşılaştırması → nakit uygunluğu → ayrı harcama yetkisi. Önceki A01–A36
+korunur; B01–B30 ek kabul kapsamıdır. [Bütçe planlayıcı tasarımı](BUDGET_PLANNER_SPEC.md)
+bu testlerin ürün/veri sözleşmesi referansıdır. Bu ek senaryoların uygulanmış veya
+çalıştırılmış olduğu iddia edilmez; mevcut kodun bütçe alanı bu belgeyle değişmez.
+
 ## 1. Mevcut testlerden korunacak sözleşmeler
 
 Depo köküne göre yollar:
@@ -57,7 +64,7 @@ controlled_live` düzeyini, commit, kural/adaptör/şema sürümünü, tarih ve 
 | A03 | 429, timeout, 5xx | Bütçeli retry/backoff; Retry-After uyumu; circuit state; eski cevabı güncelmiş gibi gösterme; çağrı fırtınası yok. | S,I |
 | A04 | Missing/unsupported/unauthorized/stale/zero | Beş durum farklıdır; `value=0,status=available` ile `value=null,status=missing` aynı hesaplamaya girmez. | S,I,B |
 | A05 | İki kaynağın aynı metrik için çelişmesi | Bağlam/tarih/örneklem/atıf farkı gösterilir; sessiz ortalama/son yazan kazanır yok; kritikse harcama bekler. | S,I,B |
-| A06 | Bütçe 0, organic veya content_only | Medya ayırma/forecast çağrısı yok; içerik/organik yol devam eder; üretim maliyeti ayrı gösterilir. | S,I,B |
+| A06 | Açık medya tavanı 0, organic veya content_only | Medya ayırma/forecast çağrısı yok; içerik/organik yol devam eder; üretim maliyeti ayrı gösterilir. Bütçenin hiç girilmemesi 0 değildir; keşif akışı B01'deki gibi devam edebilir. | S,I,B |
 | A07 | Teknik minimumdan az bütçe | Kanal tahsisi 0; neden ve kalan bütçe; başka kanala zorla harcama yok. | S,B |
 | A08 | Teknik minimum karşılanır, anlamlı test minimumu karşılanmaz | Teknik olarak mümkün ile öğrenmeye yeterli ayrı gösterilir; varsayımsal test minimumu kaynağı/sürümüyle etiketlenir. | S,B |
 | A09 | Tüm adaylar tavanda | Artan tutar rezerv kalır; toplamı %100 harcamak için tavan yükseltilmez. | S,I,B |
@@ -93,7 +100,8 @@ controlled_live` düzeyini, commit, kural/adaptör/şema sürümünü, tarih ve 
 
 Para API sınırında doğru sağlayıcı birimine çevrilir; iç tahsiste currency başına
 tam sayı alt birim veya Decimal kullanılır. TRY kuruş ile Google micros eşit
-varsayılmaz. NaN, Infinity, taşma, negatif ve kesirli alt birim reddedilir.
+varsayılmaz. NaN, Infinity, taşma ve kesirli alt birim reddedilir. Harcama ve
+rezerv negatif olamaz; ekonomik sonuç/ek katkı negatif olabilir ve gizlenmez.
 
 - Her kanal için `allocation_i >= 0`; elenmiş kanalda `allocation_i = 0`.
 - Aynı para/vergi kapsamındaki `sum(allocation_i) + reserve = media_budget`;
@@ -115,6 +123,18 @@ varsayılmaz. NaN, Infinity, taşma, negatif ve kesirli alt birim reddedilir.
   yinelenmez; tenant ve kaynak kimliği dedup kapsamına dahildir.
 - Algoritma izinli sonlu bütçe gridinde deterministik ve açıklanabilir olur;
   greedy veya heuristik yaklaşımın global optimum olduğu iddia edilmez.
+
+Bütçe keşfi ile yürütme sınırı farklıdır. Keşif aşamasında `optional_ceiling=null`
+ile henüz seçilmemiş bütçe korunur; bu durum sıfır, sonsuz tavan veya harcama izni
+değildir. Yetkilendirme aşamasında açık medya/üretim/hizmet ve toplam nakit sınırları
+gerekir. Nakit uygunluğu onayı ile harcama izni ayrı kayıt ve sürüm bağlarıdır.
+
+Kapasite testlerinde her kaynak için birim, dönem/yerel saat dilimi, veri tarihi ve
+kapasite türü zorunludur: toplam / mevcut işlerden sonra boş / reklama ayrılabilir
+ek kapasite. Düşülen mevcut işler, reklamsız beklenen talep ve güvenlik payı her
+yükün kimliğiyle yalnız bir kez hesaba katılır. Kullanıcının doğrudan ek kapasite
+beyanı yeniden toplam kapasite formülüyle azaltılmaz. Kaynak güncel değilse bu
+değişmezler gerçek zamanlı kontenjan garantisi sayılmaz.
 
 Sınır kümeleri: 0/1 kuruş; min-1/min/min+1; cap-1/cap/cap+1; shared-cap;
 %0/%100 ve yuvarlama; aynı anda düzenleme; bütçe gridinde son nokta; unsupported
@@ -204,11 +224,11 @@ Resmî kaynaklar 29 Ekim 2026'da açılarak incelendi:
 
 | Kapı | Gerekli kanıt | Açılmayan yetki |
 |---|---|---|
-| G0 — sözleşme / sentetik | A01–A36'nın uygulanabilir saf/fixture vakaları, değişmezler, sürüm/binding ve dört-aşama tarayıcı akışı | Hesap bağlantısı/gerçek veri/harcama yok. |
-| G1 — uygulama dry-run | Tenant/izin/cache/revocation/idempotency/race testleri, audit ve güvenli hata; geçici DB'de migration/recovery doğrulaması | Dry-run yayın izni değildir. |
-| G2 — gerçek salt-okunur forecast | Belirli sağlayıcı/hesap/pazar için açık yetki; scope ve hesap proof; resmî response/schema/metric karşılaştırması; saklama ve veri politikası | Forecast okuma token'ı nesne oluşturma veya medya harcama izni vermez. |
-| G3 — kontrollü pilot | Önceki tüm release/security/privacy/staging E2E/backup-restore/rollback kapıları; müşterinin hedef/sert bütçe/tarih/içerik onayı; stop ve belirsiz gönderim uzlaştırması; ölçüm olgunluğu planı | Otomatik tüm-kanal/global rollout yok. |
-| G4 — sınırlı öğrenme / büyüme | İleri dönem hata ve aralık kalibrasyonu, kapasite/doğru net sonuç, drift ve rollback; müşteri sınırları içinde yeniden onay kuralları | Kesin satış/ROI garantisi veya izinsiz müşteriler-arası öğrenme yok. |
+| G0 — sözleşme / sentetik | A01–A36 ve B01–B30'un uygulanabilir saf/fixture vakaları; opsiyonel ilk tavan, birim/dönem, maliyet kapsamı, kapasite türü, nakit ve onay ayrımı; dört-aşama tarayıcı akışı | Hesap bağlantısı/gerçek veri/harcama yok. |
+| G1 — uygulama dry-run | Tenant/izin/cache/revocation/idempotency/race testleri; aynı işletme kaynağını kullanan kampanyalar arasında rezervasyon/karşılaştırma; kapasite ve nakit revizyonu; audit ve güvenli hata; geçici DB'de ayrı onaylanmış migration/recovery doğrulaması | Dry-run yayın izni değildir. |
+| G2 — gerçek salt-okunur forecast | Belirli sağlayıcı/hesap/pazar için açık yetki; scope ve hesap proof; resmî response/schema/metric/bütçe-adayı karşılaştırması; saklama ve veri politikası; günlük bütçe/harcama davranışının ürün bazında kanıtı | Forecast okuma token'ı nesne oluşturma veya medya harcama izni vermez. |
+| G3 — kontrollü pilot | Önceki release/security/privacy/staging E2E/backup-restore/rollback kapıları; güncel kapasiteyi onay anında kontrol; nakit yeterliliği ve müşterinin ayrı sert bütçe/tarih/kanal/içerik onayı; eşzamanlı kapasite rezervasyonu; stop ve belirsiz gönderim uzlaştırması; gecikmeli talep/sonuç olgunluğu planı | Onaylı üst tavanın tamamı baştan harcanmaz; otomatik tüm-kanal/global rollout yok. |
+| G4 — sınırlı öğrenme / büyüme | İleri dönem hata ve aralık kalibrasyonu, günlük+dönemlik kapasite, doğru net sonuç, nakit/tahsilat gecikmesi, drift ve rollback; olgun sonuçtan sonra müşteri sınırları içinde adımlı büyüme ve yeniden onay kuralları | Kesin satış/ROI/kapasite garantisi veya izinsiz müşteriler-arası öğrenme yok. |
 
 Gerçek hesap erişimi, API response'u, pazar/amaç desteği, hukuki/politika
 uygunluğu, ölçüm yetkisi, saklama/consent koşulları veya hard spend yetkisi eksikse
@@ -229,6 +249,98 @@ Yatay taşma yok; renk tek bilgi taşıyıcısı değil; yüzde slider'ının sa
 girişi/klavyesi; durum değişiminde odak korunur. Tekrar sorulan ilk-aşama
 bilgisi yok. Kritik stale tahmin yayın onayını durdurabilir, taslağı silmez.
 
-“Temkinli / öğrenme / büyüme” ancak seçilen hedef, bütçe/risk sınırı, veri
-yeterliliği ve beklenen ilave sonuç bakımından hesaplanabilir fark varsa sunulur.
-Aynı tahsisin üç pazarlama adıyla kopyalanması kabul değildir.
+İlk ekranda önceden bütçe sorulmaz; önerilen medya bütçesi, üretim dahil toplam
+maliyet, hedef sonuç, kapasite durumu ve hesaplanabiliyorsa ek katkı gösterilir.
+Nakit sorusu bu öneriden sonra gelir. İlk aşamadaki ekonomik/dönem/kapasite
+cevapları tekrar sorulmaz; yalnız eksik yardımcı alanlar açılır. Bilinmeyen
+maliyetle kârlılık, bilinmeyen kapasiteyle güvenli üst sınır gösterilmez.
+
+“Başlangıç testi / önerilen bütçe / mevcut koşullarda üst sınır” ancak gerçekten
+uygulanabilir ve hesaplanabilir farklı seçenekler varsa sunulur. Üst sınır harcama
+hedefi değildir; önerilen bütçe daha düşük olabilir. Aynı tahsisin üç adı veya
+uygulanamayan seviyelerin süs amaçlı kartları kabul değildir. Nakit henüz
+doğrulanmadıysa koşullu taslak etiketi ve yayın engeli görünür olmalı.
+
+## 9. İşletmeye uygun bütçe ve canlı senaryo kabul matrisi
+
+Bu bölümde “anlık”, önceden alınmış geçerli verilere dayalı ekran hesabıdır;
+canlı piyasa verisi veya reklam hesabına bütçe yazımı anlamına gelmez. B testleri
+bu doküman güncellemesinde çalıştırılmadı. Katman kısaltmaları bölüm3'le aynıdır.
+
+| ID | Kurulum / eylem | Beklenen sonuç / kabul | Katman |
+|---|---|---|---|
+| B01 | Kullanıcı bütçe girmeden ücretli planı araştırır | Boş bütçe 0 veya sınırsız izin sayılmaz; sonuç/dönem/iş koşullarıyla keşif ilerler. Yeterli kaynak varsa açık varsayım ve koşullarla adaylar çıkar; yoksa gerekli bilgi istenir. | S,I,B |
+| B02 | Kullanıcının önceden belirlediği isteğe bağlı tavan var | Adaylar bu tavan içinde kalır; tavan tüm tutarı harcama hedefi olmaz. Açık0 tavan ücretli planı durdurur, eksik tavanla karışmaz. | S,B |
+| B03 | Hiç performans geçmişi yok | Satış/kârlılık uydurulmaz; yalnız desteklenen platform metriği, ölçüm ihtiyacı veya açık risk/tutar sınırı olan başlangıç testi. Her işletmeye sabit tutar yok. | S,I,B |
+| B04 | Birim katkıyı veya kapasiteyi bilmiyor | “Bilmiyorum, birlikte hesaplayalım” ilgili fiyat/doğrudan gider/stok/süre/personel alanlarını açar; eksik kalan alan null kalır. Hesap yapılamıyorsa sayısal kârlı öneri veya güvenli üst sınır yok. | S,B |
+| B05 | Ürün stoğu tükenmiş veya ek hizmet kapasitesi0 | Ücretli ek iş önerilmez; rezerv/erteleme/hazırlık/organik yol. Bilinmeyen kapasite0 sayılmaz. | S,I,B |
+| B06 | Teknik minimum ya da anlamlı test minimumu uygulanabilir üst sınırın üzerinde | Üç seviye zorla yaratılmaz; “Bu koşullarda ücretli reklam testi önermiyoruz”; başka kapsam/kanal veya ölçüm/organik alternatif. | S,B |
+| B07 | Önerilen seçenek ekonomik/kapasite/nakit üst sınırından düşük | Öneri düşük kalabilir; üst sınırı doldurmak için ek pay yok. Üst seviye tüm uygulanabilir incelenmiş adaylardan bulunur; öneri için yapılan etkinlik filtresi katkısı daha düşük olan üst adayı yok etmez. Etkin sınırın nedeni ve sonraki bütçe artışının zayıf değeri görünür. | S,B |
+| B08 | Daha yüksek harcama daha düşük ek katkı üretiyor | Daha yüksek sonuç sayısı olsa da maliyet/katkı düşüşü gösterilir; büyüme varsayılan olmaz. “Değerlendirilen seçenekler içinde önerilen” ifadesi kullanılır. | S,B |
+| B09 | İki kanal ve eşzamanlı iki kampanya aynı stok/personel/ekipmanı kullanıyor | Tek tenant/kaynak/dönem havuzu; aday önizlemeler kesin rezervasyon sayılmaz. Onay rezervasyonunda kilit/atomik kontrol; yarışta toplam tek kapasiteyi aşmaz. | S,I |
+| B10 | Ortalama sonuç kapasiteye uyuyor, yüksek talep senaryosu aşıyor | Ortalama yeterli sayılmaz; kapasite kontrolünde yüksek senaryo, ekonomik kontrolde düşük sonuç senaryosu kullanılır. Risk yüksekse azalt/ertele; kesin kapasite garantisi yok. | S,B |
+| B11 | Dönemlik kapasite yeterli, bir gün taşma var | Günlük/saatlik kaynak sınırı ayrıca ihlal sayılır; dönem toplamı günlük taşmayı gizlemez. Zamanlama/randevu/dağıtım alternatifi gerekçeli sunulur. | S,I,B |
+| B12 | Talep karşılama kapasitesi teslim kapasitesinden düşük | Telefon/mesaj/görüşme/teklif ve stok/personel/gönderim ayrı darboğazlar; biri için yeterlilik diğerini doğrulamaz. En dar uygulanabilir kaynak sınırı açıklanır. | S,B |
+| B13 | Kullanıcı toplam kapasite verir | Mevcut rezervasyon/taahhüt, reklamsız beklenen yük ve güvenlik payı kendi durumlarıyla bir kez düşülür; negatif kalan kapasite0 kullanılabilir olarak etiketlenir, veri çelişkisi gizlenmez. | S,I |
+| B14 | Kullanıcı mevcut işler sonrası boş veya doğrudan reklama ayrılabilir ek kapasite verir | Kapasite türü korunur; mevcut işler tekrar düşülmez. Ek kapasiteye daha önce dahil edilmiş reklamsız yük/güvenlik payı yeniden düşülmez; belirsiz kapsam açıklığa kavuşturulur. | S,B |
+| B15 | Güvenlik payı aynı olmayan işletmeler/sonuç gecikmesi/veri yaşı | Sabit evrensel yüzde yok; payın kaynağı/varsayımı, birimi ve dönemi kayıtlı. Yeni veri ya da gecikme değişikliği aynı eski payla daha kesin öneri oluşturmaz. | S,I,B |
+| B16 | Dönüşüm geç geliyor veya reklam durduktan sonra talep sürüyor | Bekleyen yük ve gecikmeli talep penceresi ayrı; stop anında kapasite boşalmış sayılmaz. Bekleme listesi/rezervasyon/manuel güncelleme ve tekrar kontrol yolu vardır. | S,I,L |
+| B17 | İptal/iade/no-show veya kısmi gerçekleşme | Sipariş/randevu kimliğiyle idempotent düzeltme; sonuç, katkı, nakit ve kapasitenin her biri ilgili anda güncellenir. Tahmini iptaller şimdiden kesin stok boşalması sayılmaz. | S,I |
+| B18 | Stok/takvim/sonuç bağlantısı kesiliyor veya kapasite eskimiş | Kapasite tarihi ve reklam verisi tarihi ayrı görünür. Güncelmiş gibi kullanma; artış/yayın kritik eşikte kapalı, taslak korunur; kısa manuel güncelleme seçeneği. | S,I,B,R |
+| B19 | Öneri sonrası kullanıcı daha düşük nakit tavanı bildiriyor | Medya+üretim/hizmet ve gerekiyorsa ön finansman/tahsilat gecikmesi yeniden değerlendirilir; düşük aday seçilebilir. Kârlı tahmin nakit uygunluğu değildir; yeni sürüm/eski onay geçersiz. | S,I,B |
+| B20 | Tahsilat gecikiyor, siparişin doğrudan gideri önce ödeniyor | Nakit ihtiyacında zamanlı çıkış/giriş ayrı; başlangıçta tahsil edilmemiş gelir kullanılabilir nakit sayılmaz. Birim katkıdaki gider ekonomik hesapta yeniden düşülmez; nakit akışında ödeme zamanı gösterilir. | S,I,B |
+| B21 | Çok ürün, farklı katkı ve farklı stok/personel tüketimi | SKU/hizmet karması ve kaynak tüketim katsayıları olmadan tek ortalama kazançla güvenli öneri yok. Kaynak birimleri toplanmaz; karışım/ürün bilinmiyorsa aralık/eksik bilgi veya dar pilot. | S,I |
+| B22 | Bağış/farkındalık/işe alım/etkinlik amacı | Uygun sonuç, kabul edilebilir maliyet ve varsa koltuk/işleme kapasitesi kullanılır. Ticari satış katkısı veya net kâr fonksiyonu zorlanmaz; yetki/politika kapıları ayrı. | S,I,B |
+| B23 | Slider/tutar girişi hızlı veya tekrar değişiyor | Geçerli aday/önbellekten yerel hesap; her harekette API/LLM çağrısı0 ve gerçek hesap bütçe yazımı0. Yarışan geç yanıt eski plana uygulanmaz. | S,I,B |
+| B24 | Kullanıcı iki desteklenen bütçe adayı arasına veya veri dışına gidiyor | Ara değer yöntem/varsayım etiketli; yalnız aynı bağlam/kanal/format rejiminde desteklenen aralıkta. Veri aralığı dışında kesin sonuç/kazanç gösterilmez; gerekirse yeniden sorgu açık işlemle. | S,B |
+| B25 | Yüksek aday yeni kanal, video veya ek üretim gerektiriyor | Basamaklı üretim/kurulum/hizmet maliyeti ve revizyonu eklenir; eski ucuz rejimin doğrusal ara değeri geçmez. Ücretli üretim önizlemeyle başlamaz. | S,I,B |
+| B26 | Kapasite, maliyet, tahmin, kanal/format, dönem veya nakit sınırı onaydan sonra değişiyor | Yalnız etkilenen hesap/önbellek ve bağımlı onaylar yeniden değerlendirilir; eski tam plan fingerprint'i yürütülemez. Kullanıcının ilgisiz taslağı kaybolmaz. | S,I,B |
+| B27 | Üst tavan onaylı, sonuçlar henüz olgun değil | Tavanın tamamı baştan harcanmaz; sınırlı dilim ve durdurma kuralı. Yeni dilim olgun sonuç+kapasite+nakit kontrolüyle, önceki yetki kapsamı dışındaysa yeni onayla. Evrensel test süresi/dilim yok. | S,I,L |
+| B28 | Tüm uygun kanallar veya uygulanabilir kapasite sınırında, nakit tavanı daha yüksek | Bir bölüm bilinçli ayrılmamış kalır; kullanılmayan para başarıyı bozmaz, başka kampanyaya sessizce taşınmaz. Rezerve kaynak ile harcanmamış para ayrı kavramdır. | S,I,B |
+| B29 | Platformda ortalama günlük bütçe, potansiyel aşım ve durdurma gecikmesi var | Ürün/hesap özelindeki belgelenmiş spend davranışı adapter kabulünde kanıtlanır. Ortalama günlük tutar katı günlük tavan sayılmaz; stop sonrası taahhüt/harcama/gelecek talep korunur. | S,I,R,L |
+| B30 | Nakit sorusu yanıtlanmıyor veya yalnız senaryo seçiliyor | Öneri koşullu taslak; nakit onayı yokken yayın/harcama yetkisi yok. Nakit onayı da kendi başına provider/publish yetkisi oluşturmaz. | S,I,B |
+
+## 10. Bütçe planlayıcının ek sayısal ve geçiş kuralları
+
+- Her aday için `medya >= 0`, `üretim >= 0`, `diğer_ek_gider >= 0`; aynı vergi ve
+  para kapsamında `toplam_plan_maliyeti = medya + üretim + diğer_ek_gider`.
+  Net ekonomik katkı negatif olabilir. Giderin kapsam ID'si birim katkıda ve
+  kampanya kaleminde aynı giderin iki kez düşülmesini önler.
+- Karşılaştırılabilir gelir amacı için `koşullu_ek_katkı = modelde_ek_kabul_edilen_
+  sonuçların_doğrudan_gider_sonrası_katkısı - toplam_plan_maliyeti`.
+  Ek etki deneyle doğrulanmadıysa “koşullu/model senaryosu” etiketi zorunlu;
+  platformun atfedilmiş satışları otomatik ek satış veya muhasebe net kârı olmaz.
+- Bir önceki adayla fark, aynı amaç/metrik/para/vergi/dönem kapsamında hesaplanır.
+  Yeni kanal/format rejiminin basamaklı maliyeti fark hesabına dahil edilir.
+  Aday sonuçları bütçeyle doğrusal veya monoton kârlı olmak zorunda değildir.
+- Her fiziksel/işleme kaynağı ve gün/dönem için yüksek talep senaryosunda
+  `sum(kampanya, kanal, ürün için tüketim_katsayısı × planlanan_yük) <= reklama_
+  ayrılabilir_kapasite`. Farklı birimler doğrudan toplanmaz; aynı kaynağın
+  kampanya/kanal bazında ayrı kopyası oluşturulmaz.
+- Toplam kaynak, mevcut işler sonrası boş kaynak ve reklama ayrılabilir kaynak
+  dönüşümleri açık yük kimlikleriyle test edilir. Her mevcut iş/baz talep/güvenlik
+  payı en çok bir kez düşülür; zaten ek olarak verilen tutar tekrar azaltılmaz.
+- Düşük sonuç senaryosu ekonomik kaybı; yüksek talep senaryosu kapasite riskini
+  sınar. Bunlar ölçülmüş dağılım yoksa güven aralığı veya garanti değildir.
+- Nakit akışı zaman eksenindedir: plan gideri ve ilgili operasyonel ön finansman
+  çıkışları, güvenilir tahsilat girişleri ve kullanıcının kullanılabilir nakit
+  sınırıyla kontrol edilir. Gelecekteki belirsiz satış geliri bugünkü nakit değildir.
+  Nakit hesabında gider zamanı göstermek, ekonomik katkı hesabında gideri ikinci
+  kez düşmek anlamına gelmez.
+- Senaryo seçimi, nakit uygunluğu ve yürütme onayı ayrı durum/sürümdür. Yürütme
+  anında `gerçekleşen_harcama + henüz_gerçekleşmemiş_taahhüt + yeni_tutar <=
+  onaylı_sert_tavan`; gerçekleşmiş taahhüt yeniden bekleyen sayılmaz. Keşif adayının
+  tutarı veya önerilen üst sınır bu tavanı kendiliğinden yaratamaz.
+- Aday içinde paylar+ayrılmamış tutar=aday medya toplamı. Varsa isteğe bağlı
+  medya tavanı−aday medya toplamı “kullanılmayan tavan”dır; gider veya aday
+  rezervi diye yeniden sayılmaz, aradaki fark harcama yetkisi oluşturmaz.
+- Aynı kaynağa eşzamanlı iki onay verildiğinde atomik rezervasyon sürümü/kilidi
+  sınanır. Önizleme yalnız kapasite değerlendirmesi yapar; kalıcı rezervasyon
+  sayılamaz. Harcama, kaynak rezervasyonu ve gerçekleşen iş ayrı defter durumlarıdır.
+- Stok/takvim kaynağı bayatladığında “tavan altında” sonucu yeniden kanıtlanmış
+  sayılmaz. Taslak korunur; kritik kapasite/izin/onay geçersizliği yürütmeyi durdurur.
+
+İlk geliştirme kabulü yalnız sentetik sözleşme/hesap ve yerel senaryo önizlemesidir.
+Kendi tutarlı varsayımlarımızla üretilmiş üç örneğin çalışması; gerçek işletme
+kârlılığı, API yetkisi veya kapasitenin kesin korunması kanıtı değildir. Gerçek
+API/hesap testi G2, medya pilotu G3 ve kontrollü büyüme G4 kapılarından ayrı geçer.
