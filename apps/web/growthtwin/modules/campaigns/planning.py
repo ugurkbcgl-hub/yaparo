@@ -141,8 +141,10 @@ def build_google_search_campaign_plan(
             "En az iki farklı açıklama taslağı için daha fazla girdi gerekli."
         )
 
+    # Both local calendar endpoints count, consistent with owned plan settings.
+    # This is a descriptive average, not a platform daily budget or spend limit.
     pacing_days = (
-        (draft.flight_end - draft.flight_start).days
+        (draft.flight_end - draft.flight_start).days + 1
         if draft.flight_start and draft.flight_end
         else 0
     )

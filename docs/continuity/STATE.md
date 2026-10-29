@@ -1,73 +1,56 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 09:40 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 10:51 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
-## Current objective and boundary
+## Objective and authorization
 
-Owner supplied a detailed recommendation/budget-engine research brief. This task
-is research, audit and implementation planning ONLY. Four-stage journey remains:
-clarify request → build plan → create content → review/publish. Owner explicitly
-requires approval BEFORE application coding. No new migration, dependency upgrade,
-account read, OAuth, ad object, publishing, spending or deployment was performed.
-Local synthetic product work remains gated as before. Usage monitoring disabled.
+Owner approved the recommendation-engine plan on29October2026. Local synthetic
+implementation may proceed; actual account/real data/provider/spend/publishing/
+production and paid-service gates remain closed. Usage monitoring disabled.
+First implementation is deliberately a small WP01 foundation, NOT full accepted
+brief analysis, persistent storage or operational recommendation integration.
 
-## Repository and evidence
+## Repository
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Current feature branch codex/recommendation-engine-research, from local87fa86d
-handoff on maincba8fba. No open PR at initial live check.
-PR373 merge and required CI40789784874 remain historical success; main
-CI40790844945 has now been rechecked COMPLETED/SUCCESS for cba8fba.
-Research package is local for owner review; no PR/new CI triggered this task.
-Do not mistake the earlier handoff's in-progress main CI for current status.
+Branch codex/recommendation-contracts, from local researchf534af7 and handoff87fa86d
+on maincba8fba. No PR open at initial check; creation/required CI pending.
+Prior PR373/main CI40790844945 SUCCESS was rechecked in the research task.
 
-## Completed planning deliverable
+## Completed local package
 
-docs/planning/recommendation-engine/:
-- AUDIT.md: actual code/function/data/test inventory; working vs authored vs
-  designed/unverified, reference-package defects, preserved boundaries.
-- PROVIDER_CAPABILITIES.md: official sources checked29Oct; Google Search/YouTube,
-  Meta, LinkedIn, TikTok, Microsoft, Yandex; access/version/mutation/metric limits,
-  unknown costs/retention and account/pazar validation; no live account evidence.
-- IMPLEMENTATION_PLAN.md: proposed owned contracts, metric/event/evidence models,
-  cache/approval invalidation, per-purpose marginal allocation,11 work packages
-  with dependencies/acceptance/effort/rollback, costs and approval gates.
-- ACCEPTANCE_TESTS.md:36 scenarios, mathematical invariants, frozen forecast
-  evaluation, maturity/dedup/attribution vs incrementality, G0–G4 and visual gates.
+The four research documents in docs/planning/recommendation-engine are retained.
+Owner approval recorded in PROJECT/ROADMAP/implementation plan. ADR0074 records
+new pure campaigns/recommendations/contracts.py and all qualifications:
 
-PROJECT/ROADMAP point to research and record implementation approval hold.
-This proposal does not select a new provider/stack/database/budget or approve
-production/real data. First proposed work: WP01 versioned owned draft/evidence,
-WP02 business outcomes/metric semantics, WP03 capabilities/freshness.
+- Immutable canonical browser declarations with exact46 route vocabulary, usage,
+  retained explicit/fundraising risks. Always declared_unqualified. Full bank
+  required/conditional/hidden-field validator is NOT yet ported server-side.
+- Separate business/account countries, markets, language/currency/timezone,
+  inclusive1..365day local dates, media budget/allocations/reserve.
+- Structural evidence available0 versus nullable unavailable states, separate
+  source kind/as-of/fetch/expiry, owner/context and account/generation binding.
+- Scope metadata is not authorization. status_at checks declared expiry only,
+  not real provider max-age/terms/quality/permissions. No active-generation lookup.
+- Pure expected-version/history/request replay decision; exact replay returns
+  original revision without restoring current authority. New past plans refuse.
+  No persistence, transaction/race guarantee, HTTP, worker, credential or provider.
+- publication_enabled always False; organic/content-only/unsure0 media does not
+  loosen existing WorkspaceCampaignDraft DB constraints or touch old records.
 
-## Material findings
+Existing planning.py descriptive daily average now counts both endpoints,
+matching ADR0071/brand_settings; same-day1 and leap dates covered. Publisher
+budgets/pacing unchanged. No prototype8014 asset change.
 
-8014 still uses authored Simulation.forecast and score-squared allocation.
-Public FX is not an account forecast. Django draft only Google Search/lead and
-positive media budget; organic/46routes require a separate versioned contract.
-Existing report_metrics ownership/completeness/zero/freshness patterns are reusable.
-planning.py date difference vs brand_settings inclusive+1 is a real source
-inconsistency; resolve/test in WP01 before real pacing, no code fix done here.
+## Verification actually run
 
-Official current Google docs differ from old token/v23 assumptions: Cloud-project
-access and v24+ strategy-dependent forecast fields must be qualified. Meta
-SDK gives audience size, not a proven paid result curve. Some Meta references
-were inaccessible; current Graph version/change date remain unverified.
-Yandex report creation is not strictly read-only. All current account/production
-forecast access remains unverified; protected TEST work is not permission proof.
-
-## Verification this task
-
-Independent read-only integrated reviews corrected inaccurate symbol names and
-clarified spend invariant/cache scope wording. No unresolved material review issue.
-Agent actually ran pure brief-analysis, owned-recommendation and V2 importer
---check successfully; source workbook/hash matched. No generated source change.
-Four document deliverables/local links/UTF8/fence checks and git diff --check passed.
-No new application/DB/browser/provider suite was run; no UI change or new visual
-verification claimed. Prior PR373 desktop/mobile evidence remains historical.
-Source research and case studies explicitly distinguish provider claims, model
-projections, inaccessible evidence and actual measured outcomes.
+22 pure contracts +5 calendar +18 existing metric tests =45 local passes;
+Django system check clear. All selected tests are database-free; no DB setup,
+migration or provider. Configured Ruff format/check passed355 files.
+Independent read-only source review found no blocker in unqualified/unwired scope
+and recorded the remaining qualification boundaries above. Documentation updated.
+Required PR CI not yet run; do not claim merge/deployment success.
 
 ## Preserved capabilities and protected work
 
@@ -86,6 +69,6 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Present the completed research plan for owner approval. Wait for that approval
-before implementing WP01's synthetic owned draft/evidence contract. No real
-provider/account operation is part of that first development package.
+Finish review/required PR CI for this foundation. Then complete/review the
+server-owned first-stage field validator and accepted analysis across46 routes
+before any durable owner service or actual forecast integration.

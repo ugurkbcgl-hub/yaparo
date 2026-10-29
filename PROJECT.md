@@ -2,14 +2,19 @@
 
 ## Recommendation-engine research — 29 October 2026
 
-Owner requested a source-backed audit and implementation plan only, with explicit
-approval before application coding. The four-document research package starts at
+Owner approved the recommendation-engine plan on29October2026. First WP01 slice:
+pure immutable, always-unqualified declarations, plan/evidence/allocation bindings
+and metadata revision/replay. Full server form validation, durable storage,
+provider qualification and UI integration remain pending. Preview calendar
+averages now count both dates, matching ADR0071.
+See [ADR0074](docs/adr/0074-unqualified-recommendation-contracts.md).
+The four-document research package starts at
 [the implementation plan](docs/planning/recommendation-engine/IMPLEMENTATION_PLAN.md).
 It preserves the four-stage journey, ADR0073 and existing ownership/spend/launch
 gates; proposes versioned evidence, business outcomes and provider capability
 contracts before real forecast allocation. Current8014 is still authored simulation.
 No new provider, budget, account access, model, stack, migration or rollout is
-approved by this research. Current platform documentation is not account evidence.
+enabled by this slice. Current platform documentation is not account evidence.
 
 ## Brief-driven planning — 29 October 2026
 

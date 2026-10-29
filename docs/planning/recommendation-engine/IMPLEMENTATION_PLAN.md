@@ -1,8 +1,14 @@
 # Yaparo reklam önerisi ve bütçe motoru — uygulama planı
 
-Durum: **önerilen tasarım; uygulama onayı bekliyor**. Araştırma tarihi:
+Durum: **29 Ekim2026'da kullanıcı tarafından onaylandı**. Araştırma tarihi:
 29 Ekim 2026, Europe/Istanbul. Bu paket ürün kodu, migration, hesap nesnesi,
 kampanya, paket sürümü, ücret veya yayın değişikliği içermez.
+
+Uygulama kaydı: ilk WP01 dilimi sağlayıcısız, immutable ve daima
+`declared_unqualified` sözleşmeler olarak başladı; tam form doğrulaması/kalıcı
+kayıt/gerçek tahmin tamamlanmadı. Güncel sınır ve testler
+[ADR0074](../../adr/0074-unqualified-recommendation-contracts.md) içindedir.
+Aşağıdaki mimari hedef planıdır, tamamlanmış özellik listesi değildir.
 
 Bu plan [denetim](AUDIT.md), [sağlayıcı matrisi](PROVIDER_CAPABILITIES.md) ve
 [kabul planıyla](ACCEPTANCE_TESTS.md) birlikte okunur. Mevcut ADR0072/0073,
@@ -30,8 +36,8 @@ kanıt zinciri**. Kur uygunluğu, hesap erişimi veya satış tahmini değildir.
    adayını güncel sürüm/izin kanıtıyla daha sonra bağla.
 
 Bu üçü bitmeden gerçek tahmine dayanan otomatik dağılım veya satış beklentisi
-etiketi eklenmez. Şu anda başka kullanıcı bilgisi gerekmiyor. Uygulama için
-bu planın onayı; gerçek veri/hesap denemesi için ayrıca aşağıdaki kapılar gerekir.
+etiketi eklenmez. Şu anda başka kullanıcı bilgisi gerekmiyor. Plan onaylandı;
+gerçek veri/hesap denemesi için ayrıca aşağıdaki kapılar gerekir.
 
 ## 2. Korunan kullanıcı deneyimi
 
@@ -356,8 +362,9 @@ Diğer katalog kanalları kayıt olarak kalır, kanıt yoksa otomatik yatırım 
 ## 9. Sıralı, bağımsız iş paketleri
 
 Her paket ayrı geri alınabilir PR ve ilgili kabul testleriyle ilerler. Aşağıdaki
-dosya adları mevcut değilse önerilen hedef olarak okunmalıdır. Kodlama bu görevin
-dışındadır. Göreli efor, takvim/sağlayıcı onay süresi taahhüdü değildir.
+dosya adları mevcut değilse önerilen hedef olarak okunmalıdır. Kodlama ilk
+araştırmadan sonraki kullanıcı onayıyla başladı. Göreli efor,
+takvim/sağlayıcı onay süresi taahhüdü değildir.
 
 ### WP01 — Taslak ve kanıt sözleşmesi · şimdi · orta
 
@@ -534,5 +541,6 @@ kontrolü görevini bu plan otomatik açmaz.
    kalibrasyon coverage ve tazelik SLO'ları pilot amacına göre önce kaydedilip
    backtestte sınanacak. Kalite kanıtı yoksa büyüme yerine ölçüm/test önerilecek.
 
-**Sonraki tek iş:** Kullanıcı bu planı onaylarsa WP01'in sentetik, sağlayıcısız
-veri sözleşmesi ve kabul örneklerini uygula. Bu teslimat uygulama koduna geçmez.
+**Sonraki tek iş:** WP01'in tam sunucu form doğrulaması ve kabul edilmiş analiz
+sözleşmesini46 yol için tamamla; ilk unqualified dilimi kabul edilmiş müşteri
+analizi gibi kullanma. Kalıcı servis/şema ve gerçek kaynaklar ayrı kapılardır.

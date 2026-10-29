@@ -1,10 +1,11 @@
 """Tenant isolation for workspace-owned campaign drafts."""
 
 from datetime import date
+from decimal import Decimal
 
 from django.contrib.auth import get_user_model
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.test import TestCase
+from django.test import SimpleTestCase, TestCase
 from django.urls import reverse
 
 from growthtwin.modules.campaigns.models import WorkspaceCampaignDraft
@@ -25,6 +26,53 @@ from growthtwin.modules.campaigns.services import (
     update_campaign_draft_for_owner,
 )
 from growthtwin.modules.workspaces.models import Workspace
+
+
+class CampaignPlanningCalendarTests(SimpleTestCase):
+    """Pure calendar regression; unsaved drafts never query a database."""
+
+    def plan(self, start, end, budget=30_000):
+        draft = WorkspaceCampaignDraft(
+            name="Synthetic date-only plan",
+            brand_name="Sentetik Bakım",
+            brief="Sentetik bakım hizmeti için bilgi alın.",
+            target_city="Ankara",
+            destination_url="https://example.test/sentetik",
+            media_budget_minor=budget,
+            currency="TRY",
+            flight_start=start,
+            flight_end=end,
+        )
+        return build_google_search_campaign_plan(draft)
+
+    def test_same_day_is_one_inclusive_calendar_day(self):
+        plan = self.plan(date(2026, 11, 1), date(2026, 11, 1))
+        self.assertEqual(plan.daily_media_average_minor, Decimal(30_000))
+        self.assertFalse(plan.publication_enabled)
+
+    def test_multi_day_average_counts_both_endpoints(self):
+        plan = self.plan(date(2026, 11, 1), date(2026, 11, 3))
+        self.assertEqual(plan.daily_media_average_minor, Decimal(10_000))
+        self.assertEqual(plan.media_budget_minor, 30_000)
+
+    def test_leap_day_counts_as_calendar_day(self):
+        plan = self.plan(date(2028, 2, 28), date(2028, 3, 1))
+        self.assertEqual(plan.daily_media_average_minor, Decimal(10_000))
+
+    def test_non_leap_february_has_two_inclusive_days(self):
+        plan = self.plan(date(2027, 2, 28), date(2027, 3, 1))
+        self.assertEqual(plan.daily_media_average_minor, Decimal(15_000))
+
+    def test_missing_date_has_no_daily_average(self):
+        for start, end in (
+            (None, None),
+            (date(2026, 11, 1), None),
+            (None, date(2026, 11, 1)),
+        ):
+            with self.subTest(start=start, end=end):
+                plan = self.plan(start, end)
+                self.assertIsNone(plan.daily_media_average_minor)
+                self.assertFalse(plan.ready_for_review)
 
 
 class CampaignDraftOwnershipTests(TestCase):
