@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 18:43 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 23:23 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and authorization
 
@@ -13,10 +13,16 @@ or new service. Usage monitoring disabled. No prototype UI/DB/runtime change.
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/budget-discovery-contract, from local planning5be6a3b/handoffd8ae2c3
-on origin/mainb75e16b. PR376 merged, issue375 closed, main CI40899075957 SUCCESS.
-Planning update plus new code belong in the upcoming feature PR; no PR at initial
-check. Required CI/merge still pending for this package.
+Branch codex/shared-business-resources, based on origin/main c834d5e.
+PR377 merged 2026-10-29 18:54:41 Europe/Istanbul; squash commit
+c834d5e80686e4e4adeca8f2571928b737945033. Reviewed head
+5c90031c94b9bc3d3a38407c78cd41cc720262af passed required CI40904479147.
+Post-merge main CI40906309933 also completed SUCCESS on the squash commit.
+This handoff/ADR completion note is a local commit carried into the next meaningful
+feature package; no standalone documentation PR. No WP02 code started.
+PR link: https://github.com/ugurkbcgl-hub/yaparo/pull/377
+App attachment failed because the thread reached its100-attachment limit;
+the normal GitHub PR link remains usable.
 
 ## Completed first discovery contract slice (ADR0076)
 
@@ -50,7 +56,11 @@ New campaigns/recommendations/discovery.py:
 Independent read-only review found semantic-version binding, cash withdrawal/
 renewal, stale declaration and ABA gaps; fixed with targeted regressions and
 re-reviewed without blocker. No UI change/manual visual claim.
-Required PR CI still pending; do not claim merged/real-ready planner.
+Required PR CI40904479147 passed on the reviewed head:1237 application tests
+with4 explicit skips,45 application browser E2E checks; prototype19 legacy,
+16 first-stage and6 compact-plan browser checks plus source/editor checks passed.
+Required formatting/lint/dependency/build/migration-drift checks passed.
+Post-merge main CI40906309933 SUCCESS verified. This is not a real-ready planner.
 
 ## Planning preserved and updated
 
@@ -78,6 +88,8 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Finish review/required PR CI for this package, then WP02: typed economics and
-shared response/delivery resource/deduction semantics with synthetic examples.
-Finite budget candidates and WP07 UI follow; no real provider/account rollout.
+WP02: typed economics and shared response/delivery resources, cost-component
+identities and total/free/incremental deduction semantics with synthetic examples.
+Track https://github.com/ugurkbcgl-hub/yaparo/issues/378; bind revisions to discovery
+and prevent double deductions. Finite budget candidates and WP07 UI follow;
+no real provider/account rollout.

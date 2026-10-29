@@ -86,7 +86,10 @@ With prior bank/contracts/calendar/metrics tests:89 local passes, no DB setup,
 migration or provider operation. Ruff formatting/lint passed361 files.
 Independent review's version binding, cash update/withdrawal and ABA findings
 were fixed and regression tested; final targeted review found no blocker.
-Required PR CI remains the merge gate.
+PR377 required CI40904479147 passed on reviewed head5c90031:1237 application
+tests with4 explicit skips and45 application browser E2E checks, plus required
+prototype/source/editor, formatting/lint/dependency/build/migration-drift checks.
+PR377 merged as c834d5e on29October2026; post-merge main CI40906309933 also passed.
 
 No browser asset changed; no new manual visual check claimed. Existing8014 still
 has the old explicit-budget UI; none of the numeric budget recommendations are
