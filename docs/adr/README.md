@@ -54,3 +54,4 @@ ADRs capture decisions that would be costly or confusing to reverse. Keep propos
 
 - [ADR-0072 — Plan before placement-specific production](0072-plan-before-placement-production.md): paid/organic routes, shared ideas, requirements and downstream invalidation.
 - [ADR-0073 — Brief-driven local recommendation](0073-brief-driven-prototype-recommendation.md): no repeated classification form; bound first-stage facts, explicit unknowns and partial authored ranking.
+- [ADR-0074 — Unqualified recommendation contracts](0074-unqualified-recommendation-contracts.md): pure immutable declarations/evidence/bounds, metadata replay, explicit qualification hold and inclusive preview dates.

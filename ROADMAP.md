@@ -1,5 +1,19 @@
 # Yaparo roadmap
 
+## Recommendation-engine planning — 29 October 2026
+
+Owner approved implementation on29October2026. First WP01 slice: immutable
+unqualified declaration/bounds/evidence/allocation/revision contracts and inclusive
+preview date correction; no persistence/provider/UI wiring. Next within WP01:
+port/review all46 server-side form banks and accepted analysis before a durable
+owner service (ADR0074). Audit, official provider
+capability matrix, implementation sequence and acceptance plan are in
+[docs/planning/recommendation-engine](docs/planning/recommendation-engine/IMPLEMENTATION_PLAN.md).
+Approved first packages: WP01 owned draft/evidence contract; WP02 business outcomes
+and metric semantics; WP03 provider capabilities/freshness. Then qualify authorized
+read-only forecasts before calibration/allocation. All account/real-data/launch
+gates remain. WP01 is partially implemented; WP02/WP03 are not completed.
+
 ## Brief-driven recommendation — 29 October 2026
 
 Removed repeated plan classification, audience and measurement questions. The
