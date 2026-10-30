@@ -44,7 +44,8 @@ assert.equal(fixture.expected.canDispatch, false);
 assert.equal(fixture.expected.externalCallMade, false);
 assert.equal(fixture.expected.spendTry, 0);
 for (const blocker of [
-  "image_upload_scopes_and_legacy_image_ad_guide_require_review",
+  "images_api_202608_vs_marketing_api_202610_compatibility_unverified",
+  "image_owner_and_images_api_permissions_unverified",
   "inline_content_image_schema_not_verified",
   "marketing_api_version_202610_support_must_be_rechecked_before_provider_use",
   "creative_write_scope_and_ad_account_role_not_verified",

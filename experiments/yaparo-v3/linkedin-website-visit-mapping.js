@@ -50,7 +50,8 @@
       brief[field] === undefined || brief[field] === null || brief[field] === "",
     );
     const blockers = [
-      "image_upload_scopes_and_legacy_image_ad_guide_require_review",
+      "images_api_202608_vs_marketing_api_202610_compatibility_unverified",
+      "image_owner_and_images_api_permissions_unverified",
       "inline_content_image_schema_not_verified",
       "marketing_api_version_202610_support_must_be_rechecked_before_provider_use",
       "account_access_role_and_organization_permission_not_verified",
