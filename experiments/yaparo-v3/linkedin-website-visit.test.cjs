@@ -14,7 +14,7 @@ const adapter = context.window.YaparoV3LinkedInWebsiteVisit;
 const result = adapter.map(fixture.brief);
 
 assert.equal(adapter.version, "linkedin-website-visit-image-preview-v1");
-assert.equal(result.status, "preview_only_unverified");
+assert.equal(result.status, "blocked");
 assert.deepEqual(Array.from(result.missing), []);
 assert.equal(result.candidateMapping.campaignType, "SPONSORED_UPDATES");
 assert.equal(result.candidateMapping.format, "STANDARD_UPDATE");

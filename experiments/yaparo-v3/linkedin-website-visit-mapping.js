@@ -90,7 +90,8 @@
     const inputsComplete = missing.length === 0;
     return {
       version,
-      status: inputsComplete ? "preview_only_unverified" : "blocked",
+      // Documentation conflicts remain blockers even when every supplied field is shaped correctly.
+      status: "blocked",
       missing: [...new Set(missing)],
       blockers,
       canDispatch: false,
