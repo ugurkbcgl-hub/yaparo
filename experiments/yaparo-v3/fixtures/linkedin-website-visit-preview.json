@@ -3,6 +3,8 @@
     "accountUrn": "urn:li:sponsoredAccount:900000001",
     "campaignGroupUrn": "urn:li:sponsoredCampaignGroup:900000002",
     "organizationUrn": "urn:li:organization:900000003",
+    "campaignUrn": "urn:li:sponsoredCampaign:900000005",
+    "sponsoredPostUrn": "urn:li:ugcPost:900000006",
     "campaignName": "Synthetic Yaparo website visit preview",
     "dailyBudgetAmount": "100.00",
     "accountCurrency": "TRY",

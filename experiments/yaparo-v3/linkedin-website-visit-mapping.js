@@ -14,6 +14,8 @@
     "accountUrn",
     "campaignGroupUrn",
     "organizationUrn",
+    "campaignUrn",
+    "sponsoredPostUrn",
     "campaignName",
     "dailyBudgetAmount",
     "accountCurrency",
@@ -46,7 +48,8 @@
       brief[field] === undefined || brief[field] === null || brief[field] === "",
     );
     const blockers = [
-      "creative_payload_schema_and_image_upload_flow_not_verified",
+      "image_upload_scopes_and_legacy_image_ad_guide_require_review",
+      "inline_content_image_schema_not_verified",
       "marketing_api_version_202610_support_must_be_rechecked_before_provider_use",
       "account_access_role_and_organization_permission_not_verified",
       "turkey_account_currency_locale_and_location_urn_not_verified",
@@ -60,6 +63,8 @@
       ["accountUrn", /^urn:li:sponsoredAccount:\d+$/, "sponsored_account_urn"],
       ["campaignGroupUrn", /^urn:li:sponsoredCampaignGroup:\d+$/, "sponsored_campaign_group_urn"],
       ["organizationUrn", /^urn:li:organization:\d+$/, "organization_urn"],
+      ["campaignUrn", /^urn:li:sponsoredCampaign:\d+$/, "sponsored_campaign_urn"],
+      ["sponsoredPostUrn", /^urn:li:(?:share|ugcPost):\d+$/, "sponsored_post_urn"],
       ["locationUrn", /^urn:li:geo:\d+$/, "geo_location_urn"],
       ["imageAssetUrn", /^urn:li:digitalmediaAsset:[A-Za-z0-9:_-]+$/, "digital_media_asset_urn"],
     ]) {
@@ -113,6 +118,8 @@
           accountUrn: brief.accountUrn,
           campaignGroupUrn: brief.campaignGroupUrn,
           associatedEntityUrn: brief.organizationUrn,
+          campaignUrn: brief.campaignUrn,
+          sponsoredPostUrn: brief.sponsoredPostUrn,
           name: brief.campaignName,
           dailyBudget: { amount: brief.dailyBudgetAmount, currencyCode: brief.accountCurrency },
           locale: { country: brief.country, language: brief.language },
@@ -123,6 +130,12 @@
           imageAssetUrn: brief.imageAssetUrn,
         } : null,
       },
+      creativeCandidate: inputsComplete ? {
+        route: "existing_post_reference",
+        campaignUrn: brief.campaignUrn,
+        content: { reference: brief.sponsoredPostUrn },
+        intendedStatus: "DRAFT",
+      } : null,
       providerBody: null,
     };
   }
