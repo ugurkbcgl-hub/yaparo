@@ -5,6 +5,8 @@
   const marketingApiVersion = "202610";
   const sources = {
     campaigns: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-campaigns?view=li-lms-2026-10",
+    creatives: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-creatives?view=li-lms-2026-10",
+    posts: "https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api?view=li-lms-2026-09",
     objectives: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/campaign-objectives?view=li-lms-2026-10",
     access: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/getting-started?view=li-lms-2026-10",
     changes: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2026-10",
@@ -52,6 +54,9 @@
       "inline_content_image_schema_not_verified",
       "marketing_api_version_202610_support_must_be_rechecked_before_provider_use",
       "account_access_role_and_organization_permission_not_verified",
+      "creative_write_scope_and_ad_account_role_not_verified",
+      "organization_post_read_scope_and_page_role_not_verified",
+      "sponsored_post_owner_and_campaign_format_compatibility_not_verified",
       "turkey_account_currency_locale_and_location_urn_not_verified",
       "no_linkedin_account_authorization_or_provider_validation",
     ];
