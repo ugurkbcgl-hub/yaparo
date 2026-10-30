@@ -1,0 +1,20 @@
+{
+  "brief": {
+    "advertiserId": "SYNTHETIC_ADVERTISER_ONLY",
+    "campaignName": "Kurgusal butik koleksiyonu",
+    "budgetMode": "BUDGET_MODE_TOTAL",
+    "budgetAmount": 250,
+    "budgetCurrency": "TRY",
+    "websiteUrl": "https://example.invalid/koleksiyon",
+    "locationIds": ["SYNTHETIC_TURKIYE_LOCATION"],
+    "scheduleStartTime": "2030-01-01 09:00:00",
+    "optimizationGoal": "LANDING_PAGE_VIEW",
+    "placement": "PLACEMENT_TIKTOK"
+  },
+  "expected": {
+    "externalCallMade": false,
+    "spendTry": 0,
+    "canDispatch": false,
+    "providerBody": null
+  }
+}
