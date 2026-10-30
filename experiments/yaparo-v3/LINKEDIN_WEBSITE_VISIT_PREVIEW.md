@@ -30,6 +30,15 @@ to invent a format. Current Creative docs show both `content.reference` and
 Marketing API version and per-account access must be rechecked before any
 provider integration or request.
 
+The current Images API page is versioned through `202608`, while this campaign
+candidate is pinned to `202610`; their compatibility has not been established.
+The documented upload flow first initializes an upload to obtain an upload URL
+and image URN, then uploads bytes to that URL; synchronous upload is not
+supported. The documented endpoint permissions include `rw_ads`,
+`w_member_social`, `w_organization_social`, and `w_power_creators`, with extra
+owner-specific checks for organization and member assets. No upload URL or
+asset is created by this preview.
+
 The current Creative API docs also require an authorized ad-account role and
 `rw_ads` for write operations. Reading an organization post requires
 `r_organization_social` and an eligible organization page role. The preview
@@ -56,5 +65,5 @@ node linkedin-website-visit.test.cjs
 - [Recent Marketing API changes](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2026-10)
 - [Create and Manage Creatives](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-creatives?view=li-lms-2026-10)
 - [Image Ads (Legacy)](https://learn.microsoft.com/en-us/linkedin/marketing/usecases/ad-tech/image-ads-usecase?view=li-lms-2026-04)
-- [Image API permissions and upload](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/images-api?view=li-lms-2026-03)
+- [Image API permissions and upload](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/images-api?view=li-lms-2026-08)
 - [Posts API permissions and supported sponsored formats](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api?view=li-lms-2026-09)
