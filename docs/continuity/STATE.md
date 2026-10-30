@@ -1,6 +1,6 @@
 # Yaparo — current handoff
 
-Verified: 2026-10-29 23:43 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
+Verified: 2026-10-29 23:55 Europe/Istanbul (+03:00). Recheck Git/PR/CI.
 
 ## Objective and authorization
 
@@ -12,9 +12,14 @@ Usage monitoring remains disabled. No protected DB/schema/history change.
 
 Checkout C:\Users\ugrkb\OneDrive\Masaüstü\yaparo
 Remote https://github.com/ugurkbcgl-hub/yaparo
-Branch codex/shared-business-resources, from main c834d5e plus local completion
-note9d6a283. PR377 already merged; main CI40906309933 SUCCESS. New package PR/CI
-not yet created at this verification. Do not claim merged until checked.
+Branch codex/qualified-budget-candidates, based on main2d63346.
+PR379 merged2026-10-29 23:55:06 Europe/Istanbul as
+2d63346ccaef2519d332d4afde517c79794d65d5. Reviewed head
+037e6f64bfb628b355aede25f7c3b74f6a06e486 passed required CI40951593373.
+Post-merge main CI40953249164 is IN_PROGRESS on the squash commit; not claimed
+successful. This completion note is local-only for the next meaningful package.
+PR: https://github.com/ugurkbcgl-hub/yaparo/pull/379
+App PR attachment hit the existing100-identity cap; normal GitHub link works.
 
 ## Implemented (ADR0077)
 
@@ -50,7 +55,10 @@ updates. Kernel comparison tests passed; Ruff format
 review found and resolved semantic sales conversion, invalid cash, stale context,
 map and lower-cash gaps. Desktop/mobile screenshots inspected in private evidence
 folder yaparo-first-stage-yvhyd7z7. No real campaign/account/AI claim.
-Required PR CI is still pending at this snapshot.
+Required CI40951593373 completed SUCCESS on the reviewed head:1264 application
+tests,4 explicit skips;45 application browser E2E;19 legacy,16 first-stage and8
+compact-plan browser checks, editor/source/kernel and all required checks passed.
+PR379 merged after source review and this CI success.
 
 ## Runtime and limits
 
@@ -79,6 +87,7 @@ unresolved holds and ADR0067–0071 ownership/replay/financial contracts retaine
 
 ## Next action
 
-Finish reviewed package PR and required CI, then bind accepted discovery, economics,
-resource revisions and qualified evidence to a provider-free candidate service.
+Continue issue378 with result-to-resource consumption and bind accepted discovery,
+economics/resource revisions and qualified evidence to a provider-free candidate
+service. First recheck main CI40953249164; do not rerun completed preview work.
 Keep sample browser output separate from actual forecasts and spend authority.

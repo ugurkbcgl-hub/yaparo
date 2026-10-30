@@ -59,5 +59,8 @@ this local preview is not customer-beta or production readiness.
 Focused pure tests and browser acceptance checks cover unknown/zero/ceiling,
 explicit fixture choice, costs/capacity/cash filtering, stale selections, original
 channel share constraints, geography, first-stage reuse and organic paths. Desktop
-and mobile screenshots are reviewed before merge. Required CI must pass on the
-reviewed head; the milestone handoff records actual results.
+and mobile screenshots are reviewed before merge. PR379 required CI40951593373 passed on reviewed head037e6f6:1264 application
+tests with4 explicit skips,45 application browser E2E,19 legacy/16 first-stage/8
+compact-plan browser checks and required source/editor/build/audit/migration
+checks. PR379 merged as2d63346 on29October2026 after independent review.
+Post-merge main CI40953249164 was still running at handoff; no success claim.

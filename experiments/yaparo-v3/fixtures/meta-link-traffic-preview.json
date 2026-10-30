@@ -1,0 +1,21 @@
+{
+  "brief": {
+    "adAccountId": "act_SYNTHETIC_ONLY",
+    "campaignName": "Kurgusal butik koleksiyonu",
+    "specialAdCategories": ["NONE"],
+    "accountCurrency": "TRY",
+    "dailyBudgetMinor": 25000,
+    "targeting": { "geo_locations": { "countries": ["TR"] } },
+    "pageId": "SYNTHETIC_PAGE",
+    "websiteUrl": "https://example.invalid/koleksiyon",
+    "primaryText": "Yeni koleksiyonu keşfedin.",
+    "headline": "Yeni sezon burada",
+    "imageHash": "SYNTHETIC_IMAGE_HASH",
+    "callToAction": "LEARN_MORE"
+  },
+  "expected": {
+    "externalCallMade": false,
+    "spendTry": 0,
+    "canDispatch": false
+  }
+}
