@@ -29,6 +29,12 @@ assert.equal(result.candidateMapping.status, "DRAFT");
 assert.equal(result.candidateMapping.inputs.dailyBudget.amount, "100.00");
 assert.equal(result.candidateMapping.inputs.dailyBudget.currencyCode, "TRY");
 assert.equal(result.candidateMapping.inputs.locationUrn, "urn:li:geo:900000004");
+assert.deepEqual(JSON.parse(JSON.stringify(result.creativeCandidate)), {
+  route: "existing_post_reference",
+  campaignUrn: "urn:li:sponsoredCampaign:900000005",
+  content: { reference: "urn:li:ugcPost:900000006" },
+  intendedStatus: "DRAFT",
+});
 assert.equal(result.providerBody, null);
 assert.equal(result.canDispatch, false);
 assert.equal(result.externalCallMade, false);
@@ -38,18 +44,20 @@ assert.equal(fixture.expected.canDispatch, false);
 assert.equal(fixture.expected.externalCallMade, false);
 assert.equal(fixture.expected.spendTry, 0);
 for (const blocker of [
-  "creative_payload_schema_and_image_upload_flow_not_verified",
+  "image_upload_scopes_and_legacy_image_ad_guide_require_review",
+  "inline_content_image_schema_not_verified",
   "marketing_api_version_202610_support_must_be_rechecked_before_provider_use",
   "turkey_account_currency_locale_and_location_urn_not_verified",
 ]) assert(result.blockers.includes(blocker), `expected blocker ${blocker}`);
 
 const partial = adapter.map({ campaignName: "partial" });
 assert.equal(partial.status, "blocked");
-for (const field of ["accountUrn", "campaignGroupUrn", "organizationUrn", "dailyBudgetAmount", "accountCurrency", "locationUrn", "country", "language", "startAt", "endAt", "websiteUrl", "introText", "imageAssetUrn"]) {
+for (const field of ["accountUrn", "campaignGroupUrn", "organizationUrn", "campaignUrn", "sponsoredPostUrn", "dailyBudgetAmount", "accountCurrency", "locationUrn", "country", "language", "startAt", "endAt", "websiteUrl", "introText", "imageAssetUrn"]) {
   assert(partial.missing.includes(field), `missing ${field} should block`);
 }
 assert.equal(partial.candidateMapping.inputs, null);
 assert.equal(partial.providerBody, null);
+assert.equal(partial.creativeCandidate, null);
 
 for (const invalid of [
   { websiteUrl: "http://example.invalid" },
@@ -61,6 +69,8 @@ for (const invalid of [
   { accountUrn: "urn:li:sponsoredAccount:synthetic" },
   { campaignGroupUrn: "urn:li:sponsoredCampaignGroup:synthetic" },
   { organizationUrn: "urn:li:organization:synthetic" },
+  { campaignUrn: "urn:li:sponsoredCampaign:synthetic" },
+  { sponsoredPostUrn: "urn:li:digitalmediaAsset:synthetic" },
   { locationUrn: "urn:li:geo:synthetic" },
   { imageAssetUrn: "https://example.invalid/image.png" },
   { dailyBudgetAmount: "0" },
