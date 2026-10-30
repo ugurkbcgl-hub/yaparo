@@ -47,6 +47,9 @@ for (const blocker of [
   "image_upload_scopes_and_legacy_image_ad_guide_require_review",
   "inline_content_image_schema_not_verified",
   "marketing_api_version_202610_support_must_be_rechecked_before_provider_use",
+  "creative_write_scope_and_ad_account_role_not_verified",
+  "organization_post_read_scope_and_page_role_not_verified",
+  "sponsored_post_owner_and_campaign_format_compatibility_not_verified",
   "turkey_account_currency_locale_and_location_urn_not_verified",
 ]) assert(result.blockers.includes(blocker), `expected blocker ${blocker}`);
 

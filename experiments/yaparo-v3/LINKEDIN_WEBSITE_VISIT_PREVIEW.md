@@ -30,6 +30,12 @@ to invent a format. Current Creative docs show both `content.reference` and
 Marketing API version and per-account access must be rechecked before any
 provider integration or request.
 
+The current Creative API docs also require an authorized ad-account role and
+`rw_ads` for write operations. Reading an organization post requires
+`r_organization_social` and an eligible organization page role. The preview
+does not verify that the referenced post belongs to the selected organization
+or matches the campaign's source ad format; these remain explicit blockers.
+
 The contract always returns `providerBody: null`, `canDispatch: false`,
 `externalCallMade: false`, and `spendTry: 0`. It is not a validated LinkedIn ad,
 forecast, account-readiness result, or authorization to publish.
@@ -51,3 +57,4 @@ node linkedin-website-visit.test.cjs
 - [Create and Manage Creatives](https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-creatives?view=li-lms-2026-10)
 - [Image Ads (Legacy)](https://learn.microsoft.com/en-us/linkedin/marketing/usecases/ad-tech/image-ads-usecase?view=li-lms-2026-04)
 - [Image API permissions and upload](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/images-api?view=li-lms-2026-03)
+- [Posts API permissions and supported sponsored formats](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api?view=li-lms-2026-09)
