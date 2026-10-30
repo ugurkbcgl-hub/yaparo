@@ -13,15 +13,18 @@ vm.runInContext(fs.readFileSync("linkedin-website-visit-mapping.js", "utf8"), co
 const adapter = context.window.YaparoV3LinkedInWebsiteVisit;
 const result = adapter.map(fixture.brief);
 
-assert.equal(adapter.version, "linkedin-website-visit-image-preview-v1");
+assert.equal(adapter.version, "linkedin-website-visit-image-preview-v2");
 assert.equal(result.status, "blocked");
 assert.deepEqual(Array.from(result.missing), []);
+assert.equal(result.marketingApiVersion, "202610");
 assert.equal(result.candidateMapping.campaignType, "SPONSORED_UPDATES");
 assert.equal(result.candidateMapping.format, "STANDARD_UPDATE");
 assert.equal(result.candidateMapping.creativeType, "SPONSORED_STATUS_UPDATE");
+assert.equal(result.candidateMapping.objectiveType, "WEBSITE_VISITS");
 assert.equal(result.candidateMapping.optimizationTargetType, "MAX_CLICK");
-assert.deepEqual(Array.from(result.candidateMapping.objectiveTypeCandidates), ["WEBSITE_VISIT", "WEBSITE_VISITS"]);
-assert.equal(result.candidateMapping.costType, null);
+assert.equal(result.candidateMapping.costType, "CPM");
+assert.equal(result.candidateMapping.bidType, "CPC");
+assert.equal(result.candidateMapping.biddingMode, "AUTO");
 assert.equal(result.candidateMapping.status, "DRAFT");
 assert.equal(result.candidateMapping.inputs.dailyBudget.amount, "100.00");
 assert.equal(result.candidateMapping.inputs.dailyBudget.currencyCode, "TRY");
@@ -35,10 +38,8 @@ assert.equal(fixture.expected.canDispatch, false);
 assert.equal(fixture.expected.externalCallMade, false);
 assert.equal(fixture.expected.spendTry, 0);
 for (const blocker of [
-  "linkedin_objective_enum_conflicts_between_official_documents",
-  "max_click_cost_type_mapping_requires_official_resolution",
   "creative_payload_schema_and_image_upload_flow_not_verified",
-  "marketing_api_version_header_not_pinned",
+  "marketing_api_version_202610_support_must_be_rechecked_before_provider_use",
   "turkey_account_currency_locale_and_location_urn_not_verified",
 ]) assert(result.blockers.includes(blocker), `expected blocker ${blocker}`);
 

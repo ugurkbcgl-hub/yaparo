@@ -1,11 +1,13 @@
 (function () {
   "use strict";
 
-  const version = "linkedin-website-visit-image-preview-v1";
+  const version = "linkedin-website-visit-image-preview-v2";
+  const marketingApiVersion = "202610";
   const sources = {
-    campaigns: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-campaigns?view=li-lms-2026-04",
-    objectives: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/campaign-objectives?view=li-lms-2026-09",
+    campaigns: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/create-and-manage-campaigns?view=li-lms-2026-10",
+    objectives: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/account-structure/campaign-objectives?view=li-lms-2026-10",
     access: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/ads/getting-started?view=li-lms-2026-10",
+    changes: "https://learn.microsoft.com/en-us/linkedin/marketing/integrations/recent-changes?view=li-lms-2026-10",
   };
 
   const required = [
@@ -44,10 +46,8 @@
       brief[field] === undefined || brief[field] === null || brief[field] === "",
     );
     const blockers = [
-      "linkedin_objective_enum_conflicts_between_official_documents",
-      "max_click_cost_type_mapping_requires_official_resolution",
       "creative_payload_schema_and_image_upload_flow_not_verified",
-      "marketing_api_version_header_not_pinned",
+      "marketing_api_version_202610_support_must_be_rechecked_before_provider_use",
       "account_access_role_and_organization_permission_not_verified",
       "turkey_account_currency_locale_and_location_urn_not_verified",
       "no_linkedin_account_authorization_or_provider_validation",
@@ -94,6 +94,7 @@
       status: "blocked",
       missing: [...new Set(missing)],
       blockers,
+      marketingApiVersion,
       canDispatch: false,
       externalCallMade: false,
       spendTry: 0,
@@ -102,9 +103,11 @@
         campaignType: "SPONSORED_UPDATES",
         format: "STANDARD_UPDATE",
         creativeType: "SPONSORED_STATUS_UPDATE",
+        objectiveType: "WEBSITE_VISITS",
         optimizationTargetType: "MAX_CLICK",
-        objectiveTypeCandidates: ["WEBSITE_VISIT", "WEBSITE_VISITS"],
-        costType: null,
+        costType: "CPM",
+        bidType: "CPC",
+        biddingMode: "AUTO",
         status: "DRAFT",
         inputs: inputsComplete ? {
           accountUrn: brief.accountUrn,
