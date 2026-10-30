@@ -1,0 +1,24 @@
+{
+  "brief": {
+    "accountUrn": "urn:li:sponsoredAccount:900000001",
+    "campaignGroupUrn": "urn:li:sponsoredCampaignGroup:900000002",
+    "organizationUrn": "urn:li:organization:900000003",
+    "campaignName": "Synthetic Yaparo website visit preview",
+    "dailyBudgetAmount": "100.00",
+    "accountCurrency": "TRY",
+    "locationUrn": "urn:li:geo:900000004",
+    "country": "TR",
+    "language": "tr",
+    "startAt": 1793404800000,
+    "endAt": 1793491200000,
+    "websiteUrl": "https://example.invalid/urun",
+    "introText": "Sentetik örnek tanıtım metni.",
+    "imageAssetUrn": "urn:li:digitalmediaAsset:synthetic-preview"
+  },
+  "expected": {
+    "providerBody": null,
+    "canDispatch": false,
+    "externalCallMade": false,
+    "spendTry": 0
+  }
+}
